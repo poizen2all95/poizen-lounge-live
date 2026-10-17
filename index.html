@@ -1678,6 +1678,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 @media (max-width:420px){.lh-txt{padding-right:34%}.lhero2 h2{font-size:42px}.lh-cd{font-size:36px}.kp span{font-size:11px}.pm-lg span:last-child{display:none}.brand h1{font-size:16px}.crest{width:40px;height:40px}.brand small{max-width:150px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+<link rel="stylesheet" href="mobile.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1700,15 +1701,16 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
       <a class="dk-btn" id="dkJoin" hidden target="_blank" rel="noopener"><span>DK</span><span class="lbl">Play on DraftKings</span></a>
       <span class="soundpill" id="soundPill" hidden>Tap anywhere to turn on alert sounds</span>
       <div class="vibewrap">
-        <button class="vibebtn" type="button" id="vibeBtn" aria-haspopup="dialog" aria-expanded="false"><span class="sw" id="vibeSw"></span><img class="tlogo" id="vibeLogo" alt="" hidden onerror="this.style.visibility='hidden'" onload="this.style.visibility='visible'"><span id="vibeName">Midnight</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button class="vibebtn" type="button" id="vibeBtn" aria-label="Choose appearance and team" aria-haspopup="dialog" aria-expanded="false"><span class="sw" id="vibeSw"></span><img class="tlogo" id="vibeLogo" alt="" hidden onerror="this.style.visibility='hidden'" onload="this.style.visibility='visible'"><span id="vibeName">Midnight</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
         <div class="vibemenu" id="vibeMenu" hidden role="dialog" aria-label="Look and team">
+          <button class="mobile-close" type="button" data-close-vibe>Done</button>
           <div class="vm-h">Vibe</div>
           <button class="vopt" type="button" data-vibe="midnight" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#07090B 40%,#11161A 40% 66%,#2ED8BA 66% 82%,#D9B36A 82%)"></span><span><b>Midnight</b><span>Solid black, charcoal and champagne</span></span></button>
           <button class="vopt" type="button" data-vibe="vegas" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#0A0705 40%,#F2C14E 40% 70%,#E0284A 70%)"></span><span><b>Vegas</b><span>Casino gold and crimson</span></span></button>
           <button class="vopt" type="button" data-vibe="daylight" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#F3F4F6 40%,#FFFFFF 40% 66%,#00A386 66% 82%,#B0862F 82%)"></span><span><b>Daylight</b><span>Pearl white studio look</span></span></button>
           <div class="vm-h">Season</div>
           <button class="vopt po-opt" type="button" id="poToggle" aria-pressed="false"><span class="pv" style="--pv:radial-gradient(circle at 20% 0,#fff8 0 8%,transparent 30%),radial-gradient(circle at 80% 0,#fff8 0 8%,transparent 30%),linear-gradient(160deg,#0B1A1A,#07090B 55%,#E8C26A)"></span><span><b>Playoffs <em class="po-tag">Elite</em></b><span>The whole board goes stadium-night: lights, glow, players up front</span></span></button>
-          <div class="vm-h">Your team <span>The whole board takes its colors</span></div>
+          <div class="vm-h">Your team <span class="theme-access" id="teamAccess">Pro · the whole board takes its colors</span></div>
           <input class="vm-q" id="teamQ" type="search" placeholder="Search any team — Cowboys, Dodgers, Lakers…" aria-label="Search teams" autocomplete="off">
           <div class="vm-tabs" role="tablist"><button type="button" data-league="nfl" role="tab">NFL</button><button type="button" data-league="mlb" role="tab">MLB</button><button type="button" data-league="nba" role="tab">NBA</button></div>
           <div class="vm-teams" id="teamGrid"></div>
@@ -1718,14 +1720,16 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
       <div class="feed" id="feed" role="status"><span class="dot"></span><span id="feedTxt">Connecting…</span></div>
     </div>
   </div>
-  <div class="record" id="record" aria-label="Record"></div>
+  <div class="record-shell"><div class="record" id="record" aria-label="Record ticker. Scroll to explore." tabindex="0"></div><button class="record-pause" id="recordPause" type="button" aria-label="Pause record ticker" aria-pressed="false" hidden>Ⅱ</button></div>
 </header>
 
 <div class="shell">
   <nav class="rail" id="rail" aria-label="Board sections"></nav>
   <main id="main" tabindex="-1"><section class="seo-intro"><h2>Poizen Lounge</h2><p>PoiZen's live sports prediction-trading board. It tracks DraftKings Pick6 slips and DraftKings Predictions, Robinhood and Kalshi event contracts live, leg by leg, with the honest math on every slip.</p><ul><li>Live: every open slip and contract with its chance right now</li><li>Pick6, first touchdown and in-game scalps</li><li>Games with stadium, weather and TV, and the full NFL injury report</li><li>Lab, Ledger and a personal Coach for members</li></ul><p>Plans: Free, Pro and Elite. Loading the live board…</p></section></main>
 </div>
-<nav class="bottom" id="bottom" aria-label="Board sections"></nav>
+<nav class="bottom" id="bottom" aria-label="Mobile navigation"></nav>
+<dialog class="mobile-more" id="mobileMore" aria-labelledby="mobileMoreTitle"><div class="mobile-more-head"><h2 id="mobileMoreTitle">Explore the Lounge</h2><button type="button" data-close-more aria-label="Close navigation">✕</button></div><div class="mobile-more-grid"></div><p class="mobile-more-note">Research a line, follow the public board, or track your own slips in My Lounge.</p></dialog>
+<script src="mobile.js"></script>
 
 <div class="ticker" aria-hidden="true"><div class="tag"><img src="crest.png" alt="">Poizen Lounge</div><div class="scroll"><div class="track" id="ticker"></div></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -2457,7 +2461,8 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
     honest: { tier: 'free', label: 'The honest read on every slip', status: 'live' },
     limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
     exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
-    themes: { tier: 'free', label: 'Midnight, Daylight, Vegas and your team colors', status: 'live' },
+    themes: { tier: 'free', label: 'Midnight, Daylight and Vegas themes — always free', status: 'live' },
+    teamThemes: { tier: 'pro', label: 'Your team, your Lounge: NFL, MLB and NBA colors and team branding across the board', status: 'live' },
     ocr: { tier: 'pro', label: 'Read slips from a DraftKings screenshot', status: 'live' },
     coach: { tier: 'pro', label: 'Your Coach: each stat judged against what it was priced at, feeding your gate', status: 'live' },
     gateEdit: { tier: 'pro', label: 'Edit your own gate rules', status: 'live' },
@@ -2745,7 +2750,7 @@ S.custom = store.get('pz_custom_checks', []);
 
 /* ---------------- vibe ---------------- */
 const VIBES = { midnight: ['Midnight', 'linear-gradient(135deg,#11161A 45%,#D9B36A)'], vegas: ['Vegas', 'linear-gradient(135deg,#F2C14E,#E0284A)'], daylight: ['Daylight', 'linear-gradient(135deg,#F3F4F6 45%,#00A386)'] };
-function setVibe(v) { if (!VIBES[v]) v = 'midnight'; document.documentElement.dataset.vibe = v; store.set('pz_vibe', v); if (window.__teamReady) applyTeam(store.get('pz_team', '')); document.querySelectorAll('.vopt[data-vibe]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.vibe === v))); const n = document.getElementById('vibeName'); if (n) { n.textContent = VIBES[v][0]; document.getElementById('vibeSw').style.setProperty('--sw', VIBES[v][1]); } if (window.__teamReady) updateVibeBtn(); }
+function setVibe(v) { if (!VIBES[v]) v = 'midnight'; document.documentElement.dataset.vibe = v; store.set('pz_vibe', v); if (window.__teamReady) applyTeam(preferredTeam()); document.querySelectorAll('.vopt[data-vibe]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.vibe === v))); const n = document.getElementById('vibeName'); if (n) { n.textContent = VIBES[v][0]; document.getElementById('vibeSw').style.setProperty('--sw', VIBES[v][1]); } if (window.__teamReady) updateVibeBtn(); }
 setVibe(params.get('vibe') || store.get('pz_vibe', 'midnight'));
 S.playoffsOn = store.get('pz_playoffs', false) === true;
 
@@ -2858,6 +2863,7 @@ const mixHex = (h, t, k) => { const a = hexRgb(h), b = hexRgb(t); return a.map((
 /* pick an accent that reads on the current vibe: brighten dark colors on dark vibes, deepen pale ones on Daylight */
 function readable(h, light) { let x = h, k = 0; if (light) { while (lumOf(x) > 0.32 && k < 10) { x = mixHex(h, '000000', (++k) * 0.08); } } else { while (lumOf(x) < 0.2 && k < 10) { x = mixHex(h, 'FFFFFF', (++k) * 0.08); } } return x; }
 function applyTeam(id) {
+  if (id && !M.canUse(meTier(), 'teamThemes')) id = '';
   const root = document.documentElement; const [lg, ab] = String(id || '').split(':'); const t = lg && TEAMS[lg] && TEAMS[lg].find((x) => x[0] === ab);
   const props = ['--team-a', '--team-b', '--team-acc', '--team-on', '--team-logo', '--teal', '--teal2', '--gold', '--gold2', '--bg-glow1', '--bg-glow2', '--bg-glow3', '--hero'];
   if (!t) { delete root.dataset.team; props.forEach((p) => root.style.removeProperty(p)); updateVibeBtn(); renderTeamGrid(); return; }
@@ -2884,10 +2890,12 @@ function renderTeamGrid() {
   const g = $('#teamGrid'); if (!g) return; const q = ($('#teamQ') && $('#teamQ').value || '').trim().toLowerCase(); const cur = document.documentElement.dataset.team || '';
   document.querySelectorAll('.vm-tabs [data-league]').forEach((b) => b.setAttribute('aria-selected', String(!q && b.dataset.league === teamLeague)));
   const list = q ? Object.entries(TEAMS).flatMap(([lg, ts]) => ts.map((t) => [lg, t])).filter(([lg, t]) => (t[1] + ' ' + t[0] + ' ' + lg).toLowerCase().includes(q)) : TEAMS[teamLeague].map((t) => [teamLeague, t]);
-  g.innerHTML = list.length ? list.map(([lg, t]) => `<button class="vm-team ${q ? 'wide' : ''}" type="button" data-team="${lg}:${t[0]}" aria-pressed="${cur === lg + ':' + t[0]}" style="--c1:#${t[2]};--c2:#${readable(t[3] === '000000' ? t[2] : t[3], false)}" title="${esc(t[1])}"><img src="${teamLogo(lg, t[0])}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span>${esc(q ? t[1] : t[1].split(' ').slice(-1)[0])}</span></button>`).join('') : '<div class="dim" style="grid-column:1/-1;padding:10px;font-size:12px">No team matches that.</div>';
+  g.innerHTML = list.length ? list.map(([lg, t]) => `<button class="vm-team ${q ? 'wide' : ''}" type="button" data-team="${lg}:${t[0]}" aria-pressed="${cur === lg + ':' + t[0]}" style="--c1:#${t[2]};--c2:#${readable(t[3] === '000000' ? t[2] : t[3], false)}" title="${esc(t[1])}"><img src="${teamLogo(lg, t[0])}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span>${esc(q ? t[1] : t[1].split(' ').slice(-1)[0])}</span>${M.canUse(meTier(), 'teamThemes') ? '' : '<em class="tier-tag">PRO</em>'}</button>`).join('') : '<div class="dim" style="grid-column:1/-1;padding:10px;font-size:12px">No team matches that.</div>';
 }
 window.__teamReady = true;
-applyTeam(params.get('team') ? params.get('team').replace('-', ':').toLowerCase().replace(/:(.*)$/, (m, a) => ':' + a.toUpperCase()) : store.get('pz_team', ''));
+S.requestedTeam = params.get('team') ? params.get('team').replace('-', ':').toLowerCase().replace(/:(.*)$/, (m, a) => ':' + a.toUpperCase()) : null;
+function preferredTeam() { return S.requestedTeam !== null && S.requestedTeam !== undefined ? S.requestedTeam : store.get('pz_team', ''); }
+applyTeam(preferredTeam());
 
 function tg(sport, abbr) { const [a, b] = teamColors(sport, abbr); return `radial-gradient(circle at 50% 16%, ${b}cc 0%, ${a} 52%, #05070b 100%)`; }
 const PO_PLAYERS = new Set([]);
@@ -3345,7 +3353,7 @@ function previewPanel() {
   }).join('');
   return `<div class="card mecard pvpanel"><b class="st-font" style="font-size:22px">${M.PLAN_NAMES[t]} — what a member sees</b><p class="muted">Every feature, in plan order. Switch plans above; your own account and data are untouched.</p><ul class="palist">${rows}</ul></div>` + deskHTML() + `<div class="grid2" style="margin-top:16px">${can('coach') ? '<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b><p class="muted">Unlocked on this plan. It needs 8+ graded picks per stat before it calls anything an edge or a leak.</p></div>' : proLock('Your Coach')}${can('gateEdit') ? '<div class="card mecard"><b class="st-font" style="font-size:20px">Your own gate rules</b><p class="muted">Unlocked on this plan.</p></div>' : proLock('Your own gate rules')}</div>` + planCard();
 }
-/* Playoffs: a season look on top of Midnight or Daylight. Elite keeps it on; everyone else can take a labelled look for this visit. */
+/* Playoffs is exclusive to Elite; base themes remain free and team branding requires Pro. */
 function playoffsArt() {
   const evs = Object.values(S.events || {}); const pick = evs.find((e) => e.state === 'in' && venuePhoto(e)) || evs.find((e) => e.state === 'pre' && venuePhoto(e)) || evs.find((e) => venuePhoto(e));
   const src = pick ? venuePhoto(pick) : ''; const root = document.documentElement;
@@ -3427,10 +3435,10 @@ let meRefs = [];
 function meAttach(u) {
   meRefs.forEach((r) => r.off()); meRefs = [];
   S.me.user = u && !u.isAnonymous ? u : null; S.me.profile = undefined; S.me.tier = null; S.previewTier = null; S.me.request = null; S.me.requesting = null; S.me.slips = {}; S.me.builder = null;
-  if (!S.me.user) { if (S.tab === 'me') render(); return; }
+  if (!S.me.user) { applyTeam(''); applyPlayoffs(); render(); return; }
   const db = firebase.database(); const base = 'users/' + S.me.user.uid;
   const pr = db.ref(base + '/profile'); pr.on('value', (snap) => { S.me.profile = snap.val(); if (S.tab === 'me') render(); }, (e) => { S.me.err = 'Could not load your account: ' + e.message; render(); }); meRefs.push(pr);
-  const tr = db.ref('tiers/' + S.me.user.uid); tr.on('value', (snap) => { S.me.tier = snap.val(); applyPlayoffs(); if (S.tab === 'me') render(); }, () => { S.me.tier = null; }); meRefs.push(tr);
+  const tr = db.ref('tiers/' + S.me.user.uid); tr.on('value', (snap) => { S.me.tier = snap.val(); applyTeam(preferredTeam()); applyPlayoffs(); render(); }, () => { S.me.tier = null; applyTeam(''); applyPlayoffs(); render(); }); meRefs.push(tr);
   const wr = db.ref('requests/' + S.me.user.uid); wr.on('value', (snap) => { S.me.request = snap.val(); if (S.tab === 'me') render(); }, () => {}); meRefs.push(wr);
   const sr = db.ref(base + '/slips'); sr.on('value', (snap) => { S.me.slips = snap.val() || {}; Object.values(S.me.slips).forEach((x) => Object.assign(S.mePlayers, x.players || {})); S.projMemo = {}; afterData(); loadLogs(); poll(); }, () => {}); meRefs.push(sr);
 }
@@ -4020,12 +4028,17 @@ function navHTML() {
 }
 function renderNav() {
   $('#rail').innerHTML = navHTML() + dataHealth();
-  $('#bottom').innerHTML = navHTML();
+  window.PZMobile.renderNav(S.tab, TABS, SVG, { pick6: activeTickets().length });
 }
 function setTab(id) {
   if (!TABS.some((t) => t[0] === id)) id = 'live';
+  const from = S.tab;
+  S.tabScroll = S.tabScroll || {};
+  if (from !== id) S.tabScroll[from] = window.scrollY;
   S.tab = id; if (location.hash.slice(1) !== id) history.replaceState(null, '', '#' + id);
-  render(); window.scrollTo({ top: 0 });
+  window.PZMobile.afterNavigate();
+  render(); window.scrollTo({ top: S.tabScroll[id] || 0, behavior: 'instant' });
+  document.getElementById('main').focus({ preventScroll: true });
   if (id === 'injuries' || id === 'research') loadInjuries();
   if (id === 'research') loadResearch();
   if (['ledger', 'pick6', 'ftd', 'scalp'].includes(id)) loadArchive();
@@ -4782,7 +4795,7 @@ function renderRecord() {
   const p = periods();
   const cell = (lbl, a) => `<div class="rec" title="${a.unknown ? `P/L counts entries with a known stake only; ${a.unknown} entr${a.unknown === 1 ? 'y has' : 'ies have'} no stake shown (paid ${money(a.unknownPaid)})` : 'Every entry here has a known stake'}"><span class="lbl">${lbl}</span><b>${a.w}-${a.l}</b><span class="${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : 'dim'}" style="font-weight:900">${money(a.pl, true)}${a.unknown ? '<sup>*</sup>' : ''}</span>${a.n ? `<span class="dim">${Math.round((a.w / a.n) * 100)}%</span>` : ''}</div>`;
   const anyUnknown = [p.today, p.week, p.month, p.all].some((a) => a.unknown);
-  $('#record').innerHTML = cell('Today', p.today) + cell('Week', p.week) + cell('Month', p.month) + cell('All-time', p.all) + (p.all.n ? '' : '<div class="rec"><span class="dim">Record starts with this week’s graded slips</span></div>') + (anyUnknown ? `<div class="rec recnote"><span class="dim"><sup>*</sup>P/L on entries with a known stake · ${p.all.unknown} without one</span></div>` : '');
+  window.PZMobile.setRecord(cell('Today', p.today) + cell('Week', p.week) + cell('Month', p.month) + cell('All-time', p.all) + (p.all.n ? '' : '<div class="rec"><span class="dim">Record starts with this week’s graded slips</span></div>') + (anyUnknown ? `<div class="rec recnote"><span class="dim"><sup>*</sup>P/L on entries with a known stake · ${p.all.unknown} without one</span></div>` : ''));
 }
 async function loadArchive() {
   if (S.archive) return;
@@ -4930,6 +4943,10 @@ function render() {
   if (!S.G) S.G = gradeAll();
   document.body.dataset.view = S.tab;
   renderNav(); renderRecord(); feedStatus(); renderTicker(); applyPlayoffs();
+  const themeAccess = meTier();
+  if (S.themeAccess !== themeAccess) { S.themeAccess = themeAccess; applyTeam(preferredTeam()); }
+  const accessLabel = document.getElementById('teamAccess');
+  if (accessLabel) accessLabel.textContent = can('teamThemes') ? 'Included · the whole board takes its colors' : 'Pro · the whole board takes its colors';
   { const sp = slateSports(); const extra = sp.filter((x) => x !== 'nfl' && !(S.slate.title || '').toLowerCase().includes(x)).map((x) => x.toUpperCase()); $('#slateTitle').textContent = (S.slate.title || 'Live picks board') + (extra.length ? ' + ' + extra.join(' + ') : '') + ' · live board'; }
   const dk = S.slate.dkLink; const dkEl = $('#dkJoin'); if (dk) { dkEl.href = dk; dkEl.hidden = false; } else dkEl.hidden = true;
   const views = { me: viewMe, pickem: viewPickem, live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger };
@@ -4938,6 +4955,9 @@ function render() {
   const keep = {}; ['ckName', 'ckLine', 'ckMarket', 'wiMult', 'pkName'].forEach((id) => { const el = document.getElementById(id); if (el) keep[id] = el.value; });
   let body = (views[S.tab] || viewLive)();
   if (S.tab !== 'live') { const strip = liveStrip(); if (strip) { const i = body.indexOf('</section>'); body = i > -1 ? body.slice(0, i + 10) + strip + body.slice(i + 10) : strip + body; } }
+  const researchNav = window.PZMobile.researchNav(S.tab, TABS);
+  if (researchNav) { const end = body.indexOf('</section>'); body = end >= 0 ? body.slice(0, end + 10) + researchNav + body.slice(end + 10) : researchNav + body; }
+  if (S.tab === 'live') { const end = body.indexOf('</section>'); const actions = `<nav class="mobile-home-actions" aria-label="Quick actions"><button type="button" data-tab="me">${SVG.user} My slips</button><button type="button" data-tab="research">${SVG.research} Research a line</button><button type="button" data-tab="pick6">${SVG.pick6} PoiZen's board</button><button type="button" data-tab="ledger">${SVG.ledger} Results</button></nav>`; body = end >= 0 ? body.slice(0, end + 10) + actions + body.slice(end + 10) : actions + body; }
   $('#main').innerHTML = body + footHTML();
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('main details').forEach((d) => { const s = d.querySelector('summary'); if (s && openD.includes(s.textContent)) d.open = true; });
@@ -4957,10 +4977,13 @@ function calcUpdate() {
 document.addEventListener('click', (e) => {
   const jb = e.target.closest('[data-jump]'); if (jb) { const [tb, an] = jb.dataset.jump.split('|'); jump(tb, an); return; }
   const t = e.target.closest('[data-tab]'); if (t) { setTab(t.dataset.tab); return; }
-  const vb = e.target.closest('#vibeBtn'); if (vb) { const m = $('#vibeMenu'); m.hidden = !m.hidden; vb.setAttribute('aria-expanded', String(!m.hidden)); return; }
+  const vb = e.target.closest('#vibeBtn'); if (vb) { const m = $('#vibeMenu'); m.hidden = !m.hidden; vb.setAttribute('aria-expanded', String(!m.hidden)); if (!m.hidden) window.PZMobile.themeOpened(); return; }
   if (e.target.closest('#poToggle')) { if (!can('playoffs')) { toast({ title: 'Playoffs is part of Elite', body: 'Request Elite on My Lounge', tone: '' }); const m = document.getElementById('vibeMenu'); if (m) m.hidden = true; setTab('me'); setTimeout(() => { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); return; } S.playoffsOn = !S.playoffsOn; applyPlayoffs(); render(); return; }
   const v = e.target.closest('.vopt'); if (v && v.dataset.vibe) { setVibe(v.dataset.vibe); render(); return; }
-  const tb = e.target.closest('[data-team]'); if (tb && tb.closest('#vibeMenu')) { store.set('pz_team', tb.dataset.team); applyTeam(tb.dataset.team); render(); return; }
+  const tb = e.target.closest('[data-team]'); if (tb && tb.closest('#vibeMenu')) {
+    if (tb.dataset.team && !can('teamThemes')) { $('#vibeMenu').hidden = true; $('#vibeBtn').setAttribute('aria-expanded', 'false'); setTab('me'); toast({ title: 'Team themes are part of Pro', body: 'Midnight, Daylight and Vegas are always free. See plans in My Lounge.', tone: '' }); requestAnimationFrame(() => document.querySelector('.meplan')?.scrollIntoView({ behavior: 'smooth', block: 'start' })); return; }
+    S.requestedTeam = null; store.set('pz_team', tb.dataset.team); applyTeam(tb.dataset.team); render(); return;
+  }
   const lgb = e.target.closest('[data-league]'); if (lgb) { teamLeague = lgb.dataset.league; const q = $('#teamQ'); if (q) q.value = ''; renderTeamGrid(); return; }
   if (!e.target.closest('#vibeMenu')) { const m = $('#vibeMenu'); if (m && !m.hidden) m.hidden = true; }
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; render(); return; }
@@ -4969,7 +4992,7 @@ document.addEventListener('click', (e) => {
   const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; renderSweat(); return; }
   const wi = e.target.closest('[data-wi]'); if (wi) { const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
   if (e.target.closest('[data-wiclear]')) { S.whatIf.clear(); render(); return; }
-  const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview || null; applyPlayoffs(); render(); return; }
+  const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview || null; applyTeam(preferredTeam()); applyPlayoffs(); render(); return; }
   if (e.target.closest('[data-histall]')) { S.histAll = !S.histAll; render(); return; }
   const wk = e.target.closest('[data-week]'); if (wk) { S.week = wk.dataset.week; render(); return; }
   const lrb = e.target.closest('[data-lr]'); if (lrb) { S.ledgerRange = lrb.dataset.lr; render(); return; }
