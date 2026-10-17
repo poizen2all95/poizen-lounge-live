@@ -24,7 +24,7 @@
   --on-teal:#02130F; --on-gold:#1C1302;
   --card-grad:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.015));
   --hero:linear-gradient(120deg,rgba(20,241,199,.22) 0%,rgba(76,201,240,.12) 45%,rgba(242,193,78,.14) 100%);
-  --chat-bg:rgba(4,6,8,.86);
+  --chat-bg:rgba(4,6,8,.58);
   --stadium:'Barlow Condensed','Arial Narrow',Impact,sans-serif; --jersey:'Teko','Barlow Condensed',sans-serif;
   --body:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --r:20px; --shadow:0 24px 50px -22px rgba(0,0,0,.9);
@@ -37,7 +37,7 @@
   --fg:#FBF6EC; --fg2:#C4B49B; --fg3:#857561;
   --teal:#F2C14E; --teal2:#D9A531; --teal-d:#4A3209; --on-teal:#1C1302;
   --hero:linear-gradient(120deg,rgba(242,193,78,.26) 0%,rgba(224,40,74,.16) 55%,rgba(20,241,199,.08) 100%);
-  --chat-bg:rgba(10,7,5,.88);
+  --chat-bg:rgba(10,7,5,.6);
 }
 [data-vibe="daylight"]{
   --bg:#EEF2F5; --bg-glow1:rgba(0,168,142,.16); --bg-glow2:rgba(201,149,43,.14); --bg-glow3:rgba(76,201,240,.14);
@@ -49,7 +49,7 @@
   --card-grad:linear-gradient(180deg,#fff,#fbfcfd);
   --hero:linear-gradient(120deg,rgba(0,168,142,.16) 0%,rgba(76,201,240,.12) 50%,rgba(201,149,43,.14) 100%);
   --shadow:0 20px 40px -24px rgba(10,30,45,.35);
-  --chat-bg:rgba(8,12,16,.88);
+  --chat-bg:rgba(8,12,16,.62);
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -67,7 +67,7 @@ a{color:var(--sky)}
 
 /* ---------- top bar ---------- */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);border-bottom:1px solid var(--line)}
-.top-in{max-width:1480px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:14px}
+.top-in{max-width:none;margin:0;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:12px;min-width:0;text-decoration:none;color:inherit}
 .crest{width:42px;height:48px;flex:none;filter:drop-shadow(0 6px 14px rgba(242,193,78,.35))}
 .brand h1{margin:0;font:900 26px/.9 var(--stadium);text-transform:uppercase;letter-spacing:.04em;background:linear-gradient(180deg,var(--gold2),var(--gold) 60%,var(--gold-d));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -79,21 +79,29 @@ a{color:var(--sky)}
 .feed.ok .dot{background:var(--win);animation:ping 2s infinite}
 .feed.warn .dot{background:var(--live)} .feed.bad .dot{background:var(--loss)}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(46,229,157,.6)}70%{box-shadow:0 0 0 9px rgba(46,229,157,0)}100%{box-shadow:0 0 0 0 rgba(46,229,157,0)}}
-.vibes{display:flex;gap:4px;padding:4px;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
-.vibe{width:26px;height:26px;border-radius:50%;border:2px solid transparent;padding:0}
-.vibe[aria-pressed="true"]{border-color:var(--gold)}
-.vibe.m{background:conic-gradient(#14F1C7 0 50%,#04070A 0)} .vibe.v{background:conic-gradient(#F2C14E 0 50%,#E0284A 0)} .vibe.d{background:conic-gradient(#00A88E 0 50%,#EEF2F5 0)}
+.vibewrap{position:relative}
+.vibebtn{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border-radius:999px;border:1px solid var(--line2);background:var(--panel);font-weight:800;font-size:12px}
+.vibebtn .sw{width:22px;height:22px;border-radius:7px;background:var(--sw)}
+.vibebtn svg{width:14px;height:14px;color:var(--fg2)}
+.vibemenu{position:absolute;right:0;top:calc(100% + 8px);z-index:90;width:250px;padding:8px;border-radius:18px;background:var(--panel);border:1px solid var(--line2);box-shadow:0 30px 60px -20px rgba(0,0,0,.8);display:flex;flex-direction:column;gap:6px}
+.vopt{display:grid;grid-template-columns:54px minmax(0,1fr);gap:10px;align-items:center;padding:8px;border-radius:12px;border:1px solid transparent;background:transparent;text-align:left}
+.vopt:hover{background:var(--panel2)}
+.vopt[aria-pressed="true"]{border-color:var(--gold)}
+.vopt .pv{height:34px;border-radius:9px;background:var(--pv);border:1px solid rgba(255,255,255,.12)}
+.vopt b{display:block;font:900 17px/1 var(--stadium);text-transform:uppercase}
+.vopt span{font-size:11px;color:var(--fg2)}
+.soundpill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid rgba(242,193,78,.5);background:rgba(242,193,78,.12);color:var(--gold);font-weight:800;font-size:12px;white-space:nowrap}
 .dk-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:linear-gradient(135deg,#53D337,#1E8E15);color:#06210A;font-weight:900;font-size:12px;text-decoration:none;white-space:nowrap}
 
 /* ---------- record strip ---------- */
-.record{max-width:1480px;margin:0 auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.record{max-width:none;margin:0;padding:8px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 .record::-webkit-scrollbar{display:none}
 .rec{flex:none;display:flex;align-items:baseline;gap:8px;padding:6px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:12px;white-space:nowrap}
 .rec b{font:800 16px/1 var(--stadium);letter-spacing:.03em}
 .rec .lbl{color:var(--fg2);font-weight:800;font-size:11px}
 
 /* ---------- shell ---------- */
-.shell{max-width:1480px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-right,0px)) 120px max(16px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:232px minmax(0,1fr);gap:24px;align-items:start}
+.shell{max-width:none;margin:0;padding:18px max(20px,env(safe-area-inset-right,0px)) 120px max(12px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:228px minmax(0,1fr);gap:24px;align-items:start}
 .rail{position:sticky;top:92px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:24px;background:var(--card-grad),var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
 .navbtn{display:flex;align-items:center;gap:11px;width:100%;padding:12px 14px;border-radius:14px;border:1px solid transparent;background:transparent;color:var(--fg2);font-weight:800;font-size:14px;text-align:left}
 .navbtn:hover{background:var(--panel2);color:var(--fg)}
@@ -130,6 +138,29 @@ main{min-width:0}
 .pt.kick.live{border-color:color-mix(in srgb,var(--loss) 55%,transparent);background:linear-gradient(135deg,rgba(255,59,92,.22),transparent 70%),var(--panel)} .pt.kick.live::after{background:var(--loss)}
 .pt.kick .v{color:var(--live)} .pt.kick.live .v{color:var(--loss)}
 
+/* ---------- per-tab identity: every tab gets its own accent + banner ---------- */
+body{--acc:var(--teal)}
+body[data-tab="live"]{--acc:#FF3B5C} body[data-tab="pick6"]{--acc:#8B6CFF} body[data-tab="ftd"]{--acc:#F2C14E} body[data-tab="scalp"]{--acc:#22D3EE}
+body[data-tab="games"]{--acc:#2EE59D} body[data-tab="injuries"]{--acc:#FF7A59} body[data-tab="research"]{--acc:#4CC9F0} body[data-tab="ledger"]{--acc:#7CF27C}
+.navbtn[aria-current="page"]{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 60%,#000))!important;color:#06080b!important;box-shadow:0 12px 26px -12px var(--acc)!important}
+.banner{position:relative;overflow:hidden;border-radius:24px;padding:22px 24px;margin-bottom:18px;border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);background:radial-gradient(900px 260px at 0% 0%,color-mix(in srgb,var(--acc) 34%,transparent),transparent 70%),linear-gradient(120deg,color-mix(in srgb,var(--acc) 16%,var(--panel)),var(--panel) 70%);box-shadow:var(--shadow);isolation:isolate}
+.banner .wm{position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(-8deg);width:220px;height:220px;color:var(--acc);opacity:.13;z-index:-1}
+.banner .wm svg{width:100%;height:100%}
+.banner h2{margin:0;font:900 46px/.92 var(--stadium);text-transform:uppercase;letter-spacing:.01em;color:var(--fg)}
+.banner h2 span{color:var(--acc)}
+.banner p{margin:8px 0 0;color:var(--fg2);font-size:14px;max-width:70ch}
+.banner .bchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.banner .bchips .chip{border-color:color-mix(in srgb,var(--acc) 45%,transparent);background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--fg)}
+.sec::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+.fbtn[aria-pressed="true"]{background:var(--acc);color:#06080b;border-color:var(--acc)}
+.ticket::before{background:linear-gradient(90deg,var(--acc),var(--gold))}
+.nolive{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:20px;border:1px dashed color-mix(in srgb,var(--acc) 50%,transparent);background:color-mix(in srgb,var(--acc) 6%,var(--panel));color:var(--fg2);font-weight:700}
+.nolive b{display:block;color:var(--fg);font:900 22px/1 var(--stadium);text-transform:uppercase}
+.nolive svg{width:34px;height:34px;color:var(--acc);flex:none}
+.upnext .gcard{opacity:.88}
+.upnext .gcard .g-band{filter:saturate(.75)}
+.divider{display:flex;align-items:center;gap:12px;margin:34px 0 14px;color:var(--fg3);font:900 18px/1 var(--stadium);text-transform:uppercase;letter-spacing:.06em}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line2)}
 /* ---------- headings ---------- */
 .vh{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 16px;flex-wrap:wrap}
 .vh h2{margin:0;font:900 40px/.95 var(--stadium);text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
@@ -156,8 +187,9 @@ main{min-width:0}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .fbtn{padding:9px 15px;border-radius:999px;border:1px solid var(--line2);background:var(--panel);color:var(--fg2);font-weight:800;font-size:12px}
 .fbtn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:16px;align-items:start}
+.grid4{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:16px;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:16px;align-items:start}
 .empty{padding:34px;text-align:center;color:var(--fg2);border:1px dashed var(--line2);border-radius:var(--r);background:var(--panel)}
 .empty b{display:block;color:var(--fg);font-size:16px;margin-bottom:4px}
 details.more{margin-top:12px}
@@ -342,8 +374,8 @@ details.more[open] summary::before{content:"–"}
 .s-ir{color:#fff;background:#6D4FE0;border-color:#6D4FE0}
 .s-act{color:var(--win);border-color:color-mix(in srgb,var(--win) 40%,transparent)}
 
-.masonry{columns:2;column-gap:16px}.masonry>*{break-inside:avoid;margin-bottom:16px;display:block}
-@media (max-width:980px){.masonry{columns:1}}
+.masonry{columns:360px;column-gap:16px}.masonry>*{break-inside:avoid;margin-bottom:16px;display:block}
+
 /* ---------- research ---------- */
 .checkbar{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) 110px auto;gap:8px;padding:14px;margin-bottom:18px}
 .verdict{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font:900 15px/1 var(--stadium);letter-spacing:.02em}
@@ -404,10 +436,10 @@ details.more[open] summary::before{content:"–"}
 @keyframes tin{from{transform:translateX(30px) scale(.96);opacity:0}}
 
 /* ---------- chat: smoked glass + gold ---------- */
-.chat-fab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;align-items:center;gap:9px;padding:12px 18px 12px 12px;border-radius:999px;border:1px solid rgba(242,193,78,.65);background:rgba(4,6,8,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#F2C14E;font-weight:900;box-shadow:0 14px 34px -10px rgba(0,0,0,.9),0 0 22px -8px rgba(242,193,78,.6)}
+.chat-fab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;align-items:center;gap:9px;padding:12px 18px 12px 12px;border-radius:999px;border:1px solid rgba(242,193,78,.65);background:rgba(4,6,8,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#F2C14E;font-weight:900;box-shadow:0 14px 34px -10px rgba(0,0,0,.9),0 0 22px -8px rgba(242,193,78,.6)}
 .chat-fab .cr{width:26px;height:30px}
 .chat-fab .badge2{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--loss);color:#fff;font-size:11px;display:grid;place-items:center}
-.chat{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:75;width:min(390px,calc(100vw - 32px));height:min(580px,calc(100vh - 120px));display:flex;flex-direction:column;background:var(--chat-bg);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);border:1px solid rgba(242,193,78,.45);border-radius:22px;box-shadow:0 34px 70px -14px rgba(0,0,0,.9);overflow:hidden;color:#F4F1EA}
+.chat{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:75;width:min(390px,calc(100vw - 32px));height:min(580px,calc(100vh - 120px));display:flex;flex-direction:column;background:var(--chat-bg);backdrop-filter:blur(14px) saturate(1.25);-webkit-backdrop-filter:blur(14px) saturate(1.25);border:1px solid rgba(242,193,78,.55);border-radius:22px;box-shadow:0 34px 70px -14px rgba(0,0,0,.9);overflow:hidden;color:#F4F1EA}
 .chat-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(242,193,78,.22);background:linear-gradient(180deg,rgba(242,193,78,.14),transparent)}
 .chat-h .cr{width:26px;height:30px}
 .chat-h b{font:900 20px/1 var(--stadium);text-transform:uppercase;color:#F2C14E;letter-spacing:.03em}
@@ -422,7 +454,7 @@ details.more[open] summary::before{content:"–"}
 .vbadge{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:2px 6px;border-radius:999px;background:linear-gradient(135deg,#FFDF8A,#F2C14E);color:#1C1302;font-weight:900;letter-spacing:.06em}
 .chat-f{border-top:1px solid rgba(242,193,78,.22);padding:10px;display:flex;flex-direction:column;gap:8px}
 .chat-f .row{display:flex;gap:8px}
-.chat-f input,.chat-f textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(242,193,78,.25);background:rgba(0,0,0,.45);color:#F4F1EA;font:inherit;font-size:13px}
+.chat-f input,.chat-f textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(242,193,78,.3);background:rgba(0,0,0,.3);color:#F4F1EA;font:inherit;font-size:13px}
 .chat-f textarea{resize:none;height:46px}
 .chat-f button{padding:0 18px;border-radius:12px;border:0;background:linear-gradient(135deg,#FFDF8A,#F2C14E);color:#1C1302;font-weight:900}
 .chat-note{font-size:11px;color:rgba(244,241,234,.5)}
@@ -443,7 +475,7 @@ body.overlay .toasts{bottom:96px}
 /* ---------- responsive ---------- */
 @media (max-width:1240px){.pt .v{font-size:30px}}
 @media (max-width:1060px){.pulse{grid-template-columns:repeat(3,minmax(0,1fr))}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:980px){.grid2{grid-template-columns:minmax(0,1fr)}.checkbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media (max-width:980px){.checkbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 @media (max-width:860px){
   .shell{grid-template-columns:minmax(0,1fr);padding-bottom:160px}
   .rail{display:none}
@@ -451,7 +483,6 @@ body.overlay .toasts{bottom:96px}
   .bottom::-webkit-scrollbar{display:none}
   .bottom .navbtn{flex:1 0 auto;width:auto;flex-direction:column;gap:3px;padding:8px 10px;font-size:11px;text-align:center;min-width:62px}
   .bottom .navbtn .cnt{display:none}
-  .grid3{grid-template-columns:minmax(0,1fr)}
   .shifts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .chat-fab{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
   .chat{bottom:calc(86px + env(safe-area-inset-bottom,0px));height:min(520px,calc(100vh - 180px))}
@@ -488,15 +519,19 @@ body.overlay .toasts{bottom:96px}
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#live" aria-label="Poizen Lounge home">
-      <svg class="crest" aria-hidden="true"><use href="#crest"/></svg>
+      <span class="crestslot"><svg class="crest" aria-hidden="true"><use href="#crest"/></svg></span>
       <div style="min-width:0"><h1>Poizen Lounge</h1><small id="slateTitle">Live picks board</small></div>
     </a>
     <div class="top-r">
       <a class="dk-btn" id="dkJoin" hidden target="_blank" rel="noopener"><span>DK</span><span class="lbl">Play on DraftKings</span></a>
-      <div class="vibes" role="group" aria-label="Board vibe">
-        <button class="vibe m" type="button" data-vibe="midnight" title="Midnight" aria-label="Midnight vibe"></button>
-        <button class="vibe v" type="button" data-vibe="vegas" title="Vegas" aria-label="Vegas vibe"></button>
-        <button class="vibe d" type="button" data-vibe="daylight" title="Daylight" aria-label="Daylight vibe"></button>
+      <span class="soundpill" id="soundPill" hidden>Tap anywhere to turn on alert sounds</span>
+      <div class="vibewrap">
+        <button class="vibebtn" type="button" id="vibeBtn" aria-haspopup="true" aria-expanded="false"><span class="sw" id="vibeSw"></span><span id="vibeName">Midnight</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="vibemenu" id="vibeMenu" hidden role="menu" aria-label="Board vibe">
+          <button class="vopt" type="button" data-vibe="midnight" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#04070A 40%,#14F1C7 40% 70%,#F2C14E 70%)"></span><span><b>Midnight</b><span>Venom teal and gold on black</span></span></button>
+          <button class="vopt" type="button" data-vibe="vegas" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#0A0705 40%,#F2C14E 40% 70%,#E0284A 70%)"></span><span><b>Vegas</b><span>Casino gold and crimson</span></span></button>
+          <button class="vopt" type="button" data-vibe="daylight" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#EEF2F5 40%,#00A88E 40% 70%,#C9952B 70%)"></span><span><b>Daylight</b><span>Bright studio look</span></span></button>
+        </div>
       </div>
       <div class="feed" id="feed" role="status"><span class="dot"></span><span id="feedTxt">Connecting…</span></div>
     </div>
@@ -891,8 +926,8 @@ body.overlay .toasts{bottom:96px}
 <script>
 'use strict';
 const E = window.PZE;
-const DEFAULT_SLATE = {"version":1,"title":"NFL Week 6","updated":"2026-10-17T00:32:50.316Z","note":"Pick6 tickets confirmed from DraftKings My Picks (Sun 10/18). First-TD and scalp are game plans until placed.","players":{"henry":{"name":"Derrick Henry","sport":"nfl","team":"BAL","pos":"RB","number":"22","espnId":"3043078"},"bijan":{"name":"Bijan Robinson","sport":"nfl","team":"ATL","pos":"RB","number":"7","espnId":"4430807"},"allen":{"name":"Josh Allen","sport":"nfl","team":"BUF","pos":"QB","number":"17","espnId":"3918298"},"walker":{"name":"Kenneth Walker III","sport":"nfl","team":"KC","pos":"RB","number":"9","espnId":"4567048"},"watson":{"name":"Christian Watson","sport":"nfl","team":"GB","pos":"WR","number":"9","espnId":"4248528"},"cmc":{"name":"Christian McCaffrey","sport":"nfl","team":"SF","pos":"RB","number":"23","espnId":"3117251"},"daniels":{"name":"Jayden Daniels","sport":"nfl","team":"WSH","pos":"QB","number":"5","espnId":"4426348"},"young":{"name":"Bryce Young","sport":"nfl","team":"CAR","pos":"QB","number":"9","espnId":"4685720"},"mcmillan":{"name":"Tetairoa McMillan","sport":"nfl","team":"CAR","pos":"WR","number":"4","espnId":"4685472"},"warren":{"name":"Jaylen Warren","sport":"nfl","team":"PIT","pos":"RB","number":"30","espnId":"4569987"},"lamb":{"name":"CeeDee Lamb","sport":"nfl","team":"DAL","pos":"WR","number":"88","espnId":"4241389"},"dak":{"name":"Dak Prescott","sport":"nfl","team":"DAL","pos":"QB","number":"4","espnId":"2577417"},"taylor":{"name":"Jonathan Taylor","sport":"nfl","team":"IND","pos":"RB","number":"28","espnId":"4242335"},"irving":{"name":"Bucky Irving","sport":"nfl","team":"TB","pos":"RB","number":"7","espnId":"4596448"},"mahomes":{"name":"Patrick Mahomes","sport":"nfl","team":"KC","pos":"QB","number":"15","espnId":"3139477"},"stafford":{"name":"Matthew Stafford","sport":"nfl","team":"LAR","pos":"QB","number":"9","espnId":"12483"},"nacua":{"name":"Puka Nacua","sport":"nfl","team":"LAR","pos":"WR","number":"17","espnId":"4426515"},"caminero":{"name":"Junior Caminero","sport":"mlb","team":"TB","pos":"3B","number":"13","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/691406/headshot/67/current"},"ydiaz":{"name":"Yandy Díaz","sport":"mlb","team":"TB","pos":"1B","number":"2","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/650490/headshot/67/current"},"kwan":{"name":"Steven Kwan","sport":"mlb","team":"CLE","pos":"OF","number":"38","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680757/headshot/67/current"},"jram":{"name":"José Ramírez","sport":"mlb","team":"CLE","pos":"3B","number":"11","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/608070/headshot/67/current"},"halpin":{"name":"Petey Halpin","sport":"mlb","team":"CLE","pos":"OF","number":"0","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/690984/headshot/67/current"},"nlowe":{"name":"Nathaniel Lowe","sport":"mlb","team":"CLE","pos":"1B","number":"30","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/663993/headshot/67/current"},"simpson":{"name":"Chandler Simpson","sport":"mlb","team":"TB","pos":"OF","number":"14","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/802415/headshot/67/current"},"palacios":{"name":"Richie Palacios","sport":"mlb","team":"TB","pos":"2B","number":"1","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680700/headshot/67/current"},"rocchio":{"name":"Brayan Rocchio","sport":"mlb","team":"CLE","pos":"SS","number":"4","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/677587/headshot/67/current"}},"pick6":[{"id":"nfl-3","title":"3-Pick Anchor","badge":"50% Winnings Boost","status":"confirmed","entry":10,"toWin":131,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"}],"window":"Sun 10/18"},{"id":"nfl-8-lamb","title":"8-Pick Lamb Run","badge":"50% Winnings Boost","status":"confirmed","entry":10,"toWin":2400,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mcmillan","market":"rec_yds","line":89.5,"mult":"1.6x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"},{"player":"walker","market":"rush_yds","line":119.5,"mult":"1.6x"},{"player":"lamb","market":"rec_yds","line":99.5,"mult":"1.3x"}],"window":"Sun 10/18"},{"id":"nfl-8-dak","title":"8-Pick Dak Gimme","badge":"Dak 0.5 Pass Yds Promo","status":"confirmed","entry":10,"toWin":1260.53,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mcmillan","market":"rec_yds","line":89.5,"mult":"1.6x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"},{"player":"walker","market":"rush_yds","line":119.5,"mult":"1.6x"},{"player":"dak","market":"pass_yds","line":0.5,"mult":"Gimme","gimme":true}],"window":"Sun 10/18"},{"id":"mlb-4","title":"ALCS Game 4 — 4-Pick","badge":"MLB · $5 Bonus + Caminero Gimme","status":"unconfirmed","entry":5,"toWin":33,"legs":[{"player":"caminero","market":"hrr","line":0.5,"mult":"Gimme","gimme":true},{"player":"ydiaz","market":"hrr","line":1.5,"mult":"1.0x"},{"player":"kwan","market":"hrr","line":1.5,"mult":"1.0x"},{"player":"rocchio","market":"hrr","line":0.5,"mult":"0.8x"}]},{"id":"mlb-6","title":"ALCS Game 4 — 6-Pick","badge":"MLB · J. Ramírez Promo","status":"unconfirmed","entry":3,"toWin":40,"legs":[{"player":"jram","market":"hrr","line":0.5,"mult":"0.5x Promo"},{"player":"halpin","market":"hrr","line":1.5,"mult":"1.3x"},{"player":"nlowe","market":"hrr","line":1.5,"mult":"1.2x"},{"player":"simpson","market":"hrr","line":1.5,"mult":"0.8x"},{"player":"palacios","market":"hrr","line":0.5,"mult":"0.8x"},{"player":"rocchio","market":"hrr","line":0.5,"mult":"0.8x"}]}],"firstTD":{"title":"$20 Tiered First-TD Portfolio","status":"plan","bets":[{"player":"bijan","stake":2,"odds":"+380"},{"player":"henry","stake":2,"odds":"+425"},{"player":"warren","stake":2,"odds":"+550"},{"player":"mcmillan","stake":5,"odds":"+850"},{"player":"walker","stake":2,"odds":"+360"},{"player":"allen","stake":2,"odds":"+500"},{"player":"lamb","stake":5,"odds":"+650"}]},"scalp":{"title":"2+ TD Live Scalp","seed":100,"status":"plan","rule":"Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.","shifts":[{"label":"Shift 1","targets":[{"player":"henry","stake":50,"odds":"+390"},{"player":"bijan","stake":50,"odds":"+410"}]},{"label":"Shift 2","targets":[{"player":"allen","stake":50,"odds":"+420"},{"player":"walker","stake":50,"odds":"+350"}]},{"label":"Shift 3 · SNF","targets":[{"player":"watson","stake":100,"odds":"+525"}]},{"label":"Shift 4 · MNF","targets":[{"player":"cmc","stake":50,"odds":"+330"},{"player":"daniels","stake":50,"odds":"+550"}]}]},"rules":{"maxLegs":4,"avgMustBeatLine":true,"cashOutOnFirstTD":true},"research":[{"player":"young","market":"pass_yds","line":269.5},{"player":"warren","market":"rush_rec_yds","line":109.5},{"player":"stafford","market":"pass_yds","line":309.5},{"player":"nacua","market":"rec_yds","line":109.5},{"player":"walker","market":"rush_yds","line":119.5},{"player":"mcmillan","market":"rec_yds","line":89.5},{"player":"allen","market":"anytime_td","line":0.5},{"player":"bijan","market":"rush_rec_yds","line":110},{"player":"henry","market":"rush_rec_yds","line":109.5},{"player":"lamb","market":"rec_yds","line":99.5},{"player":"watson","market":"rec_yds","line":89.5},{"player":"cmc","market":"anytime_td","line":0.5},{"player":"daniels","market":"anytime_td","line":0.5},{"player":"dak","market":"pass_yds","line":0.5},{"player":"taylor","market":"rush_yds","line":99.5},{"player":"irving","market":"rush_yds","line":79.5},{"player":"mahomes","market":"pass_yds","line":259.5},{"player":"allen","market":"pass_yds","line":259.5}]};
-const DEFAULT_RESULTS = {"entries":[]};
+const DEFAULT_SLATE = {"version":1,"title":"NFL Week 6","updated":"2026-10-17T00:32:50.316Z","note":"Pick6 tickets confirmed from DraftKings My Picks (Sun 10/18). First-TD and scalp are game plans until placed.","players":{"henry":{"name":"Derrick Henry","sport":"nfl","team":"BAL","pos":"RB","number":"22","espnId":"3043078"},"bijan":{"name":"Bijan Robinson","sport":"nfl","team":"ATL","pos":"RB","number":"7","espnId":"4430807"},"allen":{"name":"Josh Allen","sport":"nfl","team":"BUF","pos":"QB","number":"17","espnId":"3918298"},"walker":{"name":"Kenneth Walker III","sport":"nfl","team":"KC","pos":"RB","number":"9","espnId":"4567048"},"watson":{"name":"Christian Watson","sport":"nfl","team":"GB","pos":"WR","number":"9","espnId":"4248528"},"cmc":{"name":"Christian McCaffrey","sport":"nfl","team":"SF","pos":"RB","number":"23","espnId":"3117251"},"daniels":{"name":"Jayden Daniels","sport":"nfl","team":"WSH","pos":"QB","number":"5","espnId":"4426348"},"young":{"name":"Bryce Young","sport":"nfl","team":"CAR","pos":"QB","number":"9","espnId":"4685720"},"mcmillan":{"name":"Tetairoa McMillan","sport":"nfl","team":"CAR","pos":"WR","number":"4","espnId":"4685472"},"warren":{"name":"Jaylen Warren","sport":"nfl","team":"PIT","pos":"RB","number":"30","espnId":"4569987"},"lamb":{"name":"CeeDee Lamb","sport":"nfl","team":"DAL","pos":"WR","number":"88","espnId":"4241389"},"dak":{"name":"Dak Prescott","sport":"nfl","team":"DAL","pos":"QB","number":"4","espnId":"2577417"},"taylor":{"name":"Jonathan Taylor","sport":"nfl","team":"IND","pos":"RB","number":"28","espnId":"4242335"},"irving":{"name":"Bucky Irving","sport":"nfl","team":"TB","pos":"RB","number":"7","espnId":"4596448"},"mahomes":{"name":"Patrick Mahomes","sport":"nfl","team":"KC","pos":"QB","number":"15","espnId":"3139477"},"stafford":{"name":"Matthew Stafford","sport":"nfl","team":"LAR","pos":"QB","number":"9","espnId":"12483"},"nacua":{"name":"Puka Nacua","sport":"nfl","team":"LAR","pos":"WR","number":"17","espnId":"4426515"},"caminero":{"name":"Junior Caminero","sport":"mlb","team":"TB","pos":"3B","number":"13","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/691406/headshot/67/current"},"ydiaz":{"name":"Yandy Díaz","sport":"mlb","team":"TB","pos":"1B","number":"2","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/650490/headshot/67/current"},"kwan":{"name":"Steven Kwan","sport":"mlb","team":"CLE","pos":"OF","number":"38","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680757/headshot/67/current"},"jram":{"name":"José Ramírez","sport":"mlb","team":"CLE","pos":"3B","number":"11","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/608070/headshot/67/current"},"halpin":{"name":"Petey Halpin","sport":"mlb","team":"CLE","pos":"OF","number":"0","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/690984/headshot/67/current"},"nlowe":{"name":"Nathaniel Lowe","sport":"mlb","team":"CLE","pos":"1B","number":"30","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/663993/headshot/67/current"},"simpson":{"name":"Chandler Simpson","sport":"mlb","team":"TB","pos":"OF","number":"14","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/802415/headshot/67/current"},"palacios":{"name":"Richie Palacios","sport":"mlb","team":"TB","pos":"2B","number":"1","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680700/headshot/67/current"},"rocchio":{"name":"Brayan Rocchio","sport":"mlb","team":"CLE","pos":"SS","number":"4","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/677587/headshot/67/current"}},"pick6":[{"id":"nfl-3","title":"3-Pick Anchor","badge":"50% Winnings Boost","status":"confirmed","entry":10,"toWin":131,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"}],"window":"Sun 10/18"},{"id":"nfl-8-lamb","title":"8-Pick Lamb Run","badge":"50% Winnings Boost","status":"confirmed","entry":10,"toWin":2400,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mcmillan","market":"rec_yds","line":89.5,"mult":"1.6x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"},{"player":"walker","market":"rush_yds","line":119.5,"mult":"1.6x"},{"player":"lamb","market":"rec_yds","line":99.5,"mult":"1.3x"}],"window":"Sun 10/18"},{"id":"nfl-8-dak","title":"8-Pick Dak Gimme","badge":"Dak 0.5 Pass Yds Promo","status":"confirmed","entry":10,"toWin":1260.53,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mcmillan","market":"rec_yds","line":89.5,"mult":"1.6x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"},{"player":"walker","market":"rush_yds","line":119.5,"mult":"1.6x"},{"player":"dak","market":"pass_yds","line":0.5,"mult":"Gimme","gimme":true}],"window":"Sun 10/18"},{"id":"mlb-4","title":"ALCS Game 4 — 4-Pick","badge":"MLB · $5 Bonus + Caminero Gimme","status":"confirmed","entry":5,"toWin":33,"legs":[{"player":"caminero","market":"hrr","line":0.5,"mult":"Gimme","gimme":true},{"player":"ydiaz","market":"hrr","line":1.5,"mult":"1.0x"},{"player":"kwan","market":"hrr","line":1.5,"mult":"1.0x"},{"player":"rocchio","market":"hrr","line":0.5,"mult":"0.8x"}],"window":"Fri 10/16 · ALCS G4"},{"id":"mlb-6","title":"ALCS Game 4 — 6-Pick","badge":"MLB · J. Ramírez Promo","status":"confirmed","entry":3,"toWin":40,"legs":[{"player":"jram","market":"hrr","line":0.5,"mult":"0.5x Promo"},{"player":"halpin","market":"hrr","line":1.5,"mult":"1.3x"},{"player":"nlowe","market":"hrr","line":1.5,"mult":"1.2x"},{"player":"simpson","market":"hrr","line":1.5,"mult":"0.8x"},{"player":"palacios","market":"hrr","line":0.5,"mult":"0.8x"},{"player":"rocchio","market":"hrr","line":0.5,"mult":"0.8x"}],"window":"Fri 10/16 · ALCS G4"}],"firstTD":{"title":"$20 Tiered First-TD Portfolio","status":"plan","bets":[{"player":"bijan","stake":2,"odds":"+380"},{"player":"henry","stake":2,"odds":"+425"},{"player":"warren","stake":2,"odds":"+550"},{"player":"mcmillan","stake":5,"odds":"+850"},{"player":"walker","stake":2,"odds":"+360"},{"player":"allen","stake":2,"odds":"+500"},{"player":"lamb","stake":5,"odds":"+650"}]},"scalp":{"title":"2+ TD Live Scalp","seed":100,"status":"plan","rule":"Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.","shifts":[{"label":"Shift 1","targets":[{"player":"henry","stake":50,"odds":"+390"},{"player":"bijan","stake":50,"odds":"+410"}]},{"label":"Shift 2","targets":[{"player":"allen","stake":50,"odds":"+420"},{"player":"walker","stake":50,"odds":"+350"}]},{"label":"Shift 3 · SNF","targets":[{"player":"watson","stake":100,"odds":"+525"}]},{"label":"Shift 4 · MNF","targets":[{"player":"cmc","stake":50,"odds":"+330"},{"player":"daniels","stake":50,"odds":"+550"}]}]},"rules":{"maxLegs":4,"avgMustBeatLine":true,"cashOutOnFirstTD":true},"research":[{"player":"young","market":"pass_yds","line":269.5},{"player":"warren","market":"rush_rec_yds","line":109.5},{"player":"stafford","market":"pass_yds","line":309.5},{"player":"nacua","market":"rec_yds","line":109.5},{"player":"walker","market":"rush_yds","line":119.5},{"player":"mcmillan","market":"rec_yds","line":89.5},{"player":"allen","market":"anytime_td","line":0.5},{"player":"bijan","market":"rush_rec_yds","line":110},{"player":"henry","market":"rush_rec_yds","line":109.5},{"player":"lamb","market":"rec_yds","line":99.5},{"player":"watson","market":"rec_yds","line":89.5},{"player":"cmc","market":"anytime_td","line":0.5},{"player":"daniels","market":"anytime_td","line":0.5},{"player":"dak","market":"pass_yds","line":0.5},{"player":"taylor","market":"rush_yds","line":99.5},{"player":"irving","market":"rush_yds","line":79.5},{"player":"mahomes","market":"pass_yds","line":259.5},{"player":"allen","market":"pass_yds","line":259.5}]};
+const DEFAULT_RESULTS = {"entries":[{"date":"2026-10-11","title":"3-Pick NFL (50% boost)","type":"pick6","stake":10,"payout":76.69,"legs":3,"hits":3,"source":"DraftKings email: Your Pick6 Lineup Won — 3/3, $76.69 total payout (7x). Entry inferred from the 7x payout."}]};
 const FIREBASE = {"apiKey":"AIzaSyDmlLzMBS4O28NvnvjGT5qQAA6otDA5WaQ","authDomain":"poizen-lounge.firebaseapp.com","databaseURL":"https://poizen-lounge-default-rtdb.firebaseio.com","projectId":"poizen-lounge","storageBucket":"poizen-lounge.firebasestorage.app","messagingSenderId":"1008348808294","appId":"1:1008348808294:web:fd7df53d2a921daec599a7"};
 const TZ = 'America/Los_Angeles';
 const params = new URLSearchParams(location.search);
@@ -913,7 +948,8 @@ const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ==
 S.custom = store.get('pz_custom_checks', []);
 
 /* ---------------- vibe ---------------- */
-function setVibe(v) { if (!['midnight', 'vegas', 'daylight'].includes(v)) v = 'midnight'; document.documentElement.dataset.vibe = v; store.set('pz_vibe', v); document.querySelectorAll('[data-vibe]').forEach((b) => b.tagName === 'BUTTON' && b.setAttribute('aria-pressed', String(b.dataset.vibe === v))); }
+const VIBES = { midnight: ['Midnight', 'linear-gradient(135deg,#14F1C7,#04070A)'], vegas: ['Vegas', 'linear-gradient(135deg,#F2C14E,#E0284A)'], daylight: ['Daylight', 'linear-gradient(135deg,#EEF2F5,#00A88E)'] };
+function setVibe(v) { if (!VIBES[v]) v = 'midnight'; document.documentElement.dataset.vibe = v; store.set('pz_vibe', v); document.querySelectorAll('.vopt').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.vibe === v))); const n = document.getElementById('vibeName'); if (n) { n.textContent = VIBES[v][0]; document.getElementById('vibeSw').style.setProperty('--sw', VIBES[v][1]); } }
 setVibe(params.get('vibe') || store.get('pz_vibe', 'midnight'));
 
 /* ---------------- helpers ---------------- */
@@ -1108,9 +1144,11 @@ function snapshot(G) {
 
 /* ---------------- alerts / toasts ---------------- */
 let audioCtx = null;
+function unlockAudio() { try { audioCtx = audioCtx || new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); } catch {} const p = $('#soundPill'); if (p) p.hidden = true; }
+['pointerdown', 'keydown', 'touchstart'].forEach((ev) => document.addEventListener(ev, unlockAudio, { once: false, passive: true }));
 function chime(tone) {
-  if (!store.get('pz_sound', false)) return;
-  try { audioCtx = audioCtx || new AudioContext(); const notes = tone === 'loss' ? [330, 262] : tone === 'gold' ? [660, 880, 1046] : [660, 880]; notes.forEach((f, i) => { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.frequency.value = f; const t0 = audioCtx.currentTime + i * .12; g.gain.setValueAtTime(.1, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + .35); o.start(t0); o.stop(t0 + .36); }); } catch {}
+  if (OVERLAY && params.get('sound') === 'off') return;
+  try { audioCtx = audioCtx || new AudioContext(); if (audioCtx.state === 'suspended') { const p = $('#soundPill'); if (p) p.hidden = false; return; } const notes = tone === 'loss' ? [330, 262] : tone === 'gold' ? [660, 880, 1046] : [660, 880]; notes.forEach((f, i) => { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.frequency.value = f; const t0 = audioCtx.currentTime + i * .12; g.gain.setValueAtTime(.1, t0); g.gain.exponentialRampToValueAtTime(.001, t0 + .35); o.start(t0); o.stop(t0 + .36); }); } catch {}
 }
 function toast(a) {
   const box = $('#toasts'); const el = document.createElement('div');
@@ -1147,7 +1185,7 @@ function navHTML() {
   return TABS.map(btn).join('');
 }
 function renderNav() {
-  $('#rail').innerHTML = navHTML() + `<div class="rail-foot">Live stats from ESPN. DraftKings settles every ticket.<label><input type="checkbox" id="soundTgl" ${store.get('pz_sound', false) ? 'checked' : ''}> Alert sounds</label></div>`;
+  $('#rail').innerHTML = navHTML() + `<div class="rail-foot">Live stats from ESPN, refreshed every 15 seconds. Alert sounds are on. DraftKings settles every ticket.</div>`;
   $('#bottom').innerHTML = navHTML();
 }
 function setTab(id) {
@@ -1158,7 +1196,8 @@ function setTab(id) {
   if (id === 'research') loadResearch();
   if (id === 'ledger') loadArchive();
 }
-const vh = (title, sub, extra = '') => `<div class="vh"><div><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ''}</div>${extra}</div>`;
+const TABICON = { live: 'live', pick6: 'pick6', ftd: 'ftd', scalp: 'scalp', games: 'games', injuries: 'inj', research: 'research', ledger: 'ledger' };
+const vh = (title, sub, chips = '') => `<section class="banner"><div class="wm">${SVG[TABICON[S.tab]] || ''}</div><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ''}${chips ? `<div class="bchips">${chips}</div>` : ''}</section>`;
 
 function pulseHTML() {
   const m = moneySummary(S.G);
@@ -1226,7 +1265,8 @@ function viewPick6() {
   if (f === 'live') list = list.filter(({ r }) => r.state === 'live');
   if (f === 'settled') list = list.filter(({ r }) => ['won', 'lost', 'partial', 'dead'].includes(r.state));
   const fb = (id, label) => `<button class="fbtn" type="button" data-p6="${id}" aria-pressed="${f === id}">${label}</button>`;
-  return vh('Pick6 Slips', 'Each pick fills in from the live box score. Green border means it cashed, gold means it is live.') +
+  const mm = moneySummary(S.G);
+  return vh('Pick6 <span>Slips</span>', 'Your DraftKings Pick6 entries, filled in pick by pick from the live box score. Green means it cashed, gold means it is live.', `<span class="chip">${mine.length} slips</span><span class="chip">${money(mm.inPlay)} in play</span><span class="chip">${money(mm.maxLeft)} max payout</span>`) +
     `<div class="filters">${fb('live-first', `All slips (${mine.length})`)}${fb('live', 'Live now')}${fb('settled', 'Settled')}</div>` +
     (list.length ? `<div style="display:flex;flex-direction:column;gap:18px">${list.map(ticketCard).join('')}</div>` : '<div class="empty"><b>Nothing here yet</b>Slips show up here once they are live or settled.</div>') +
     (pending.length ? `<details class="more" style="margin-top:22px"><summary>${pending.length} slip${pending.length === 1 ? '' : 's'} not confirmed on DraftKings</summary><div style="display:flex;flex-direction:column;gap:18px;margin-top:12px">${pending.map(ticketCard).join('')}</div></details>` : '');
@@ -1267,7 +1307,7 @@ function viewFTD() {
     <p class="muted" style="font-size:13px">Pick who scores first in their game. The math covers the whole ${money(risk)} slate.</p>
     <div class="facts" id="calcBox">${items.map(({ b, r }, i) => `<label class="chip" style="cursor:pointer;padding:7px 12px"><input type="checkbox" data-calc="${i}"> ${esc(P(b.player).name)} · ${money(r.ret)}</label>`).join('')}</div>
     <div style="margin-top:12px;font:900 22px var(--stadium)" id="calcOut">Pick players to see the math.</div></details>`;
-  return vh(esc(ftd.title || 'First Touchdown'), 'One bet per game. Only the first touchdown of each game counts.') + planNote + sum + `<div class="grid3">${cards}</div>` + calc;
+  return vh('First <span>Touchdown</span>', 'One bet per game on who scores the first touchdown. Only the first TD of each game counts.', `<span class="chip">${items.length} games</span><span class="chip">${money(risk)} risk</span><span class="chip">Best hit ${money(Math.max(0, ...items.map(({ r }) => r.ret)))}</span>`) + planNote + sum + `<div class="grid3">${cards}</div>` + calc;
 }
 
 /* ---------------- Scalp ---------------- */
@@ -1296,7 +1336,7 @@ function viewScalp() {
   const bank = `<div class="card bank"><div><div class="k">Seed</div><div class="v">${money(Number(sc.seed) || 0)}</div></div><div><div class="k">Returned from finished shifts</div><div class="v ${realized > staked ? 'win' : ''}">${money(realized)}</div></div><div><div class="k">Net</div><div class="v ${realized - staked > 0 ? 'win' : realized - staked < 0 ? 'loss' : ''}">${money(realized - staked, true)}</div></div></div>`;
   const nx = shifts[S.shift + 1];
   const nextBox = nx ? `<div class="card" style="padding:16px;margin-top:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="st-font" style="font-size:18px;color:var(--fg2)">Up next · ${esc(nx.sh.label)}</div><div style="font-weight:800">${nx.targets.map(({ t }) => `${esc(P(t.player).name)} (${money(Number(t.stake))} at ${esc(t.odds)})`).join(' + ')}</div><div class="dim" style="font-size:12px;flex-basis:100%">Roll what the current shift actually returns. Cash-out values come from DraftKings, not a fixed percentage.</div></div>` : '';
-  return vh(esc(sc.title || '2+ TD Scalp'), esc(sc.rule || '')) + planNote + `<div class="shifts">${btns}</div><div class="grid2">${cards}</div>${bank}${nextBox}`;
+  return vh('2+ TD <span>Scalp</span>', esc(sc.rule || ''), `<span class="chip">${shifts.length} shifts</span><span class="chip">${money(Number(sc.seed) || 0)} seed</span>`) + planNote + `<div class="shifts">${btns}</div><div class="grid2">${cards}</div>${bank}${nextBox}`;
 }
 
 /* ---------------- game cards (broadcast style) ---------------- */
@@ -1357,18 +1397,19 @@ function viewLive() {
   evs.sort((a, b) => order[a.state] - order[b.state] || a.date.localeCompare(b.date));
   const live = evs.filter((e) => e.state === 'in'), next = evs.filter((e) => e.state === 'pre'), done = evs.filter((e) => e.state === 'post');
   const feed = S.alertLog.length ? `<h3 class="sec">Alert feed</h3><div class="card" style="padding:12px;display:flex;flex-direction:column;gap:8px">${S.alertLog.slice(0, 12).map((a) => `<div class="mtile ${a.tone === 'win' ? 'hit' : a.tone === 'loss' ? 'miss' : 'live'}" style="grid-template-columns:40px minmax(0,1fr) auto">${a.player ? avatar(a.player) : '<div></div>'}<div style="min-width:0"><b>${esc(a.title)}</b><span>${esc(a.body || '')}</span></div><span class="dim" style="font-size:11px;font-weight:800">${new Date(a.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span></div>`).join('')}</div>` : '';
-  return vh('Live Board', 'Every game with one of your picks in it, live games first.') +
-    (live.length ? `<h3 class="sec">Live now</h3><div class="grid2">${live.map(gameCard).join('')}</div>` : '') +
+  const chips = `<span class="chip">${live.length} live</span><span class="chip">${next.length} coming up</span><span class="chip">${done.length} final</span>`;
+  return vh('Live <span>Now</span>', 'Games with your picks that are being played right now. Everything here updates every 15 seconds.', chips) +
+    (live.length ? `<div class="grid2">${live.map(gameCard).join('')}</div>` : `<div class="nolive">${SVG.live}<div><b>No games live right now</b>Your next game starts ${next[0] ? `${esc(kickLabel(next[0].date))} — ${esc(next[0].name)}` : 'later this week'}. This section lights up the moment it kicks off.</div></div>`) +
     feed +
-    (next.length ? `<h3 class="sec">Up next</h3><div class="grid2">${next.map(gameCard).join('')}</div>` : '') +
-    (done.length ? `<h3 class="sec">Final</h3><div class="grid2">${done.map(gameCard).join('')}</div>` : '') +
+    (next.length ? `<div class="divider">Coming up · not started</div><div class="grid2 upnext">${next.map(gameCard).join('')}</div>` : '') +
+    (done.length ? `<div class="divider">Final</div><div class="grid2">${done.map(gameCard).join('')}</div>` : '') +
     (!evs.length ? '<div class="empty"><b>Loading games</b>Connecting to the live feed.</div>' : '');
 }
 function viewGames() {
   const evs = Object.values(S.events).sort((a, b) => a.date.localeCompare(b.date));
   const nfl = evs.filter((e) => e.sport === 'nfl'), mlb = evs.filter((e) => e.sport === 'mlb');
   const block = (title, list) => list.length ? `<h3 class="sec">${title}</h3><div class="grid3">${list.map(gameCard).join('')}</div>` : '';
-  return vh('Games', 'Every game this week with DraftKings lines, implied points, weather and a countdown to kickoff. More implied points usually means more touchdown chances.') + block('NFL · Week ' + ((S.slate.title || '').match(/\d+/) || [''])[0], nfl) + block('MLB', mlb);
+  return vh('The <span>Slate</span>', 'Every game this week with DraftKings lines, implied points, weather and a countdown to kickoff. More implied points usually means more touchdown chances.') + block('NFL · Week ' + ((S.slate.title || '').match(/\d+/) || [''])[0], nfl) + block('MLB', mlb);
 }
 
 /* ---------------- injuries ---------------- */
@@ -1389,7 +1430,7 @@ function myTeamsAndOpps() {
 }
 function injuriesFor(abbr) { const t = ((S.injuries && S.injuries.teams) || []).find((x) => TEAMNAMES[x.displayName] === abbr); return t ? t.injuries || [] : []; }
 function viewInjuries() {
-  const head = vh('Injury Report', 'Live from ESPN for every team in your games. Gold marks your players. Teal marks a hurt defender on a team your players face this week — that is a matchup edge.');
+  const head = vh('Injury <span>Report</span>', 'Live from ESPN for every team in your games. Gold marks your players. Teal marks a hurt defender on a team your players face this week — that is a matchup edge.');
   if (!S.injuries) return head + `<div class="empty"><b>${S.injLoading ? 'Loading injury reports' : 'Injury reports'}</b>${S.injLoading ? 'Pulling the latest from ESPN.' : 'Open this tab to load them.'}</div>`;
   const { mine, opps } = myTeamsAndOpps();
   const myNames = new Set([...slatePlayersInUse()].map((k) => E.norm(P(k).name)));
@@ -1398,6 +1439,8 @@ function viewInjuries() {
   const teams = S.injuries.teams.map((t) => ({ name: t.displayName, abbr: TEAMNAMES[t.displayName] || '', list: (t.injuries || []).filter((i) => stOK(i.status) && (!q || E.norm(i.athlete && i.athlete.displayName).includes(q))) }))
     .filter((t) => t.list.length && (S.injFilter === 'all' || mine.has(t.abbr) || opps[t.abbr]))
     .sort((a, b) => (mine.has(b.abbr) ? 1 : 0) - (mine.has(a.abbr) ? 1 : 0));
+  const mineKeys = [...slatePlayersInUse()].filter((k) => sportOf(k) === 'nfl');
+  const strip = `<h3 class="sec">Your players</h3><div class="grid4" style="margin-bottom:8px">${mineKeys.map((k) => { const inj = injuriesFor(P(k).team).find((i) => E.norm(i.athlete && i.athlete.displayName) === E.norm(P(k).name)); const st = inj ? inj.status : 'Not on report'; const cls = inj ? injClass(st) : 'win'; return `<div class="mtile" style="grid-template-columns:44px minmax(0,1fr) auto">${avatar(k)}<div style="min-width:0"><b>${esc(P(k).name)}</b><span>${esc(P(k).team)} ${esc(oppLabel(k))}${inj && inj.shortComment ? ' · ' + esc(inj.shortComment.slice(0, 60)) : ''}</span></div><span class="chip ${cls}">${esc(st)}</span></div>`; }).join('')}</div><h3 class="sec">Team reports</h3>`;
   const fb = (id, label) => `<button class="fbtn" type="button" data-inj="${id}" aria-pressed="${S.injFilter === id}">${label}</button>`;
   const sb = (id, label) => `<button class="fbtn" type="button" data-injs="${id}" aria-pressed="${S.injStatus === id}">${label}</button>`;
   const tools = `<div class="tools">${fb('mine', 'My games')}${fb('all', 'All 32 teams')}<span style="width:8px"></span>${sb('all', 'All statuses')}${sb('out', 'Out / IR')}${sb('q', 'Questionable')}<input class="inp" id="injQ" placeholder="Search a player" value="${esc(S.injQ)}" style="flex:1;min-width:170px"><span class="dim" style="font-size:12px;font-weight:700">Updated ${new Date(S.injuries.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}${S.injuries.err ? ' · <span class="loss">' + esc(S.injuries.err) + '</span>' : ''}</span></div>`;
@@ -1412,7 +1455,7 @@ function viewInjuries() {
     }).join('');
     return `<article class="card team-inj" style="--c1:${c1}"><div class="ti-head"><img src="${esc(logo('nfl', t.abbr))}" alt="" onerror="this.remove()"><b>${esc(t.name)}</b><span>${mine.has(t.abbr) ? 'Your team' : facing ? 'Faces ' + esc(facing) : t.list.length + ' listed'}</span></div>${rows}</article>`;
   }).join('');
-  return head + tools + (cards ? `<div class="masonry">${cards}</div>` : '<div class="empty"><b>No injuries match</b>Try All 32 teams or All statuses.</div>');
+  return head + strip + tools + (cards ? `<div class="masonry">${cards}</div>` : '<div class="empty"><b>No injuries match</b>Try All 32 teams or All statuses.</div>');
 }
 
 /* ---------------- research ---------------- */
@@ -1424,7 +1467,14 @@ async function loadResearch() {
   await Promise.all(ids.map(async (id) => { try { S.research[id] = { rows: E.gamelogRows(await getJSON(E.ESPN.gamelog(id))) }; } catch (e) { S.research[id] = { err: e.message }; } }));
   render();
 }
-function researchItems() { return [...S.custom.map((c) => ({ ...c, custom: true })), ...(S.slate.research || [])]; }
+function researchItems() {
+  const seen = new Set(); const out = [];
+  const add = (x) => { const k = x.player + '|' + x.market + '|' + Number(x.line) + '|' + (x.dir || 'over'); if (seen.has(k)) return; seen.add(k); out.push(x); };
+  S.custom.forEach((c) => add({ ...c, custom: true }));
+  activeTickets().forEach((t) => t.legs.forEach((l) => { if (sportOf(l.player) === 'nfl' && E.MARKETS[l.market] && Number(l.line) > 0.5 || (l.market === 'anytime_td' && sportOf(l.player) === 'nfl')) add({ player: l.player, market: l.market, line: Number(l.line), dir: l.dir }); }));
+  (S.slate.research || []).forEach(add);
+  return out;
+}
 function ladderLines(line) {
   if (line <= 2.5) return [0.5, 1.5, 2.5];
   const steps = line >= 150 ? 20 : line >= 60 ? 10 : 5;
@@ -1463,8 +1513,8 @@ function viewResearch() {
   const items = researchItems().filter((x) => sportOf(x.player) === 'nfl');
   const opts = Object.entries(E.MARKETS).filter(([, m]) => m.sport === 'nfl').map(([k, m]) => `<option value="${k}">${esc(m.label)}</option>`).join('');
   const bar = `<form class="card checkbar" id="checkForm" autocomplete="off"><input class="inp" id="ckName" placeholder="Check any NFL player — e.g. Jahmyr Gibbs" aria-label="Player"><select class="inp" id="ckMarket" aria-label="Stat">${opts}</select><input class="inp" id="ckLine" type="number" step="0.5" placeholder="Line" aria-label="Line"><button class="fbtn" type="submit" aria-pressed="true" id="ckGo">Run check</button><div id="ckMsg" class="dim" style="grid-column:1/-1;font-size:12px;font-weight:700"></div></form>`;
-  return vh('Research', 'Real 2026 game logs against every line. The three checks are your rules: season average beats the line, cleared it in 60% of games, and the last three games beat it. The ladder shows how safe the line is if you move it.') + bar +
-    (items.length ? `<div class="grid2">${items.map(researchCard).join('')}</div>` : '<div class="empty"><b>No lines to check yet</b>Use the search above to check any player.</div>');
+  return vh('Pick <span>Research</span>', 'Real 2026 game logs against every line. The three checks are your rules: season average beats the line, cleared it in 60% of games, and the last three games beat it. The ladder shows how safe the line is if you move it.') + bar +
+    (items.length ? `<div class="grid4">${items.map(researchCard).join('')}</div>` : '<div class="empty"><b>No lines to check yet</b>Use the search above to check any player.</div>');
 }
 async function runCheck(e) {
   e.preventDefault();
@@ -1488,7 +1538,27 @@ async function runCheck(e) {
 }
 
 /* ---------------- ledger ---------------- */
-function entries() { const e = (S.results && S.results.entries) || []; return (Array.isArray(e) ? e : Object.values(e)).filter((x) => x && x.date).sort((a, b) => a.date.localeCompare(b.date)); }
+function recorded() { const e = (S.results && S.results.entries) || []; return (Array.isArray(e) ? e : Object.values(e)).filter((x) => x && x.date); }
+function autoGraded() {
+  if (!S.G) return [];
+  const rec = recorded(); const out = [];
+  S.G.pick6.filter(({ t }) => confirmed(t)).forEach(({ t, r }) => {
+    if (r.payout === null) return;
+    if (rec.some((e) => e.slipId === t.id || e.title === t.title)) return;
+    const evs = t.legs.map((l) => eventFor(l.player)).filter(Boolean); const last = evs.map((e) => e.date).sort().pop();
+    out.push({ date: last ? dayKey(new Date(last)) : dayKey(), title: t.title, slipId: t.id, type: 'pick6', stake: r.entry, payout: r.payout, legs: r.n, hits: r.hits, auto: true, picks: r.legs.map(({ leg, g }) => ({ name: P(leg.player).name, player: leg.player, market: leg.market, line: leg.line, result: g.state, value: g.value })) });
+  });
+  return out;
+}
+function entries() { return [...recorded(), ...autoGraded()].sort((a, b) => a.date.localeCompare(b.date)); }
+function playerBoard() {
+  const m = {};
+  const add = (name, key, res, mk) => { if (!['hit', 'miss'].includes(res)) return; const k = E.norm(name); const o = (m[k] = m[k] || { name, key, hit: 0, n: 0, markets: {} }); o.n++; if (res === 'hit') o.hit++; o.markets[mk] = (o.markets[mk] || 0) + 1; if (key && !o.key) o.key = key; };
+  recorded().forEach((e) => (e.picks ? Object.values(e.picks) : []).forEach((p) => add(p.name, p.player, p.result, p.market)));
+  const seenLeg = new Set();
+  if (S.G) S.G.pick6.filter(({ t }) => confirmed(t)).forEach(({ r }) => r.legs.forEach(({ leg, g }) => { const k = leg.player + leg.market + leg.line; if (seenLeg.has(k)) return; seenLeg.add(k); add(P(leg.player).name, leg.player, g.state, leg.market); }));
+  return Object.values(m).sort((a, b) => b.hit / b.n - a.hit / a.n || b.n - a.n);
+}
 function agg(list) { const n = list.length, w = list.filter((e) => Number(e.payout) > Number(e.stake)).length, staked = list.reduce((a, e) => a + Number(e.stake || 0), 0), pl = list.reduce((a, e) => a + Number(e.payout || 0) - Number(e.stake || 0), 0); return { n, w, l: n - w, pl, staked, roi: staked ? pl / staked : 0 }; }
 function periods() {
   const now = new Date(), today = dayKey(now);
@@ -1526,15 +1596,17 @@ function viewLedger() {
   const kpi = (lbl, a) => `<div class="card kpi"><div class="k">${lbl}</div><span class="rec">${a.w}-${a.l}</span><div class="pl ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${money(a.pl, true)}</div><div class="sub">${a.n ? `${Math.round((a.w / a.n) * 100)}% wins · ${a.roi >= 0 ? '+' : ''}${Math.round(a.roi * 100)}% ROI on ${money(a.staked)}` : 'No graded slips yet'}</div></div>`;
   const byLegs = {}; L.forEach((e) => { const k = e.legs ? e.legs + '-pick' : (e.type || 'other'); (byLegs[k] = byLegs[k] || []).push(e); });
   const breakdown = Object.entries(byLegs).map(([k, l]) => { const a = agg(l); return `<tr><td><b>${esc(k)}</b></td><td class="n">${a.w}-${a.l}</td><td class="n">${a.n ? Math.round((a.w / a.n) * 100) + '%' : '–'}</td><td class="n">${money(a.staked)}</td><td class="n ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${money(a.pl, true)}</td></tr>`; }).join('');
-  const hist = [...L].reverse().map((e) => { const pl = Number(e.payout || 0) - Number(e.stake || 0); return `<tr><td>${esc(e.date)}</td><td><b>${esc(e.title)}</b>${e.legs ? ` <span class="dim">· ${e.hits ?? '?'}/${e.legs}</span>` : ''}</td><td class="n">${money(Number(e.stake))}</td><td class="n">${money(Number(e.payout))}</td><td class="n ${pl > 0 ? 'win' : 'loss'}">${money(pl, true)}</td><td><span class="chip ${pl > 0 ? 'win' : 'loss'}">${pl > 0 ? 'Won' : 'Lost'}</span></td></tr>`; }).join('');
+  const board = playerBoard();
+  const boardHTML = board.length ? `<div class="grid4">${board.map((b) => { const pct = b.hit / b.n; const col = pct >= 0.7 ? 'var(--win)' : pct >= 0.5 ? 'var(--live)' : 'var(--loss)'; return `<div class="mtile" style="grid-template-columns:44px minmax(0,1fr) auto">${b.key && S.slate.players[b.key] ? avatar(b.key) : '<div class="av"></div>'}<div style="min-width:0"><b>${esc(b.name)}</b><span>${Object.keys(b.markets).map((k) => esc((E.MARKETS[k] || {}).short || k)).join(' · ')}</span></div><span class="v" style="color:${col}">${b.hit}/${b.n}</span></div>`; }).join('')}</div>` : '<div class="empty"><b>No graded picks yet</b>Every pick that finishes — hit or miss — lands here, even when the slip loses. This fills in as Sunday\'s games end.</div>';
+  const hist = [...L].reverse().map((e) => { const pl = Number(e.payout || 0) - Number(e.stake || 0); return `<tr><td>${esc(e.date)}</td><td><b>${esc(e.title)}</b>${e.legs ? ` <span class="dim">· ${e.hits ?? '?'}/${e.legs}</span>` : ''}${e.auto ? ' <span class="chip">Graded live · awaiting DK</span>' : ''}</td><td class="n">${money(Number(e.stake))}</td><td class="n">${money(Number(e.payout))}</td><td class="n ${pl > 0 ? 'win' : 'loss'}">${money(pl, true)}</td><td><span class="chip ${pl > 0 ? 'win' : 'loss'}">${pl > 0 ? 'Won' : 'Lost'}</span></td></tr>`; }).join('');
   const arch = S.archive ? Object.entries(S.archive).sort((a, b) => String(b[1].closedAt || '').localeCompare(String(a[1].closedAt || ''))).map(([k, w]) => { const sl = w.slate || {}; const tix = Object.values(sl.pick6 || {}); return `<details class="card more" style="padding:14px 16px;margin:0 0 10px"><summary style="font-size:15px;color:var(--fg)">${esc(w.title || k)} <span class="dim" style="font-weight:700">· ${tix.length} slips${w.closedAt ? ' · closed ' + esc(String(w.closedAt).slice(0, 10)) : ''}</span></summary><div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${tix.map((t) => `<div class="mtile" style="grid-template-columns:minmax(0,1fr) auto"><div style="min-width:0"><b>${esc(t.title)}</b><span>${Object.values(t.legs || {}).map((l) => esc(((sl.players || {})[l.player] || {}).name || l.player) + ' ' + esc(l.line)).join(' · ')}</span></div><span class="v" style="font-size:16px">${money(Number(t.entry))}</span></div>`).join('')}</div></details>`; }).join('') : '';
-  return vh('Ledger', 'Every graded slip, the running profit line and how each slip type performs. DraftKings is the official settlement; results are entered after they settle.') +
+  return vh('The <span>Ledger</span>', 'Every graded slip, the running profit line, how each slip size performs, and which players keep cashing for you — even on slips that lost.', `<span class="chip">${L.length} slips graded</span><span class="chip">${board.length} players tracked</span>`) +
     `<div class="kpis">${kpi('Today', p.today)}${kpi('This week', p.week)}${kpi('This month', p.month)}${kpi('All-time', p.all)}</div>` +
     (L.length ? `<div class="card plchart"><div class="st-font" style="font-size:20px;margin-bottom:6px">Running profit</div>${plChart(L)}</div>
       <h3 class="sec">By slip size</h3><div class="card tablewrap"><table class="ltable"><thead><tr><th>Slip</th><th style="text-align:right">Record</th><th style="text-align:right">Win %</th><th style="text-align:right">Staked</th><th style="text-align:right">P/L</th></tr></thead><tbody>${breakdown}</tbody></table></div>
       <h3 class="sec">History</h3><div class="card tablewrap"><table class="ltable"><thead><tr><th>Date</th><th>Slip</th><th style="text-align:right">Entry</th><th style="text-align:right">Paid</th><th style="text-align:right">P/L</th><th></th></tr></thead><tbody>${hist}</tbody></table></div>`
       : '<div class="empty"><b>No graded slips yet</b>Results land here after DraftKings settles them — this week’s slips are the first entries.</div>') +
-    `<h3 class="sec">Previous weeks</h3>${arch || '<div class="empty"><b>No archived weeks yet</b>Each week is archived here when the slate closes.</div>'}`;
+    `<h3 class="sec">Player hit board</h3>${boardHTML}<h3 class="sec">Previous weeks</h3>${arch || '<div class="empty"><b>No archived weeks yet</b>Each week is archived here when the slate closes.</div>'}`;
 }
 
 /* ---------------- ticker (OBS) ---------------- */
@@ -1551,6 +1623,7 @@ function renderTicker() {
 /* ---------------- render ---------------- */
 function render() {
   if (!S.G) S.G = gradeAll();
+  document.body.dataset.tab = S.tab;
   renderNav(); renderRecord(); feedStatus(); renderTicker();
   $('#slateTitle').textContent = (S.slate.title || 'Live picks board') + ' · live board';
   const dk = S.slate.dkLink; const dkEl = $('#dkJoin'); if (dk) { dkEl.href = dk; dkEl.hidden = false; } else dkEl.hidden = true;
@@ -1575,7 +1648,9 @@ function calcUpdate() {
 /* ---------------- events ---------------- */
 document.addEventListener('click', (e) => {
   const t = e.target.closest('[data-tab]'); if (t) { setTab(t.dataset.tab); return; }
-  const v = e.target.closest('button[data-vibe]'); if (v) { setVibe(v.dataset.vibe); render(); return; }
+  const vb = e.target.closest('#vibeBtn'); if (vb) { const m = $('#vibeMenu'); m.hidden = !m.hidden; vb.setAttribute('aria-expanded', String(!m.hidden)); return; }
+  const v = e.target.closest('.vopt'); if (v) { setVibe(v.dataset.vibe); $('#vibeMenu').hidden = true; render(); return; }
+  if (!e.target.closest('#vibeMenu')) { const m = $('#vibeMenu'); if (m && !m.hidden) m.hidden = true; }
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; render(); return; }
   const sh = e.target.closest('[data-shift]'); if (sh) { S.shift = Number(sh.dataset.shift); render(); return; }
   const ij = e.target.closest('[data-inj]'); if (ij) { S.injFilter = ij.dataset.inj; render(); return; }
@@ -1584,7 +1659,6 @@ document.addEventListener('click', (e) => {
 });
 document.addEventListener('submit', (e) => { if (e.target.id === 'checkForm') runCheck(e); });
 document.addEventListener('change', (e) => {
-  if (e.target.id === 'soundTgl') { store.set('pz_sound', e.target.checked); if (e.target.checked) chime('win'); }
   if (e.target.matches('[data-calc]')) calcUpdate();
 });
 let injT; document.addEventListener('input', (e) => { if (e.target.id === 'injQ') { clearTimeout(injT); const val = e.target.value; injT = setTimeout(() => { S.injQ = val; render(); }, 250); } });
@@ -1681,6 +1755,13 @@ const Chat = {
     finally { $('#chatSend').disabled = false; }
   },
 };
+
+/* swap in the owner's real crest artwork when crest.png is published next to the page */
+(function realCrest() {
+  const img = new Image();
+  img.onload = () => { document.querySelectorAll('.crest, .chat-fab .cr, .chat-h .cr, .ticker .tag svg').forEach((el) => { const i = document.createElement('img'); i.src = img.src; i.alt = ''; i.className = el.getAttribute('class') || ''; i.style.objectFit = 'contain'; el.replaceWith(i); }); const fav = document.querySelector('link[rel=icon]'); if (fav) fav.href = img.src; };
+  img.src = 'crest.png?v=1';
+})();
 
 /* ---------------- boot ---------------- */
 (async function boot() {

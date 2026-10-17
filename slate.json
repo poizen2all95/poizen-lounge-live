@@ -366,7 +366,7 @@
       "id": "mlb-4",
       "title": "ALCS Game 4 — 4-Pick",
       "badge": "MLB · $5 Bonus + Caminero Gimme",
-      "status": "unconfirmed",
+      "status": "confirmed",
       "entry": 5,
       "toWin": 33,
       "legs": [
@@ -395,13 +395,14 @@
           "line": 0.5,
           "mult": "0.8x"
         }
-      ]
+      ],
+      "window": "Fri 10/16 · ALCS G4"
     },
     {
       "id": "mlb-6",
       "title": "ALCS Game 4 — 6-Pick",
       "badge": "MLB · J. Ramírez Promo",
-      "status": "unconfirmed",
+      "status": "confirmed",
       "entry": 3,
       "toWin": 40,
       "legs": [
@@ -441,7 +442,8 @@
           "line": 0.5,
           "mult": "0.8x"
         }
-      ]
+      ],
+      "window": "Fri 10/16 · ALCS G4"
     }
   ],
   "firstTD": {
