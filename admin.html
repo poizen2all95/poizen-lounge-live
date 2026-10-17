@@ -741,12 +741,12 @@ td.n{text-align:right;font-weight:800}
 
   // ---------- coach ----------
   /* picks: [{market, dir, result, prob}] → hit rates by market+direction and calibration buckets */
-  function coach(picks) {
+  function coach(picks, edges) {
     const done = picks.filter((p) => p.result === 'hit' || p.result === 'miss');
     const by = {};
     done.forEach((p) => { const k = p.market + '|' + (p.dir || 'over'); const o = (by[k] = by[k] || { market: p.market, dir: p.dir || 'over', n: 0, hit: 0 }); o.n++; if (p.result === 'hit') o.hit++; });
     const markets = Object.values(by).sort((a, b) => b.hit / b.n - a.hit / a.n || b.n - a.n);
-    const buckets = [[0, 0.45, 'Under 45%'], [0.45, 0.6, '45–60%'], [0.6, 0.75, '60–75%'], [0.75, 1.01, '75%+']].map(([lo, hi, label]) => {
+    const buckets = (edges || [[0, 0.45, 'Under 45%'], [0.45, 0.6, '45–60%'], [0.6, 0.75, '60–75%'], [0.75, 1.01, '75%+']]).map(([lo, hi, label]) => {
       const xs = done.filter((p) => typeof p.prob === 'number' && p.prob >= lo && p.prob < hi);
       return { label, n: xs.length, expected: xs.length ? xs.reduce((a, p) => a + p.prob, 0) / xs.length : null, actual: xs.length ? xs.filter((p) => p.result === 'hit').length / xs.length : null };
     });
