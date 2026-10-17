@@ -1082,7 +1082,7 @@ function viewScalp() {
     const ev = eventFor(targets[0] && targets[0].t.player);
     const done = targets.every(({ r }) => ['hit', 'miss', 'cashed'].includes(r.state));
     const live = targets.some(({ r }) => r.state === 'live' || r.state === 'td1');
-    return `<button class="shift" type="button" data-shift="${i}" aria-pressed="${i === S.shift}"><div class="k"><span>${esc(sh.label)}</span>${live ? '<span class="red">LIVE</span>' : done ? '<span class="em">DONE</span>' : ''}</div><b>${targets.map(({ t }) => esc(P(t.player).name.split(' ').slice(-1)[0])).join(' + ')}</b>${ev && ev.state === 'pre' ? `<span class="cd" data-kick="${esc(ev.date)}"></span>` : `<span class="dim" style="font-size:12px">${esc(ev ? ev.detail : '')}</span>`}</button>`;
+    return `<button class="shift" type="button" data-shift="${i}" aria-pressed="${i === S.shift}"><div class="k"><span>${esc(sh.label)}</span>${live ? '<span class="red">LIVE</span>' : done ? '<span class="em">DONE</span>' : ''}</div><b>${targets.map(({ t }) => esc(P(t.player).name.replace(/\s+(Jr\.?|Sr\.?|II|III|IV|V)$/i, '').split(' ').slice(-1)[0])).join(' + ')}</b>${ev && ev.state === 'pre' ? `<span class="cd" data-kick="${esc(ev.date)}"></span>` : `<span class="dim" style="font-size:12px">${esc(ev ? ev.detail : '')}</span>`}</button>`;
   }).join('');
   const cards = cur.targets.map(({ t, r }) => {
     const pips = `<div class="tds" aria-label="${r.tds || 0} touchdowns"><i class="${r.tds >= 1 ? 'on' : ''}"></i><i class="${r.tds >= 2 ? 'on' : ''}"></i></div>`;
