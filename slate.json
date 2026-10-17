@@ -1,8 +1,8 @@
 {
   "version": 1,
   "title": "NFL Week 6",
-  "updated": "2026-10-16T20:30:00-07:00",
-  "note": "Imported from the Gemini board. Tickets marked unconfirmed have not been matched to DraftKings yet.",
+  "updated": "2026-10-17T00:32:50.316Z",
+  "note": "Pick6 tickets confirmed from DraftKings My Picks (Sun 10/18). First-TD and scalp are game plans until placed.",
   "players": {
     "henry": {
       "name": "Derrick Henry",
@@ -215,24 +215,59 @@
   },
   "pick6": [
     {
-      "id": "dk-8-staged",
-      "title": "DraftKings 8-Pick — Dak Gimme",
-      "badge": "Staged on DraftKings",
-      "status": "unconfirmed",
+      "id": "nfl-3",
+      "title": "3-Pick Anchor",
+      "badge": "50% Winnings Boost",
+      "status": "confirmed",
       "entry": 10,
-      "toWin": 2219.81,
-      "payouts": {
-        "6": 1.3,
-        "7": 5.5,
-        "8": 221.981
-      },
+      "toWin": 131,
       "legs": [
         {
-          "player": "dak",
+          "player": "young",
           "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "warren",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "allen",
+          "market": "anytime_td",
           "line": 0.5,
-          "mult": "Gimme",
-          "gimme": true
+          "mult": "0.8x"
+        }
+      ],
+      "window": "Sun 10/18"
+    },
+    {
+      "id": "nfl-8-lamb",
+      "title": "8-Pick Lamb Run",
+      "badge": "50% Winnings Boost",
+      "status": "confirmed",
+      "entry": 10,
+      "toWin": 2400,
+      "legs": [
+        {
+          "player": "young",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "mcmillan",
+          "market": "rec_yds",
+          "line": 89.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "warren",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.3x"
         },
         {
           "player": "bijan",
@@ -241,22 +276,63 @@
           "mult": "0.7x"
         },
         {
-          "player": "taylor",
-          "market": "rush_yds",
-          "line": 99.5,
+          "player": "henry",
+          "market": "rush_rec_yds",
+          "line": 109.5,
           "mult": "1.1x"
         },
         {
           "player": "allen",
-          "market": "pass_yds",
-          "line": 259.5,
-          "mult": "1.2x"
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.8x"
         },
         {
-          "player": "irving",
+          "player": "walker",
           "market": "rush_yds",
-          "line": 79.5,
+          "line": 119.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "lamb",
+          "market": "rec_yds",
+          "line": 99.5,
           "mult": "1.3x"
+        }
+      ],
+      "window": "Sun 10/18"
+    },
+    {
+      "id": "nfl-8-dak",
+      "title": "8-Pick Dak Gimme",
+      "badge": "Dak 0.5 Pass Yds Promo",
+      "status": "confirmed",
+      "entry": 10,
+      "toWin": 1260.53,
+      "legs": [
+        {
+          "player": "young",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "mcmillan",
+          "market": "rec_yds",
+          "line": 89.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "warren",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "bijan",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.7x"
         },
         {
           "player": "henry",
@@ -265,18 +341,26 @@
           "mult": "1.1x"
         },
         {
-          "player": "young",
-          "market": "pass_yds",
-          "line": 269.5,
-          "mult": "1.4x"
+          "player": "allen",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.8x"
         },
         {
-          "player": "mahomes",
+          "player": "walker",
+          "market": "rush_yds",
+          "line": 119.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "dak",
           "market": "pass_yds",
-          "line": 259.5,
-          "mult": "1.5x"
+          "line": 0.5,
+          "mult": "Gimme",
+          "gimme": true
         }
-      ]
+      ],
+      "window": "Sun 10/18"
     },
     {
       "id": "mlb-4",
@@ -358,156 +442,11 @@
           "mult": "0.8x"
         }
       ]
-    },
-    {
-      "id": "nfl-3",
-      "title": "3-Pick Bankroll Builder",
-      "badge": "+50% Winnings Boost",
-      "status": "unconfirmed",
-      "entry": 10,
-      "toWin": 131,
-      "legs": [
-        {
-          "player": "young",
-          "market": "pass_yds",
-          "line": 269.5,
-          "mult": "1.4x"
-        },
-        {
-          "player": "warren",
-          "market": "rush_rec_yds",
-          "line": 109.5,
-          "mult": "1.3x"
-        },
-        {
-          "player": "allen",
-          "market": "anytime_td",
-          "line": 0.5,
-          "mult": "0.8x"
-        }
-      ]
-    },
-    {
-      "id": "nfl-8-lamb",
-      "title": "8-Pick CeeDee Lamb Re-Run",
-      "badge": "+50% Winnings Boost",
-      "status": "unconfirmed",
-      "entry": 10,
-      "toWin": 2400,
-      "legs": [
-        {
-          "player": "young",
-          "market": "pass_yds",
-          "line": 269.5,
-          "mult": "1.4x"
-        },
-        {
-          "player": "mcmillan",
-          "market": "rec_yds",
-          "line": 89.5,
-          "mult": "1.6x"
-        },
-        {
-          "player": "warren",
-          "market": "rush_rec_yds",
-          "line": 109.5,
-          "mult": "1.3x"
-        },
-        {
-          "player": "bijan",
-          "market": "anytime_td",
-          "line": 0.5,
-          "mult": "0.7x"
-        },
-        {
-          "player": "henry",
-          "market": "rush_rec_yds",
-          "line": 109.5,
-          "mult": "1.1x"
-        },
-        {
-          "player": "allen",
-          "market": "anytime_td",
-          "line": 0.5,
-          "mult": "0.8x"
-        },
-        {
-          "player": "walker",
-          "market": "rush_yds",
-          "line": 119.5,
-          "mult": "1.6x"
-        },
-        {
-          "player": "lamb",
-          "market": "rec_yds",
-          "line": 99.5,
-          "mult": "1.3x"
-        }
-      ]
-    },
-    {
-      "id": "nfl-8-dak",
-      "title": "8-Pick Dak Gimme (Gemini version)",
-      "badge": "Dak 0.5 Pass Yds Gimme",
-      "status": "unconfirmed",
-      "entry": 10,
-      "toWin": 1260.53,
-      "legs": [
-        {
-          "player": "young",
-          "market": "pass_yds",
-          "line": 269.5,
-          "mult": "1.4x"
-        },
-        {
-          "player": "mcmillan",
-          "market": "rec_yds",
-          "line": 89.5,
-          "mult": "1.6x"
-        },
-        {
-          "player": "warren",
-          "market": "rush_rec_yds",
-          "line": 109.5,
-          "mult": "1.3x"
-        },
-        {
-          "player": "bijan",
-          "market": "anytime_td",
-          "line": 0.5,
-          "mult": "0.7x"
-        },
-        {
-          "player": "henry",
-          "market": "rush_rec_yds",
-          "line": 109.5,
-          "mult": "1.1x"
-        },
-        {
-          "player": "allen",
-          "market": "anytime_td",
-          "line": 0.5,
-          "mult": "0.8x"
-        },
-        {
-          "player": "walker",
-          "market": "rush_yds",
-          "line": 119.5,
-          "mult": "1.6x"
-        },
-        {
-          "player": "dak",
-          "market": "pass_yds",
-          "line": 0.5,
-          "mult": "Gimme",
-          "gimme": true
-        }
-      ]
     }
   ],
   "firstTD": {
     "title": "$20 Tiered First-TD Portfolio",
-    "status": "unconfirmed",
+    "status": "plan",
     "bets": [
       {
         "player": "bijan",
@@ -549,7 +488,7 @@
   "scalp": {
     "title": "2+ TD Live Scalp",
     "seed": 100,
-    "status": "unconfirmed",
+    "status": "plan",
     "rule": "Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.",
     "shifts": [
       {
