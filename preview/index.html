@@ -1024,15 +1024,16 @@ html[data-team] .fbtn[aria-pressed="true"]{color:var(--fg)!important}
 .lh-jn{position:absolute;right:1.5%;top:-6%;z-index:1;font:700 clamp(130px,17vw,250px)/1 var(--jersey);color:rgba(255,255,255,.13);pointer-events:none}
 .lh-hs{position:absolute;right:7%;bottom:0;z-index:2;height:108%;width:auto;max-width:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.6))}
 .lh-txt{position:relative;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:22px 28px 24px;max-width:58%}
-.lh-tag{display:inline-flex;align-items:center;gap:7px;font:900 13px/1 var(--stadium);letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
+.lh-tag{display:inline-flex;align-items:center;gap:7px;font:900 13px/1 var(--stadium);letter-spacing:.14em;text-transform:uppercase;color:#F0D79E}
 .lh-tag::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
 .lh-tag.live{color:#FF5A72} .lh-tag.live::before{animation:blink 1.1s infinite}
 .lhero2 h2{margin:0;font:900 clamp(46px,6vw,84px)/.86 var(--stadium);text-transform:uppercase;letter-spacing:.005em;text-shadow:0 4px 24px rgba(0,0,0,.5)}
 .lh-k{font-size:15px;font-weight:700;color:rgba(255,255,255,.86)} .lh-k b{color:#fff}
-.lh-cd{font:700 clamp(40px,4.6vw,64px)/1 var(--jersey);letter-spacing:.02em;color:var(--gold2);text-shadow:0 4px 20px rgba(0,0,0,.6)}
+.lh-cd{font:700 clamp(40px,4.6vw,64px)/1 var(--jersey);letter-spacing:.02em;color:#F0D79E;text-shadow:0 4px 20px rgba(0,0,0,.6)}
 .lh-chips{display:flex;gap:6px;flex-wrap:wrap}
 .lhero2 .btn-sweat{display:inline-flex;align-items:center;gap:8px;margin-top:8px;color:#fff;border-color:color-mix(in srgb,var(--gold) 70%,transparent);background:rgba(0,0,0,.35);backdrop-filter:blur(6px)}
-.lhero2 .btn-sweat svg{width:18px;height:18px;color:var(--gold2)}
+.lhero2 .btn-sweat svg{width:18px;height:18px;color:#F0D79E}
+[data-vibe="daylight"][data-team] .brand h1{background:linear-gradient(180deg,var(--team-acc),color-mix(in srgb,var(--team-acc) 55%,#000));-webkit-background-clip:text;background-clip:text}
 .lh-who{position:absolute;z-index:3;right:22px;bottom:16px;text-align:right;text-shadow:0 2px 12px rgba(0,0,0,.85)}
 .lh-who b{display:block;font:900 26px/1 var(--stadium);text-transform:uppercase}
 .lh-who span{display:block;font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-top:3px}
@@ -2527,7 +2528,7 @@ function tg(sport, abbr) { const [a, b] = teamColors(sport, abbr); return `radia
 function headshot(key, w = 350) {
   const p = P(key);
   if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`;
-  if (p.headshot) return p.headshot;
+  if (p.headshot) { const m = String(p.headshot).match(/mlbstatic\.com\/.*people\/(\d+)\/headshot/); return m ? `https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_${w},q_auto:best/v1/people/${m[1]}/headshot/silo/current.png` : p.headshot; }
   const g = gameFor(key); const pl = g && E.findPlayer(g, { name: p.name, team: p.team });
   if (pl) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${pl.id}.png&w=${w}&h=${Math.round(w * 0.727)}`;
   return '';
@@ -2716,7 +2717,7 @@ function wxHTML(ev, full) {
   if (w.kind === 'espn') return `<span class="wx">${WXI[espnIcon(w.text)]}<b>${esc(w.text)}${w.t ? ' ' + esc(w.t) + '°F' : ''}</b>${full ? '<em>ESPN game-day weather</em>' : ''}</span>`;
   const [txt, ic] = WMO(w.code, w.day); const t = Math.round(w.t) + '°F'; const wind = typeof w.wind === 'number' ? Math.round(w.wind) + ' mph wind' : '';
   const rain = w.kind === 'fc' && typeof w.rain === 'number' ? `${w.rain}% rain` : '';
-  const lbl = w.kind === 'live' ? 'Live at the stadium' : 'Kickoff forecast';
+  const lbl = w.kind === 'live' ? 'Live at the stadium' : ev.sport === 'mlb' ? 'First-pitch forecast' : 'Kickoff forecast';
   return `<span class="wx ${w.kind}">${WXI[ic]}<b>${t} ${esc(txt)}</b>${full ? `<em>${[lbl, wind, rain].filter(Boolean).join(' · ')}</em>` : rain && w.rain >= 30 ? `<em>${rain}</em>` : ''}</span>`;
 }
 function tvHTML(ev) {
@@ -3965,7 +3966,7 @@ function liveHero(live, next, hero) {
   const tag = live.length ? '<span class="lh-tag live">Live now</span>' : next.length ? '<span class="lh-tag">Pregame</span>' : '<span class="lh-tag">Final</span>';
   const state = live.length
     ? `<div class="lh-k">${live.length} game${live.length === 1 ? '' : 's'} live</div><div class="lh-chips">${live.map((e) => `<span class="chip live">${esc(e.name)} · ${esc(e.detail)}</span>`).join('')}</div>`
-    : hero && hero.state === 'pre' ? `<div class="lh-k">Next kickoff · <b>${esc(hero.name)}</b> · ${esc(kickLabel(hero.date))}</div><div class="lh-cd" data-kick="${esc(hero.date)}"><span></span></div>` : '<div class="lh-k">Every game on this slate is final.</div>';
+    : hero && hero.state === 'pre' ? `<div class="lh-k">${hero.sport === 'mlb' ? 'First pitch' : hero.sport === 'nba' ? 'Tip-off' : 'Next kickoff'} · <b>${esc(hero.name)}</b> · ${esc(kickLabel(hero.date))}</div><div class="lh-cd" data-kick="${esc(hero.date)}"><span></span></div>` : '<div class="lh-k">Every game on this slate is final.</div>';
   const [c1, c2] = p ? teamColors(p.sport || 'nfl', p.team) : ['#1f2937', '#334155'];
   return `<section class="lhero2" style="--c1:${c1};--c2:${c2}">${hero ? venueArt(hero, true) : ''}<div class="lh-shade"></div>
     ${p && p.number ? `<div class="lh-jn">${esc(p.number)}</div>` : ''}${src ? `<img class="lh-hs" src="${esc(src)}" alt="" onerror="this.remove()">` : ''}
