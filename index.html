@@ -1475,6 +1475,36 @@ html[data-season="playoffs"][data-vibe="daylight"] .vh h2,html[data-season="play
 }
 html[data-season="playoffs"] main>h3.sec,html[data-season="playoffs"] main h3.sec{text-shadow:0 2px 14px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.8)}
 html[data-season="playoffs"][data-vibe="daylight"] main h3.sec{text-shadow:0 0 14px rgba(255,255,255,1),0 0 4px rgba(255,255,255,1)}
+/* reference-matched layer: stadium-light bokeh, stadium banners, neon rims, metallic gold headlines, lit player cards */
+html[data-season="playoffs"]{--po-bokeh:
+  radial-gradient(circle at 8% 14%,rgba(255,255,255,.95) 0 1.2px,transparent 2.4px),radial-gradient(circle at 15% 32%,rgba(255,236,180,.9) 0 1px,transparent 2px),
+  radial-gradient(circle at 23% 9%,rgba(255,255,255,.85) 0 1.6px,transparent 3px),radial-gradient(circle at 31% 26%,rgba(255,230,160,.8) 0 1px,transparent 2px),
+  radial-gradient(circle at 44% 12%,rgba(255,255,255,.9) 0 1.3px,transparent 2.6px),radial-gradient(circle at 57% 30%,rgba(255,240,200,.85) 0 1px,transparent 2px),
+  radial-gradient(circle at 66% 8%,rgba(255,255,255,.95) 0 1.8px,transparent 3.2px),radial-gradient(circle at 74% 22%,rgba(255,226,150,.9) 0 1.1px,transparent 2.2px),
+  radial-gradient(circle at 83% 11%,rgba(255,255,255,.9) 0 1.4px,transparent 2.8px),radial-gradient(circle at 92% 28%,rgba(255,240,200,.85) 0 1px,transparent 2px),
+  radial-gradient(circle at 37% 44%,rgba(255,255,255,.6) 0 1px,transparent 2px),radial-gradient(circle at 88% 46%,rgba(255,255,255,.6) 0 1px,transparent 2px),
+  radial-gradient(14% 22% at 20% 0%,rgba(255,240,200,.45),transparent 70%),radial-gradient(14% 22% at 50% -4%,rgba(255,240,200,.4),transparent 70%),radial-gradient(14% 22% at 80% 0%,rgba(255,240,200,.45),transparent 70%)}
+html[data-season="playoffs"] .lhero2::before,html[data-season="playoffs"] .banner::before,html[data-season="playoffs"] .pc-art::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--po-bokeh);mix-blend-mode:screen}
+html[data-season="playoffs"] .pc-art::before{z-index:-1}
+/* page banners become a lit stadium wall */
+html[data-season="playoffs"] .banner{border:1px solid var(--po-gold);color:#fff;background:linear-gradient(90deg,rgba(4,8,16,.94) 0%,rgba(4,8,16,.72) 45%,rgba(4,8,16,.25) 100%),var(--po-stadium,linear-gradient(160deg,#0B1A30,#04070D)) center 35%/cover;box-shadow:0 0 0 1px rgba(255,211,107,.35),0 0 40px -10px rgba(255,211,107,.55),inset 0 -30px 60px -40px var(--po-glow)}
+html[data-season="playoffs"] .banner h2{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.8)}
+html[data-season="playoffs"] .banner p{color:rgba(255,255,255,.82)}
+html[data-season="playoffs"] .banner .wm{opacity:.18}
+html[data-season="playoffs"] .banner h2 span,html[data-season="playoffs"] .lhero2 h2 span{background:linear-gradient(180deg,#FFF6D6 0%,#FFD46A 38%,#C88A1A 58%,#FFE39A 78%,#B57A12 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 16px rgba(255,200,80,.55))}
+html[data-season="playoffs"] .lhero2 h2{background:none;-webkit-text-fill-color:#fff;color:#fff;filter:drop-shadow(0 4px 18px rgba(0,0,0,.6))}
+/* neon rim light: gold edge, teal underglow */
+html[data-season="playoffs"] main .card,html[data-season="playoffs"] .kpis2,html[data-season="playoffs"] .rail{box-shadow:0 0 0 1px rgba(255,211,107,.42),0 0 20px -6px rgba(255,211,107,.45),inset 0 -26px 40px -34px rgba(56,240,208,.9),inset 0 1px 0 rgba(255,240,200,.35),0 24px 50px -30px #000!important}
+html[data-season="playoffs"] details.p6{border-color:rgba(255,211,107,.6);box-shadow:0 0 0 1px rgba(255,211,107,.35),0 0 26px -8px rgba(255,211,107,.6)}
+/* player cards: team-color spotlight rays, bright jersey number */
+html[data-season="playoffs"] .pc-art{background:radial-gradient(70% 90% at 50% -10%,color-mix(in srgb,var(--tg) 55%,#fff 45%),transparent 62%),conic-gradient(from 180deg at 50% -20%,transparent 150deg,color-mix(in srgb,var(--tg) 60%,#fff) 165deg,transparent 172deg,transparent 188deg,color-mix(in srgb,var(--tg) 60%,#fff) 195deg,transparent 210deg),linear-gradient(180deg,color-mix(in srgb,var(--tg) 80%,#000),#05070C)}
+html[data-season="playoffs"] .pc-art .jn{color:transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--tg) 40%,#fff),color-mix(in srgb,var(--tg) 85%,#000));-webkit-background-clip:text;background-clip:text;opacity:.75}
+html[data-season="playoffs"] .lh-jn{color:rgba(255,230,170,.32)!important}
+/* Daylight playoffs: white glass, same lights */
+html[data-season="playoffs"][data-vibe="daylight"] .banner{color:var(--fg);background:linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.78) 45%,rgba(255,255,255,.2) 100%),var(--po-stadium,linear-gradient(160deg,#DDE8F5,#fff)) center 35%/cover}
+html[data-season="playoffs"][data-vibe="daylight"] .banner h2{color:#0E1720;text-shadow:0 0 18px rgba(255,255,255,.9)}
+html[data-season="playoffs"][data-vibe="daylight"] .banner p{color:#33414E}
+html[data-season="playoffs"][data-vibe="daylight"] main .card,html[data-season="playoffs"][data-vibe="daylight"] .kpis2,html[data-season="playoffs"][data-vibe="daylight"] .rail{box-shadow:0 0 0 1px rgba(196,138,18,.38),0 0 22px -8px rgba(255,190,60,.55),inset 0 -24px 40px -34px rgba(0,163,134,.6),0 20px 40px -28px rgba(20,40,70,.45)!important}
 .po-opt.locked{opacity:.75}.po-opt.locked .pv{filter:grayscale(.6)}
 .seo-intro{max-width:720px;padding:28px 8px;color:var(--fg2)}.seo-intro h2{font:900 34px var(--stadium);text-transform:uppercase;color:var(--fg);margin:0 0 8px}
 .reqform{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px;padding:14px;border-radius:14px;border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 7%,var(--panel2))}.reqform p{margin:0}
@@ -3185,7 +3215,8 @@ function applyPlayoffs() {
   if (own && S.me.user) store.set('pz_playoffs', !!S.playoffsOn);
 }
 function foundingLeft() { const f = (S.plans && S.plans.founding) || {}; const cap = Number(f.cap) || M.FOUNDING_CAP; return { cap, left: Math.max(0, cap - (Number(f.taken) || 0)) }; }
-function planPrice(tier) { const c = (S.plans && S.plans[tier]) || {}; const { cap, left } = foundingLeft(); const founding = !!(c.founding && left > 0);
+const PRICE_DEFAULT = { pro: { price: '$79 / month', founding: '$29 / month' }, elite: { price: '$249 / month', founding: '$149 / month' } };
+function planPrice(tier) { const c = { ...(PRICE_DEFAULT[tier] || {}), ...Object.fromEntries(Object.entries((S.plans && S.plans[tier]) || {}).filter(([, v]) => v)) }; const { cap, left } = foundingLeft(); const founding = !!(c.founding && left > 0);
   return { founding, now: founding ? c.founding : c.price || '', std: c.price || '', cap, left }; }
 const untilTxt = (ms) => new Date(ms).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
 function planCard() {
@@ -4300,7 +4331,7 @@ function liveHero(live, next, hero) {
   const [c1, c2] = p ? teamColors(p.sport || 'nfl', p.team) : ['#1f2937', '#334155'];
   return `<section class="lhero2" style="--c1:${c1};--c2:${c2}">${hero ? venueArt(hero, true) : ''}<div class="lh-shade"></div>
     ${p && p.number ? `<div class="lh-jn">${esc(p.number)}</div>` : ''}${src ? `<img class="lh-hs" src="${esc(src)}" alt="" onerror="this.remove()">` : ''}
-    <div class="lh-txt">${tag}<h2>Live Sweat</h2>${state}<button class="btn-sweat" type="button" data-sweat="on">${SVG.live}Sweat mode<span class="wide-only"> · full screen</span></button></div>
+    <div class="lh-txt">${tag}<h2>Live <span>Sweat</span></h2>${state}<button class="btn-sweat" type="button" data-sweat="on">${SVG.live}Sweat mode<span class="wide-only"> · full screen</span></button></div>
     ${p ? `<div class="lh-who"><b>${esc(p.name)}</b><span>${esc(p.team)} · ${esc(p.pos || '')}${p.number ? ' · #' + esc(p.number) : ''}</span>${hero && hero.venue ? `<em>${esc(hero.venue)}</em>` : ''}</div>` : ''}</section>`;
 }
 /* the model's numbers are final only once scores, injuries and every game log are in */
