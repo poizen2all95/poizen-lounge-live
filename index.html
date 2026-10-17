@@ -1500,6 +1500,41 @@ html[data-season="playoffs"][data-vibe="daylight"] .banner h2 span{background:li
 html[data-season="playoffs"][data-vibe="daylight"] .brand h1{background:linear-gradient(180deg,#E9B13A,#8A5A00);-webkit-background-clip:text;background-clip:text}
 html[data-season="playoffs"][data-vibe="daylight"] .navbtn[aria-current="page"]{color:#8A5E00!important}
 @media (prefers-reduced-motion:no-preference){html[data-season="playoffs"] .lhero2::before{animation:poTwinkle 3.2s ease-in-out infinite alternate}@keyframes poTwinkle{from{opacity:.65}to{opacity:1}}}
+
+/* ===== drawn Playoffs stadium on every photo slot (hero, game cards, player cards, context, team reports, pick'em) ===== */
+html[data-season="playoffs"]{--po-scene:var(--po-night)}
+html[data-season="playoffs"][data-vibe="daylight"]{--po-scene:var(--po-day)}
+.poart{display:block;background:var(--po-scene) center 40%/cover no-repeat}
+html[data-season="playoffs"] .pc-art .poart,html[data-season="playoffs"] .ath-hero .poart,html[data-season="playoffs"] .pk-art .poart{background:linear-gradient(180deg,color-mix(in srgb,var(--tg,#123) 70%,transparent),color-mix(in srgb,var(--tg,#123) 25%,transparent) 55%,color-mix(in srgb,var(--tg,#123) 80%,#000)),var(--po-scene) center 30%/cover}
+html[data-season="playoffs"] .ctx-art .poart,html[data-season="playoffs"] .ti-head .poart{background:linear-gradient(90deg,color-mix(in srgb,var(--c1,#123) 75%,transparent),transparent 70%),var(--po-scene) center 35%/cover}
+html[data-season="playoffs"] .ti-head .poart{width:100%;-webkit-mask-image:none;mask-image:none}
+html[data-season="playoffs"] .lhero2 .poart{background:linear-gradient(90deg,color-mix(in srgb,var(--c1,#123) 55%,transparent),transparent 60%),var(--po-scene) center 45%/cover}
+html[data-season="playoffs"] .banner{background:linear-gradient(90deg,rgba(4,9,18,.9) 0%,rgba(4,9,18,.5) 40%,rgba(4,9,18,0) 72%),var(--po-scene) center 38%/cover!important}
+html[data-season="playoffs"][data-vibe="daylight"] .banner{background:linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.65) 40%,rgba(255,255,255,0) 72%),var(--po-scene) center 38%/cover!important}
+html[data-season="playoffs"] .lh-shade,html[data-season="playoffs"] .g-shade{background:linear-gradient(90deg,rgba(4,9,18,.7),rgba(4,9,18,.15) 50%,transparent)}
+html[data-season="playoffs"] .pc-tint,html[data-season="playoffs"] .ath-tint,html[data-season="playoffs"] .pk-tint{opacity:.35}
+
+/* ===== your team, loud: when you pick a team the whole board wears it ===== */
+html[data-team] body{background:radial-gradient(80% 60% at 0% 0%,color-mix(in srgb,var(--team-a) 34%,transparent),transparent 65%),radial-gradient(70% 55% at 100% 0%,color-mix(in srgb,var(--team-b) 26%,transparent),transparent 65%),var(--bg)}
+html[data-team] body::after{opacity:.09!important}
+html[data-team] .top{box-shadow:inset 0 -4px 0 var(--team-acc),inset 0 -8px 0 color-mix(in srgb,var(--team-b) 70%,transparent)}
+html[data-team] .banner{border-color:var(--team-acc)!important;background:linear-gradient(115deg,color-mix(in srgb,var(--team-a) 82%,#000) 0%,color-mix(in srgb,var(--team-a) 55%,#000) 45%,color-mix(in srgb,var(--team-b) 55%,#000) 100%)!important;color:#fff}
+html[data-team] .banner h2{color:#fff!important;-webkit-text-fill-color:#fff}
+html[data-team] .banner h2 span{color:var(--team-acc)!important;-webkit-text-fill-color:var(--team-acc)}
+html[data-team] .banner p{color:rgba(255,255,255,.86)!important}
+html[data-team] .banner .wm{color:#fff;opacity:.2}
+html[data-team] main .card{border-color:color-mix(in srgb,var(--team-acc) 38%,var(--line))}
+html[data-team] .sec::before{background:var(--team-acc);box-shadow:0 0 12px var(--team-acc)}
+html[data-team] .kp b,html[data-team] .kp .big{color:var(--team-acc)}
+/* Playoffs + your team: team colours replace gold everywhere */
+html[data-season="playoffs"][data-team]{--po-rim:color-mix(in srgb,var(--team-acc) 85%,#fff 15%);--po-gold:var(--team-acc);--po-gold2:color-mix(in srgb,var(--team-acc) 60%,#fff);--po-teal:var(--team-b)}
+html[data-season="playoffs"][data-team] body{background:radial-gradient(90% 60% at 0% 0%,color-mix(in srgb,var(--team-a) 45%,transparent),transparent 65%),radial-gradient(80% 60% at 100% 0%,color-mix(in srgb,var(--team-b) 35%,transparent),transparent 65%),#040912}
+html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:radial-gradient(90% 60% at 0% 0%,color-mix(in srgb,var(--team-a) 30%,transparent),transparent 65%),radial-gradient(80% 60% at 100% 0%,color-mix(in srgb,var(--team-b) 24%,transparent),transparent 65%),#EEF2F7}
+html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:radial-gradient(90% 60% at 0% 0%,color-mix(in srgb,var(--team-a) 30%,transparent),transparent 65%),radial-gradient(80% 60% at 100% 0%,color-mix(in srgb,var(--team-b) 24%,transparent),transparent 65%),#EEF2F7}
+html[data-season="playoffs"][data-team] .banner{background:linear-gradient(90deg,color-mix(in srgb,var(--team-a) 92%,#000) 0%,color-mix(in srgb,var(--team-a) 60%,transparent) 42%,transparent 75%),var(--po-scene) center 38%/cover!important}
+html[data-season="playoffs"][data-team] .banner h2 span,html[data-season="playoffs"][data-team] .lhero2 h2 span{background:linear-gradient(180deg,#fff 0%,var(--team-acc) 45%,color-mix(in srgb,var(--team-acc) 60%,#000) 75%,#fff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+html[data-season="playoffs"][data-team] main .card,html[data-season="playoffs"][data-team] .kpis2,html[data-season="playoffs"][data-team] .rail,html[data-season="playoffs"][data-team] details.p6,html[data-season="playoffs"][data-team] .team-inj{box-shadow:0 0 0 1px color-mix(in srgb,var(--team-acc) 30%,transparent),0 0 22px -4px color-mix(in srgb,var(--team-acc) 70%,transparent),inset 0 -26px 40px -34px var(--team-b),0 22px 46px -30px #000!important}
+html[data-season="playoffs"][data-team] .navbtn[aria-current="page"]{background:linear-gradient(90deg,var(--team-a),color-mix(in srgb,var(--team-a) 40%,transparent))!important;color:#fff!important;box-shadow:0 0 0 1px var(--team-acc) inset,0 0 22px -4px var(--team-acc)!important}
 .po-opt.locked{opacity:.75}.po-opt.locked .pv{filter:grayscale(.6)}
 .seo-intro{max-width:720px;padding:28px 8px;color:var(--fg2)}.seo-intro h2{font:900 34px var(--stadium);text-transform:uppercase;color:var(--fg);margin:0 0 8px}
 .reqform{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px;padding:14px;border-radius:14px;border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 7%,var(--panel2))}.reqform p{margin:0}
@@ -2658,6 +2693,56 @@ function setVibe(v) { if (!VIBES[v]) v = 'midnight'; document.documentElement.da
 setVibe(params.get('vibe') || store.get('pz_vibe', 'midnight'));
 S.playoffsOn = store.get('pz_playoffs', false) === true;
 
+
+/* ---------------- Playoffs stadium art: drawn in SVG, sharp at any size, never a regular-season photo ---------------- */
+const PO_ART = (() => {
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const scene = (day) => {
+    seed = day ? 11 : 7;
+    const W = 1600, H = 900, cx = 800, cy = 1010;
+    const crowdCols = day ? ['#ffffff', '#e8eef5', '#c9d6e4', '#f2c55c', '#1d3557', '#e63946', '#2a9d8f', '#f1faee', '#457b9d'] : ['#ffffff', '#ffe7a8', '#9fb3c8', '#f2c55c', '#3a86ff', '#ff4d6d', '#22e6c8', '#ffd166', '#7a8ba0'];
+    let tile = ''; for (let i = 0; i < 160; i++) tile += `<circle cx="${(rnd() * 160).toFixed(1)}" cy="${(rnd() * 70).toFixed(1)}" r="${(1.4 + rnd() * 2).toFixed(2)}" fill="${crowdCols[(rnd() * crowdCols.length) | 0]}" opacity="${(0.55 + rnd() * 0.45).toFixed(2)}"/>`;
+    const ring = (rx, ry, fill, extra = '') => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${fill}" ${extra}/>`;
+    let towers = '', beams = '', flashes = '', truss = '';
+    const T = [[170, 250], [520, 150], [1080, 150], [1430, 250]];
+    T.forEach(([x, y]) => {
+      if (!day) beams += `<polygon points="${x - 26},${y + 20} ${x + 26},${y + 20} ${cx + (x - cx) * 0.25 + 260},${H} ${cx + (x - cx) * 0.25 - 260},${H}" fill="url(#beam)"/>`;
+      towers += `<circle cx="${x}" cy="${y}" r="${day ? 70 : 150}" fill="url(#glow)" opacity="${day ? 0.35 : 0.95}"/>`;
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 9; c++) towers += `<circle cx="${x - 40 + c * 10}" cy="${y - 15 + r * 10}" r="3.6" fill="${day ? '#fffdf5' : '#ffffff'}"/>`;
+      towers += `<rect x="${x - 3}" y="${y + 25}" width="6" height="${day ? 120 : 140}" fill="${day ? '#cfd8e3' : '#1a2438'}"/>`;
+    });
+    for (let i = 0; i < 140; i++) { const a = Math.PI * (1 + rnd()), rr = 0.62 + rnd() * 0.36; flashes += `<circle cx="${(cx + Math.cos(a) * 1150 * rr).toFixed(1)}" cy="${(cy + Math.sin(a) * 690 * rr).toFixed(1)}" r="${(1 + rnd() * 2.4).toFixed(1)}" fill="#fff" opacity="${(0.5 + rnd() * 0.5).toFixed(2)}"/>`; }
+    for (let i = 0; i <= 18; i++) { const a = Math.PI * (1.03 + i * 0.94 / 18); truss += `<line x1="${(cx + Math.cos(a) * 1180).toFixed(1)}" y1="${(cy + Math.sin(a) * 760).toFixed(1)}" x2="${(cx + Math.cos(a) * 1330).toFixed(1)}" y2="${(cy + Math.sin(a) * 900).toFixed(1)}" stroke="${day ? '#ffffff' : '#2b3a55'}" stroke-width="${day ? 9 : 6}"/>`; }
+    let lines = ''; for (let i = -5; i <= 5; i++) lines += `<line x1="${cx + i * 60}" y1="${cy - 300}" x2="${cx + i * 120}" y2="${cy}" stroke="#ffffff" stroke-opacity=".55" stroke-width="3"/>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">
+<defs>
+<radialGradient id="sky" cx="50%" cy="0%" r="95%">${day ? '<stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#bfe0ff"/><stop offset="1" stop-color="#5aa7e8"/>' : '<stop offset="0" stop-color="#22407a"/><stop offset=".5" stop-color="#0c1838"/><stop offset="1" stop-color="#040816"/>'}</radialGradient>
+<radialGradient id="glow"><stop offset="0" stop-color="#ffffff"/><stop offset=".22" stop-color="#fff6dc" stop-opacity=".85"/><stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/></radialGradient>
+<linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6dc" stop-opacity=".42"/><stop offset="1" stop-color="#fff6dc" stop-opacity="0"/></linearGradient>
+<linearGradient id="shadeU" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${day ? '#ffffff' : '#000000'}" stop-opacity="${day ? '.35' : '.55'}"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+<linearGradient id="turf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${day ? '#3fb36a' : '#1f9a55'}"/><stop offset="1" stop-color="${day ? '#2a8a4e' : '#0f5e33'}"/></linearGradient>
+<pattern id="crowd" width="160" height="70" patternUnits="userSpaceOnUse"><rect width="160" height="70" fill="${day ? '#8fa3b8' : '#1a2640'}"/>${tile}</pattern>
+<pattern id="stripes" width="120" height="900" patternUnits="userSpaceOnUse"><rect width="60" height="900" fill="#ffffff" opacity=".06"/></pattern>
+</defs>
+<rect width="${W}" height="${H}" fill="url(#sky)"/>
+${day ? `<circle cx="1320" cy="40" r="260" fill="url(#glow)" opacity=".9"/>` : ''}
+${truss}
+${ring(1180, 760, day ? '#e9eef4' : '#121b2c')}
+${ring(1150, 720, 'url(#crowd)')}${ring(1150, 720, 'url(#shadeU)')}
+${ring(950, 545, day ? '#f5f7fa' : '#0b1220')}${ring(930, 528, day ? '#1d3557' : '#1a2a44', 'opacity=".9"')}
+${ring(910, 515, 'url(#crowd)')}${ring(1150, 720, 'none', `stroke="${day ? '#ffffff' : '#ffe08a'}" stroke-width="7" opacity=".95"`)}${ring(948, 543, 'none', `stroke="${day ? '#0aa' : '#22e6c8'}" stroke-width="9" opacity=".9"`)}
+${flashes}
+${ring(700, 330, 'url(#turf)')}${ring(700, 330, 'url(#stripes)')}
+${lines}
+${beams}${towers}
+</svg>`;
+    return 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '")';
+  };
+  const night = scene(false), day = scene(true);
+  const root = document.documentElement; root.style.setProperty('--po-night', night); root.style.setProperty('--po-day', day);
+  return { night, day };
+})();
+
 /* ---------------- helpers ---------------- */
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -2948,7 +3033,10 @@ function tvHTML(ev) {
   return L.map((b) => `<span class="tvc ${b.stream ? 'stream' : ''}">${b.stream ? WXI.stream : WXI.tv}${esc(b.name)}</span>`).join('');
 }
 /* venue photo as a background layer; team colors behind it in case the photo is missing */
-function venueArt(ev, eager) { const src = venuePhoto(ev); return src ? `<img class="vimg" src="${esc(src)}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">` : ''; }
+const PO_PHOTOS = new Set([]);
+const venueSlug = (ev) => String((ev && ev.venue) || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const poKey = (ev) => { const h = ev && (ev.comps || []).find((t) => t.ha === 'home'); const slug = venueSlug(ev); const neutral = /wembley|tottenham|allianz|bernab|maracan|azteca|croke|olympiastadion|stade|dublin|melbourne/.test(slug); const team = h ? `${ev.sport}-${h.abbr}`.toLowerCase() : ''; return !neutral && PO_PHOTOS.has(team) ? team : PO_PHOTOS.has(slug) ? slug : ''; };
+function venueArt(ev, eager) { if (document.documentElement.dataset.season === 'playoffs') { const sl = poKey(ev); return sl ? `<img class="vimg poimg" src="playoffs-art/${sl}.jpg" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.outerHTML='<i class=&quot;vimg poart&quot;></i>'">` : '<i class="vimg poart" aria-hidden="true"></i>'; } const src = venuePhoto(ev); return src ? `<img class="vimg" src="${esc(src)}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">` : ''; }
 
 let pollTimer = null;
 async function poll() {
@@ -4807,7 +4895,7 @@ document.addEventListener('click', (e) => {
   const jb = e.target.closest('[data-jump]'); if (jb) { const [tb, an] = jb.dataset.jump.split('|'); jump(tb, an); return; }
   const t = e.target.closest('[data-tab]'); if (t) { setTab(t.dataset.tab); return; }
   const vb = e.target.closest('#vibeBtn'); if (vb) { const m = $('#vibeMenu'); m.hidden = !m.hidden; vb.setAttribute('aria-expanded', String(!m.hidden)); return; }
-  if (e.target.closest('#poToggle')) { if (!can('playoffs')) { toast({ title: 'Playoffs is part of Elite', body: 'Request Elite on My Lounge', tone: '' }); const m = document.getElementById('vibeMenu'); if (m) m.hidden = true; setTab('me'); setTimeout(() => { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); return; } S.playoffsOn = !S.playoffsOn; applyPlayoffs(); return; }
+  if (e.target.closest('#poToggle')) { if (!can('playoffs')) { toast({ title: 'Playoffs is part of Elite', body: 'Request Elite on My Lounge', tone: '' }); const m = document.getElementById('vibeMenu'); if (m) m.hidden = true; setTab('me'); setTimeout(() => { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); return; } S.playoffsOn = !S.playoffsOn; applyPlayoffs(); render(); return; }
   const v = e.target.closest('.vopt'); if (v && v.dataset.vibe) { setVibe(v.dataset.vibe); render(); return; }
   const tb = e.target.closest('[data-team]'); if (tb && tb.closest('#vibeMenu')) { store.set('pz_team', tb.dataset.team); applyTeam(tb.dataset.team); render(); return; }
   const lgb = e.target.closest('[data-league]'); if (lgb) { teamLeague = lgb.dataset.league; const q = $('#teamQ'); if (q) q.value = ''; renderTeamGrid(); return; }
