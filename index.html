@@ -2896,7 +2896,7 @@ function honestHTML(t, r) {
     why = `<div class="hwhy"><b>Why PoiZen played it anyway</b><q>${esc(g.reason || '')}</q>${(g.failed || []).length ? `<span>Broke: ${g.failed.map((x) => esc(lbl(x))).join(' · ')}</span>` : ''}</div>`; }
   else if (g && g.status === 'cleared') why = '<div class="hwhy ok"><b>Passed every gate rule when it was placed</b></div>';
   const backTxt = t.units ? `Expected back ${(v.ev).toFixed(2)}× your entry (${v.evNet >= 0 ? '+' : '−'}${Math.abs(Math.round(v.roi * 100))}%)` : `Expected back ${money(v.ev)} on ${money(Number(t.entry))} (${money(v.evNet, true)})`;
-  return `<div class="honest ${no ? 'no' : 'yes'}"><div class="hv"><b>${no ? 'The numbers said no' : 'The numbers said yes'}</b><span>${backTxt} · all ${n} hit ${fmtP(v.pAll)}</span>${be ? `<span>To break even each leg needs about ${fmtP(be)}. The Lab has them at ${fmtP(avg)} on average${avg < be ? ' — short of it' : ''}.</span>` : ''}</div>${why}</div>`;
+  return `<div class="honest ${no ? 'no' : 'yes'}"><div class="hv"><b>${no ? 'The numbers said no' : 'The numbers said yes'}</b><span>${backTxt} · all ${n} hit ${fmtP(v.pAll)}</span>${be ? `<span>To break even each leg needs about ${fmtP(be)}. The Lab has them at ${fmtP(avg)} on average${avg < be ? (no ? ' — short of it' : ' — just short, but legs that move together make up the gap') : ''}.</span>` : ''}</div>${why}</div>`;
 }
 function ticketCard({ t, r }) {
   const ev = eventFor(t.legs[0].player); const sport = sportOf(t.legs[0].player);
