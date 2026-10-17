@@ -1582,6 +1582,10 @@ html[data-season="playoffs"] .ath-hero .hs,html[data-season="playoffs"] .pk-art 
 html[data-season="playoffs"] .pk-name b,html[data-season="playoffs"] .ath-hero b{text-shadow:0 2px 10px rgba(0,0,0,.7)}
 html[data-season="playoffs"] .card.ath,html[data-season="playoffs"] .card.pk{border:1.5px solid var(--po-rim)!important}
 html[data-season="playoffs"] .pc-art .vimg,html[data-season="playoffs"] .ath-hero .vimg,html[data-season="playoffs"] .pk-art .vimg{opacity:.3!important;mix-blend-mode:luminosity}
+.lh-tl{display:none}
+html[data-season="playoffs"] .lh-tl{display:block;position:absolute;right:30%;top:8%;height:62%;width:auto;z-index:1;opacity:.95;filter:drop-shadow(0 6px 18px rgba(0,0,0,.55))}
+html[data-season="playoffs"] .lh-jn{font-size:clamp(140px,16vw,240px)!important;color:transparent!important;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.08));-webkit-background-clip:text;background-clip:text}
+html[data-season="playoffs"] .lh-hs{height:118%!important;z-index:2}
 /* team background: louder in Playoffs */
 html[data-season="playoffs"][data-team] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 62%,#040912) 0%,color-mix(in srgb,var(--team-a) 30%,#040912) 35%,#040912 70%),radial-gradient(70% 50% at 100% 0%,color-mix(in srgb,var(--team-b) 45%,transparent),transparent 70%),#040912!important}
 html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 62%,#EEF2F7) 0%,color-mix(in srgb,var(--team-a) 32%,#EEF2F7) 45%,color-mix(in srgb,var(--team-b) 14%,#EEF2F7) 100%)!important}
@@ -2886,8 +2890,10 @@ window.__teamReady = true;
 applyTeam(params.get('team') ? params.get('team').replace('-', ':').toLowerCase().replace(/:(.*)$/, (m, a) => ':' + a.toUpperCase()) : store.get('pz_team', ''));
 
 function tg(sport, abbr) { const [a, b] = teamColors(sport, abbr); return `radial-gradient(circle at 50% 16%, ${b}cc 0%, ${a} 52%, #05070b 100%)`; }
+const PO_PLAYERS = new Set([]);
 function headshot(key, w = 350) {
   const p = P(key);
+  if (document.documentElement.dataset.season === 'playoffs' && PO_PLAYERS.has(String(key))) return `playoffs-art/players/${key}.png`;
   if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`;
   if (p.headshot) { const m = String(p.headshot).match(/mlbstatic\.com\/.*people\/(\d+)\/headshot/); return m ? `https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_${w},q_auto:best/v1/people/${m[1]}/headshot/silo/current.png` : p.headshot; }
   const g = gameFor(key); const pl = g && E.findPlayer(g, { name: p.name, team: p.team });
@@ -4470,7 +4476,7 @@ function liveHero(live, next, hero) {
     : hero && hero.state === 'pre' ? `<div class="lh-k">${hero.sport === 'mlb' ? 'First pitch' : hero.sport === 'nba' ? 'Tip-off' : 'Next kickoff'} · <b>${esc(hero.name)}</b> · ${esc(kickLabel(hero.date))}</div><div class="lh-cd" data-kick="${esc(hero.date)}"><span></span></div>` : '<div class="lh-k">Every game on this slate is final.</div>';
   const [c1, c2] = p ? teamColors(p.sport || 'nfl', p.team) : ['#1f2937', '#334155'];
   return `<section class="lhero2" style="--c1:${c1};--c2:${c2}">${hero ? venueArt(hero, true) : ''}<div class="lh-shade"></div>
-    ${p && p.number ? `<div class="lh-jn">${esc(p.number)}</div>` : ''}${src ? `<img class="lh-hs" src="${esc(src)}" alt="" onerror="this.remove()">` : ''}
+    ${p && p.number ? `<div class="lh-jn">${esc(p.number)}</div>` : ''}${p ? `<img class="lh-tl" src="${esc(logo(p.sport || 'nfl', p.team))}" alt="" onerror="this.remove()">` : ''}${src ? `<img class="lh-hs" src="${esc(src)}" alt="" onerror="this.remove()">` : ''}
     <div class="lh-txt">${tag}<h2>Live <span>Sweat</span></h2>${state}<button class="btn-sweat" type="button" data-sweat="on">${SVG.live}Sweat mode<span class="wide-only"> · full screen</span></button></div>
     ${p ? `<div class="lh-who"><b>${esc(p.name)}</b><span>${esc(p.team)} · ${esc(p.pos || '')}${p.number ? ' · #' + esc(p.number) : ''}</span>${hero && hero.venue ? `<em>${esc(hero.venue)}</em>` : ''}</div>` : ''}</section>`;
 }
