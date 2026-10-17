@@ -898,9 +898,20 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     if (b > 0) { out.proceeds = (q * b) / 100; out.pnlIfSold = out.proceeds - cost; out.call = hold === null ? null : cashoutCall(out.proceeds, hold); }
     return out;
   }
+  /* exit at size: walk the bids (dollars, best first or any order) for qty contracts.
+     Returns what actually fills from the visible book, the average price, and what is left unfilled.
+     feeCents is per contract and optional — unknown fees stay unknown (feeKnown false). Visible depth can move: an estimate, not a fill. */
+  function exitAtSize(bids, qty, feeCents) {
+    const L = (bids || []).map(([p, q]) => [Number(p), Number(q)]).filter(([p, q]) => p > 0 && q > 0).sort((a, b) => b[0] - a[0]);
+    let left = Math.max(0, Number(qty) || 0), filled = 0, gross = 0, levels = 0;
+    for (const [p, q] of L) { if (left <= 0) break; const take = Math.min(left, q); filled += take; gross += take * p; left -= take; levels++; }
+    const feeKnown = feeCents !== undefined && feeCents !== null && feeCents !== '' && isFinite(Number(feeCents));
+    const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
+    return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -1429,7 +1440,7 @@ function vResults() {
 
 /* contracts: DK Predictions / Robinhood positions the board tracks with a sell-or-hold call */
 const CKINDS = { win: 'Team to win', prop: 'Player stat', two_td: '2+ TDs', first_td: 'First TD', other: 'Something else' };
-const CVENUES = ['DraftKings Predictions', 'Robinhood', 'Kalshi', 'Other'];
+const CVENUES = ['DraftKings Predictions', 'FanDuel Predicts', 'Robinhood', 'Kalshi', 'Polymarket US', 'Fanatics Markets', 'Crypto.com', 'Underdog', 'Novig', 'ProphetX', 'Other'];
 const CMARKET = { win: 'moneyline', two_td: 'two_td', first_td: 'first_td', other: 'other' };
 function contractTitle(c) {
   if (c.title) return c.title; const p = c.player ? P(c.player) : null;
@@ -1447,11 +1458,12 @@ function vContracts() {
   const form = `<div class="card" style="display:flex;flex-direction:column;gap:10px"><b class="st" style="font-size:22px">Add a position</b>
     <div class="row">${sel('cVenue', CVENUES.map((v) => [v, v]), $('#cVenue') ? $('#cVenue').value : CVENUES[0])}${sel('cKind', Object.entries(CKINDS), k)}</div>${who}${stat}
     <div class="row"><label class="f" style="flex:1">Contracts<input id="cQty" data-keep type="number" min="1" step="1" placeholder="100"></label><label class="f" style="flex:1">Avg price (¢)<input id="cAvg" data-keep type="number" min="1" max="99" step="1" placeholder="40"></label></div>
+    <div class="row"><label class="f" style="flex:2">Kalshi ticker (optional — live order book)<input id="cKalshi" data-keep maxlength="80" placeholder="KXNFLGAME-26OCT26DALPHI-PHI" style="text-transform:uppercase"></label><label class="f" style="flex:1">Side<select id="cSide" data-keep><option value="yes">YES</option><option value="no">NO</option></select></label><label class="f" style="flex:1">Fee per contract (¢, optional)<input id="cFee" data-keep type="number" min="0" max="20" step="0.01" placeholder="unknown"></label></div>
     <input id="cTitle" data-keep maxlength="60" placeholder="Title (optional — built for you)">
     <button class="btn teal" id="cAdd" type="button">Add to the board</button>
     <p class="dim" style="font-size:12px;margin:0">Each contract pays $1 if it hits. The board puts a live chance on it and, when you type the sell price you see, says sell or hold.</p></div>`;
   const row = (c) => { const qty = Number(c.qty), avg = Number(c.avg), cost = (qty * avg) / 100; const open = !c.status || c.status === 'open';
-    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(c.title)}</b><span>${esc(c.venue)} · ${qty} at ${avg}¢ · cost ${money(cost)}${open ? '' : ` · ${c.status === 'sold' ? 'sold at ' + c.exit + '¢' : c.status}`}</span></div>${open ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="cx-${esc(c.id)}" data-keep type="number" min="1" max="99" step="1" placeholder="¢" style="width:64px"><button class="btn sm teal" data-csell="${esc(c.id)}" type="button">Sold</button><button class="btn sm" data-cwon="${esc(c.id)}" type="button">Won</button><button class="btn sm warn" data-clost="${esc(c.id)}" type="button">Lost</button><button class="btn sm" data-cdel="${esc(c.id)}" type="button" aria-label="Remove">×</button></div>` : `<span class="chip ${c.status === 'lost' ? 'loss' : 'win'}">Recorded</span>`}</div>`; };
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(c.title)}</b><span>${esc(c.venue)} · ${c.side === 'no' ? 'NO · ' : ''}${qty} at ${avg}¢ · cost ${money(cost)}${c.kalshi ? ' · book ' + esc(c.kalshi) : ''}${open ? '' : ` · ${c.status === 'sold' ? 'sold at ' + c.exit + '¢' : c.status}`}</span></div>${open ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="cx-${esc(c.id)}" data-keep type="number" min="1" max="99" step="1" placeholder="¢" style="width:64px"><button class="btn sm teal" data-csell="${esc(c.id)}" type="button">Sold</button><button class="btn sm" data-cwon="${esc(c.id)}" type="button">Won</button><button class="btn sm warn" data-clost="${esc(c.id)}" type="button">Lost</button><button class="btn sm" data-cdel="${esc(c.id)}" type="button" aria-label="Remove">×</button></div>` : `<span class="chip ${c.status === 'lost' ? 'loss' : 'win'}">Recorded</span>`}</div>`; };
   return banner('contracts', 'Event <span>contracts</span>', 'DK Predictions and Robinhood positions. Add what you hold; the board tracks the live chance and gives a sell-or-hold call against the price you see. Closing one records it in your Ledger.') +
     `<div class="grid2">${form}<div class="card"><b class="st" style="font-size:22px">Positions</b><div style="margin-top:10px">${list.length ? list.slice().reverse().map(row).join('') : '<div class="empty">No contracts yet.</div>'}</div></div></div>`;
 }
@@ -1479,7 +1491,8 @@ function plansCard() {
   return `<div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Plans &amp; checkout</b><span class="dim" style="font-size:12px">Waitlist: ${wl.filter((x) => x.tier === 'pro').length} Pro · ${wl.filter((x) => x.tier === 'creator').length} Creator</span></div>
     <p class="dim" style="font-size:12px;margin:0">Paste a Stripe Payment Link (or any checkout link). The member's account ID is added to the link as client_reference_id so a payment can be matched to them. Until a link is set and opened, members see a waitlist button. You can always give or remove Pro by hand in the list below.</p>
     <div class="row"><label class="f" style="width:160px">Pro price<input id="plProPrice" data-keep value="${esc(P2.price || '')}" placeholder="$14.99 / month"></label><label class="f" style="flex:1">Pro checkout link<input id="plProLink" data-keep value="${esc(P2.link || '')}" placeholder="https://buy.stripe.com/…"></label><label class="f" style="flex:1">Manage-subscription link<input id="plProManage" data-keep value="${esc(P2.manage || '')}" placeholder="Stripe customer portal link"></label></div>
-    <div class="row"><label class="f" style="width:160px">Creator price<input id="plCrPrice" data-keep value="${esc(C2.price || '')}" placeholder="Coming later"></label><label class="tog" style="flex:1"><input type="checkbox" id="plProOpen" ${P2.open ? 'checked' : ''}><span><b>Pro checkout is open</b><em>Off shows the waitlist even if a link is set</em></span></label><button class="btn teal" id="plSave" type="button">Save plans</button></div></div>`;
+    <div class="row"><label class="f" style="width:160px">Creator price<input id="plCrPrice" data-keep value="${esc(C2.price || '')}" placeholder="Coming later"></label><label class="tog" style="flex:1"><input type="checkbox" id="plProOpen" ${P2.open ? 'checked' : ''}><span><b>Pro checkout is open</b><em>Off shows the waitlist even if a link is set</em></span></label><button class="btn teal" id="plSave" type="button">Save plans</button></div>
+    <div class="row"><label class="f" style="flex:1">Poizen server URL (Cloudflare Worker — live order books, Stripe, Discord)<input id="plServer" data-keep value="${esc((A.plans || {}).server || '')}" placeholder="https://poizen-lounge-server.you.workers.dev"></label></div></div>`;
 }
 function vMembers() {
   if (A.mem === null) { A.mem = undefined; loadMembers(); }
@@ -1684,8 +1697,10 @@ document.addEventListener('click', async (e) => {
     if (k === 'prop') { c.market = v('cMarket'); c.dir = v('cDir') || 'over'; c.line = Number(v('cLine')); if (!(c.line >= 0) || v('cLine') === '') { toast('Enter the line', 'bad'); return; } }
     if (!(c.qty > 0)) { toast('How many contracts?', 'bad'); return; } if (!(c.avg >= 1 && c.avg <= 99)) { toast('Average price is in cents, 1–99', 'bad'); return; }
     if (k === 'other' && !v('cTitle')) { toast('Give it a title', 'bad'); return; }
+    const tk = v('cKalshi').toUpperCase(); if (tk) { if (!/^[A-Z0-9][A-Z0-9._-]{2,79}$/.test(tk)) { toast('That Kalshi ticker has characters it should not', 'bad'); return; } c.kalshi = tk; }
+    c.side = v('cSide') === 'no' ? 'no' : 'yes'; const fee = v('cFee'); if (fee !== '') { if (!(Number(fee) >= 0 && Number(fee) <= 20)) { toast('Fee per contract is in cents, 0–20', 'bad'); return; } c.fee = Number(fee); }
     c.title = v('cTitle') || contractTitle(c);
-    A.slate.contracts = (A.slate.contracts || []).concat(c); ['cQty', 'cAvg', 'cTitle', 'cLine', 'cTeam'].forEach((id) => { const el = $('#' + id); if (el) el.value = ''; });
+    A.slate.contracts = (A.slate.contracts || []).concat(c); ['cQty', 'cAvg', 'cTitle', 'cLine', 'cTeam', 'cKalshi', 'cFee'].forEach((id) => { const el = $('#' + id); if (el) el.value = ''; });
     setDirty(); render(); toast('Added — publish to put it on the board'); return;
   }
   if (t.dataset.memview) { try { const v = (await db.ref('users/' + t.dataset.memview).get()).val(); A.memView = { uid: t.dataset.memview, data: v || {} }; } catch (er) { toast('Could not open: ' + er.message, 'bad'); } render(); return; }
@@ -1693,7 +1708,8 @@ document.addEventListener('click', async (e) => {
   if (t.dataset.tierset) { const [uid, tier] = t.dataset.tierset.split('|'); try { await db.ref('tiers/' + uid).set(tier ? { tier, since: Date.now(), source: 'manual' } : null); A.tiers = A.tiers || {}; if (tier) A.tiers[uid] = { tier, since: Date.now(), source: 'manual' }; else delete A.tiers[uid]; render(); toast(tier ? 'Pro given' : 'Plan removed'); } catch (er) { toast('Could not change the plan: ' + er.message, 'bad', 6000); } return; }
   if (t.id === 'plSave') { const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : ''); const link = v('plProLink'), manage = v('plProManage');
     if ((link && !/^https:\/\//.test(link)) || (manage && !/^https:\/\//.test(manage))) { toast('Links must start with https://', 'bad'); return; }
-    const plans = { pro: { price: v('plProPrice').slice(0, 40), link, manage, open: !!($('#plProOpen') || {}).checked }, creator: { price: v('plCrPrice').slice(0, 40) } };
+    const server = v('plServer').replace(/\/+$/, ''); if (server && !/^https:\/\/[a-z0-9.-]+(\.workers\.dev|\.[a-z]{2,})$/i.test(server)) { toast('Server URL should look like https://poizen-lounge-server.you.workers.dev', 'bad'); return; }
+    const plans = { pro: { price: v('plProPrice').slice(0, 40), link, manage, open: !!($('#plProOpen') || {}).checked }, creator: { price: v('plCrPrice').slice(0, 40) }, server };
     try { await db.ref('board/plans').set(plans); A.plans = plans; toast('Plans saved — members see them now'); render(); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
   if (t.dataset.memreload !== undefined) { A.mem = null; render(); return; }
   if (t.dataset.csell) return closeContract(t.dataset.csell, 'sold');

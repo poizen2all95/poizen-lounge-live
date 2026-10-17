@@ -299,9 +299,20 @@
     if (b > 0) { out.proceeds = (q * b) / 100; out.pnlIfSold = out.proceeds - cost; out.call = hold === null ? null : cashoutCall(out.proceeds, hold); }
     return out;
   }
+  /* exit at size: walk the bids (dollars, best first or any order) for qty contracts.
+     Returns what actually fills from the visible book, the average price, and what is left unfilled.
+     feeCents is per contract and optional — unknown fees stay unknown (feeKnown false). Visible depth can move: an estimate, not a fill. */
+  function exitAtSize(bids, qty, feeCents) {
+    const L = (bids || []).map(([p, q]) => [Number(p), Number(q)]).filter(([p, q]) => p > 0 && q > 0).sort((a, b) => b[0] - a[0]);
+    let left = Math.max(0, Number(qty) || 0), filled = 0, gross = 0, levels = 0;
+    for (const [p, q] of L) { if (left <= 0) break; const take = Math.min(left, q); filled += take; gross += take * p; left -= take; levels++; }
+    const feeKnown = feeCents !== undefined && feeCents !== null && feeCents !== '' && isFinite(Number(feeCents));
+    const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
+    return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

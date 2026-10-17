@@ -668,6 +668,13 @@ main .card.mecard{padding:22px}
 .ct .nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.ct .nums div{padding:8px 10px;border-radius:12px;background:var(--panel2)}.ct .nums .k{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--fg3)}.ct .nums .v{font:900 20px var(--stadium)}
 .ct .src{font-size:11px;color:var(--fg3)}
 .ct.closed{opacity:.7}
+.vcap{font-size:11px;color:var(--fg3);line-height:1.4}
+.bk{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);font-size:12px;color:var(--fg2)}
+.bk.warn{border-color:color-mix(in srgb,var(--live) 55%,transparent)}
+.bk-top{display:flex;justify-content:space-between;gap:8px}.bk-top b{color:var(--fg);font-weight:800}
+.bk-q{display:flex;gap:14px;flex-wrap:wrap}.bk-q b{color:var(--fg);font:900 17px var(--stadium)}
+.bk-l{display:flex;gap:6px;flex-wrap:wrap}.bk-l span{padding:2px 8px;border-radius:999px;border:1px solid var(--line2);font-weight:800;color:var(--fg)}.bk-l em{font-style:normal;color:var(--fg3);font-weight:700}
+.bk-x{color:var(--fg);font-size:13px;line-height:1.45}.bk-n{font-size:11px;color:var(--fg3)}
 
 /* ---------- overlay mode (OBS) ---------- */
 body.overlay{background:transparent!important}
@@ -2180,9 +2187,20 @@ details.labslip>*:not(summary){margin:0 18px 14px}
     if (b > 0) { out.proceeds = (q * b) / 100; out.pnlIfSold = out.proceeds - cost; out.call = hold === null ? null : cashoutCall(out.proceeds, hold); }
     return out;
   }
+  /* exit at size: walk the bids (dollars, best first or any order) for qty contracts.
+     Returns what actually fills from the visible book, the average price, and what is left unfilled.
+     feeCents is per contract and optional — unknown fees stay unknown (feeKnown false). Visible depth can move: an estimate, not a fill. */
+  function exitAtSize(bids, qty, feeCents) {
+    const L = (bids || []).map(([p, q]) => [Number(p), Number(q)]).filter(([p, q]) => p > 0 && q > 0).sort((a, b) => b[0] - a[0]);
+    let left = Math.max(0, Number(qty) || 0), filled = 0, gross = 0, levels = 0;
+    for (const [p, q] of L) { if (left <= 0) break; const take = Math.min(left, q); filled += take; gross += take * p; left -= take; levels++; }
+    const feeKnown = feeCents !== undefined && feeCents !== null && feeCents !== '' && isFinite(Number(feeCents));
+    const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
+    return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -3772,18 +3790,60 @@ function contractEval(c) {
   } else out.src = 'No live model for this market — use your own read';
   return out;
 }
+/* venue capability registry: what Poizen can actually read for each place you trade (Oct 17, 2026).
+   'manual' = you enter the position; a reference book can be attached when the exact contract also trades on Kalshi. */
+const VENUES = {
+  'DraftKings Predictions': { ex: 'DKeX (Railbird) and CME-listed markets', data: 'manual', note: 'No public market-data feed found; positions are entered by you.' },
+  'FanDuel Predicts': { ex: 'CME Group / Crypto.com (reports differ — check the contract in the app)', data: 'manual', note: 'No public market-data feed found; positions are entered by you.' },
+  Robinhood: { ex: 'Partner exchanges, including Kalshi for certain contracts', data: 'manual', note: 'Positions entered by you. Attach the Kalshi ticker only if your contract is that exact Kalshi market.' },
+  Kalshi: { ex: 'Kalshi', data: 'book', note: 'Public order book through the Poizen server.' },
+  'Polymarket US': { ex: 'Polymarket US', data: 'manual', note: 'Public API documented; not connected yet.' },
+  'Fanatics Markets': { ex: 'Crypto.com | Derivatives North America', data: 'manual', note: 'Positions entered by you.' },
+};
+const BOOK = {};
+function bookAge(b) { return b && b.data ? Math.round((Date.now() - b.data.fetchedAt) / 1000) : null; }
+async function loadBooks() {
+  const base = S.plans && S.plans.server; if (!base || document.hidden) return;
+  const ts = [...new Set(openContracts().map((c) => c.kalshi).filter(Boolean))]; if (!ts.length) return; let changed = false;
+  await Promise.all(ts.map(async (t) => { const b = (BOOK[t] = BOOK[t] || {}); if (b.busy || (b.at && Date.now() - b.at < 8000)) return; b.busy = true;
+    try { const r = await fetchJSON(String(base).replace(/\/+$/, '') + '/kalshi/' + encodeURIComponent(t)); if (r.error) throw new Error(r.error); b.data = r; b.err = ''; changed = true; }
+    catch (e) { b.err = e.message; changed = true; } b.at = Date.now(); b.busy = false; }));
+  if (changed && ['live', 'scalp'].includes(S.tab)) render();
+}
+setInterval(loadBooks, 10000);
+/* the live-book block on a contract: quotes with age, exit-at-size for the held quantity, top of the book */
+function bookHTML(c, x) {
+  const vn = VENUES[c.venue] || null;
+  const cap = vn ? `<div class="vcap">${esc(c.venue)} · ${esc(vn.ex)} · ${esc(vn.note)}</div>` : '';
+  if (!c.kalshi) return { html: cap, bid: null };
+  if (!(S.plans && S.plans.server)) return { html: cap + `<div class="bk warn">Live book for ${esc(c.kalshi)} needs the Poizen server, which isn't connected yet. Using the price you type.</div>`, bid: null };
+  const b = BOOK[c.kalshi];
+  if (!b || (!b.data && !b.err)) return { html: cap + '<div class="bk">Loading the Kalshi order book…</div>', bid: null };
+  if (!b.data) return { html: cap + `<div class="bk warn">Order book unavailable (${esc(b.err)}). Using the price you type.</div>`, bid: null };
+  const d = b.data; const age = bookAge(b); const stale = age > 30 || !!b.err;
+  const side = c.side === 'no' ? 'no' : 'yes'; const bids = side === 'no' ? d.noBids : d.yesBids; const opp = side === 'no' ? d.yesBids : d.noBids;
+  const best = bids.length ? Math.max(...bids.map((l) => l[0])) : null; const ask = opp.length ? 1 - Math.max(...opp.map((l) => l[0])) : null;
+  const qty = Number(c.qty) || 0; const e = M.exitAtSize(bids, qty, c.fee);
+  const paused = d.status && !/^(active|open)$/i.test(d.status);
+  const ladder = [...bids].sort((a, z) => z[0] - a[0]).slice(0, 5).map(([p, q]) => `<span>${Math.round(p * 100)}¢ <em>${Math.round(q).toLocaleString()}</em></span>`).join('');
+  const exit = e.filled ? `Sell all ${qty.toLocaleString()} now: <b>${e.filled.toLocaleString()}</b> fill from the visible book at about <b>${(e.avg * 100).toFixed(1)}¢</b> avg → <b>${money(e.gross)}</b>${e.feeKnown ? `, ${money(e.net)} after ${money(e.fees)} fees` : ' before fees'}${e.residual ? ` · <span class="loss">${e.residual.toLocaleString()} have no visible buyer</span>` : ''}.` : '<span class="loss">No visible buyers for this side right now.</span>';
+  const html = cap + `<div class="bk ${stale || paused ? 'warn' : ''}"><div class="bk-top"><b>Kalshi book · ${esc(side.toUpperCase())}</b><span>${b.err ? 'Update failed · showing the book from ' + age + 's ago' : stale ? 'STALE · ' + age + 's old' : age + 's old'}${paused ? ' · ' + esc(d.status) : ''}</span></div>
+    <div class="bk-q"><span>Bid <b>${best !== null ? Math.round(best * 100) + '¢' : '–'}</b></span><span>Ask <b>${ask !== null ? Math.round(ask * 100) + '¢' : '–'}</b></span><span>Spread <b>${best !== null && ask !== null ? Math.round((ask - best) * 100) + '¢' : '–'}</b></span></div>
+    <div class="bk-l">${ladder || '<span>Empty</span>'}</div><div class="bk-x">${exit}</div><div class="bk-n">Estimate from the visible book — depth moves and fills aren't guaranteed.${c.venue !== 'Kalshi' ? ` Reference book only: confirm your ${esc(c.venue)} contract is this exact Kalshi market.` : ''}</div></div>`;
+  return { html, bid: !stale && !paused && e.filled ? { cents: e.avg * 100, e } : null };
+}
 function contractCard(c) {
   const x = c.status && c.status !== 'open' ? null : contractEval(c);
   const qty = Number(c.qty) || 0, avg = Number(c.avg) || 0, cost = (qty * avg) / 100;
   if (!x) { const paid = c.status === 'won' ? qty : c.status === 'sold' ? (qty * (Number(c.exit) || 0)) / 100 : 0;
     return `<div class="ct closed"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} at ${avg}¢</span></div><span class="chip ${paid > cost ? 'win' : 'loss'}">${c.status === 'sold' ? 'Sold ' + (Number(c.exit) || 0) + '¢' : c.status === 'won' ? 'Won' : 'Lost'} · ${money(paid - cost, true)}</span></div></div>`; }
-  const bid = Number(S.bids[c.id]); const v = M.contractCall(qty, avg, x.p, bid);
+  const BK = bookHTML(c, x); const typed = Number(S.bids[c.id]); const bookBid = BK.bid && BK.bid.e.filled === qty ? BK.bid.cents : null; const bid = typed > 0 ? typed : bookBid || 0; const v = M.contractCall(qty, avg, x.p, bid);
   const where = x.ev ? `${esc(x.ev.name)} · ${esc(x.ev.state === 'pre' ? kickLabel(x.ev.date) : x.ev.detail || '')}` : '';
-  const call = v.call ? `<div class="oc ${v.call.take ? 'take' : v.call.ratio >= 0.9 ? 'close' : 'hold'}"><b>${esc(v.call.take ? 'Sell' : v.call.ratio >= 0.9 ? 'Close call — sell if you want the sure thing' : 'Hold')}</b><span>Selling now: ${money(v.proceeds)} (${money(v.pnlIfSold, true)} on your ${money(cost)}) · holding is worth ${money(v.hold)} at ${fmtP(x.p)}</span></div>` : x.p === null ? `<div class="oc"><span>Selling at ${bid > 0 ? bid + '¢' : 'your price'} returns ${bid > 0 ? money(v.proceeds) + ' (' + money(v.pnlIfSold, true) + ')' : '–'}. There's no live model for this one.</span></div>` : `<div class="oc"><span>Fair price right now is ${Math.round(v.fairCents)}¢. Type the sell price you see and get the call.</span></div>`;
-  return `<div class="ct" id="ct-${esc(c.id)}"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} contract${qty === 1 ? '' : 's'} at ${avg}¢${where ? ' · ' + where : ''}</span></div>${x.player ? avatar(x.player) : ''}</div>
+  const call = v.call ? `<div class="oc ${v.call.take ? 'take' : v.call.ratio >= 0.9 ? 'close' : 'hold'}"><b>${esc(v.call.take ? 'Sell' : v.call.ratio >= 0.9 ? 'Close call — sell if you want the sure thing' : 'Hold')}</b><span>Selling now: ${money(v.proceeds)} (${money(v.pnlIfSold, true)} on your ${money(cost)}) · holding is worth ${money(v.hold)} at ${fmtP(x.p)}</span></div>` : x.p === null ? `<div class="oc"><span>Selling at ${bid > 0 ? (Number.isInteger(bid) ? bid : bid.toFixed(1)) + '¢' : 'your price'} returns ${bid > 0 ? money(v.proceeds) + ' (' + money(v.pnlIfSold, true) + ')' : '–'}. There's no live model for this one.</span></div>` : `<div class="oc"><span>Fair price right now is ${Math.round(v.fairCents)}¢. Type the sell price you see and get the call.</span></div>`;
+  return `<div class="ct" id="ct-${esc(c.id)}"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${c.side === 'no' ? 'NO · ' : ''}${qty} contract${qty === 1 ? '' : 's'} at ${avg}¢${where ? ' · ' + where : ''}</span></div>${x.player ? avatar(x.player) : ''}</div>
     <div class="nums"><div><div class="k">Chance now</div><div class="v" style="color:${x.p === null ? 'var(--fg2)' : pColor(x.p)}">${fmtP(x.p)}</div></div><div><div class="k">Worth holding</div><div class="v">${v.hold === null ? '–' : money(v.hold)}</div></div><div><div class="k">Paid</div><div class="v">${money(cost)}</div></div></div>
-    <div class="offer"><label>Sell price you see (¢) <input data-bid="${esc(c.id)}" id="bid-${esc(c.id)}" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="¢" value="${bid > 0 ? bid : ''}"></label>${call}</div>
-    <div class="src">${esc(x.src)} · fees not included</div></div>`;
+    <div class="offer"><label>Sell price you see (¢) <input data-bid="${esc(c.id)}" id="bid-${esc(c.id)}" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="${bookBid ? bookBid.toFixed(1) : '¢'}" value="${typed > 0 ? typed : ''}"></label>${call}</div>
+    ${BK.html}<div class="src">${esc(x.src)}${typed > 0 ? ' · using the price you typed' : bookBid ? ' · using the Kalshi book' : ''}${c.fee !== undefined && c.fee !== null ? '' : ' · fees not included'}</div></div>`;
 }
 function contractsHTML() {
   const all = S.slate.contracts || []; if (!all.length) return '';
@@ -4504,7 +4564,7 @@ function watchBoard() {
       S.slate = s; S.snap = null; S.shift = null; afterData(); poll(); loadLogs();
     }, () => {});
     db.ref('.info/connected').on('value', (snap) => { const was = S.fbConnected; S.fbConnected = !!snap.val(); if (was === true && !S.fbConnected) S.alertLog.unshift({ tone: 'warn', title: 'Board sync dropped', body: 'Reconnecting automatically', at: Date.now() }); if (was === false && S.fbConnected) S.alertLog.unshift({ tone: 'win', title: 'Board sync back', body: '', at: Date.now() }); renderNav(); }, () => {});
-    db.ref('board/plans').on('value', (snap) => { S.plans = snap.val() || {}; if (S.tab === 'me') render(); }, () => {});
+    db.ref('board/plans').on('value', (snap) => { S.plans = snap.val() || {}; loadBooks(); if (S.tab === 'me') render(); }, () => {});
     db.ref('board/gate').on('value', (snap) => { S.gateRules = snap.val(); if (S.tab === 'research') render(); }, () => {});
     let firstMoment = true; db.ref('board/moment').on('value', (snap) => { const m = snap.val(); if (firstMoment) { firstMoment = false; return; } if (m && m.type && Date.now() - (m.at || 0) < 20000) { const rm = m.slipId ? remoteMoment(m) : null; if (m.slipId && !rm) return; Moments.push(rm || { type: m.type, word: String(m.word || '').slice(0, 24), sub: String(m.sub || '').slice(0, 80), player: m.player && S.slate.players[m.player] ? m.player : undefined }); } }, () => {});
     if (OVERLAY) { let firstScene = true; db.ref('board/scene').on('value', (snap) => { const c = snap.val(); if (firstScene) { firstScene = false; return; } if (c && c.name && Date.now() - (c.at || 0) < 20000) OBS.cut(String(c.name).slice(0, 80), Number(c.secs) || 0); }, () => {}); }
