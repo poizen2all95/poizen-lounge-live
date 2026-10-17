@@ -2609,7 +2609,7 @@ function ingestScoreboard(sport, sb) {
       venue: c.venue && c.venue.fullName, indoor: c.venue && c.venue.indoor,
       venueId: c.venue && c.venue.id ? String(c.venue.id) : '', city: (c.venue && c.venue.address && c.venue.address.city) || '', st: (c.venue && c.venue.address && c.venue.address.state) || '', country: (c.venue && c.venue.address && c.venue.address.country) || '',
       tv: ((c.broadcasts || [])[0] || {}).names, situation: c.situation || null,
-      tvs: (() => { const seen = new Set(); const out = []; (c.geoBroadcasts || []).forEach((b) => { const n = b && b.media && (b.media.shortName || b.media.callLetters); if (!n || seen.has(n)) return; seen.add(n); out.push({ name: n, stream: /stream/i.test((b.type && b.type.shortName) || '') }); }); ((c.broadcasts || [])[0] || {}).names && c.broadcasts[0].names.forEach((n) => { if (n && !seen.has(n)) { seen.add(n); out.push({ name: n, stream: false }); } }); return out; })(),
+      tvs: (() => { const seen = new Set(); const out = []; (c.geoBroadcasts || []).forEach((b) => { const n = b && b.media && (b.media.shortName || b.media.callLetters); const ty = (b && b.type && b.type.shortName) || ''; if (!n || seen.has(n) || /radio/i.test(ty)) return; seen.add(n); out.push({ name: n, stream: /stream/i.test((b.type && b.type.shortName) || '') }); }); ((c.broadcasts || [])[0] || {}).names && c.broadcasts[0].names.forEach((n) => { if (n && !seen.has(n)) { seen.add(n); out.push({ name: n, stream: false }); } }); return out; })(),
     };
     S.events[ev.id] = info;
     info.comps.forEach((t) => { const k = sport + ':' + t.abbr; const prev = S.events[S.teamEvent[k]]; if (!prev || (prev.state === 'post' && info.state !== 'post') || (prev.state === info.state && info.date < prev.date)) S.teamEvent[k] = ev.id; });
@@ -2624,7 +2624,7 @@ function oppLabel(key) { const ev = eventFor(key); const p = P(key); const o = o
    ESPN's per-game venue (competition.venue) is authoritative — the team "franchise venue" records are stale for some
    teams. The photo comes from ESPN's venue record and is cached on this device for 30 days. */
 const SPORTPATH = { nfl: 'football/leagues/nfl', mlb: 'baseball/leagues/mlb', nba: 'basketball/leagues/nba' };
-const VENUE = { img: store.get('pz_venue_img', {}), busy: false };
+const VENUE = { img: store.get('pz_venue_img2', {}), busy: false };
 const venueKey = (ev) => (ev && ev.venueId && SPORTPATH[ev.sport] ? ev.sport + ':' + ev.venueId : '');
 function venuePhoto(ev) { const v = VENUE.img[venueKey(ev)]; return v && v.href ? v.href : ''; }
 const venuePlace = (ev) => (ev ? [ev.city, ev.st || (ev.country && ev.country !== 'USA' ? ev.country : '')].filter(Boolean).join(', ') : '');
@@ -2635,11 +2635,11 @@ async function loadVenues() {
     const want = [...new Set(Object.values(S.events).map(venueKey).filter(Boolean))].filter((k) => { const v = VENUE.img[k]; return !v || (v.fail ? now - v.at > 10 * 60000 : now - v.at > 30 * 864e5); });
     await Promise.all(want.slice(0, 30).map(async (k) => {
       const [sp, id] = k.split(':');
-      try { const j = await fetchJSON(`https://sports.core.api.espn.com/v2/sports/${SPORTPATH[sp]}/venues/${id}`); const im = (j.images || []).find((x) => (x.rel || []).includes('day')) || (j.images || [])[0]; VENUE.img[k] = { href: im && im.href ? String(im.href).replace(/^http:/, 'https:') : '', at: Date.now() }; changed = true; }
+      try { const j = await fetchJSON(`https://sports.core.api.espn.com/v2/sports/${SPORTPATH[sp]}/venues/${id}`); const L = j.images || []; const im = L.find((x) => (x.rel || []).includes('interior')) || L.find((x) => (x.rel || []).includes('day')) || L[0]; VENUE.img[k] = { href: im && im.href ? String(im.href).replace(/^http:/, 'https:') : '', at: Date.now() }; changed = true; }
       catch { VENUE.img[k] = { href: (VENUE.img[k] && VENUE.img[k].href) || '', fail: true, at: Date.now() }; }
     }));
   } finally { VENUE.busy = false; }
-  if (changed) { store.set('pz_venue_img', VENUE.img); render(); }
+  if (changed) { store.set('pz_venue_img2', VENUE.img); render(); }
 }
 
 /* ---------------- weather: forecast for the game window, live conditions once it starts ----------------
@@ -2660,7 +2660,7 @@ async function loadWeather() {
   if (WX.busy) return; WX.busy = true; let changed = false;
   try {
     const evs = Object.values(S.events).filter(wxWanted); const places = [...new Set(evs.map(wxPlace))];
-    for (const pl of places) if (!WX.geo[pl]) { try { WX.geo[pl] = await geocode(pl); store.set('pz_geo2', WX.geo); } catch (e) { WX.err = 'Geocoding: ' + e.message; } }
+    await Promise.all(places.filter((pl) => !WX.geo[pl]).map(async (pl) => { try { WX.geo[pl] = await geocode(pl); } catch (e) { WX.err = 'Geocoding: ' + e.message; } })); store.set('pz_geo2', WX.geo);
     await Promise.all(places.map(async (pl) => {
       const g = WX.geo[pl]; if (!g || g.none) return;
       const live = evs.some((e) => wxPlace(e) === pl && e.state === 'in'); const f = WX.fc[pl];
@@ -3922,8 +3922,8 @@ function legRow(leg, g) {
 function aliveMeter(r) {
   return `<div class="segs" aria-label="${r.hits} of ${r.n} legs cashed">${r.legs.map(({ leg, g }) => `<i class="${['hit', 'miss', 'dnp'].includes(g.state) ? g.state : g.state === 'live' ? 'on' : ''}" title="${esc(lastName(P(leg.player).name))} · ${g.state === 'scheduled' ? 'not started' : E.fmt(g.value) + ' of ' + E.fmt(leg.line)}">${g.state === 'live' ? `<b style="width:${Math.max(6, Math.round((g.progress || 0) * 100))}%;background:${legHue(leg, g)}"></b>` : ''}</i>`).join('')}</div>`;
 }
-function facesHTML(r, max = 4) {
-  return r.legs.slice(0, max).map(({ leg }) => { const p = P(leg.player); const src = headshot(leg.player, 120); return `<span style="--tg:${tg(p.sport || 'nfl', p.team)}">${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`; }).join('') + (r.legs.length > max ? `<em>+${r.legs.length - max}</em>` : '');
+function facesHTML(r, max = 4, more = true) {
+  return r.legs.slice(0, max).map(({ leg }) => { const p = P(leg.player); const src = headshot(leg.player, 120); return `<span style="--tg:${tg(p.sport || 'nfl', p.team)}">${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`; }).join('') + (more && r.legs.length > max ? `<em>+${r.legs.length - max}</em>` : '');
 }
 function slipTracker({ t, r }) {
   const liveN = r.legs.filter(({ g }) => g.state === 'live').length;
@@ -3937,7 +3937,7 @@ function slipTracker({ t, r }) {
   const H = r.payout !== null || r.state === 'dead' ? null : slipHealth(t, r);
   const cascade = H && H.clusters.length ? `<div class="cascade">${H.clusters.map((c) => `${c.idx.length} legs in danger in ${esc(c.game)} — one bad game script sinks both`).join(' · ')}</div>` : '';
   return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>
-    <summary><div class="faces">${facesHTML(r)}</div><div class="st"><b>${esc(t.title)}</b><span>${esc(line2)}</span>${aliveMeter(r)}</div>
+    <summary><div class="faces">${facesHTML(r, 3, false)}</div><div class="st"><b>${esc(t.title)}</b><span>${esc(line2)}</span>${aliveMeter(r)}</div>
       <div class="hwrap" title="${H ? 'Slip health: ' + esc(H.label) : esc(done || '')}">${H ? healthRing(H) : `<span class="hdone ${r.payout > 0 ? 'win' : 'loss'}">${r.payout > 0 ? SVG.check : SVG.x}</span>`}</div>
       <div class="cnum en"><b>${money(r.entry)}</b><span>entry</span></div>${odds}<div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'paid' : 'to win'}</span></div>${CHEV}</summary>
     ${cascade}<div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div>${honestHTML(t, r)}</details>`;
