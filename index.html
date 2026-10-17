@@ -6,7 +6,8 @@
 <title>Poizen Lounge</title>
 <meta name="description" content="PoiZen's live picks board — every leg graded live.">
 <meta name="theme-color" content="#04070A">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 72'%3E%3Cpath d='M32 2 60 12v24c0 17-12 28-28 34C16 64 4 53 4 36V12z' fill='%23F2C14E'/%3E%3Cpath d='M32 8 54 16v20c0 14-9 23-22 28C19 59 10 50 10 36V16z' fill='%230A3F3A'/%3E%3Cpath d='M36 14 20 40h11l-3 18 17-28H34z' fill='%23F2C14E'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="poizen-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,800;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
@@ -69,7 +70,7 @@ a{color:var(--sky)}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);border-bottom:1px solid var(--line)}
 .top-in{max-width:none;margin:0;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:12px;min-width:0;text-decoration:none;color:inherit}
-.crest{width:42px;height:48px;flex:none;filter:drop-shadow(0 6px 14px rgba(242,193,78,.35))}
+.crest{width:52px;height:52px;flex:none;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(242,193,78,.55),0 8px 22px -6px rgba(242,193,78,.55)}
 .brand h1{margin:0;font:900 26px/.9 var(--stadium);text-transform:uppercase;letter-spacing:.04em;background:linear-gradient(180deg,var(--gold2),var(--gold) 60%,var(--gold-d));-webkit-background-clip:text;background-clip:text;color:transparent}
 [data-vibe="daylight"] .brand h1{background:linear-gradient(180deg,#B88518,#7A5208);-webkit-background-clip:text;background-clip:text}
 .brand small{display:block;color:var(--fg2);font-size:11px;font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -140,8 +141,8 @@ main{min-width:0}
 
 /* ---------- per-tab identity: every tab gets its own accent + banner ---------- */
 body{--acc:var(--teal)}
-body[data-tab="live"]{--acc:#FF3B5C} body[data-tab="pick6"]{--acc:#8B6CFF} body[data-tab="ftd"]{--acc:#F2C14E} body[data-tab="scalp"]{--acc:#22D3EE}
-body[data-tab="games"]{--acc:#2EE59D} body[data-tab="injuries"]{--acc:#FF7A59} body[data-tab="research"]{--acc:#4CC9F0} body[data-tab="ledger"]{--acc:#7CF27C}
+body[data-view="live"]{--acc:#FF3B5C} body[data-view="pick6"]{--acc:#8B6CFF} body[data-view="ftd"]{--acc:#F2C14E} body[data-view="scalp"]{--acc:#22D3EE}
+body[data-view="games"]{--acc:#2EE59D} body[data-view="injuries"]{--acc:#FF7A59} body[data-view="research"]{--acc:#4CC9F0} body[data-view="ledger"]{--acc:#7CF27C}
 .navbtn[aria-current="page"]{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 60%,#000))!important;color:#06080b!important;box-shadow:0 12px 26px -12px var(--acc)!important}
 .banner{position:relative;overflow:hidden;border-radius:24px;padding:22px 24px;margin-bottom:18px;border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);background:radial-gradient(900px 260px at 0% 0%,color-mix(in srgb,var(--acc) 34%,transparent),transparent 70%),linear-gradient(120deg,color-mix(in srgb,var(--acc) 16%,var(--panel)),var(--panel) 70%);box-shadow:var(--shadow);isolation:isolate}
 .banner .wm{position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(-8deg);width:220px;height:220px;color:var(--acc);opacity:.13;z-index:-1}
@@ -437,11 +438,11 @@ details.more[open] summary::before{content:"–"}
 
 /* ---------- chat: smoked glass + gold ---------- */
 .chat-fab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;align-items:center;gap:9px;padding:12px 18px 12px 12px;border-radius:999px;border:1px solid rgba(242,193,78,.65);background:rgba(4,6,8,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#F2C14E;font-weight:900;box-shadow:0 14px 34px -10px rgba(0,0,0,.9),0 0 22px -8px rgba(242,193,78,.6)}
-.chat-fab .cr{width:26px;height:30px}
+.chat-fab .cr{width:32px;height:32px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px rgba(242,193,78,.7)}
 .chat-fab .badge2{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--loss);color:#fff;font-size:11px;display:grid;place-items:center}
 .chat{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:75;width:min(390px,calc(100vw - 32px));height:min(580px,calc(100vh - 120px));display:flex;flex-direction:column;background:var(--chat-bg);backdrop-filter:blur(14px) saturate(1.25);-webkit-backdrop-filter:blur(14px) saturate(1.25);border:1px solid rgba(242,193,78,.55);border-radius:22px;box-shadow:0 34px 70px -14px rgba(0,0,0,.9);overflow:hidden;color:#F4F1EA}
 .chat-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(242,193,78,.22);background:linear-gradient(180deg,rgba(242,193,78,.14),transparent)}
-.chat-h .cr{width:26px;height:30px}
+.chat-h .cr{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px rgba(242,193,78,.7)}
 .chat-h b{font:900 20px/1 var(--stadium);text-transform:uppercase;color:#F2C14E;letter-spacing:.03em}
 .chat-h select{margin-left:auto;padding:6px 8px;border-radius:10px;background:rgba(0,0,0,.5);color:#F4F1EA;border:1px solid rgba(242,193,78,.35);font-size:12px}
 .chat-h .x{background:none;border:0;font-size:22px;color:rgba(244,241,234,.6);padding:2px 6px}
@@ -466,11 +467,138 @@ body.overlay .top,body.overlay .record,body.overlay .shell,body.overlay .bottom,
 .ticker{display:none}
 body.overlay .ticker{display:flex;position:fixed;left:16px;right:16px;bottom:16px;z-index:50;align-items:stretch;border-radius:18px;overflow:hidden;background:rgba(4,6,8,.9);border:1px solid rgba(242,193,78,.5);box-shadow:0 20px 40px -10px rgba(0,0,0,.7);color:#fff}
 .ticker .tag{flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;background:linear-gradient(135deg,#0A3F3A,#0FB89A);font:900 22px/1 var(--stadium);text-transform:uppercase;color:#F2C14E}
-.ticker .tag svg{width:24px;height:28px}
+.ticker .tag img{width:36px;height:36px;border-radius:50%}
 .ticker .scroll{flex:1;overflow:hidden;display:flex;align-items:center}
 .ticker .track{display:flex;gap:30px;padding:13px 0;white-space:nowrap;animation:scroll 45s linear infinite;font-weight:800;font-size:16px}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 body.overlay .toasts{bottom:96px}
+
+/* ---------- icon sizing guards (unsized inline svgs blow up to full width) ---------- */
+.plan svg{width:20px;height:20px;flex:none;color:var(--gold)}
+.ftdline svg{width:18px;height:18px;flex:none;color:var(--gold)}
+.chip svg{width:12px;height:12px;flex:none}
+.status svg,.weekbar svg,.lstrip svg{width:16px;height:16px;flex:none}
+
+/* ---------- crest placements ---------- */
+.rail-crest{margin-top:8px;padding:12px 10px 10px;border-radius:16px;background:radial-gradient(circle at 50% 40%,rgba(242,193,78,.12),transparent 70%),var(--panel2);text-align:center}
+.rail-crest img{width:100%;max-width:170px;display:block;margin:0 auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.6))}
+.rail-crest span{display:block;margin-top:6px;font:800 12px/1.2 var(--stadium);text-transform:uppercase;letter-spacing:.08em;color:var(--gold)}
+.chat::before{content:"";position:absolute;inset:60px 0 120px;background:url(crest.png) center/78% no-repeat;opacity:.07;pointer-events:none}
+.chat>*{position:relative}
+
+/* ---------- compact live strip on non-live tabs ---------- */
+.lstrip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;margin:-6px 0 18px;border-radius:16px;border:1px solid color-mix(in srgb,var(--loss) 50%,transparent);background:linear-gradient(90deg,rgba(255,59,92,.16),var(--panel) 60%);font-weight:800;font-size:13px}
+.lstrip .go{margin-left:auto;padding:7px 12px;border-radius:999px;border:0;background:var(--loss);color:#fff;font-weight:900;font-size:12px}
+
+/* ---------- week switcher ---------- */
+.weekbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 16px}
+.weekbar .wk{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--panel);color:var(--fg2);font-weight:800;font-size:13px}
+.weekbar .wk[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#06080b}
+.weekbar .wk small{font-weight:700;opacity:.75}
+.weekbar .hint{font-size:12px;color:var(--fg3);font-weight:700}
+.archnote{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);color:var(--fg2);font-size:13px;font-weight:700;margin-bottom:14px}
+
+/* ---------- scalp / 1st TD summary row (sits above the cards) ---------- */
+.sumrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+.sumrow>div{padding:14px 16px;border-radius:16px;background:var(--card-grad),var(--panel);border:1px solid var(--line)}
+.sumrow .k{font-size:12px;font-weight:800;color:var(--fg2)}
+.sumrow .v{font:900 28px/1 var(--stadium);margin-top:6px}
+.sumrow .s{font-size:12px;color:var(--fg2);margin-top:4px}
+.sumrow .nx{border-color:color-mix(in srgb,var(--acc) 50%,transparent)}
+.plan.slim{margin:0 0 16px;padding:9px 12px;font-size:12px}
+.ath-body .cdbig{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);font-size:12px;font-weight:800;color:var(--fg2)}
+
+/* ---------- Live: hero ---------- */
+.lhero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:center;padding:24px;border-radius:26px;margin-bottom:20px;border:1px solid color-mix(in srgb,var(--acc) 50%,transparent);background:radial-gradient(700px 300px at 0% 0%,color-mix(in srgb,var(--acc) 30%,transparent),transparent 70%),radial-gradient(500px 260px at 100% 100%,rgba(242,193,78,.16),transparent 70%),var(--panel);box-shadow:var(--shadow);isolation:isolate}
+.lhero .wm{position:absolute;right:-40px;top:-40px;width:300px;opacity:.08;z-index:-1}
+.lhero h2{margin:0;font:900 52px/.9 var(--stadium);text-transform:uppercase}
+.lhero h2 span{color:var(--acc)}
+.lhero .state{display:flex;align-items:center;gap:10px;margin-top:12px;font-weight:800;color:var(--fg2);flex-wrap:wrap}
+.lhero .big{font:700 64px/1 var(--jersey);letter-spacing:.02em;color:var(--live)}
+.lhero .big.on{color:var(--loss);animation:blink 1.6s infinite}
+.lhero .bubbles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lhero .bub{padding:14px;border-radius:18px;background:rgba(127,127,127,.08);border:1px solid var(--line2);text-align:center}
+.lhero .bub .v{font:900 30px/1 var(--stadium)}
+.lhero .bub .k{font-size:11px;font-weight:800;color:var(--fg2);margin-top:5px}
+
+/* ---------- Live: slip tracker ---------- */
+.slips{display:flex;flex-direction:column;gap:12px}
+details.slip{border-radius:20px;border:1px solid var(--line);background:var(--card-grad),var(--panel);box-shadow:var(--shadow);overflow:hidden}
+details.slip.live{border-color:color-mix(in srgb,var(--live) 55%,transparent)}
+details.slip.won,details.slip.partial{border-color:color-mix(in srgb,var(--win) 60%,transparent)}
+details.slip.dead,details.slip.lost{border-color:color-mix(in srgb,var(--loss) 45%,transparent)}
+details.slip>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(140px,260px) auto 20px;gap:14px;align-items:center;padding:14px 16px}
+details.slip>summary::-webkit-details-marker{display:none}
+.slip .faces{display:flex}
+.slip .faces span{width:38px;height:38px;border-radius:50%;overflow:hidden;background:var(--tg);border:2px solid var(--panel);margin-right:-12px;position:relative}
+.slip .faces span:last-child{margin-right:0}
+.slip .faces img{position:absolute;left:50%;top:1px;transform:translateX(-50%);height:42px;width:auto;max-width:none}
+.slip .faces em{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--panel3);border:2px solid var(--panel);font:800 12px var(--body);font-style:normal;position:relative}
+.slip .st b{display:block;font:900 22px/1 var(--stadium);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slip .st span{display:block;font-size:12px;color:var(--fg2);font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.segs{display:flex;gap:3px;height:12px}
+.segs i{flex:1;border-radius:4px;background:rgba(127,127,127,.2);position:relative;overflow:hidden}
+.segs i b{position:absolute;inset:0 auto 0 0;border-radius:4px}
+.segs i.hit{background:var(--win);box-shadow:0 0 10px -2px var(--win)} .segs i.miss{background:var(--loss)} .segs i.dnp{background:var(--violet)}
+.slip .pay{text-align:right}
+.slip .pay b{display:block;font:900 24px/1 var(--stadium);color:var(--win)}
+.slip.dead .pay b,.slip.lost .pay b{color:var(--loss);text-decoration:line-through}
+.slip .pay span{font-size:11px;font-weight:800;color:var(--fg2)}
+.slip .chev{width:20px;height:20px;color:var(--fg2);transition:transform .2s}
+details.slip[open] .chev{transform:rotate(180deg)}
+.slip-legs{display:flex;flex-direction:column;gap:2px;padding:0 10px 12px}
+.lrow{display:grid;grid-template-columns:48px minmax(120px,1.1fr) minmax(0,2fr) 92px;gap:14px;align-items:center;padding:10px 8px;border-radius:14px}
+.lrow:nth-child(odd){background:rgba(127,127,127,.05)}
+.lrow .av{width:48px;height:48px;border-radius:14px;overflow:hidden;position:relative;background:var(--tg)}
+.lrow .av img{position:absolute;left:50%;top:2px;transform:translateX(-50%);height:54px;width:auto;max-width:none}
+.lrow .who b{display:block;font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .who .sub{display:block;font-size:11px;font-weight:700;color:var(--fg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .who .cd{margin-top:5px;font-size:10px;padding:1px 7px}
+.lrow .who .cd svg{width:10px;height:10px}
+.ptrack{position:relative;height:16px;border-radius:999px;background:rgba(127,127,127,.16);overflow:visible}
+.ptrack .fill{position:absolute;inset:0 auto 0 0;border-radius:999px;transition:width .8s cubic-bezier(.2,.8,.2,1),background .8s}
+.ptrack .goal{position:absolute;right:0;top:-5px;bottom:-5px;width:3px;border-radius:2px;background:var(--fg)}
+.ptrack .pace{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--sky);opacity:.9}
+.tmeta{display:flex;justify-content:space-between;gap:8px;margin-top:6px;font-size:11px;font-weight:800;color:var(--fg2)}
+.tmeta .pc{color:var(--sky)}
+.lrow .num{text-align:right}
+.lrow .num b{display:block;font:700 30px/1 var(--jersey)}
+.lrow .num span{font-size:11px;font-weight:800;color:var(--fg3)}
+.lrow.hit .ptrack .fill{box-shadow:0 0 16px var(--win)}
+.lrow.hit .num b{color:var(--win)} .lrow.miss .num b{color:var(--loss)} .lrow.miss{opacity:.7}
+.lrow .tag2{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:900;padding:2px 7px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.tag2.hit{background:var(--win);color:#032015} .tag2.miss{background:var(--loss);color:#fff} .tag2.live{background:var(--live);color:#1a1100}
+.tdwatch{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;padding:0 14px 14px}
+.tdw{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}
+.tdw .av{width:44px;height:44px;border-radius:12px;overflow:hidden;position:relative;background:var(--tg)}
+.tdw .av img{position:absolute;left:50%;top:2px;transform:translateX(-50%);height:50px;width:auto;max-width:none}
+.tdw b{display:block;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tdw span{display:block;font-size:11px;color:var(--fg2);font-weight:700}
+.tdw.gold{border-color:var(--gold);animation:glow 1.5s infinite} .tdw.hit{border-color:var(--win)}
+
+/* ---------- ledger ---------- */
+.plrow{display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:16px;align-items:stretch}
+.plchart svg{width:100%;height:auto;max-height:280px;display:block}
+.cal{padding:16px}
+.cal .grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:8px}
+.cal .dow{font-size:10px;font-weight:900;color:var(--fg3);text-align:center}
+.cal .d{aspect-ratio:1;border-radius:8px;background:rgba(127,127,127,.1);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--fg3);position:relative}
+.cal .d.w{background:color-mix(in srgb,var(--win) calc(var(--i) * 100%),rgba(127,127,127,.12));color:#032015}
+.cal .d.l{background:color-mix(in srgb,var(--loss) calc(var(--i) * 100%),rgba(127,127,127,.12));color:#fff}
+.cal .d.today{box-shadow:inset 0 0 0 2px var(--fg)}
+.cal .legend{display:flex;gap:12px;margin-top:10px;font-size:11px;font-weight:800;color:var(--fg2)}
+.cal .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.hist{display:flex;flex-direction:column;gap:8px}
+details.hrow{border-radius:16px;border:1px solid var(--line);background:var(--panel)}
+details.hrow>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:92px minmax(0,1fr) auto auto auto;gap:14px;align-items:center;padding:12px 14px}
+details.hrow>summary::-webkit-details-marker{display:none}
+.hrow .dt{font-size:12px;font-weight:800;color:var(--fg2)}
+.hrow .tt b{display:block;font-weight:800}
+.hrow .tt span{font-size:11px;color:var(--fg2);font-weight:700}
+.hrow .mny{text-align:right;font-size:12px;font-weight:800;color:var(--fg2)}
+.hrow .mny b{display:block;font:900 20px/1 var(--stadium)}
+.hrow .picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;padding:0 14px 14px}
+.hrow .src{padding:0 14px 14px;font-size:12px;color:var(--fg3)}
 
 /* ---------- responsive ---------- */
 @media (max-width:1240px){.pt .v{font-size:30px}}
@@ -501,7 +629,22 @@ body.overlay .toasts{bottom:96px}
   .side img{width:40px;height:40px} .side .sc{font-size:40px} .side .tn{font-size:20px}
   .vibes{display:none}
   .checkbar{grid-template-columns:minmax(0,1fr)}
+  .crest{width:40px;height:40px} .brand{gap:9px} .brand h1{font-size:18px;white-space:nowrap;letter-spacing:.02em} .top-in{gap:8px} #vibeName,.vibebtn>svg{display:none} .vibebtn{padding:6px} .feed{padding:6px 10px}
+  .chat-fab{padding:7px} .chat-fab .lbl{display:none} .chat-fab .cr{width:40px;height:40px}
   .ladder{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@media (max-width:1100px){.plrow{grid-template-columns:minmax(0,1fr)}.lhero{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){
+  details.slip>summary{grid-template-columns:auto minmax(0,1fr) auto;row-gap:10px}
+  details.slip>summary .segs{grid-column:1 / -1;grid-row:2}
+  details.slip>summary .chev{display:none}
+  .lrow{grid-template-columns:44px minmax(0,1fr) 70px;row-gap:8px}
+  .lrow .bar2{grid-column:1 / -1}
+  .lrow .num b{font-size:24px}
+  .lhero h2{font-size:40px} .lhero .big{font-size:48px}
+  details.hrow>summary{grid-template-columns:minmax(0,1fr) auto;row-gap:6px}
+  details.hrow>summary .dt{grid-column:1 / -1}
+  details.hrow>summary .dots{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -519,7 +662,7 @@ body.overlay .toasts{bottom:96px}
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#live" aria-label="Poizen Lounge home">
-      <span class="crestslot"><svg class="crest" aria-hidden="true"><use href="#crest"/></svg></span>
+      <img class="crest" src="poizen-mark.png" alt="" width="52" height="52">
       <div style="min-width:0"><h1>Poizen Lounge</h1><small id="slateTitle">Live picks board</small></div>
     </a>
     <div class="top-r">
@@ -545,14 +688,14 @@ body.overlay .toasts{bottom:96px}
 </div>
 <nav class="bottom" id="bottom" aria-label="Board sections"></nav>
 
-<div class="ticker" aria-hidden="true"><div class="tag"><svg><use href="#crest"/></svg>Poizen Lounge</div><div class="scroll"><div class="track" id="ticker"></div></div></div>
+<div class="ticker" aria-hidden="true"><div class="tag"><img src="poizen-mark.png" alt="">Poizen Lounge</div><div class="scroll"><div class="track" id="ticker"></div></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
 <button class="chat-fab" id="chatFab" type="button" aria-expanded="false" aria-controls="chat">
-  <svg class="cr" aria-hidden="true"><use href="#crest"/></svg>Lounge Chat <span class="badge2" id="chatBadge" hidden>0</span>
+  <img class="cr" src="poizen-mark.png" alt=""><span class="lbl">Lounge Chat</span> <span class="badge2" id="chatBadge" hidden>0</span>
 </button>
 <section class="chat" id="chat" hidden aria-label="Lounge chat">
-  <div class="chat-h"><svg class="cr" aria-hidden="true"><use href="#crest"/></svg><b>Lounge Chat</b><select id="chatDay" aria-label="Chat day"></select><button class="x" id="chatClose" type="button" aria-label="Close chat">×</button></div>
+  <div class="chat-h"><img class="cr" src="poizen-mark.png" alt=""><b>Lounge Chat</b><select id="chatDay" aria-label="Chat day"></select><button class="x" id="chatClose" type="button" aria-label="Close chat">×</button></div>
   <div class="chat-list" id="chatList"></div>
   <form class="chat-f" id="chatForm" autocomplete="off">
     <div class="row"><input id="chatName" maxlength="24" placeholder="Your name — or leave blank to stay anonymous" aria-label="Your name"></div>
@@ -942,7 +1085,7 @@ const S = {
   snap: null, alertLog: [],
   tab: (location.hash || '#live').slice(1),
   injuries: null, injLoading: false, injFilter: 'mine', injStatus: 'all', injQ: '',
-  research: {}, custom: [], p6Filter: 'live-first', shift: null, ledgerWeek: 'all',
+  research: {}, custom: [], p6Filter: 'live-first', shift: null, ledgerWeek: 'all', week: 'current', slipOpen: {}, ledgerRange: 'all', pOverride: null,
 };
 const store = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
 S.custom = store.get('pz_custom_checks', []);
@@ -956,7 +1099,7 @@ setVibe(params.get('vibe') || store.get('pz_vibe', 'midnight'));
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const money = (n, sign) => { if (n === null || n === undefined || !isFinite(n)) return '–'; const a = Math.abs(n); const s = a >= 10000 ? (a / 1000).toFixed(1) + 'K' : a >= 1000 ? a.toLocaleString('en-US', { maximumFractionDigits: 0 }) : a.toFixed(2); return (n < 0 ? '-' : (sign && n > 0 ? '+' : '')) + '$' + s; };
-const P = (key) => (S.slate.players || {})[key] || { name: key, team: '', sport: 'nfl' };
+const P = (key) => (S.pOverride && S.pOverride[key]) || (S.slate.players || {})[key] || { name: key, team: '', sport: 'nfl' };
 const sportOf = (key) => P(key).sport || 'nfl';
 const confirmed = (t) => t.status !== 'unconfirmed';
 const SVG = {
@@ -1054,7 +1197,7 @@ function ingestScoreboard(sport, sb) {
     const odds = (c.odds || [])[0] || null;
     const info = {
       id: ev.id, sport, date: ev.date, name: ev.shortName,
-      state: st.state || 'pre', detail: st.shortDetail || '', completed: !!st.completed, statusName: st.name || '', period: ev.status && ev.status.period,
+      state: st.state || 'pre', detail: st.shortDetail || '', clock: ev.status && ev.status.displayClock, completed: !!st.completed, statusName: st.name || '', period: ev.status && ev.status.period,
       comps: (c.competitors || []).map((t) => ({ ha: t.homeAway, abbr: t.team.abbreviation, name: t.team.shortDisplayName || t.team.name, color: t.team.color, alt: t.team.alternateColor, logo: t.team.logo, score: t.score, record: (t.records || [])[0] && t.records[0].summary, winner: t.winner })),
       odds: odds ? { details: odds.details, total: odds.overUnder, spread: odds.spread, fav: odds.homeTeamOdds && odds.homeTeamOdds.favorite ? 'home' : (odds.awayTeamOdds && odds.awayTeamOdds.favorite ? 'away' : null), provider: odds.provider && odds.provider.name } : null,
       weather: ev.weather ? { text: ev.weather.displayValue, temp: ev.weather.temperature } : null,
@@ -1185,7 +1328,7 @@ function navHTML() {
   return TABS.map(btn).join('');
 }
 function renderNav() {
-  $('#rail').innerHTML = navHTML() + `<div class="rail-foot">Live stats from ESPN, refreshed every 15 seconds. Alert sounds are on. DraftKings settles every ticket.</div>`;
+  $('#rail').innerHTML = navHTML() + `<div class="rail-foot">Live stats from ESPN, refreshed every 15 seconds. Alert sounds are on. DraftKings settles every ticket.</div><div class="rail-crest"><img src="crest.png" alt="Maciel's Incorporated crest" loading="lazy"><span>A Maciel's Incorporated lounge</span></div>`;
   $('#bottom').innerHTML = navHTML();
 }
 function setTab(id) {
@@ -1194,7 +1337,7 @@ function setTab(id) {
   render(); window.scrollTo({ top: 0 });
   if (id === 'injuries' || id === 'research') loadInjuries();
   if (id === 'research') loadResearch();
-  if (id === 'ledger') loadArchive();
+  if (['ledger', 'pick6', 'ftd', 'scalp'].includes(id)) loadArchive();
 }
 const TABICON = { live: 'live', pick6: 'pick6', ftd: 'ftd', scalp: 'scalp', games: 'games', injuries: 'inj', research: 'research', ledger: 'ledger' };
 const vh = (title, sub, chips = '') => `<section class="banner"><div class="wm">${SVG[TABICON[S.tab]] || ''}</div><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ''}${chips ? `<div class="bchips">${chips}</div>` : ''}</section>`;
@@ -1266,9 +1409,13 @@ function viewPick6() {
   if (f === 'settled') list = list.filter(({ r }) => ['won', 'lost', 'partial', 'dead'].includes(r.state));
   const fb = (id, label) => `<button class="fbtn" type="button" data-p6="${id}" aria-pressed="${f === id}">${label}</button>`;
   const mm = moneySummary(S.G);
-  return vh('Pick6 <span>Slips</span>', 'Your DraftKings Pick6 entries, filled in pick by pick from the live box score. Green means it cashed, gold means it is live.', `<span class="chip">${mine.length} slips</span><span class="chip">${money(mm.inPlay)} in play</span><span class="chip">${money(mm.maxLeft)} max payout</span>`) +
+  const past = weekSlate();
+  const head = vh('Pick6 <span>Slips</span>', 'Your DraftKings Pick6 entries, filled in pick by pick from the live box score. Green means it cashed, gold means it is live.', past ? '' : `<span class="chip">${mine.length} slips</span><span class="chip">${money(mm.inPlay)} in play</span><span class="chip">${money(mm.maxLeft)} max payout</span>`);
+  if (past) return head + weekBar() + viewArchived('pick6', past);
+  const emptyMsg = f === 'live' ? '<div class="empty"><b>No slips live right now</b>A slip shows up here the moment one of its games kicks off.</div>' : f === 'settled' ? '<div class="empty"><b>No settled slips yet this week</b>Slips land here once every leg is graded or the slip busts.</div>' : '<div class="empty"><b>No slips this week yet</b></div>';
+  return head + weekBar() +
     `<div class="filters">${fb('live-first', `All slips (${mine.length})`)}${fb('live', 'Live now')}${fb('settled', 'Settled')}</div>` +
-    (list.length ? `<div style="display:flex;flex-direction:column;gap:18px">${list.map(ticketCard).join('')}</div>` : '<div class="empty"><b>Nothing here yet</b>Slips show up here once they are live or settled.</div>') +
+    (list.length ? `<div style="display:flex;flex-direction:column;gap:18px">${list.map(ticketCard).join('')}</div>` : emptyMsg) +
     (pending.length ? `<details class="more" style="margin-top:22px"><summary>${pending.length} slip${pending.length === 1 ? '' : 's'} not confirmed on DraftKings</summary><div style="display:flex;flex-direction:column;gap:18px;margin-top:12px">${pending.map(ticketCard).join('')}</div></details>` : '');
 }
 
@@ -1288,18 +1435,57 @@ function heroCard(key, inner, cls = '', id = '', corner = '', lefttop = '') {
   </article>`;
 }
 
+/* ---------------- week switcher (Pick6 / 1st TD / Scalp) ---------------- */
+function weekList() {
+  const cur = { key: 'current', label: S.slate.title || 'This week', sub: 'this week' };
+  const arch = S.archive ? Object.entries(S.archive).sort((a, b) => String(b[1].closedAt || '').localeCompare(String(a[1].closedAt || ''))).map(([k, w]) => ({ key: k, label: w.title || (w.slate && w.slate.title) || k, sub: w.closedAt ? 'closed ' + String(w.closedAt).slice(5, 10) : 'archived' })) : [];
+  return [cur, ...arch];
+}
+function weekBar() {
+  const L = weekList(); if (!L.some((w) => w.key === S.week)) S.week = 'current';
+  return `<div class="weekbar" role="group" aria-label="Week">${L.map((w) => `<button class="wk" type="button" data-week="${esc(w.key)}" aria-pressed="${S.week === w.key}">${esc(w.label)} <small>${esc(w.sub)}</small></button>`).join('')}${L.length < 2 ? `<span class="hint">${S.archive ? 'Past weeks show up here after you archive a week in admin.' : 'Loading past weeks…'}</span>` : ''}</div>`;
+}
+function weekSlate() { if (S.week === 'current' || !S.archive || !S.archive[S.week]) return null; return fixArrays(JSON.parse(JSON.stringify(S.archive[S.week].slate || {}))); }
+/* past weeks are shown from the archive: no live grading, results come from the ledger */
+function viewArchived(kind, sl) {
+  S.pOverride = sl.players || {};
+  try {
+    const note = `<div class="archnote">${SVG.clock}<span>Archived week. Live tracking is off; results come from the ledger and logged cash-outs.</span></div>`;
+    if (kind === 'pick6') {
+      const tix = sl.pick6 || []; if (!tix.length) return note + '<div class="empty"><b>No Pick6 slips that week</b></div>';
+      return note + `<div class="grid2">${tix.map((t) => {
+        const rec = recorded().find((e) => e.slipId === t.id || e.title === t.title);
+        const picks = rec && rec.picks ? Object.values(rec.picks) : [];
+        const legs = (t.legs || []).map((l) => { const pk = picks.find((x) => x.player === l.player && x.market === l.market) || {}; const res = pk.result || ''; const p = P(l.player); return `<div class="mtile ${res}">${avatar(l.player)}<div style="min-width:0;display:flex;align-items:center;gap:6px"><div style="min-width:0"><b>${esc(p.name)}</b><span>${l.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(l.line)} ${esc((E.MARKETS[l.market] || {}).short || l.market)}</span></div><span class="v">${pk.value !== undefined ? E.fmt(pk.value) : ''}</span></div></div>`; }).join('');
+        const pl = rec ? Number(rec.payout || 0) - Number(rec.stake || 0) : null;
+        return `<article class="card ticket ${rec ? (pl > 0 ? 'won' : 'lost') : ''}"><div class="t-top"><h3 class="t-title" style="margin:0">${esc(t.title)}</h3>${rec ? `<span class="chip ${pl > 0 ? 'win' : 'loss'}">${pl > 0 ? 'Won' : 'Lost'} ${money(pl, true)}</span>` : '<span class="chip">Result not logged</span>'}</div><div class="minis" style="margin:14px 0">${legs}</div><div class="money"><div><div class="k">Entry</div><span class="pill">${money(Number(t.entry))}</span></div><div><div class="k">${rec ? 'Paid' : 'To win'}</div><span class="pill towin">${money(rec ? Number(rec.payout) : Number(t.toWin) || 0)}</span></div></div></article>`;
+      }).join('')}</div>`;
+    }
+    if (kind === 'ftd') {
+      const bets = (sl.firstTD && sl.firstTD.bets) || []; if (!bets.length) return note + '<div class="empty"><b>No first-TD bets that week</b></div>';
+      return note + `<div class="minis">${bets.map((b) => `<div class="mtile ${b.result === 'hit' ? 'hit' : b.result === 'miss' ? 'miss' : ''}">${avatar(b.player)}<div style="min-width:0"><b>${esc(P(b.player).name)}</b><span>${money(Number(b.stake))} at ${esc(b.odds)}${b.result ? ' · ' + esc(b.result) : ''}</span></div></div>`).join('')}</div>`;
+    }
+    const shifts = (sl.scalp && sl.scalp.shifts) || []; if (!shifts.length) return note + '<div class="empty"><b>No scalp that week</b></div>';
+    return note + shifts.map((sh) => `<h3 class="sec">${esc(sh.label)}</h3><div class="minis">${(sh.targets || []).map((t) => `<div class="mtile ${t.cashedOut !== undefined && t.cashedOut !== '' ? (Number(t.cashedOut) > Number(t.stake) ? 'hit' : 'miss') : ''}">${avatar(t.player)}<div style="min-width:0"><b>${esc(P(t.player).name)}</b><span>${money(Number(t.stake))} at ${esc(t.odds)}${t.cashedOut !== undefined && t.cashedOut !== '' ? ' · cashed ' + money(Number(t.cashedOut)) : ' · no cash-out logged'}</span></div></div>`).join('')}</div>`).join('');
+  } finally { S.pOverride = null; }
+}
+
 /* ---------------- 1st TD ---------------- */
 function viewFTD() {
+  const head = vh('First <span>Touchdown</span>', 'One bet per game on who scores the first touchdown. Only the first TD of each game counts.');
+  const past = weekSlate(); if (past) return head + weekBar() + viewArchived('ftd', past);
   const ftd = S.slate.firstTD;
-  if (!ftd) return vh('First Touchdown', '') + '<div class="empty"><b>No first-TD bets this week</b></div>';
+  if (!ftd) return head + weekBar() + '<div class="empty"><b>No first-TD bets this week</b></div>';
   const items = S.G.ftd;
   const risk = items.reduce((a, { b }) => a + (Number(b.stake) || 0), 0);
   const ret = items.filter(({ r }) => r.state === 'hit').reduce((a, { r }) => a + r.ret, 0);
   const done = items.filter(({ r }) => r.state === 'hit' || r.state === 'miss').length;
-  const planNote = ftd.status !== 'placed' ? `<div class="plan">${SVG.clock}<span><b>Game plan.</b> These are the planned first-TD bets for the slate. They count toward totals once they are placed on DraftKings.</span></div>` : '';
-  const sum = `<div class="card bank" style="margin:0 0 16px"><div><div class="k">Total risk</div><div class="v">${money(risk)}</div></div><div><div class="k">Returned</div><div class="v ${ret > 0 ? 'win' : ''}">${money(ret)}</div></div><div><div class="k">Games decided</div><div class="v">${done} / ${items.length}</div></div></div>`;
+  const best = Math.max(0, ...items.map(({ r }) => r.ret));
+  const nextEv = items.map(({ b }) => eventFor(b.player)).filter((e) => e && e.state === 'pre').sort((a, b) => a.date.localeCompare(b.date))[0];
+  const sum = `<div class="sumrow"><div><div class="k">Total risk</div><div class="v">${money(risk)}</div><div class="s">${items.length} games</div></div><div><div class="k">Returned</div><div class="v ${ret > 0 ? 'win' : ''}">${money(ret)}</div><div class="s">${done} of ${items.length} games decided</div></div><div><div class="k">Best single hit</div><div class="v gold">${money(best)}</div><div class="s">If the longest shot scores first</div></div><div class="nx"><div class="k">Next kickoff</div><div class="v" style="font-size:22px">${nextEv ? cdHTML(nextEv.date) : '–'}</div><div class="s">${nextEv ? esc(nextEv.name + ' · ' + kickLabel(nextEv.date)) : 'All games started'}</div></div></div>`;
+  const planNote = ftd.status !== 'placed' ? `<div class="plan slim">${SVG.clock}<span><b>Game plan.</b> Planned first-TD bets. They count toward totals once placed on DraftKings.</span></div>` : '';
   const cards = items.map(({ b, r }) => {
-    const status = r.state === 'hit' ? `<div class="status win">Scored the first TD — pays ${money(r.ret)}</div>` : r.state === 'miss' ? `<div class="status loss">${esc(r.note || 'Missed')}</div>` : r.state === 'live' ? '<div class="status">Live — no touchdown yet in this game</div>' : '<div class="status">Waiting for kickoff</div>';
+    const status = r.state === 'hit' ? `<div class="status win">Scored the first TD — pays ${money(r.ret)}</div>` : r.state === 'miss' ? `<div class="status loss">${esc(r.note || 'Missed')}</div>` : r.state === 'live' ? '<div class="status">Live — no touchdown yet in this game</div>' : '';
     const inner = `<div class="payline"><div><div class="k">Pays if he scores first</div><div class="dim" style="font-size:12px;font-weight:700">${money(Number(b.stake))} at ${esc(b.odds)}</div></div><div class="v">${money(r.ret)}</div></div>${status}`;
     return heroCard(b.player, inner, r.state === 'hit' ? 'hit' : '', 'f-' + b.player, `<span class="chip">${money(Number(b.stake))} · ${esc(b.odds)}</span>`);
   }).join('');
@@ -1307,16 +1493,24 @@ function viewFTD() {
     <p class="muted" style="font-size:13px">Pick who scores first in their game. The math covers the whole ${money(risk)} slate.</p>
     <div class="facts" id="calcBox">${items.map(({ b, r }, i) => `<label class="chip" style="cursor:pointer;padding:7px 12px"><input type="checkbox" data-calc="${i}"> ${esc(P(b.player).name)} · ${money(r.ret)}</label>`).join('')}</div>
     <div style="margin-top:12px;font:900 22px var(--stadium)" id="calcOut">Pick players to see the math.</div></details>`;
-  return vh('First <span>Touchdown</span>', 'One bet per game on who scores the first touchdown. Only the first TD of each game counts.', `<span class="chip">${items.length} games</span><span class="chip">${money(risk)} risk</span><span class="chip">Best hit ${money(Math.max(0, ...items.map(({ r }) => r.ret)))}</span>`) + planNote + sum + `<div class="grid3">${cards}</div>` + calc;
+  return head + weekBar() + sum + planNote + `<div class="grid3">${cards}</div>` + calc;
 }
 
 /* ---------------- Scalp ---------------- */
 function viewScalp() {
   const sc = S.slate.scalp;
-  if (!sc) return vh('2+ TD Scalp', '') + '<div class="empty"><b>No scalp plan this week</b></div>';
+  const head = vh('2+ TD <span>Scalp</span>', esc((sc && sc.rule) || 'Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.'));
+  const past = weekSlate(); if (past) return head + weekBar() + viewArchived('scalp', past);
+  if (!sc) return head + weekBar() + '<div class="empty"><b>No scalp plan this week</b></div>';
   const shifts = S.G.shifts;
   if (S.shift === null) S.shift = Math.max(0, shifts.findIndex(({ targets }) => targets.some(({ r }) => !['hit', 'miss', 'cashed'].includes(r.state))));
   const cur = shifts[S.shift] || shifts[0];
+  let realized = 0, staked = 0; const planOnly = sc.status !== 'placed';
+  shifts.forEach(({ targets }) => targets.forEach(({ t, r }) => { if (r.realized !== undefined) { realized += r.realized; staked += Number(t.stake) || 0; } }));
+  const nx = shifts.find(({ targets }) => targets.every(({ r }) => r.state === 'scheduled'));
+  const nxEv = nx && eventFor(nx.targets[0] && nx.targets[0].t.player);
+  const sum = `<div class="sumrow"><div><div class="k">Seed</div><div class="v">${money(Number(sc.seed) || 0)}</div><div class="s">${shifts.length} shifts this week</div></div><div><div class="k">Returned so far</div><div class="v ${realized > staked ? 'win' : ''}">${money(realized)}</div><div class="s">${planOnly ? 'Plan tracking — not placed' : 'From finished shifts'}</div></div><div><div class="k">Net</div><div class="v ${realized - staked > 0 ? 'win' : realized - staked < 0 ? 'loss' : ''}">${money(realized - staked, true)}</div><div class="s">${planOnly ? 'How the plan would have done' : staked ? 'On ' + money(staked) + ' settled' : 'Nothing settled yet'}</div></div>${nx ? `<div class="nx"><div class="k">Up next · ${esc(nx.sh.label)}</div><div class="v" style="font-size:22px">${nxEv ? cdHTML(nxEv.date) : '–'}</div><div class="s">${nx.targets.map(({ t }) => `${esc(lastName(P(t.player).name))} ${esc(t.odds)}`).join(' + ')}</div></div>` : ''}</div>`;
+  const planNote = sc.status !== 'placed' ? `<div class="plan slim">${SVG.clock}<span><b>Game plan.</b> Placed live during the games. Roll what each shift actually returns — cash-out values come from DraftKings.</span></div>` : '';
   const btns = shifts.map(({ sh, targets }, i) => {
     const ev = eventFor(targets[0] && targets[0].t.player);
     const done = targets.every(({ r }) => ['hit', 'miss', 'cashed'].includes(r.state));
@@ -1326,17 +1520,11 @@ function viewScalp() {
   }).join('');
   const cards = cur.targets.map(({ t, r }) => {
     const pips = `<div class="tds"><i class="${r.tds >= 1 ? 'on' : ''}"></i><i class="${r.tds >= 2 ? 'on' : ''}"></i><span>${r.tds || 0} TD</span></div>`;
-    const status = { scheduled: '<div class="status">Waiting for kickoff</div>', live: '<div class="status">Live — waiting on TD #1</div>', td1: '<div class="status gold">TD #1 is in — check the DraftKings cash-out offer now</div>', hit: `<div class="status win">TD #2 — ticket wins in full (${money(r.full)})</div>`, miss: '<div class="status loss">Game ended without 2 TDs</div>', cashed: `<div class="status win">Cashed out for ${money(r.realized)}</div>` }[r.state] || '';
-    const inner = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="chip gold">${money(Number(t.stake))} at ${esc(t.odds)} · 2+ TDs</span>${pips}</div><div class="payline"><div class="k">Full payout at 2 TDs</div><div class="v">${money(r.full)}</div></div>${status}`;
+    const status = { live: '<div class="status">Live — waiting on TD #1</div>', td1: '<div class="status gold">TD #1 is in — check the DraftKings cash-out offer now</div>', hit: `<div class="status win">TD #2 — ticket wins in full (${money(r.full)})</div>`, miss: '<div class="status loss">Game ended without 2 TDs</div>', cashed: `<div class="status win">Cashed out for ${money(r.realized)}</div>` }[r.state] || '';
+    const inner = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="chip gold">${money(Number(t.stake))} at ${esc(t.odds)} · 2+ TDs</span>${r.state === 'scheduled' ? '' : pips}</div><div class="payline"><div class="k">Full payout at 2 TDs</div><div class="v">${money(r.full)}</div></div>${status}`;
     return heroCard(t.player, inner, r.state === 'hit' || r.state === 'cashed' ? 'hit' : '', 's-' + t.player);
   }).join('');
-  let realized = 0, staked = 0;
-  shifts.forEach(({ targets }) => targets.forEach(({ t, r }) => { if (r.realized !== undefined) { realized += r.realized; staked += Number(t.stake) || 0; } }));
-  const planNote = sc.status !== 'placed' ? `<div class="plan">${SVG.clock}<span><b>Game plan.</b> The live scalp is placed during the games. Cash-outs are logged as they happen.</span></div>` : '';
-  const bank = `<div class="card bank"><div><div class="k">Seed</div><div class="v">${money(Number(sc.seed) || 0)}</div></div><div><div class="k">Returned from finished shifts</div><div class="v ${realized > staked ? 'win' : ''}">${money(realized)}</div></div><div><div class="k">Net</div><div class="v ${realized - staked > 0 ? 'win' : realized - staked < 0 ? 'loss' : ''}">${money(realized - staked, true)}</div></div></div>`;
-  const nx = shifts[S.shift + 1];
-  const nextBox = nx ? `<div class="card" style="padding:16px;margin-top:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="st-font" style="font-size:18px;color:var(--fg2)">Up next · ${esc(nx.sh.label)}</div><div style="font-weight:800">${nx.targets.map(({ t }) => `${esc(P(t.player).name)} (${money(Number(t.stake))} at ${esc(t.odds)})`).join(' + ')}</div><div class="dim" style="font-size:12px;flex-basis:100%">Roll what the current shift actually returns. Cash-out values come from DraftKings, not a fixed percentage.</div></div>` : '';
-  return vh('2+ TD <span>Scalp</span>', esc(sc.rule || ''), `<span class="chip">${shifts.length} shifts</span><span class="chip">${money(Number(sc.seed) || 0)} seed</span>`) + planNote + `<div class="shifts">${btns}</div><div class="grid2">${cards}</div>${bank}${nextBox}`;
+  return head + weekBar() + sum + planNote + `<div class="shifts">${btns}</div><div class="grid2">${cards}</div>`;
 }
 
 /* ---------------- game cards (broadcast style) ---------------- */
@@ -1390,16 +1578,97 @@ function gameCard(ev) {
   </article>`;
 }
 
-/* ---------------- Live ---------------- */
+/* ---------------- Live: sweat board ---------------- */
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>';
+function liveEvents() { return Object.values(S.events).filter((e) => e.state === 'in' && relevantEvent(e)); }
+/* share of the game already played, used for the pace projection */
+function gameFrac(ev) {
+  if (!ev) return 0; if (ev.state === 'post') return 1; if (ev.state !== 'in') return 0;
+  const per = Number(ev.period) || 1;
+  if (ev.sport === 'nfl') {
+    if (/half/i.test(ev.detail || '')) return 0.5;
+    const [m, sec] = String(ev.clock || '15:00').split(':').map(Number);
+    const left = Math.min(15, (m || 0) + (sec || 0) / 60);
+    return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 15 + (15 - left)) / 60));
+  }
+  const half = /bot|mid|end/i.test(ev.detail || '') ? 0.5 : 0;
+  return Math.max(0, Math.min(1, (per - 1 + half + 0.25) / 9));
+}
+/* red → orange → gold → green as the stat closes in on the line (reversed for LESS picks) */
+function legHue(leg, g) {
+  if (g.state === 'hit') return 'var(--win)'; if (g.state === 'miss') return 'var(--loss)'; if (g.state === 'dnp' || g.state === 'void') return 'var(--violet)';
+  const p = Math.max(0, Math.min(1, g.progress || 0));
+  const ramp = (x) => (x < 0.5 ? x * 56 : x < 0.8 ? 28 + (x - 0.5) * 57 : 45 + (x - 0.8) * 200); // red → orange → gold → lime
+  const h = Math.round(leg.dir === 'under' ? 140 - ramp(p) * 1.4 : ramp(p));
+  return `hsl(${h} 95% 55%)`;
+}
+function paceOf(leg, g) {
+  if (g.state !== 'live') return null;
+  const f = gameFrac(eventFor(leg.player));
+  if (f < 0.12 || Number(leg.line) < 2.5) return null;
+  return g.value / f;
+}
+function legRow(leg, g) {
+  const p = P(leg.player), mk = E.MARKETS[leg.market] || { short: leg.market, label: leg.market };
+  const ev = eventFor(leg.player); const line = Number(leg.line);
+  const pct = Math.round(Math.max(0, Math.min(1, g.progress || 0)) * 100);
+  const pace = paceOf(leg, g); const pacePos = pace !== null ? Math.min(100, (pace / line) * 100) : null;
+  const tag = g.state === 'hit' ? '<span class="tag2 hit">HIT</span>' : g.state === 'miss' ? '<span class="tag2 miss">MISS</span>' : g.state === 'live' ? '<span class="tag2 live">LIVE</span>' : '';
+  const where = !ev ? '' : ev.state === 'pre' ? kickLabel(ev.date) : (ev.detail || '');
+  const need = g.state === 'live' ? (leg.dir === 'under' ? `${E.fmt(Math.max(0, line - g.value))} of room left` : `${E.fmt(Math.max(0, line - g.value + (Number.isInteger(line) ? 1 : 0.5)))} to go`) : g.state === 'hit' ? 'Cashed' : g.state === 'miss' ? 'Missed' : g.state === 'dnp' ? 'No stats — check void rules' : 'Not started';
+  return `<div class="lrow ${g.state}">${avatar(leg.player)}
+    <div class="who"><b>${esc(p.name)}${tag}</b><span class="sub">${leg.dir === 'under' ? 'Less than' : 'More than'} ${E.fmt(leg.line)} ${esc(mk.label || mk.short)}${leg.mult ? ' · ' + esc(leg.mult) : ''}</span><span class="sub">${esc(p.team)} ${esc(oppLabel(leg.player))} · ${esc(where)}</span>${ev && ev.state === 'pre' ? cdHTML(ev.date) : ''}</div>
+    <div class="bar2"><div class="ptrack"><div class="fill" style="width:${g.state === 'scheduled' ? 0 : Math.max(pct, 3)}%;background:${legHue(leg, g)}"></div>${pacePos !== null ? `<div class="pace" style="left:${pacePos}%" title="Pace"></div>` : ''}<div class="goal" title="Line ${E.fmt(leg.line)}"></div></div>
+      <div class="tmeta"><span>${need}</span>${pace !== null ? `<span class="pc">On pace for ${E.fmt(Math.round(pace))}</span>` : `<span>${g.state === 'scheduled' ? '' : pct + '% of the line'}</span>`}</div></div>
+    <div class="num"><b>${g.state === 'scheduled' ? '–' : E.fmt(g.value)}</b><span>of ${E.fmt(leg.line)}</span></div></div>`;
+}
+function slipTracker({ t, r }) {
+  const liveN = r.legs.filter(({ g }) => g.state === 'live').length;
+  const open = S.slipOpen[t.id] !== undefined ? S.slipOpen[t.id] : liveN > 0;
+  const faces = r.legs.slice(0, 5).map(({ leg }) => { const p = P(leg.player); const src = headshot(leg.player, 120); return `<span style="--tg:${tg(p.sport || 'nfl', p.team)}">${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>`; }).join('') + (r.legs.length > 5 ? `<em>+${r.legs.length - 5}</em>` : '');
+  const segs = r.legs.map(({ leg, g }) => `<i class="${['hit', 'miss', 'dnp'].includes(g.state) ? g.state : ''}">${g.state === 'live' ? `<b style="width:${Math.max(6, Math.round((g.progress || 0) * 100))}%;background:${legHue(leg, g)}"></b>` : ''}</i>`).join('');
+  const firstPre = r.legs.map(({ leg }) => eventFor(leg.player)).filter((e) => e && e.state === 'pre').sort((a, b) => a.date.localeCompare(b.date))[0];
+  const done = { won: 'Cashed', partial: 'Partial payout', lost: 'Lost', dead: 'Busted', review: 'Check void rules' }[r.state];
+  const line2 = done ? `${done} · ${r.hits}/${r.n} hit` : `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${kickLabel(firstPre.date)}` : ''}`;
+  const pay = r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
+  return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>
+    <summary><div class="faces">${faces}</div><div class="st"><b>${esc(t.title)}</b><span>${esc(line2)} · ${money(r.entry)} entry</span></div><div class="segs" aria-hidden="true">${segs}</div><div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'Paid' : 'To win'}</span></div>${CHEV}</summary>
+    <div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div></details>`;
+}
+function tdWatch() {
+  const rows = [];
+  S.G.shifts.forEach(({ sh, targets }) => targets.forEach(({ t, r }) => { const ev = eventFor(t.player); if (!ev || ev.state === 'pre') return; rows.push({ key: t.player, cls: r.state === 'td1' ? 'gold' : r.state === 'hit' || r.state === 'cashed' ? 'hit' : '', sub: `${sh.label} · 2+ TDs at ${t.odds}`, val: `${r.tds || 0} TD`, ev }); }));
+  S.G.ftd.forEach(({ b, r }) => { const ev = eventFor(b.player); if (!ev || ev.state === 'pre') return; rows.push({ key: b.player, cls: r.state === 'hit' ? 'hit' : '', sub: `First TD at ${b.odds}`, val: r.state === 'hit' ? 'Scored 1st' : r.state === 'miss' ? 'Missed' : 'Waiting', ev }); });
+  if (!rows.length) return '';
+  return `<details class="slip live" data-slip="__td" ${S.slipOpen.__td === false ? '' : 'open'}><summary style="grid-template-columns:minmax(0,1fr) auto 20px"><div class="st"><b>Touchdown watch</b><span>Scalp and first-TD players whose games have started</span></div><div class="pay"><b style="color:var(--gold)">${rows.length}</b><span>players</span></div>${CHEV}</summary><div class="tdwatch">${rows.map((x) => `<div class="tdw ${x.cls}">${avatar(x.key)}<div style="min-width:0"><b>${esc(P(x.key).name)}</b><span>${esc(x.sub)}</span><span>${esc(x.ev.detail || '')}</span></div><span class="st-font" style="font-size:20px">${esc(x.val)}</span></div>`).join('')}</div></details>`;
+}
+function liveHero(live, next) {
+  const mine = S.G.pick6.filter(({ t }) => confirmed(t));
+  const alive = mine.filter(({ r }) => !['dead', 'lost'].includes(r.state)).length;
+  const legsLive = mine.reduce((a, { r }) => a + r.legs.filter(({ g }) => g.state === 'live').length, 0);
+  const n0 = next[0];
+  const state = live.length
+    ? `<div class="big on">${live.length} LIVE</div><div class="state">${live.map((e) => `<span class="chip live">${esc(e.name)} · ${esc(e.detail)}</span>`).join('')}</div>`
+    : n0 ? `<div class="state">Next kickoff · ${esc(n0.name)} · ${esc(kickLabel(n0.date))}</div><div class="big" data-kick="${esc(n0.date)}"><span></span></div>` : '<div class="state">Every game on this slate is final.</div>';
+  return `<section class="lhero"><img class="wm" src="poizen-mark.png" alt=""><div><h2>Live <span>Sweat</span></h2>${state}</div>
+    <div class="bubbles"><div class="bub"><div class="v">${alive}/${mine.length}</div><div class="k">Slips still alive</div></div><div class="bub"><div class="v" style="color:var(--live)">${legsLive}</div><div class="k">Legs live now</div></div><div class="bub"><div class="v">${S.alertLog.length}</div><div class="k">Alerts this session</div></div></div></section>`;
+}
+function liveStrip() {
+  const L = liveEvents(); if (!L.length || !S.G) return '';
+  const legs = S.G.pick6.filter(({ t }) => confirmed(t)).reduce((a, { r }) => a + r.legs.filter(({ g }) => g.state === 'live').length, 0);
+  return `<div class="lstrip"><span class="chip live">LIVE</span><span>${L.map((e) => esc(e.name + ' · ' + e.detail)).join('&nbsp;&nbsp;')}</span><span class="dim">${legs} leg${legs === 1 ? '' : 's'} live</span><button class="go" type="button" data-tab="live">Open the live sweat</button></div>`;
+}
 function viewLive() {
   const evs = Object.values(S.events).filter(relevantEvent);
   const order = { in: 0, pre: 1, post: 2 };
   evs.sort((a, b) => order[a.state] - order[b.state] || a.date.localeCompare(b.date));
   const live = evs.filter((e) => e.state === 'in'), next = evs.filter((e) => e.state === 'pre'), done = evs.filter((e) => e.state === 'post');
+  const so = { live: 0, open: 1, partial: 2, won: 2, review: 3, dead: 4, lost: 4 };
+  const slips = S.G.pick6.filter(({ t }) => confirmed(t)).sort((a, b) => (so[a.r.state] ?? 5) - (so[b.r.state] ?? 5));
   const feed = S.alertLog.length ? `<h3 class="sec">Alert feed</h3><div class="card" style="padding:12px;display:flex;flex-direction:column;gap:8px">${S.alertLog.slice(0, 12).map((a) => `<div class="mtile ${a.tone === 'win' ? 'hit' : a.tone === 'loss' ? 'miss' : 'live'}" style="grid-template-columns:40px minmax(0,1fr) auto">${a.player ? avatar(a.player) : '<div></div>'}<div style="min-width:0"><b>${esc(a.title)}</b><span>${esc(a.body || '')}</span></div><span class="dim" style="font-size:11px;font-weight:800">${new Date(a.at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span></div>`).join('')}</div>` : '';
-  const chips = `<span class="chip">${live.length} live</span><span class="chip">${next.length} coming up</span><span class="chip">${done.length} final</span>`;
-  return vh('Live <span>Now</span>', 'Games with your picks that are being played right now. Everything here updates every 15 seconds.', chips) +
-    (live.length ? `<div class="grid2">${live.map(gameCard).join('')}</div>` : `<div class="nolive">${SVG.live}<div><b>No games live right now</b>Your next game starts ${next[0] ? `${esc(kickLabel(next[0].date))} — ${esc(next[0].name)}` : 'later this week'}. This section lights up the moment it kicks off.</div></div>`) +
+  return liveHero(live, next) + '<!--pulse-->' +
+    (slips.length ? `<h3 class="sec">Your slips</h3><div class="slips">${tdWatch()}${slips.map(slipTracker).join('')}</div>` : '') +
+    (live.length ? `<h3 class="sec">Games live now</h3><div class="grid2">${live.map(gameCard).join('')}</div>` : '') +
     feed +
     (next.length ? `<div class="divider">Coming up · not started</div><div class="grid2 upnext">${next.map(gameCard).join('')}</div>` : '') +
     (done.length ? `<div class="divider">Final</div><div class="grid2">${done.map(gameCard).join('')}</div>` : '') +
@@ -1574,39 +1843,67 @@ function renderRecord() {
 async function loadArchive() {
   if (S.archive) return;
   try { await fbReady; const v = (await firebase.database().ref('board/archive').get()).val(); S.archive = v || {}; } catch { S.archive = {}; }
-  if (S.tab === 'ledger') render();
+  if (['ledger', 'pick6', 'ftd', 'scalp'].includes(S.tab)) render();
 }
+const pnl = (e) => Number(e.payout || 0) - Number(e.stake || 0);
 function plChart(L) {
   if (!L.length) return '';
-  let run = 0; const pts = [{ x: 0, y: 0, d: '' }]; L.forEach((e, i) => { run += Number(e.payout || 0) - Number(e.stake || 0); pts.push({ x: i + 1, y: run, d: e.date }); });
-  const W = 800, H = 220, pad = 34; const ys = pts.map((p) => p.y); const lo = Math.min(0, ...ys), hi = Math.max(0, ...ys); const span = hi - lo || 1;
-  const X = (i) => pad + (i / (pts.length - 1)) * (W - pad * 2); const Y = (y) => H - pad - ((y - lo) / span) * (H - pad * 2);
+  const days = {}; L.forEach((e) => { days[e.date] = (days[e.date] || 0) + pnl(e); });
+  const ks = Object.keys(days).sort(); let run = 0; const pts = [{ y: 0, d: 'Start' }]; ks.forEach((d) => { run += days[d]; pts.push({ y: run, d }); });
+  const W = 800, H = 260, pl = 18, pr = 18, pt = 40, pb = 32;
+  const ys = pts.map((p) => p.y); const lo = Math.min(0, ...ys), hi = Math.max(0, ...ys); const span = hi - lo || 1;
+  const X = (i) => pl + (i / Math.max(1, pts.length - 1)) * (W - pl - pr); const Y = (y) => H - pb - ((y - lo) / span) * (H - pt - pb);
   const path = pts.map((p, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(p.y).toFixed(1)}`).join('');
   const area = path + `L${X(pts.length - 1)},${Y(0)}L${X(0)},${Y(0)}Z`;
-  const up = run >= 0;
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Running profit and loss"><defs><linearGradient id="plg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${up ? 'var(--win)' : 'var(--loss)'}" stop-opacity=".45"/><stop offset="1" stop-color="${up ? 'var(--win)' : 'var(--loss)'}" stop-opacity="0"/></linearGradient></defs>
-    <line x1="${pad}" x2="${W - pad}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--line2)" stroke-dasharray="4 4"/>
-    <path d="${area}" fill="url(#plg)"/><path d="${path}" fill="none" stroke="${up ? 'var(--win)' : 'var(--loss)'}" stroke-width="3" stroke-linejoin="round"/>
-    <circle cx="${X(pts.length - 1)}" cy="${Y(run)}" r="6" fill="${up ? 'var(--win)' : 'var(--loss)'}"/>
-    <text x="${X(pts.length - 1) - 8}" y="${Y(run) - 12}" text-anchor="end" fill="var(--fg)" font-family="Barlow Condensed" font-weight="900" font-size="20">${money(run, true)}</text>
-    <text x="${pad}" y="${H - 8}" fill="var(--fg3)" font-size="12" font-weight="700">${esc(L[0].date)}</text><text x="${W - pad}" y="${H - 8}" text-anchor="end" fill="var(--fg3)" font-size="12" font-weight="700">${esc(L[L.length - 1].date)}</text></svg>`;
+  const up = run >= 0, col = up ? 'var(--win)' : 'var(--loss)';
+  const lx = X(pts.length - 1), ly = Math.max(24, Y(run) - 14);
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Running profit and loss by day"><defs><linearGradient id="plg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".45"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    <line x1="${pl}" x2="${W - pr}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--line2)" stroke-dasharray="4 4"/>
+    <path d="${area}" fill="url(#plg)"/><path d="${path}" fill="none" stroke="${col}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.map((p, i) => i ? `<circle cx="${X(i)}" cy="${Y(p.y)}" r="5" fill="var(--panel)" stroke="${days[p.d] >= 0 ? 'var(--win)' : 'var(--loss)'}" stroke-width="3"><title>${esc(p.d)}: ${money(days[p.d], true)} (running ${money(p.y, true)})</title></circle>` : '').join('')}
+    <text x="${lx}" y="${ly}" text-anchor="end" fill="var(--fg)" font-family="Barlow Condensed" font-weight="900" font-size="26">${money(run, true)}</text>
+    <text x="${pl}" y="${H - 8}" fill="var(--fg3)" font-size="13" font-weight="700">Start</text><text x="${W - pr}" y="${H - 8}" text-anchor="end" fill="var(--fg3)" font-size="13" font-weight="700">${esc(ks[ks.length - 1])}</text></svg>`;
+}
+function calHTML(L) {
+  const by = {}; L.forEach((e) => { by[e.date] = (by[e.date] || 0) + pnl(e); });
+  const max = Math.max(1, ...Object.values(by).map(Math.abs));
+  const today = dayKey(); const t = new Date(today + 'T12:00:00');
+  const start = new Date(t); start.setDate(t.getDate() - ((t.getDay() + 6) % 7) - 28);
+  const pad = (n) => String(n).padStart(2, '0');
+  let cells = '';
+  for (let i = 0; i < 35; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const k = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; const v = by[k];
+    const cls = v > 0 ? 'w' : v < 0 ? 'l' : ''; const inten = v ? (0.35 + 0.65 * Math.abs(v) / max).toFixed(2) : 0;
+    cells += `<div class="d ${cls} ${k === today ? 'today' : ''}" style="--i:${inten};${k > today ? 'opacity:.35' : ''}" title="${k}${v !== undefined ? ': ' + money(v, true) : ''}">${d.getDate()}</div>`;
+  }
+  return `<div class="card cal"><div class="st-font" style="font-size:20px">Last 5 weeks</div><div class="grid">${['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((x) => `<div class="dow">${x}</div>`).join('')}${cells}</div><div class="legend"><span><i style="background:var(--win)"></i>Up day</span><span><i style="background:var(--loss)"></i>Down day</span><span><i style="box-shadow:inset 0 0 0 2px var(--fg)"></i>Today</span></div></div>`;
+}
+function histRow(e) {
+  const v = pnl(e); const picks = e.picks ? Object.values(e.picks) : [];
+  const dots = picks.length ? `<div class="dots">${picks.map((p) => `<i class="${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}"></i>`).join('')}</div>` : '<span></span>';
+  const body = picks.length ? `<div class="picks">${picks.map((p) => { const known = p.player && S.slate.players && S.slate.players[p.player]; return `<div class="mtile ${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}">${known ? avatar(p.player) : '<div class="av"></div>'}<div style="min-width:0;display:flex;align-items:center;gap:6px"><div style="min-width:0"><b>${esc(p.name || p.player)}</b><span>${E.fmt(p.line)} ${esc((E.MARKETS[p.market] || {}).short || p.market || '')}</span></div><span class="v">${p.value !== undefined && p.value !== null ? E.fmt(p.value) : ''}</span></div></div>`; }).join('')}</div>` : `<div class="src">${esc(e.source || 'Pick-by-pick detail was not recorded for this slip.')}</div>`;
+  return `<details class="hrow"><summary><span class="dt">${esc(e.date)}</span><div class="tt"><b>${esc(e.title)}</b><span>${e.legs ? `${e.hits ?? '?'}/${e.legs} correct` : esc(e.type || '')}${e.auto ? ' · graded live, awaiting DraftKings' : ''}</span></div>${dots}<div class="mny">${money(Number(e.stake))} in<b class="${v > 0 ? 'win' : 'loss'}">${money(v, true)}</b></div><span class="chip ${v > 0 ? 'win' : 'loss'}">${v > 0 ? 'Won' : 'Lost'}</span></summary>${body}</details>`;
 }
 function viewLedger() {
   const L = entries(); const p = periods();
   const kpi = (lbl, a) => `<div class="card kpi"><div class="k">${lbl}</div><span class="rec">${a.w}-${a.l}</span><div class="pl ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${money(a.pl, true)}</div><div class="sub">${a.n ? `${Math.round((a.w / a.n) * 100)}% wins · ${a.roi >= 0 ? '+' : ''}${Math.round(a.roi * 100)}% ROI on ${money(a.staked)}` : 'No graded slips yet'}</div></div>`;
   const byLegs = {}; L.forEach((e) => { const k = e.legs ? e.legs + '-pick' : (e.type || 'other'); (byLegs[k] = byLegs[k] || []).push(e); });
-  const breakdown = Object.entries(byLegs).map(([k, l]) => { const a = agg(l); return `<tr><td><b>${esc(k)}</b></td><td class="n">${a.w}-${a.l}</td><td class="n">${a.n ? Math.round((a.w / a.n) * 100) + '%' : '–'}</td><td class="n">${money(a.staked)}</td><td class="n ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${money(a.pl, true)}</td></tr>`; }).join('');
+  const breakdown = Object.entries(byLegs).sort((a, b) => parseInt(a[0]) - parseInt(b[0])).map(([k, l]) => { const a = agg(l); return `<tr><td><b>${esc(k)}</b></td><td class="n">${a.w}-${a.l}</td><td class="n">${a.n ? Math.round((a.w / a.n) * 100) + '%' : '–'}</td><td class="n">${money(a.staked)}</td><td class="n ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${money(a.pl, true)}</td></tr>`; }).join('');
   const board = playerBoard();
-  const boardHTML = board.length ? `<div class="grid4">${board.map((b) => { const pct = b.hit / b.n; const col = pct >= 0.7 ? 'var(--win)' : pct >= 0.5 ? 'var(--live)' : 'var(--loss)'; return `<div class="mtile" style="grid-template-columns:44px minmax(0,1fr) auto">${b.key && S.slate.players[b.key] ? avatar(b.key) : '<div class="av"></div>'}<div style="min-width:0"><b>${esc(b.name)}</b><span>${Object.keys(b.markets).map((k) => esc((E.MARKETS[k] || {}).short || k)).join(' · ')}</span></div><span class="v" style="color:${col}">${b.hit}/${b.n}</span></div>`; }).join('')}</div>` : '<div class="empty"><b>No graded picks yet</b>Every pick that finishes — hit or miss — lands here, even when the slip loses. This fills in as Sunday\'s games end.</div>';
-  const hist = [...L].reverse().map((e) => { const pl = Number(e.payout || 0) - Number(e.stake || 0); return `<tr><td>${esc(e.date)}</td><td><b>${esc(e.title)}</b>${e.legs ? ` <span class="dim">· ${e.hits ?? '?'}/${e.legs}</span>` : ''}${e.auto ? ' <span class="chip">Graded live · awaiting DK</span>' : ''}</td><td class="n">${money(Number(e.stake))}</td><td class="n">${money(Number(e.payout))}</td><td class="n ${pl > 0 ? 'win' : 'loss'}">${money(pl, true)}</td><td><span class="chip ${pl > 0 ? 'win' : 'loss'}">${pl > 0 ? 'Won' : 'Lost'}</span></td></tr>`; }).join('');
+  const boardHTML = board.length ? `<div class="grid4">${board.map((b) => { const pct = b.hit / b.n; const col = pct >= 0.7 ? 'var(--win)' : pct >= 0.5 ? 'var(--live)' : 'var(--loss)'; return `<div class="mtile" style="grid-template-columns:44px minmax(0,1fr) auto">${b.key && S.slate.players[b.key] ? avatar(b.key) : '<div class="av"></div>'}<div style="min-width:0"><b>${esc(b.name)}</b><span>${Object.keys(b.markets).map((k) => esc((E.MARKETS[k] || {}).short || k)).join(' · ')}</span></div><span class="v" style="color:${col}">${b.hit}/${b.n}</span></div>`; }).join('')}</div>` : '<div class="empty"><b>No graded picks yet</b>Every pick that finishes — hit or miss — lands here, even when the slip loses.</div>';
+  const now = new Date(); const ws = new Date(now); ws.setDate(now.getDate() - ((now.getDay() + 6) % 7)); const wk = dayKey(ws); const mo = dayKey().slice(0, 7);
+  const R = S.ledgerRange; const shown = [...L].reverse().filter((e) => R === 'week' ? e.date >= wk : R === 'month' ? e.date.startsWith(mo) : true);
+  const lr = (id, label) => `<button class="fbtn" type="button" data-lr="${id}" aria-pressed="${R === id}">${label}</button>`;
   const arch = S.archive ? Object.entries(S.archive).sort((a, b) => String(b[1].closedAt || '').localeCompare(String(a[1].closedAt || ''))).map(([k, w]) => { const sl = w.slate || {}; const tix = Object.values(sl.pick6 || {}); return `<details class="card more" style="padding:14px 16px;margin:0 0 10px"><summary style="font-size:15px;color:var(--fg)">${esc(w.title || k)} <span class="dim" style="font-weight:700">· ${tix.length} slips${w.closedAt ? ' · closed ' + esc(String(w.closedAt).slice(0, 10)) : ''}</span></summary><div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">${tix.map((t) => `<div class="mtile" style="grid-template-columns:minmax(0,1fr) auto"><div style="min-width:0"><b>${esc(t.title)}</b><span>${Object.values(t.legs || {}).map((l) => esc(((sl.players || {})[l.player] || {}).name || l.player) + ' ' + esc(l.line)).join(' · ')}</span></div><span class="v" style="font-size:16px">${money(Number(t.entry))}</span></div>`).join('')}</div></details>`; }).join('') : '';
-  return vh('The <span>Ledger</span>', 'Every graded slip, the running profit line, how each slip size performs, and which players keep cashing for you — even on slips that lost.', `<span class="chip">${L.length} slips graded</span><span class="chip">${board.length} players tracked</span>`) +
+  return vh('The <span>Ledger</span>', 'Every graded slip, the running profit line, how each slip size performs, and which players keep cashing for you — even on slips that lost.', `<span class="chip">${L.length} slip${L.length === 1 ? '' : 's'} graded</span><span class="chip">${board.length} player${board.length === 1 ? '' : 's'} tracked</span>`) +
     `<div class="kpis">${kpi('Today', p.today)}${kpi('This week', p.week)}${kpi('This month', p.month)}${kpi('All-time', p.all)}</div>` +
-    (L.length ? `<div class="card plchart"><div class="st-font" style="font-size:20px;margin-bottom:6px">Running profit</div>${plChart(L)}</div>
-      <h3 class="sec">By slip size</h3><div class="card tablewrap"><table class="ltable"><thead><tr><th>Slip</th><th style="text-align:right">Record</th><th style="text-align:right">Win %</th><th style="text-align:right">Staked</th><th style="text-align:right">P/L</th></tr></thead><tbody>${breakdown}</tbody></table></div>
-      <h3 class="sec">History</h3><div class="card tablewrap"><table class="ltable"><thead><tr><th>Date</th><th>Slip</th><th style="text-align:right">Entry</th><th style="text-align:right">Paid</th><th style="text-align:right">P/L</th><th></th></tr></thead><tbody>${hist}</tbody></table></div>`
-      : '<div class="empty"><b>No graded slips yet</b>Results land here after DraftKings settles them — this week’s slips are the first entries.</div>') +
-    `<h3 class="sec">Player hit board</h3>${boardHTML}<h3 class="sec">Previous weeks</h3>${arch || '<div class="empty"><b>No archived weeks yet</b>Each week is archived here when the slate closes.</div>'}`;
+    (L.length ? `<div class="plrow"><div class="card plchart"><div class="st-font" style="font-size:20px;margin-bottom:6px">Running profit</div>${plChart(L)}</div>${calHTML(L)}</div>
+      <h3 class="sec">History</h3><div class="filters">${lr('all', `All (${L.length})`)}${lr('week', 'This week')}${lr('month', 'This month')}</div>
+      <div class="hist">${shown.length ? shown.map(histRow).join('') : '<div class="empty"><b>No slips in this range</b>Pick a wider range.</div>'}</div>
+      <h3 class="sec">By slip size</h3><div class="card tablewrap"><table class="ltable"><thead><tr><th>Slip</th><th style="text-align:right">Record</th><th style="text-align:right">Win %</th><th style="text-align:right">Staked</th><th style="text-align:right">P/L</th></tr></thead><tbody>${breakdown}</tbody></table></div>`
+      : '<div class="empty"><b>No graded slips yet</b>Results land here after DraftKings settles them.</div>') +
+    `<h3 class="sec">Player hit board</h3>${boardHTML}<h3 class="sec">Previous weeks</h3>${arch || '<div class="empty"><b>No archived weeks yet</b>Each week is archived here when you close the slate in admin.</div>'}`;
 }
 
 /* ---------------- ticker (OBS) ---------------- */
@@ -1623,15 +1920,18 @@ function renderTicker() {
 /* ---------------- render ---------------- */
 function render() {
   if (!S.G) S.G = gradeAll();
-  document.body.dataset.tab = S.tab;
+  document.body.dataset.view = S.tab;
   renderNav(); renderRecord(); feedStatus(); renderTicker();
   $('#slateTitle').textContent = (S.slate.title || 'Live picks board') + ' · live board';
   const dk = S.slate.dkLink; const dkEl = $('#dkJoin'); if (dk) { dkEl.href = dk; dkEl.hidden = false; } else dkEl.hidden = true;
   const views = { live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger };
-  const openD = [...document.querySelectorAll('main details[open]')].map((d) => d.querySelector('summary') && d.querySelector('summary').textContent);
+  const openD = [...document.querySelectorAll('main details[open]:not([data-slip])')].map((d) => d.querySelector('summary') && d.querySelector('summary').textContent);
   const ae = document.activeElement; const focusId = ae && ae.id; let caret = null; try { caret = ae && ae.selectionStart; } catch {}
   const keep = {}; ['ckName', 'ckLine', 'ckMarket'].forEach((id) => { const el = document.getElementById(id); if (el) keep[id] = el.value; });
-  $('#main').innerHTML = pulseHTML() + (views[S.tab] || viewLive)();
+  let body = (views[S.tab] || viewLive)();
+  if (S.tab === 'live') body = body.replace('<!--pulse-->', pulseHTML());
+  else { const strip = liveStrip(); if (strip) { const i = body.indexOf('</section>'); body = i > -1 ? body.slice(0, i + 10) + strip + body.slice(i + 10) : strip + body; } }
+  $('#main').innerHTML = body;
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('main details').forEach((d) => { const s = d.querySelector('summary'); if (s && openD.includes(s.textContent)) d.open = true; });
   if (focusId && document.getElementById(focusId)) { const el = document.getElementById(focusId); el.focus(); try { if (caret !== null) el.setSelectionRange(caret, caret); } catch {} }
@@ -1652,11 +1952,14 @@ document.addEventListener('click', (e) => {
   const v = e.target.closest('.vopt'); if (v) { setVibe(v.dataset.vibe); $('#vibeMenu').hidden = true; render(); return; }
   if (!e.target.closest('#vibeMenu')) { const m = $('#vibeMenu'); if (m && !m.hidden) m.hidden = true; }
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; render(); return; }
+  const wk = e.target.closest('[data-week]'); if (wk) { S.week = wk.dataset.week; render(); return; }
+  const lrb = e.target.closest('[data-lr]'); if (lrb) { S.ledgerRange = lrb.dataset.lr; render(); return; }
   const sh = e.target.closest('[data-shift]'); if (sh) { S.shift = Number(sh.dataset.shift); render(); return; }
   const ij = e.target.closest('[data-inj]'); if (ij) { S.injFilter = ij.dataset.inj; render(); return; }
   const is = e.target.closest('[data-injs]'); if (is) { S.injStatus = is.dataset.injs; render(); return; }
   const un = e.target.closest('[data-uncheck]'); if (un) { const [pl, mk, ln] = un.dataset.uncheck.split('|'); S.custom = S.custom.filter((x) => !(x.player === pl && x.market === mk && String(x.line) === ln)); store.set('pz_custom_checks', S.custom); render(); }
 });
+document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-slip]')) S.slipOpen[d.dataset.slip] = d.open; }, true);
 document.addEventListener('submit', (e) => { if (e.target.id === 'checkForm') runCheck(e); });
 document.addEventListener('change', (e) => {
   if (e.target.matches('[data-calc]')) calcUpdate();
@@ -1756,12 +2059,6 @@ const Chat = {
   },
 };
 
-/* swap in the owner's real crest artwork when crest.png is published next to the page */
-(function realCrest() {
-  const img = new Image();
-  img.onload = () => { document.querySelectorAll('.crest, .chat-fab .cr, .chat-h .cr, .ticker .tag svg').forEach((el) => { const i = document.createElement('img'); i.src = img.src; i.alt = ''; i.className = el.getAttribute('class') || ''; i.style.objectFit = 'contain'; el.replaceWith(i); }); const fav = document.querySelector('link[rel=icon]'); if (fav) fav.href = img.src; };
-  img.src = 'crest.png?v=1';
-})();
 
 /* ---------------- boot ---------------- */
 (async function boot() {
@@ -1771,7 +2068,7 @@ const Chat = {
   watchBoard(); Chat.init();
   if (S.tab === 'injuries' || S.tab === 'research') loadInjuries();
   if (S.tab === 'research') loadResearch();
-  if (S.tab === 'ledger') loadArchive();
+  if (['ledger', 'pick6', 'ftd', 'scalp'].includes(S.tab)) loadArchive();
 })();
 </script>
 </body>
