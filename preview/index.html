@@ -962,7 +962,7 @@ body{--acc:var(--gold)}
 body[data-view="live"]{--acc:var(--gold)} body[data-view="pick6"]{--acc:#9B82FF} body[data-view="ftd"]{--acc:var(--gold)} body[data-view="scalp"]{--acc:#3FD0E0}
 body[data-view="pickem"]{--acc:var(--teal)} body[data-view="games"]{--acc:var(--teal)} body[data-view="injuries"]{--acc:#FF8A65} body[data-view="research"]{--acc:var(--teal)} body[data-view="ledger"]{--acc:var(--gold)} body[data-view="me"]{--acc:var(--teal)}
 [data-vibe="daylight"] body[data-view="pick6"]{--acc:#6D4FE0} [data-vibe="daylight"] body[data-view="scalp"]{--acc:#0891B2} [data-vibe="daylight"] body[data-view="injuries"]{--acc:#E2572B}
-html[data-team] body{--acc:var(--team-acc)}
+html[data-team][data-team] body[data-view]{--acc:var(--team-acc)}
 html[data-team] body::after{opacity:.035}
 
 /* ---- surfaces ---- */
@@ -1258,6 +1258,7 @@ details.p6[open] .chev{transform:rotate(180deg)}
 
 /* ---- Ledger ---- */
 .lmet{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:16px;position:relative;z-index:1}
+.lmet.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 .lmet>div{display:flex;flex-direction:column;gap:3px;padding:12px 14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);min-width:0}
 .lmet span{font-size:12px;font-weight:700;color:var(--fg2)}
 .lmet b{font:900 30px/1 var(--stadium);white-space:nowrap}
@@ -1351,7 +1352,8 @@ details.labslip>*:not(summary){margin:0 18px 14px}
 @media (max-width:720px){
   .lhero2{min-height:0}
   .lh-txt{max-width:none;padding:18px 18px 70px;padding-right:38%}
-  .lh-hs{height:78%;right:-8%}
+  .lh-hs{height:auto;width:min(74%,300px);right:-10%;bottom:0}
+  .wide-only{display:none}
   .lh-jn{font-size:130px;top:auto;bottom:16px}
   .lh-who{right:14px;bottom:12px;left:14px}
   .lh-who b{font-size:20px}
@@ -1411,6 +1413,7 @@ details.labslip>*:not(summary){margin:0 18px 14px}
   details.hrow>summary .pd::before{content:"Paid "}
   .filters.inph{margin:6px 0 0;width:100%}
   .trio b{font-size:22px}
+  .sec{flex-wrap:wrap;row-gap:4px}.sec .sec-r{flex-basis:100%;order:3}
   .pk-name b{font-size:25px}
   .banner{padding:18px}
 }
@@ -1427,7 +1430,7 @@ details.labslip>*:not(summary){margin:0 18px 14px}
   details.slip[data-slip="__td"]>summary{grid-template-areas:none!important;grid-template-columns:minmax(0,1fr) auto!important}
   details.slip[data-slip="__td"]>summary>*{grid-area:auto!important}
 }
-@media (max-width:420px){.lh-txt{padding-right:34%}.lhero2 h2{font-size:42px}.lh-cd{font-size:36px}.kp span{font-size:11px}.pm-lg span:last-child{display:none}}
+@media (max-width:420px){.lh-txt{padding-right:34%}.lhero2 h2{font-size:42px}.lh-cd{font-size:36px}.kp span{font-size:11px}.pm-lg span:last-child{display:none}.brand h1{font-size:16px}.crest{width:40px;height:40px}.brand small{max-width:150px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -3966,7 +3969,7 @@ function liveHero(live, next, hero) {
   const [c1, c2] = p ? teamColors(p.sport || 'nfl', p.team) : ['#1f2937', '#334155'];
   return `<section class="lhero2" style="--c1:${c1};--c2:${c2}">${hero ? venueArt(hero, true) : ''}<div class="lh-shade"></div>
     ${p && p.number ? `<div class="lh-jn">${esc(p.number)}</div>` : ''}${src ? `<img class="lh-hs" src="${esc(src)}" alt="" onerror="this.remove()">` : ''}
-    <div class="lh-txt">${tag}<h2>Live Sweat</h2>${state}<button class="btn-sweat" type="button" data-sweat="on">${SVG.live}Sweat mode · full screen</button></div>
+    <div class="lh-txt">${tag}<h2>Live Sweat</h2>${state}<button class="btn-sweat" type="button" data-sweat="on">${SVG.live}Sweat mode<span class="wide-only"> · full screen</span></button></div>
     ${p ? `<div class="lh-who"><b>${esc(p.name)}</b><span>${esc(p.team)} · ${esc(p.pos || '')}${p.number ? ' · #' + esc(p.number) : ''}</span>${hero && hero.venue ? `<em>${esc(hero.venue)}</em>` : ''}</div>` : ''}</section>`;
 }
 function kpiStrip() {
@@ -4082,7 +4085,7 @@ function viewInjuries() {
         <div class="in"><b>${esc(nm)}</b>${blurb ? `<p>${esc(blurb)}</p>` : ''}${more ? `<details class="more"><summary>Full note</summary><p>${esc(more)}</p></details>` : ''}<div class="dt">${i.date ? 'Updated ' + new Date(i.date).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : ''}</div></div>
         <span class="pos">${esc(pos)}</span><div class="ist"><span class="chip ${injClass(i.status)}">${esc(i.status || '')}</span>${isMine ? '<span class="chip gold">Your pick</span>' : ''}${isEdge ? `<span class="chip teal">Edge for ${esc(facing)}</span>` : ''}</div></div>`;
     }).join('');
-    return `<article class="card team-inj" style="--c1:${c1}"><div class="ti-head">${venueArt(ev)}<div class="ti-shade"></div><img class="tl" src="${esc(logo('nfl', t.abbr))}" alt="" onerror="this.remove()"><div class="ti-n"><b>${esc(t.name)}</b><div>${tag}<span class="ti-cnt">${t.list.length} listed</span></div></div>${where}</div>
+    return `<article class="card team-inj" style="--c1:${c1}"><div class="ti-head">${venueArt(ev)}<div class="ti-shade"></div><img class="tl" src="${esc(logo('nfl', t.abbr))}" alt="" onerror="this.style.visibility='hidden'"><div class="ti-n"><b>${esc(t.name)}</b><div>${tag}<span class="ti-cnt">${t.list.length} listed</span></div></div>${where}</div>
       <div class="ti-cols" aria-hidden="true"><span></span><span>Player · latest news</span><span>Pos</span><span>Status</span></div>${rows}</article>`;
   }).join('');
   return head + strip + `<h3 class="sec">Team reports</h3>` + tools + (cards ? `<div class="injlist">${cards}</div>` : '<div class="empty"><b>No injuries match</b>Try All 32 teams or All statuses.</div>');
@@ -4357,7 +4360,7 @@ function coachHTML(L) {
 function viewLedger() {
   const ALL = entries(); const B = S.ledgerBook; const L = B === 'all' ? ALL : ALL.filter((e) => (e.book || 'DraftKings Pick6') === B);
   const A = agg(L); const board = playerBoard();
-  const metrics = `<div class="lmet"><div><span>Record</span><b>${A.w}-${A.l}</b><em>${A.n ? Math.round((A.w / A.n) * 100) + '% wins' : 'Nothing graded'}</em></div><div><span>Known stake</span><b>${money(A.staked)}</b><em>${L.length - A.unknown} entries with a stake</em></div><div><span>Known-stake P/L</span><b class="${A.pl > 0 ? 'win' : A.pl < 0 ? 'loss' : ''}">${money(A.pl, true)}</b><em>${A.staked ? `${A.roi >= 0 ? '+' : ''}${Math.round(A.roi * 100)}% ROI` : '–'}</em></div><div><span>Entries missing a stake</span><b>${A.unknown}</b><em>P/L unknown — never counted as $0</em></div><div><span>Paid on those</span><b>${money(A.unknownPaid)}</b><em>Payouts the book did show</em></div></div>`;
+  const metrics = `<div class="lmet ${B === 'all' ? 'four' : ''}">${B === 'all' ? '' : `<div><span>${esc(BOOKTAG[B])} record</span><b>${A.w}-${A.l}</b><em>${A.n ? Math.round((A.w / A.n) * 100) + '% wins' : 'Nothing graded'}</em></div>`}<div><span>Known stake</span><b>${money(A.staked)}</b><em>${L.length - A.unknown} entries with a stake</em></div><div><span>Known-stake P/L</span><b class="${A.pl > 0 ? 'win' : A.pl < 0 ? 'loss' : ''}">${money(A.pl, true)}</b><em>${A.staked ? `${A.roi >= 0 ? '+' : ''}${Math.round(A.roi * 100)}% ROI` : '–'}</em></div><div><span>Entries missing a stake</span><b>${A.unknown}</b><em>P/L unknown — never counted as $0</em></div><div><span>Paid on those</span><b>${money(A.unknownPaid)}</b><em>Payouts the book did show</em></div></div>`;
   const exports = `<button class="fbtn ex" type="button" data-export="csv">${SVG.cash}Export CSV</button><button class="fbtn ex" type="button" data-export="json">${SVG.ledger}Export JSON</button>`;
   const head = vh('The <span>Ledger</span>', 'Every slip and every prediction trade — Pick6, DraftKings Predictions and Robinhood — with the running profit line, the Coach’s read on where you win, and the players who keep cashing.', `<span class="chip">${ALL.length} entries</span><span class="chip">${board.length} players tracked</span>`, exports, metrics);
   const bk = (id, label) => `<button class="fbtn" type="button" data-lbook="${esc(id)}" aria-pressed="${B === id}">${label}</button>`;
