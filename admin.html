@@ -790,7 +790,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   }
 
   // ---------- pre-bet gate ----------
-  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true };
+  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true, coachLeaks: true };
   const INJ_RANK = { questionable: 1, doubtful: 2, out: 3 };
   /* slip: { legs:[{ name, line, dir, p, source, avg, hits, n, status, market }], value:{ evNet }, corr:{ flags }, sizeRecord:{ w, l, pl, size } }
      returns [{ id, label, state: 'pass'|'fail'|'warn'|'na', why, source }] */
@@ -816,12 +816,24 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     add('injury', `No one ${R.injury} or worse`, hurt.length ? 'fail' : slip.injuriesLoaded === false ? 'warn' : 'pass', hurt.length ? hurt.map((l) => `${l.name}: ${l.status}`).join(', ') : slip.injuriesLoaded === false ? 'Injury report not loaded yet' : 'Nobody listed', 'ESPN NFL injury report');
     if (R.noNegCorr) { const neg = ((slip.corr && slip.corr.flags) || []).filter((f) => !f.good); add('noNegCorr', 'No legs working against each other', neg.length ? 'fail' : 'pass', neg.length ? neg.map((f) => f.text).join('; ') : 'None found', 'Lab correlation check'); }
     if (slip.value) add('minEV', R.minEV > 0 ? `Expected profit at least $${R.minEV}` : 'Positive expected value', slip.value.evNet >= R.minEV ? 'pass' : 'fail', `${slip.value.evNet >= 0 ? '+' : '-'}$${Math.abs(slip.value.evNet).toFixed(2)} expected on $${Number(slip.entry || 0).toFixed(2)}`, 'Lab vs the DraftKings payout table');
+    if (R.coachLeaks && Array.isArray(slip.leaks)) {
+      const hits = legs.map((l) => ({ l, k: slip.leaks.find((x) => x.market === l.market && (x.dir || 'over') === (l.dir || 'over')) })).filter((x) => x.k);
+      add('coachLeaks', 'No stat the Coach flags as a leak', hits.length ? 'fail' : 'pass', hits.length ? hits.map(({ l, k }) => `${l.name}: ${k.label || l.market} ${k.hit}/${k.n} in your history`).join(', ') : slip.leaks.length ? `Leaks on file: ${slip.leaks.map((k) => `${k.label || k.market} ${k.hit}/${k.n}`).join(', ')}` : 'No leaks on file yet', 'Your ledger, via the Coach');
+    }
     if (R.sizeGuard && slip.sizeRecord && slip.sizeRecord.n >= 3) { const s = slip.sizeRecord; add('sizeGuard', `Slip size is making money for you`, s.pl >= 0 ? 'pass' : 'fail', `${s.label}: ${s.w}-${s.l}, ${s.pl >= 0 ? '+' : '-'}$${Math.abs(s.pl).toFixed(2)}`, 'Your ledger'); }
     return out;
   }
+  /* stats the Coach calls a leak: at least 3 graded calls and under 40% hit */
+  function leaks(picks, minN = 3, maxRate = 0.4) { return coach(picks).markets.filter((m) => m.n >= minN && m.hit / m.n < maxRate); }
+  /* scalp cash-out call: compare the book's offer with what holding is worth */
+  function cashoutCall(offer, fair) {
+    if (!(offer > 0) || !(fair >= 0)) return null;
+    const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
+    return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -971,10 +983,19 @@ function sizeRecord(n) {
   if (!L.length) return null; const w = L.filter((e) => Number(e.payout) > Number(e.stake)).length; const pl = L.reduce((a, e) => a + Number(e.payout || 0) - Number(e.stake), 0);
   return { n: L.length, w, l: L.length - w, pl, label: n + '-pick slips' };
 }
+const XMK = { first_td: 'First TD', two_td: '2+ TDs', sacks: 'Sacks', moneyline: 'To win', combo: 'Combos' };
+const mkLabel = (k) => (E.MARKETS[k] || {}).label || XMK[k] || k;
+/* every graded call in the ledger, the same set the board's Coach reads */
+function ledgerPicks() {
+  const out = [];
+  ledgerEntries().forEach((e) => { (e.picks ? Object.values(e.picks) : []).forEach((p) => { if (p.market && p.market !== 'unknown') out.push(p); }); if (e.type === 'prediction' && e.market && (e.result === 'won' || e.result === 'lost')) out.push({ market: e.market, dir: 'over', prob: e.prob, result: e.result === 'won' ? 'hit' : 'miss' }); });
+  return out;
+}
+const coachLeaks = () => M.leaks(ledgerPicks()).map((x) => ({ ...x, label: mkLabel(x.market) + (x.dir === 'under' ? ' (less)' : '') }));
 function gateFor(t) {
   const g = slipGrade(t);
   const legs = t.legs.map((l) => { const pre = legPre(l); const p = P(l.player); return { name: lastName(p.name), line: Number(l.line), dir: l.dir || 'over', p: pre.p, source: pre.source, avg: pre.avg, hits: pre.hits, n: pre.n, status: pre.status || (injFor(p.team).find((i) => E.norm(i.athlete && i.athlete.displayName) === E.norm(p.name)) || {}).status, market: l.market }; });
-  const checks = M.gate({ entry: t.entry, legs, corr: g && g.corr, value: g, sizeRecord: sizeRecord(t.legs.length), injuriesLoaded: A.injuries !== null }, A.gateRules);
+  const checks = M.gate({ entry: t.entry, legs, corr: g && g.corr, value: g, sizeRecord: sizeRecord(t.legs.length), injuriesLoaded: A.injuries !== null, leaks: coachLeaks() }, A.gateRules);
   return { checks, verdict: M.gateVerdict(checks), failed: checks.filter((c) => c.state === 'fail') };
 }
 function gateHTML(t, i) {
@@ -994,10 +1015,11 @@ function vGate() {
     `<div class="grid2"><div class="card" style="display:flex;flex-direction:column;gap:14px"><b class="st" style="font-size:22px">Rules</b>
       <div class="grid2" style="gap:12px">${num('maxLegs', 'Most legs on one slip', R.maxLegs, 1, 2, 12, 'Your 5+ leg slips are the ones that have not cashed')}${num('minLegChance', 'Lowest Lab hit chance per leg', R.minLegChance, 0.05, 0, 0.9, '0.45 = every leg at least 45%')}${num('minHitRate', 'Cleared the line in at least', R.minHitRate, 0.05, 0, 1, 'Share of his 2026 games, 0.5 = half')}${num('minEV', 'Least expected profit ($)', R.minEV, 0.5, -50, 100, '0 = slip must be +EV')}</div>
       <label class="f">Block players listed as<select data-rule="injury"><option value="questionable" ${R.injury === 'questionable' ? 'selected' : ''}>Questionable or worse</option><option value="doubtful" ${R.injury === 'doubtful' ? 'selected' : ''}>Doubtful or worse</option><option value="out" ${R.injury === 'out' ? 'selected' : ''}>Out only</option></select></label>
-      ${tog('avgBeatsLine', 'Season average must beat the line', 'Your original rule')}${tog('noNegCorr', 'No legs that work against each other', 'Two RBs splitting carries, a QB and the other team’s run game')}${tog('sizeGuard', 'Block slip sizes that are losing money', 'Uses your Ledger once a size has 3+ results')}
+      ${tog('avgBeatsLine', 'Season average must beat the line', 'Your original rule')}${tog('noNegCorr', 'No legs that work against each other', 'Two RBs splitting carries, a QB and the other team’s run game')}${tog('sizeGuard', 'Block slip sizes that are losing money', 'Uses your Ledger once a size has 3+ results')}${tog('coachLeaks', 'Block stats the Coach calls a leak', 'Any stat with 3+ graded calls hitting under 40% — updates itself as results come in')}
       <div class="row"><button class="btn gold" id="saveRules" type="button">Save rules</button><button class="btn ghost sm" id="resetRules" type="button">Back to defaults</button></div></div>
+      <div style="display:flex;flex-direction:column;gap:16px"><div class="card"><b class="st" style="font-size:22px">What the Coach is enforcing</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Pulled from your Ledger every time a slip is checked. When a stat climbs back over 40% it drops off this list on its own.</p>${(() => { const lk = coachLeaks(); return lk.length ? lk.map((x) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(x.label)}</b><span>${x.hit} of ${x.n} hit in your history</span></div><span class="chip ${A.gateRules.coachLeaks ? 'loss' : ''}">${A.gateRules.coachLeaks ? 'Blocked' : 'Off'}</span></div>`).join('') : '<div class="empty">No leaks yet.</div>'; })()}</div>
       <div class="card"><b class="st" style="font-size:22px">Override log</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Permanent. The Coach reads this to see whether your overrides win.</p>
-      ${log.length ? log.map(([k, o]) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(o.title)}</b><span>${esc(new Date(o.at).toLocaleString())} · broke ${esc((o.failed || []).join(', '))}</span><span style="display:block;color:var(--fg);margin-top:4px">“${esc(o.reason)}”</span></div><span class="chip gold">${money(o.entry || 0)}</span></div>`).join('') : '<div class="empty">No overrides yet. Keep it that way.</div>'}</div></div>`;
+      ${log.length ? log.map(([k, o]) => { const rec = ledgerEntries().find((e) => e.slipId === o.slipId); const res = rec ? (Number(rec.payout) > Number(rec.stake) ? '<span class="chip win">Override won</span>' : '<span class="chip loss">Override lost</span>') : `<span class="chip gold">${money(o.entry || 0)}</span>`; return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(o.title)}</b><span>${esc(new Date(o.at).toLocaleString())} · broke ${esc((o.failed || []).join(', '))}</span><span style="display:block;color:var(--fg);margin-top:4px">“${esc(o.reason)}”</span></div>${res}</div>`; }).join('') : '<div class="empty">No overrides yet. Keep it that way.</div>'}</div></div></div>`;
 }
 
 /* ---------- render ---------- */

@@ -530,6 +530,12 @@ body.overlay .sweat{background:transparent}
 .dh em{font-style:normal;color:var(--fg3);white-space:nowrap}
 @media (max-width:900px){.sw-body{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:720px){main details.slip>summary{grid-template-columns:auto minmax(0,1fr) auto!important}main details.slip>summary .faces{display:none}main details.slip>summary .segs{grid-column:1 / 3;grid-row:2}main details.slip>summary .odds{grid-column:3;grid-row:2}main details.slip>summary .chev{display:none}}
+/* ---------- scalp cash-out call ---------- */
+.offer{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:14px;background:var(--panel2);border:1px dashed var(--line2)}
+.offer label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;color:var(--fg2)}
+.offer input{width:120px;padding:8px 10px;border-radius:10px;border:1px solid var(--line2);background:var(--panel);color:var(--fg);font:900 18px var(--stadium)}
+.oc{font-size:12px;color:var(--fg2)} .oc b{display:block;font:900 22px/1.1 var(--stadium);text-transform:uppercase}
+.oc.take b{color:var(--win)} .oc.hold b{color:var(--loss)} .oc.close b{color:var(--live)}
 /* ---------- debrief / simulator / chain ---------- */
 .debrief{padding:18px;display:flex;flex-direction:column;gap:14px;margin-top:6px;border-color:color-mix(in srgb,var(--gold) 45%,transparent);background:radial-gradient(600px 200px at 100% 0,rgba(242,193,78,.12),transparent 70%),var(--panel)}
 details.scen{border-radius:14px;border:1px dashed var(--line2);padding:10px 12px}
@@ -1485,7 +1491,7 @@ details.hrow>summary::-webkit-details-marker{display:none}
   }
 
   // ---------- pre-bet gate ----------
-  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true };
+  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true, coachLeaks: true };
   const INJ_RANK = { questionable: 1, doubtful: 2, out: 3 };
   /* slip: { legs:[{ name, line, dir, p, source, avg, hits, n, status, market }], value:{ evNet }, corr:{ flags }, sizeRecord:{ w, l, pl, size } }
      returns [{ id, label, state: 'pass'|'fail'|'warn'|'na', why, source }] */
@@ -1511,12 +1517,24 @@ details.hrow>summary::-webkit-details-marker{display:none}
     add('injury', `No one ${R.injury} or worse`, hurt.length ? 'fail' : slip.injuriesLoaded === false ? 'warn' : 'pass', hurt.length ? hurt.map((l) => `${l.name}: ${l.status}`).join(', ') : slip.injuriesLoaded === false ? 'Injury report not loaded yet' : 'Nobody listed', 'ESPN NFL injury report');
     if (R.noNegCorr) { const neg = ((slip.corr && slip.corr.flags) || []).filter((f) => !f.good); add('noNegCorr', 'No legs working against each other', neg.length ? 'fail' : 'pass', neg.length ? neg.map((f) => f.text).join('; ') : 'None found', 'Lab correlation check'); }
     if (slip.value) add('minEV', R.minEV > 0 ? `Expected profit at least $${R.minEV}` : 'Positive expected value', slip.value.evNet >= R.minEV ? 'pass' : 'fail', `${slip.value.evNet >= 0 ? '+' : '-'}$${Math.abs(slip.value.evNet).toFixed(2)} expected on $${Number(slip.entry || 0).toFixed(2)}`, 'Lab vs the DraftKings payout table');
+    if (R.coachLeaks && Array.isArray(slip.leaks)) {
+      const hits = legs.map((l) => ({ l, k: slip.leaks.find((x) => x.market === l.market && (x.dir || 'over') === (l.dir || 'over')) })).filter((x) => x.k);
+      add('coachLeaks', 'No stat the Coach flags as a leak', hits.length ? 'fail' : 'pass', hits.length ? hits.map(({ l, k }) => `${l.name}: ${k.label || l.market} ${k.hit}/${k.n} in your history`).join(', ') : slip.leaks.length ? `Leaks on file: ${slip.leaks.map((k) => `${k.label || k.market} ${k.hit}/${k.n}`).join(', ')}` : 'No leaks on file yet', 'Your ledger, via the Coach');
+    }
     if (R.sizeGuard && slip.sizeRecord && slip.sizeRecord.n >= 3) { const s = slip.sizeRecord; add('sizeGuard', `Slip size is making money for you`, s.pl >= 0 ? 'pass' : 'fail', `${s.label}: ${s.w}-${s.l}, ${s.pl >= 0 ? '+' : '-'}$${Math.abs(s.pl).toFixed(2)}`, 'Your ledger'); }
     return out;
   }
+  /* stats the Coach calls a leak: at least 3 graded calls and under 40% hit */
+  function leaks(picks, minN = 3, maxRate = 0.4) { return coach(picks).markets.filter((m) => m.n >= minN && m.hit / m.n < maxRate); }
+  /* scalp cash-out call: compare the book's offer with what holding is worth */
+  function cashoutCall(offer, fair) {
+    if (!(offer > 0) || !(fair >= 0)) return null;
+    const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
+    return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -2367,7 +2385,9 @@ function viewScalp() {
   const cards = cur.targets.map(({ t, r }) => {
     const pips = `<div class="tds"><i class="${r.tds >= 1 ? 'on' : ''}"></i><i class="${r.tds >= 2 ? 'on' : ''}"></i><span>${r.tds || 0} TD</span></div>`;
     const status = { live: (() => { const ev = eventFor(t.player); const lam = M.lambdaFrom2Plus(E.americanToDecimal(t.odds)) * (1 - gameFrac(ev)); const p1 = 1 - Math.exp(-lam); return `<div class="status">Live — waiting on TD #1 · ${fmtP(p1)} chance he scores in the time left</div>`; })(), td1: (() => { const fv = M.scalpFairValue(r.full, E.americanToDecimal(t.odds), gameFrac(eventFor(t.player)), r.tds); return `<div class="status gold">TD #1 is in. Holding is worth about <b>${money(fv.fair)}</b> (${fmtP(fv.pMore)} he scores again with the time left). A DraftKings offer at or above that beats holding; below it, you are paying for safety.</div>`; })(), hit: `<div class="status win">TD #2 — ticket wins in full (${money(r.full)})</div>`, miss: '<div class="status loss">Game ended without 2 TDs</div>', cashed: `<div class="status win">Cashed out for ${money(r.realized)}</div>` }[r.state] || '';
-    const inner = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="chip gold">${money(Number(t.stake))} at ${esc(t.odds)} · 2+ TDs</span>${r.state === 'scheduled' ? '' : pips}</div><div class="payline"><div class="k">Full payout at 2 TDs</div><div class="v">${money(r.full)}</div></div>${status}`;
+    const offerBox = r.state === 'live' || r.state === 'td1' ? (() => { const ev = eventFor(t.player); const fv = M.scalpFairValue(r.full, E.americanToDecimal(t.odds), gameFrac(ev), r.tds || 0); const o = Number((S.offers || {})[t.player]); const c = M.cashoutCall(o, fv.fair);
+      return `<div class="offer"><label>DraftKings cash-out offer <input id="offer-${esc(t.player)}" data-offer="${esc(t.player)}" type="number" step="0.01" min="0" inputmode="decimal" placeholder="$" value="${o > 0 ? o : ''}"></label><div class="oc ${c ? (c.take ? 'take' : c.ratio >= 0.9 ? 'close' : 'hold') : ''}">${c ? `<b>${esc(c.verdict)}</b><span>Offer ${money(o)} vs hold value ${money(fv.fair)} (${fmtP(fv.pMore)} he gets ${r.tds ? 'TD #2' : '2 TDs'} in the time left) · ${c.edge >= 0 ? 'offer is ' + money(c.edge) + ' over' : money(-c.edge) + ' under'}</span>` : `<span>Hold value right now: <b>${money(fv.fair)}</b>. Type the offer you see and get the call.</span>`}</div></div>`; })() : '';
+    const inner = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="chip gold">${money(Number(t.stake))} at ${esc(t.odds)} · 2+ TDs</span>${r.state === 'scheduled' ? '' : pips}</div><div class="payline"><div class="k">Full payout at 2 TDs</div><div class="v">${money(r.full)}</div></div>${status}${offerBox}`;
     return heroCard(t.player, inner, r.state === 'hit' || r.state === 'cashed' ? 'hit' : '', 's-' + t.player);
   }).join('');
   return head + weekBar() + sum + chainHTML(sc, shifts) + planNote + `<div class="shifts">${btns}</div><div class="grid2">${cards}</div>`;
@@ -2637,7 +2657,8 @@ function boardGate(t, v) {
   const legs = t.legs.map((l) => { const pre = legPre(l); const p = P(l.player); const inj = S.injuries && injuriesFor(p.team).find((i) => E.norm(i.athlete && i.athlete.displayName) === E.norm(p.name));
     return { name: lastName(p.name), line: Number(l.line), dir: l.dir || 'over', p: pre.p, source: pre.source, avg: pre.rs ? pre.rs.avg : undefined, hits: pre.rs ? pre.rs.hits : undefined, n: pre.rs ? pre.rs.n : undefined, status: inj && inj.status, market: l.market }; });
   const L = entries().filter((e) => (e.type === 'pick6' || !e.type) && Number(e.legs) === t.legs.length); const sz = L.length ? { ...agg(L), label: t.legs.length + '-pick slips' } : null;
-  const checks = M.gate({ entry: t.entry, legs, corr: v && v.corr, value: v, sizeRecord: sz, injuriesLoaded: !!S.injuries }, S.gateRules || {});
+  const leaks = M.leaks(allPicks()).map((x) => ({ ...x, label: mkLabel(x.market) + (x.dir === 'under' ? ' (less)' : '') }));
+  const checks = M.gate({ entry: t.entry, legs, corr: v && v.corr, value: v, sizeRecord: sz, injuriesLoaded: !!S.injuries, leaks }, S.gateRules || {});
   return { checks, verdict: M.gateVerdict(checks) };
 }
 function driverChips(drivers) { return (drivers || []).filter((d) => d.label).map((d) => `<span class="chip ${d.pct > 0.005 ? 'win' : d.pct < -0.005 ? 'loss' : ''}">${esc(d.label)}${Math.abs(d.pct) >= 0.005 ? ` ${d.pct > 0 ? '+' : ''}${Math.round(d.pct * 100)}%` : ''}</span>`).join(''); }
@@ -2931,6 +2952,7 @@ document.addEventListener('change', (e) => {
   if (e.target.matches('[data-calc]')) calcUpdate();
 });
 document.addEventListener('input', (e) => { if (e.target.id === 'teamQ') renderTeamGrid(); });
+let ofT; document.addEventListener('input', (e) => { if (e.target.dataset && e.target.dataset.offer) { clearTimeout(ofT); const k = e.target.dataset.offer, v = e.target.value; ofT = setTimeout(() => { S.offers = S.offers || {}; S.offers[k] = v; render(); }, 500); } });
 let wiT; document.addEventListener('input', (e) => { if (e.target.id === 'wiMult') { clearTimeout(wiT); const v = e.target.value; wiT = setTimeout(() => { S.wiMult = v; render(); }, 450); } });
 let injT; document.addEventListener('input', (e) => { if (e.target.id === 'injQ') { clearTimeout(injT); const val = e.target.value; injT = setTimeout(() => { S.injQ = val; render(); }, 250); } });
 window.addEventListener('hashchange', () => setTab(location.hash.slice(1)));

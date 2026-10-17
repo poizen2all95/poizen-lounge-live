@@ -210,7 +210,7 @@
   }
 
   // ---------- pre-bet gate ----------
-  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true };
+  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true, coachLeaks: true };
   const INJ_RANK = { questionable: 1, doubtful: 2, out: 3 };
   /* slip: { legs:[{ name, line, dir, p, source, avg, hits, n, status, market }], value:{ evNet }, corr:{ flags }, sizeRecord:{ w, l, pl, size } }
      returns [{ id, label, state: 'pass'|'fail'|'warn'|'na', why, source }] */
@@ -236,12 +236,24 @@
     add('injury', `No one ${R.injury} or worse`, hurt.length ? 'fail' : slip.injuriesLoaded === false ? 'warn' : 'pass', hurt.length ? hurt.map((l) => `${l.name}: ${l.status}`).join(', ') : slip.injuriesLoaded === false ? 'Injury report not loaded yet' : 'Nobody listed', 'ESPN NFL injury report');
     if (R.noNegCorr) { const neg = ((slip.corr && slip.corr.flags) || []).filter((f) => !f.good); add('noNegCorr', 'No legs working against each other', neg.length ? 'fail' : 'pass', neg.length ? neg.map((f) => f.text).join('; ') : 'None found', 'Lab correlation check'); }
     if (slip.value) add('minEV', R.minEV > 0 ? `Expected profit at least $${R.minEV}` : 'Positive expected value', slip.value.evNet >= R.minEV ? 'pass' : 'fail', `${slip.value.evNet >= 0 ? '+' : '-'}$${Math.abs(slip.value.evNet).toFixed(2)} expected on $${Number(slip.entry || 0).toFixed(2)}`, 'Lab vs the DraftKings payout table');
+    if (R.coachLeaks && Array.isArray(slip.leaks)) {
+      const hits = legs.map((l) => ({ l, k: slip.leaks.find((x) => x.market === l.market && (x.dir || 'over') === (l.dir || 'over')) })).filter((x) => x.k);
+      add('coachLeaks', 'No stat the Coach flags as a leak', hits.length ? 'fail' : 'pass', hits.length ? hits.map(({ l, k }) => `${l.name}: ${k.label || l.market} ${k.hit}/${k.n} in your history`).join(', ') : slip.leaks.length ? `Leaks on file: ${slip.leaks.map((k) => `${k.label || k.market} ${k.hit}/${k.n}`).join(', ')}` : 'No leaks on file yet', 'Your ledger, via the Coach');
+    }
     if (R.sizeGuard && slip.sizeRecord && slip.sizeRecord.n >= 3) { const s = slip.sizeRecord; add('sizeGuard', `Slip size is making money for you`, s.pl >= 0 ? 'pass' : 'fail', `${s.label}: ${s.w}-${s.l}, ${s.pl >= 0 ? '+' : '-'}$${Math.abs(s.pl).toFixed(2)}`, 'Your ledger'); }
     return out;
   }
+  /* stats the Coach calls a leak: at least 3 graded calls and under 40% hit */
+  function leaks(picks, minN = 3, maxRate = 0.4) { return coach(picks).markets.filter((m) => m.n >= minN && m.hit / m.n < maxRate); }
+  /* scalp cash-out call: compare the book's offer with what holding is worth */
+  function cashoutCall(offer, fair) {
+    if (!(offer > 0) || !(fair >= 0)) return null;
+    const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
+    return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
