@@ -194,7 +194,54 @@
     return { n: done.length, hits: done.filter((p) => p.result === 'hit').length, markets, buckets };
   }
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach };
+  // ---------- slip health (live) ----------
+  /* legs: [{ p, state, game }] with p = live chance (hit = 1, miss = 0).
+     health = geometric mean of every leg's chance × 100 — an 8-leg slip of 60% legs reads 60, a cashed leg pulls it up, a dead leg kills it. */
+  function health(legs) {
+    if (!legs.length) return { score: null, label: '', danger: [], clusters: [] };
+    if (legs.some((l) => l.state === 'miss')) return { score: 0, label: 'Busted', danger: [], clusters: [] };
+    const ps = legs.map((l) => clamp(l.p === null || l.p === undefined ? 0.5 : l.p, 0.001, 1));
+    const score = Math.round(100 * Math.exp(ps.reduce((a, p) => a + Math.log(p), 0) / ps.length));
+    const danger = legs.map((l, i) => ({ ...l, i })).filter((l) => l.state !== 'hit' && (l.p ?? 0.5) < 0.4);
+    const byGame = {}; danger.forEach((l) => { if (l.game) (byGame[l.game] = byGame[l.game] || []).push(l.i); });
+    const clusters = Object.entries(byGame).filter(([, xs]) => xs.length > 1).map(([game, idx]) => ({ game, idx }));
+    const label = legs.every((l) => l.state === 'hit') ? 'Cashed' : score >= 70 ? 'Strong' : score >= 50 ? 'Alive' : score >= 30 ? 'Shaky' : 'Critical';
+    return { score, label, danger: danger.map((l) => l.i), clusters };
+  }
+
+  // ---------- pre-bet gate ----------
+  const GATE_DEFAULTS = { maxLegs: 6, minLegChance: 0.45, minHitRate: 0.5, avgBeatsLine: true, injury: 'doubtful', noNegCorr: true, minEV: 0, sizeGuard: true };
+  const INJ_RANK = { questionable: 1, doubtful: 2, out: 3 };
+  /* slip: { legs:[{ name, line, dir, p, source, avg, hits, n, status, market }], value:{ evNet }, corr:{ flags }, sizeRecord:{ w, l, pl, size } }
+     returns [{ id, label, state: 'pass'|'fail'|'warn'|'na', why, source }] */
+  function gate(slip, rules) {
+    const R = { ...GATE_DEFAULTS, ...(rules || {}) }; const out = [];
+    const legs = slip.legs || [];
+    const add = (id, label, state, why, source) => out.push({ id, label, state, why, source });
+    add('maxLegs', `No more than ${R.maxLegs} legs`, legs.length <= R.maxLegs ? 'pass' : 'fail', `${legs.length} legs`, 'Your rule');
+    const weak = legs.filter((l) => typeof l.p === 'number' && l.p < R.minLegChance);
+    const unknownP = legs.filter((l) => l.source === 'prior');
+    add('minLegChance', `Every leg at least ${Math.round(R.minLegChance * 100)}% in the Lab`, weak.length ? 'fail' : unknownP.length ? 'warn' : 'pass',
+      weak.length ? weak.map((l) => `${l.name} ${Math.round(l.p * 100)}%`).join(', ') : unknownP.length ? `${unknownP.map((l) => l.name).join(', ')}: no game log, the Lab can only use the line` : 'All legs clear it', 'Lab: 2026 ESPN game logs, Vegas totals, injuries');
+    if (R.avgBeatsLine) {
+      const withLog = legs.filter((l) => typeof l.avg === 'number' && l.n);
+      const bad = withLog.filter((l) => (l.dir === 'under' ? l.avg >= l.line : l.avg <= l.line));
+      add('avgBeatsLine', 'Season average beats the line', !withLog.length ? 'na' : bad.length ? 'fail' : 'pass', bad.length ? bad.map((l) => `${l.name} averages ${Math.round(l.avg * 10) / 10} vs ${l.line}`).join(', ') : withLog.length < legs.length ? `${withLog.length} of ${legs.length} legs have a game log` : 'Every leg', 'ESPN 2026 game log');
+    }
+    const withLog2 = legs.filter((l) => l.n);
+    const lowHit = withLog2.filter((l) => l.hits / l.n < R.minHitRate);
+    add('minHitRate', `Cleared the line in ${Math.round(R.minHitRate * 100)}%+ of games`, !withLog2.length ? 'na' : lowHit.length ? 'fail' : 'pass', lowHit.length ? lowHit.map((l) => `${l.name} ${l.hits}/${l.n}`).join(', ') : 'Every leg with a log', 'ESPN 2026 game log');
+    const limit = INJ_RANK[R.injury] || 2;
+    const hurt = legs.filter((l) => l.status && (INJ_RANK[(String(l.status).toLowerCase().match(/out|doubtful|questionable/) || [''])[0]] || (/reserve|\bir\b/i.test(l.status) ? 3 : 0)) >= limit);
+    add('injury', `No one ${R.injury} or worse`, hurt.length ? 'fail' : slip.injuriesLoaded === false ? 'warn' : 'pass', hurt.length ? hurt.map((l) => `${l.name}: ${l.status}`).join(', ') : slip.injuriesLoaded === false ? 'Injury report not loaded yet' : 'Nobody listed', 'ESPN NFL injury report');
+    if (R.noNegCorr) { const neg = ((slip.corr && slip.corr.flags) || []).filter((f) => !f.good); add('noNegCorr', 'No legs working against each other', neg.length ? 'fail' : 'pass', neg.length ? neg.map((f) => f.text).join('; ') : 'None found', 'Lab correlation check'); }
+    if (slip.value) add('minEV', R.minEV > 0 ? `Expected profit at least $${R.minEV}` : 'Positive expected value', slip.value.evNet >= R.minEV ? 'pass' : 'fail', `${slip.value.evNet >= 0 ? '+' : '-'}$${Math.abs(slip.value.evNet).toFixed(2)} expected on $${Number(slip.entry || 0).toFixed(2)}`, 'Lab vs the DraftKings payout table');
+    if (R.sizeGuard && slip.sizeRecord && slip.sizeRecord.n >= 3) { const s = slip.sizeRecord; add('sizeGuard', `Slip size is making money for you`, s.pl >= 0 ? 'pass' : 'fail', `${s.label}: ${s.w}-${s.l}, ${s.pl >= 0 ? '+' : '-'}$${Math.abs(s.pl).toFixed(2)}`, 'Your ledger'); }
+    return out;
+  }
+  const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
+
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
