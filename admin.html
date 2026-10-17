@@ -54,7 +54,8 @@ table{width:100%;border-collapse:collapse;font-size:12px}td,th{padding:6px;borde
 
     <div class="card">
       <div class="row" style="justify-content:space-between"><h2 id="slateName">Slate</h2><div class="row"><span class="dim" id="saved"></span><button class="btn pri" id="publish" type="button">Publish to board</button></div></div>
-      <div class="row" style="margin-top:8px"><label class="muted">Board title <input id="title" style="width:260px"></label></div>
+      <div class="row" style="margin-top:8px"><label class="muted">Board title <input id="title" style="width:260px"></label><label class="muted">Your DraftKings link (referral or profile) <input id="dkLink" placeholder="https://..." style="width:300px"></label></div>
+      <div class="row" style="margin-top:8px"><button class="btn" id="archive" type="button">Archive this week to the ledger</button><span class="dim" style="font-size:12px">Saves this slate under Previous weeks. Do it after the last game settles.</span></div>
       <p class="dim" style="font-size:12px;margin:8px 0 0">Publishing updates every open viewer within seconds. Changes below stay local until you publish.</p>
     </div>
 
@@ -504,15 +505,17 @@ function validateSlate(s) {
 /* ---------- render ---------- */
 function render() {
   $('#title').value = slate.title || '';
+  $('#dkLink').value = slate.dkLink || '';
   $('#slateName').textContent = slate.title || 'Slate';
   $('#tickets').innerHTML = (slate.pick6 || []).map((t, i) => `<div class="tick"><div style="min-width:0"><b>${esc(t.title)}</b> <span class="chip ${t.status === 'unconfirmed' ? 'gold' : 'em'}">${t.status === 'unconfirmed' ? 'Unconfirmed' : 'Confirmed'}</span>
     <div class="legs">${money(t.entry)} entry · to win ${money(t.toWin || 0)} · ${t.legs.length} legs</div>
-    <div class="legs">${t.legs.map((l) => `${esc(P(l.player).name)} ${l.dir === 'under' ? 'LESS' : 'MORE'} ${l.line} ${esc((E.MARKETS[l.market] || {}).short || l.market)}`).join(' · ')}</div></div>
+    <div class="legs">${t.legs.map((l) => `${esc(P(l.player).name)} ${l.dir === 'under' ? 'LESS' : 'MORE'} ${l.line} ${esc((E.MARKETS[l.market] || {}).short || l.market)}`).join(' · ')}</div>
+    <input placeholder="DraftKings share link (Share button on the slip)" value="${esc(t.shareUrl || '')}" data-share="${i}" style="width:100%;margin-top:8px"></div>
     <div class="row" style="flex-direction:column;align-items:stretch"><button class="btn" data-confirm="${i}" type="button">${t.status === 'unconfirmed' ? 'Mark confirmed' : 'Mark unconfirmed'}</button><button class="btn warn" data-del="${i}" type="button">Remove</button></div></div>`).join('') || '<p class="dim">No tickets.</p>';
   const f = slate.firstTD;
-  $('#ftd').innerHTML = f ? `<div class="row" style="margin-bottom:8px"><span class="chip ${f.status === 'unconfirmed' ? 'gold' : 'em'}">${f.status === 'unconfirmed' ? 'Unconfirmed' : 'Confirmed'}</span><button class="btn" data-ftdconfirm type="button">${f.status === 'unconfirmed' ? 'Mark confirmed' : 'Mark unconfirmed'}</button><button class="btn warn" data-ftddel type="button">Remove all first-TD bets</button></div>` + f.bets.map((b) => `<div class="legs">${esc(P(b.player).name)} · ${money(b.stake)} at ${esc(b.odds)}</div>`).join('') : '<p class="dim">None.</p>';
+  $('#ftd').innerHTML = f ? `<div class="row" style="margin-bottom:8px"><span class="chip ${f.status === 'placed' ? 'em' : 'gold'}">${f.status === 'placed' ? 'Placed' : 'Plan'}</span><button class="btn" data-ftdconfirm type="button">${f.status === 'placed' ? 'Mark as plan only' : 'Mark as placed on DraftKings'}</button><button class="btn warn" data-ftddel type="button">Remove all first-TD bets</button></div>` + f.bets.map((b) => `<div class="legs">${esc(P(b.player).name)} · ${money(b.stake)} at ${esc(b.odds)}</div>`).join('') : '<p class="dim">None.</p>';
   const sc = slate.scalp;
-  $('#scalp').innerHTML = sc ? sc.shifts.map((sh, i) => `<div style="margin-bottom:10px"><b>${esc(sh.label)}</b>${sh.targets.map((t, j) => `<div class="row" style="margin-top:6px"><span style="flex:1">${esc(P(t.player).name)} · ${money(t.stake)} at ${esc(t.odds)}</span><input type="number" step="0.01" placeholder="Cashed out $" value="${t.cashedOut ?? ''}" data-cash="${i}:${j}" style="width:130px"></div>`).join('')}</div>`).join('') : '<p class="dim">None.</p>';
+  $('#scalp').innerHTML = (sc ? `<div class="row" style="margin-bottom:8px"><span class="chip ${sc.status === 'placed' ? 'em' : 'gold'}">${sc.status === 'placed' ? 'Placed' : 'Plan'}</span><button class="btn" data-scalpplaced type="button">${sc.status === 'placed' ? 'Mark as plan only' : 'Mark as placed'}</button></div>` : '') + (sc ? sc.shifts.map((sh, i) => `<div style="margin-bottom:10px"><b>${esc(sh.label)}</b>${sh.targets.map((t, j) => `<div class="row" style="margin-top:6px"><span style="flex:1">${esc(P(t.player).name)} · ${money(t.stake)} at ${esc(t.odds)}</span><input type="number" step="0.01" placeholder="Cashed out $" value="${t.cashedOut ?? ''}" data-cash="${i}:${j}" style="width:130px"></div>`).join('')}</div>`).join('') : '<p class="dim">None.</p>');
   $('#raw').value = JSON.stringify(slate, null, 2);
   renderLedger();
 }
@@ -533,6 +536,7 @@ async function publish() {
 async function saveResults() { try { await db.ref('board/results').set(JSON.parse(JSON.stringify(results))); flash('Record updated'); } catch (e) { flash('Could not save record: ' + e.message, 6000); } }
 
 /* ---------- grading for the record ---------- */
+const graded = {};
 async function grade() {
   const out = $('#gradeOut'); out.innerHTML = '<span class="dim">Pulling box scores…</span>';
   const sports = [...new Set(Object.values(slate.players).map((p) => p.sport || 'nfl'))];
@@ -545,7 +549,7 @@ async function grade() {
   const gameFor = (k) => { const p = P(k); const e = teamEvent[(p.sport || 'nfl') + ':' + p.team]; return e ? games[e.id] || null : null; };
   const rows = (slate.pick6 || []).map((t) => {
     const r = E.gradePick6({ ...t, legs: t.legs.map((l) => ({ ...l, name: P(l.player).name, espnId: P(l.player).espnId, team: P(l.player).team })) }, (l) => gameFor(l.player));
-    const settled = r.payout !== null;
+    const settled = r.payout !== null; graded[t.id] = r;
     return `<div class="tick"><div><b>${esc(t.title)}</b><div class="legs">${r.hits}/${r.n} hit · ${settled ? 'paid ' + money(r.payout) : r.state === 'review' ? 'a leg may be void — check DraftKings' : 'not final yet'}</div></div>${settled || r.state === 'review' ? `<div class="row"><input type="number" step="0.01" value="${settled ? r.payout.toFixed(2) : ''}" data-paid="${esc(t.id)}" style="width:100px" aria-label="Paid"><button class="btn pri" data-rec="${esc(t.id)}" type="button">Record</button></div>` : ''}</div>`;
   }).join('');
   out.innerHTML = rows || '<span class="dim">No tickets.</span>';
@@ -626,14 +630,16 @@ document.addEventListener('click', async (e) => {
   const t = e.target;
   if (t.dataset.confirm !== undefined) { const tk = slate.pick6[Number(t.dataset.confirm)]; tk.status = tk.status === 'unconfirmed' ? 'confirmed' : 'unconfirmed'; render(); setDirty(); }
   if (t.dataset.del !== undefined) { const i = Number(t.dataset.del); if (t.dataset.armed) { slate.pick6.splice(i, 1); render(); setDirty(); } else { t.dataset.armed = 1; t.textContent = 'Tap again to remove'; setTimeout(() => { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'Remove'; } }, 3000); } }
-  if (t.dataset.ftdconfirm !== undefined) { slate.firstTD.status = slate.firstTD.status === 'unconfirmed' ? 'confirmed' : 'unconfirmed'; render(); setDirty(); }
+  if (t.dataset.ftdconfirm !== undefined) { slate.firstTD.status = slate.firstTD.status === 'placed' ? 'plan' : 'placed'; render(); setDirty(); }
+  if (t.dataset.scalpplaced !== undefined) { slate.scalp.status = slate.scalp.status === 'placed' ? 'plan' : 'placed'; render(); setDirty(); }
   if (t.dataset.ftddel !== undefined) { if (t.dataset.armed) { delete slate.firstTD; render(); setDirty(); } else { t.dataset.armed = 1; t.textContent = 'Tap again to remove all'; } }
   if (t.dataset.rec) {
     const tk = slate.pick6.find((x) => x.id === t.dataset.rec); const paid = Number(document.querySelector(`[data-paid="${CSS.escape(t.dataset.rec)}"]`).value);
     if (!isFinite(paid)) { flash('Enter what DraftKings paid (0 if it lost)'); return; }
     const key = dayKey() + '_' + tk.id;
     results.entries = results.entries || {};
-    results.entries[key] = { date: dayKey(), title: tk.title, type: 'pick6', stake: Number(tk.entry), payout: paid, legs: tk.legs.length };
+    const gr = graded[tk.id];
+    results.entries[key] = { date: dayKey(), title: tk.title, type: 'pick6', stake: Number(tk.entry), payout: paid, legs: tk.legs.length, hits: gr ? gr.hits : null, picks: tk.legs.map((l, n) => ({ name: P(l.player).name, market: l.market, line: l.line, result: gr ? gr.legs[n].g.state : null, value: gr ? gr.legs[n].g.value : null })) };
     await saveResults(); renderLedger(); t.textContent = 'Recorded'; t.disabled = true;
   }
   if (t.dataset.unrec) { delete results.entries[t.dataset.unrec]; await saveResults(); renderLedger(); }
@@ -642,8 +648,16 @@ document.addEventListener('click', async (e) => {
 document.addEventListener('change', (e) => {
   if (e.target.dataset.cash) { const [i, j] = e.target.dataset.cash.split(':').map(Number); const v = e.target.value; const tg = slate.scalp.shifts[i].targets[j]; if (v === '') delete tg.cashedOut; else tg.cashedOut = Number(v); setDirty(); }
   if (e.target.id === 'title') setDirty();
+  if (e.target.id === 'dkLink') { slate.dkLink = e.target.value.trim(); setDirty(); }
+  if (e.target.dataset.share !== undefined) { const tk = slate.pick6[Number(e.target.dataset.share)]; const v = e.target.value.trim(); if (v) tk.shareUrl = v; else delete tk.shareUrl; setDirty(); }
 });
 $('#publish').onclick = publish;
+$('#archive').onclick = async (e) => {
+  if (!e.target.dataset.armed) { e.target.dataset.armed = 1; e.target.textContent = 'Tap again to archive'; setTimeout(() => { delete e.target.dataset.armed; e.target.textContent = 'Archive this week to the ledger'; }, 3000); return; }
+  const key = (slate.title || 'week').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + dayKey();
+  try { await db.ref('board/archive/' + key).set({ title: slate.title, closedAt: new Date().toISOString(), slate: JSON.parse(JSON.stringify(slate)) }); flash('Archived — it shows under Previous weeks'); e.target.textContent = 'Archived'; }
+  catch (er) { flash('Archive failed: ' + er.message, 6000); }
+};
 $('#grade').onclick = grade;
 $('#importAdd').onclick = () => doImport(false);
 $('#importReplace').onclick = (e) => { if (e.target.dataset.armed) doImport(true); else { e.target.dataset.armed = 1; e.target.textContent = 'Tap again to replace'; setTimeout(() => { delete e.target.dataset.armed; e.target.textContent = 'Replace whole slate'; }, 3000); } };
