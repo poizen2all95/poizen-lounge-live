@@ -1568,9 +1568,22 @@ html[data-season="playoffs"][data-vibe="daylight"] .pc-line{background:#fff;bord
 html[data-season="playoffs"][data-vibe="daylight"] .pc-line b{color:#0E8F7E}html[data-season="playoffs"][data-vibe="daylight"] .pc-line b i.dir,html[data-season="playoffs"][data-vibe="daylight"] .pc-line span{color:#0E1720}
 html[data-season="playoffs"][data-vibe="daylight"] .pc-game{color:#3E4C5A}
 @media (max-width:720px){html[data-season="playoffs"] .pc-art{height:260px}html[data-season="playoffs"] .po-name b{font-size:38px}html[data-season="playoffs"] .pc-art .jn{font-size:170px}}
+
+/* same reference treatment for 1st TD / Scalp hero cards and Pick'em cards */
+html[data-season="playoffs"] .ath-hero,html[data-season="playoffs"] .pk-art{background:
+  radial-gradient(46% 60% at 62% 36%,color-mix(in srgb,var(--tc1) 45%,#fff 40%),transparent 70%),
+  conic-gradient(from 196deg at 70% -12%,transparent 0deg,rgba(255,255,255,.34) 7deg,transparent 12deg,transparent 19deg,rgba(255,255,255,.22) 23deg,transparent 28deg,transparent 36deg,rgba(255,255,255,.28) 40deg,transparent 45deg,transparent 360deg),
+  radial-gradient(circle at 12% 18%,rgba(255,255,255,.9) 0 2px,transparent 3px),radial-gradient(circle at 38% 12%,rgba(255,255,255,.85) 0 2px,transparent 3px),radial-gradient(circle at 86% 22%,rgba(255,255,255,.8) 0 2px,transparent 3px),
+  linear-gradient(165deg,color-mix(in srgb,var(--tc1) 92%,#fff 8%) 0%,color-mix(in srgb,var(--tc1) 75%,#000) 55%,color-mix(in srgb,var(--tc1) 35%,#03060c) 100%)!important;border-bottom:1px solid var(--po-rim)}
+html[data-season="playoffs"] .ath-hero .poart,html[data-season="playoffs"] .pk-art .poart{opacity:.25;mix-blend-mode:screen}
+html[data-season="playoffs"] .ath-hero .ath-tint,html[data-season="playoffs"] .pk-art .pk-tint{display:none}
+html[data-season="playoffs"] .ath-hero .jn,html[data-season="playoffs"] .pk-art .jn{color:transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--tc1) 30%,#fff 60%),color-mix(in srgb,var(--tc1) 80%,transparent));-webkit-background-clip:text;background-clip:text;opacity:.6;font-size:180px;line-height:.9}
+html[data-season="playoffs"] .ath-hero .hs,html[data-season="playoffs"] .pk-art .hs{height:100%;max-height:none}
+html[data-season="playoffs"] .pk-name b,html[data-season="playoffs"] .ath-hero b{text-shadow:0 2px 10px rgba(0,0,0,.7)}
+html[data-season="playoffs"] .card.ath,html[data-season="playoffs"] .card.pk{border:1.5px solid var(--po-rim)!important}
 /* team background: louder in Playoffs */
 html[data-season="playoffs"][data-team] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 62%,#040912) 0%,color-mix(in srgb,var(--team-a) 30%,#040912) 35%,#040912 70%),radial-gradient(70% 50% at 100% 0%,color-mix(in srgb,var(--team-b) 45%,transparent),transparent 70%),#040912!important}
-html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 40%,#EEF2F7) 0%,color-mix(in srgb,var(--team-a) 16%,#EEF2F7) 40%,#EEF2F7 75%)!important}
+html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 62%,#EEF2F7) 0%,color-mix(in srgb,var(--team-a) 32%,#EEF2F7) 45%,color-mix(in srgb,var(--team-b) 14%,#EEF2F7) 100%)!important}
 html[data-season="playoffs"][data-team] body::after{opacity:.16!important}
 html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,color-mix(in srgb,var(--team-a) 55%,#06101a),#06101a 70%)!important}
 .po-opt.locked{opacity:.75}.po-opt.locked .pv{filter:grayscale(.6)}
@@ -2818,6 +2831,7 @@ const TABS = [
 /* ---------------- teams / colors ---------------- */
 const NFLC = { ARI: ['97233F', '000000'], ATL: ['A71930', '000000'], BAL: ['241773', '9E7C0C'], BUF: ['00338D', 'C60C30'], CAR: ['0085CA', '101820'], CHI: ['0B162A', 'C83803'], CIN: ['FB4F14', '000000'], CLE: ['311D00', 'FF3C00'], DAL: ['003594', '869397'], DEN: ['FB4F14', '002244'], DET: ['0076B6', 'B0B7BC'], GB: ['203731', 'FFB612'], HOU: ['03202F', 'A71930'], IND: ['002C5F', 'A2AAAD'], JAX: ['006778', 'D7A22A'], KC: ['E31837', 'FFB81C'], LV: ['000000', 'A5ACAF'], LAC: ['0080C6', 'FFC20E'], LAR: ['003594', 'FFA300'], MIA: ['008E97', 'FC4C02'], MIN: ['4F2683', 'FFC62F'], NE: ['002244', 'C60C30'], NO: ['D3BC8D', '101820'], NYG: ['0B2265', 'A71930'], NYJ: ['125740', 'FFFFFF'], PHI: ['004C54', 'A5ACAF'], PIT: ['101820', 'FFB612'], SF: ['AA0000', 'B3995D'], SEA: ['002244', '69BE28'], TB: ['D50A0A', 'FF7900'], TEN: ['0C2340', '4B92DB'], WSH: ['5A1414', 'FFB612'] };
 const MLBC = { TB: ['092C5C', '8FBCE6'], CLE: ['002B5C', 'E31937'] };
+function tcVars(sport, team) { const c = teamColors(sport, team) || []; const dull = (h) => { const m = /^#?([0-9a-f]{6})$/i.exec(h || ''); if (!m) return true; const n = parseInt(m[1], 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; return Math.max(r, g, b) < 70 || Math.max(r, g, b) - Math.min(r, g, b) < 30; }; const t = dull(c[0]) && !dull(c[1]) ? [c[1], c[0]] : c; return `--tc1:${t[0] || '#1d3557'};--tc2:${t[1] || '#457b9d'}`; }
 function teamColors(sport, abbr) {
   for (const ev of Object.values(S.events)) { if (ev.sport !== sport) continue; const t = ev.comps.find((c) => c.abbr === abbr); if (t && t.color) return ['#' + t.color, '#' + (t.alt || t.color)]; }
   const m = (sport === 'mlb' ? MLBC : NFLC)[abbr]; if (m) return ['#' + m[0], '#' + m[1]];
@@ -3669,7 +3683,7 @@ function viewPickem() {
     const btn = (side, label) => `<button class="pkb ${side} ${my === side ? 'on' : ''} ${res === side ? 'won' : ''}" type="button" data-pick="${x.id}:${side}" ${locked ? 'disabled' : ''}><b>${label}</b><span>${side === owner ? 'Tail PoiZen' : 'Fade PoiZen'}</span></button>`;
     const state = res ? `<span class="chip ${my ? (my === res ? 'win' : 'loss') : ''}">${my ? (my === res ? 'You got it' : 'Missed') : 'Final'} · ${E.fmt(x.g.value)}</span>` : st === 'live' ? `<span class="chip live">Live · ${E.fmt(x.g.value)}</span>` : !(x.id in PK.locks) ? '<span class="chip">Opens when PoiZen publishes</span>' : locked ? '<span class="chip">Locked</span>' : `<span class="chip gold">Locks in ${cdHTML(new Date(lk).toISOString())}</span>`;
     const nm = String(p.name || ''); const sp = nm.lastIndexOf(' '); const src = headshot(x.leg.player, 400);
-    return `<article class="card pk ${my ? 'picked' : ''}" style="--tg:${tg(p.sport || 'nfl', p.team)}">
+    return `<article class="card pk ${my ? 'picked' : ''}" style="--tg:${tg(p.sport || 'nfl', p.team)};${tcVars(p.sport || 'nfl', p.team)}">
       <div class="pk-art">${venueArt(evx)}<div class="pk-tint"></div><img class="tl" src="${esc(logo(p.sport || 'nfl', p.team))}" alt="" loading="lazy" onerror="this.remove()"><div class="jn">${esc(p.number || '')}</div>${src ? `<img class="hs" src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
         <div class="pk-name">${sp > 0 ? `<span>${esc(nm.slice(0, sp))}</span><b>${esc(nm.slice(sp + 1))}</b>` : `<b>${esc(nm)}</b>`}<em>${p.number ? '#' + esc(p.number) + ' · ' : ''}${esc(p.team)}</em></div><div class="pk-state">${state}</div></div>
       <div class="pk-game">${esc(p.team)} ${esc(oppLabel(x.leg.player))}${evx ? ' · ' + esc(evx.state === 'pre' ? kickLabel(evx.date) : evx.detail || '') : ''}</div>
@@ -4111,7 +4125,7 @@ function viewPick6() {
 function heroCard(key, inner, cls = '', id = '', corner = '', lefttop = '') {
   const p = P(key), ev = eventFor(key); const src = headshot(key, 600);
   return `<article class="card ath ${cls}" ${id ? `id="${id}"` : ''}>
-    <div class="ath-hero" style="--tg:${tg(p.sport || 'nfl', p.team)}">${venueArt(ev)}<div class="ath-tint"></div>
+    <div class="ath-hero" style="--tg:${tg(p.sport || 'nfl', p.team)};${tcVars(p.sport || 'nfl', p.team)}">${venueArt(ev)}<div class="ath-tint"></div>
       <div class="jn">${esc(p.number || '')}</div>
       ${src ? `<img class="hs" src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
       <div class="shade"></div>
