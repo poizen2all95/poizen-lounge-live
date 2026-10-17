@@ -319,9 +319,10 @@
     return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
   }
   /* ---------- plans: the one definition of every tier ----------
-     status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release · pilot = by arrangement */
-  const PLAN_ORDER = ['free', 'pro', 'elite', 'creator'];
-  const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite', creator: 'Creator' };
+     status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release */
+  const PLAN_ORDER = ['free', 'pro', 'elite'];
+  const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite' };
+  const FOUNDING_CAP = 50;
   const FEATURES = {
     board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
     ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
@@ -339,7 +340,6 @@
     books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
     exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
     exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
-    publish: { tier: 'creator', label: 'Your own board, OBS overlay, Pick\'em and Discord posting for your audience', status: 'pilot' },
   };
   const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
   function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
@@ -367,7 +367,7 @@
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, FOUNDING_CAP, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

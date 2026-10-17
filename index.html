@@ -4,7 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poizen Lounge</title>
-<meta name="description" content="PoiZen's live picks board — every leg graded live.">
+<meta name="description" content="Poizen Lounge — PoiZen's live sports prediction-trading board: DraftKings Pick6 and Predictions, Robinhood and Kalshi event contracts, live NFL injuries, weather, game context and honest odds on every slip.">
+<link rel="canonical" href="https://poizen2all95.github.io/poizen-lounge-live/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Poizen Lounge">
+<meta property="og:title" content="Poizen Lounge — live sports prediction-trading board">
+<meta property="og:description" content="Live DraftKings Pick6 and prediction-market board with NFL injuries, game context and honest odds on every slip.">
+<meta property="og:url" content="https://poizen2all95.github.io/poizen-lounge-live/">
+<meta property="og:image" content="https://poizen2all95.github.io/poizen-lounge-live/crest.png">
+<meta name="twitter:card" content="summary">
+<meta name="google-site-verification" content="8jyJCPOX_7C6NhHl67csn1WKlWOQwcjH-EBSmyXKnJo">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Poizen Lounge","url":"https://poizen2all95.github.io/poizen-lounge-live/","applicationCategory":"SportsApplication","operatingSystem":"Web","description":"Live sports prediction-trading board: DraftKings Pick6 and Predictions, Robinhood and Kalshi event contracts, NFL injuries, weather and honest odds.","publisher":{"@type":"Organization","name":"Maciel's Incorporated"},"offers":[{"@type":"Offer","name":"Free","price":"0","priceCurrency":"USD"}]}</script>
 <meta name="theme-color" content="#07090B">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="crest-180.png">
@@ -1413,34 +1424,61 @@ details.hrow>summary{padding:7px 8px}
 .dk-row.st-settled,.dk-row.st-closed{opacity:.9}
 @media (max-width:720px){.dk-row{grid-template-columns:minmax(0,1fr) auto;}.dk-row .dk-n{grid-column:auto}.dk-row .dk-pl{grid-column:2;grid-row:2;text-align:right}}
 .po-tag{font:800 10px var(--body);font-style:normal;text-transform:none;letter-spacing:0;margin-left:6px;padding:1px 6px;border-radius:999px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);color:var(--gold);vertical-align:2px}
-.pobar{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin:8px max(16px,env(safe-area-inset-left,0px)) 0;padding:7px 12px;border-radius:12px;border:1px solid color-mix(in srgb,#E8C26A 55%,transparent);background:color-mix(in srgb,#E8C26A 12%,var(--panel));font-size:12.5px}
-.pobar b{font:900 14px var(--stadium);text-transform:uppercase;color:var(--gold)}.pobar span{color:var(--fg2)}
-.pobar[hidden]{display:none}
 
-/* ---- Playoffs season look: stadium lights, gold and teal edges. Layers on Midnight or Daylight. ---- */
-html[data-season="playoffs"]{--po-gold:#E8C26A;--po-gold2:#FFF1C4;--po-teal:#2ED8BA;--po-beam:rgba(255,241,204,.11);--po-glow:rgba(46,216,186,.38)}
-html[data-season="playoffs"] body{background:
-  conic-gradient(from 150deg at 6% -4%,transparent 0deg,var(--po-beam) 9deg,transparent 20deg,transparent 360deg),
-  conic-gradient(from 190deg at 94% -4%,transparent 0deg,var(--po-beam) 11deg,transparent 22deg,transparent 360deg),
-  radial-gradient(42% 30% at 6% -6%,rgba(255,236,190,.26),transparent 70%),
-  radial-gradient(42% 30% at 94% -6%,rgba(255,236,190,.26),transparent 70%),
-  radial-gradient(90% 38% at 50% 112%,rgba(46,216,186,.13),transparent 70%),var(--bg);background-attachment:fixed}
-html[data-season="playoffs"] .card{border-color:color-mix(in srgb,var(--po-gold) 24%,var(--line));box-shadow:0 0 0 1px rgba(232,194,106,.06) inset,0 0 26px -16px var(--po-glow),var(--shadow)}
-html[data-season="playoffs"] .brand h1{background:linear-gradient(180deg,var(--po-gold2),var(--po-gold) 55%,#A87B22);-webkit-background-clip:text;background-clip:text;color:transparent}
-html[data-season="playoffs"] #slateTitle::before{content:"Playoffs · ";color:var(--po-gold);font-weight:800}
-html[data-season="playoffs"] .lhero2{border-color:color-mix(in srgb,var(--po-gold) 60%,transparent);box-shadow:0 0 0 1px rgba(232,194,106,.22),0 26px 70px -34px rgba(232,194,106,.7),0 0 40px -22px var(--po-glow)}
-html[data-season="playoffs"] .lhero2::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 70% at 85% -20%,rgba(255,244,214,.28),transparent 60%),linear-gradient(0deg,rgba(232,194,106,.16),transparent 30%)}
-html[data-season="playoffs"] .lhero2 h2{background:linear-gradient(180deg,#fff 35%,var(--po-gold2) 70%,var(--po-gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-html[data-season="playoffs"][data-vibe="daylight"]{--po-gold:#B8862A;--po-gold2:#8A5E10;--po-beam:rgba(214,170,70,.07);--po-glow:rgba(0,163,134,.22)}
-html[data-season="playoffs"][data-vibe="daylight"] body{background:
-  conic-gradient(from 150deg at 6% -4%,transparent 0deg,var(--po-beam) 9deg,transparent 20deg,transparent 360deg),
-  conic-gradient(from 190deg at 94% -4%,transparent 0deg,var(--po-beam) 11deg,transparent 22deg,transparent 360deg),
-  radial-gradient(42% 30% at 6% -6%,rgba(232,194,106,.26),transparent 70%),radial-gradient(42% 30% at 94% -6%,rgba(232,194,106,.26),transparent 70%),
-  radial-gradient(90% 38% at 50% 112%,rgba(0,163,134,.10),transparent 70%),var(--bg);background-attachment:fixed}
-html[data-season="playoffs"][data-vibe="daylight"] .brand h1{background:linear-gradient(180deg,#D9A440,#8A5E10);-webkit-background-clip:text;background-clip:text}
-html[data-season="playoffs"][data-vibe="daylight"] .card{box-shadow:0 0 0 1px rgba(184,134,42,.10) inset,0 14px 34px -24px rgba(184,134,42,.55),var(--shadow)}
-html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
-@media (prefers-reduced-motion:no-preference){html[data-season="playoffs"] .lhero2::after{animation:poflare 6s ease-in-out infinite alternate}@keyframes poflare{from{opacity:.75}to{opacity:1}}}
+/* ---- Playoffs (Elite): the whole board becomes stadium night (Midnight) or a sunlit stadium (Daylight).
+   A real venue photo from today's games fills the screen behind glass panels; floodlights flare; players get rim light and a shine. ---- */
+html[data-season="playoffs"]{--po-gold:#FFD36B;--po-gold2:#FFF0C2;--po-teal:#38F0D0;--po-sky:#0A1B3A;--po-glass:rgba(8,12,20,.56);--po-glass2:rgba(14,20,32,.62);--po-edge:rgba(255,211,107,.42);--po-glow:rgba(56,240,208,.45);--po-photo-tone:linear-gradient(180deg,rgba(6,14,34,.30) 0%,rgba(4,8,18,.12) 38%,rgba(3,6,12,.62) 100%)}
+html[data-season="playoffs"] body{background:#03060C}
+html[data-season="playoffs"]{--panel:rgba(10,14,22,.58);--panel2:rgba(18,24,36,.55);--panel3:rgba(28,36,52,.6);--ink:rgba(8,12,20,.6);--card-grad:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0) 40%);--line:rgba(255,211,107,.16);--line2:rgba(255,211,107,.30)}
+html[data-season="playoffs"][data-vibe="daylight"]{--panel:rgba(255,255,255,.70);--panel2:rgba(255,255,255,.62);--panel3:rgba(240,244,250,.7);--ink:rgba(255,255,255,.7);--card-grad:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 50%);--line:rgba(160,110,10,.18);--line2:rgba(160,110,10,.32)}
+.po-stage{display:none}
+html[data-season="playoffs"] .po-stage{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(28% 22% at 8% 2%,rgba(255,250,228,.95),rgba(255,226,150,.35) 30%,transparent 70%),
+    radial-gradient(28% 22% at 92% 2%,rgba(255,250,228,.95),rgba(255,226,150,.35) 30%,transparent 70%),
+    radial-gradient(18% 14% at 30% 0%,rgba(255,244,210,.55),transparent 70%),radial-gradient(18% 14% at 70% 0%,rgba(255,244,210,.55),transparent 70%),
+    conic-gradient(from 148deg at 8% 0%,transparent 0deg,rgba(255,240,200,.16) 8deg,transparent 20deg,transparent 360deg),
+    conic-gradient(from 192deg at 92% 0%,transparent 0deg,rgba(255,240,200,.16) 12deg,transparent 24deg,transparent 360deg),
+    radial-gradient(120% 55% at 50% 118%,rgba(40,210,120,.55),rgba(20,120,70,.25) 45%,transparent 70%),
+    var(--po-photo-tone),
+    var(--po-stadium, radial-gradient(160% 90% at 50% 120%,#0D3B24 0 30%,#0A1A2E 31% 55%,#060B18 56%)) center 30%/cover no-repeat;
+  filter:saturate(1.35) contrast(1.08)}
+html[data-season="playoffs"] .po-stage::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.6) 100%)}
+html[data-season="playoffs"] .top{background:linear-gradient(180deg,rgba(3,6,12,.82),rgba(3,6,12,.5));backdrop-filter:blur(10px);border-bottom:1px solid var(--po-edge)}
+html[data-season="playoffs"] .rail,html[data-season="playoffs"] main .card,html[data-season="playoffs"] .kpis2,html[data-season="playoffs"] .pcard{background:var(--po-glass);backdrop-filter:blur(9px) saturate(1.25);-webkit-backdrop-filter:blur(9px) saturate(1.25);border-color:var(--po-edge);box-shadow:0 0 0 1px rgba(255,211,107,.10) inset,0 0 34px -14px var(--po-glow),0 22px 50px -28px rgba(0,0,0,.9)}
+html[data-season="playoffs"] .pcard{background:var(--po-glass2)}
+html[data-season="playoffs"] .brand h1{background:linear-gradient(180deg,#fff 10%,var(--po-gold2) 40%,var(--po-gold) 70%,#C8921E);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(255,211,107,.55))}
+html[data-season="playoffs"] .crest{filter:drop-shadow(0 0 16px rgba(255,211,107,.8))}
+html[data-season="playoffs"] #slateTitle::before{content:"Playoffs · ";color:var(--po-gold);font-weight:900;letter-spacing:.04em}
+html[data-season="playoffs"] .vh h2,html[data-season="playoffs"] .banner h2{text-shadow:0 0 28px rgba(255,211,107,.45)}
+html[data-season="playoffs"] .lhero2{border:1px solid var(--po-gold);box-shadow:0 0 0 1px rgba(255,211,107,.35),0 0 60px -10px rgba(255,211,107,.55),0 0 90px -30px var(--po-glow)}
+html[data-season="playoffs"] .lhero2::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(45% 80% at 80% -10%,rgba(255,246,220,.55),transparent 60%),radial-gradient(40% 60% at 15% -15%,rgba(255,246,220,.3),transparent 60%),linear-gradient(0deg,rgba(255,211,107,.22),transparent 35%)}
+html[data-season="playoffs"] .lhero2 h2{background:linear-gradient(180deg,#fff 30%,var(--po-gold2) 62%,var(--po-gold));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(255,211,107,.6))}
+/* players pop: rim light, color, a slow shine across their cards */
+html[data-season="playoffs"] img.hs,html[data-season="playoffs"] img.lh-hs,html[data-season="playoffs"] .faces img{filter:drop-shadow(0 0 2px rgba(255,240,200,.95)) drop-shadow(0 0 18px rgba(255,211,107,.65)) drop-shadow(0 16px 22px rgba(0,0,0,.65)) saturate(1.2) contrast(1.06) brightness(1.06)}
+html[data-season="playoffs"] .pcard::after,html[data-season="playoffs"] .ctx-art::after{content:"";position:absolute;inset:-40% -60%;z-index:3;pointer-events:none;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.28) 50%,transparent 58%);transform:translateX(-60%)}
+html[data-season="playoffs"] .pcard{box-shadow:0 0 0 1px rgba(255,211,107,.25) inset,0 0 26px -10px rgba(255,211,107,.55),0 18px 40px -24px #000}
+html[data-season="playoffs"] .kp b,html[data-season="playoffs"] .kp .big{text-shadow:0 0 18px rgba(255,211,107,.35)}
+html[data-season="playoffs"] .navbtn[aria-current="page"]{box-shadow:0 0 0 1px var(--po-gold) inset,0 0 22px -4px rgba(255,211,107,.7)!important}
+/* Daylight playoffs: a sunlit stadium, white glass */
+html[data-season="playoffs"][data-vibe="daylight"]{--po-gold:#C48A12;--po-gold2:#8A5A00;--po-glass:rgba(255,255,255,.68);--po-glass2:rgba(255,255,255,.76);--po-edge:rgba(196,138,18,.45);--po-glow:rgba(0,163,134,.35);--po-photo-tone:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(240,246,255,.04) 40%,rgba(243,244,246,.5) 100%)}
+html[data-season="playoffs"][data-vibe="daylight"] body{background:#DCE7F2}
+html[data-season="playoffs"][data-vibe="daylight"] .po-stage::after{background:radial-gradient(120% 90% at 50% 40%,transparent 60%,rgba(20,40,70,.25) 100%)}
+html[data-season="playoffs"][data-vibe="daylight"] .top{background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(255,255,255,.62))}
+html[data-season="playoffs"][data-vibe="daylight"] .brand h1{background:linear-gradient(180deg,#E9B13A,#8A5A00);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,200,80,.6))}
+html[data-season="playoffs"][data-vibe="daylight"] .vh h2,html[data-season="playoffs"][data-vibe="daylight"] .banner h2{text-shadow:0 0 22px rgba(255,200,80,.5)}
+@media (prefers-reduced-motion:no-preference){
+  html[data-season="playoffs"] .po-stage{animation:poLights 7s ease-in-out infinite alternate}
+  html[data-season="playoffs"] .pcard::after,html[data-season="playoffs"] .ctx-art::after{animation:poShine 6.5s ease-in-out infinite}
+  @keyframes poLights{from{opacity:.86}to{opacity:1}}
+  @keyframes poShine{0%,70%{transform:translateX(-60%)}100%{transform:translateX(60%)}}
+}
+html[data-season="playoffs"] main>h3.sec,html[data-season="playoffs"] main h3.sec{text-shadow:0 2px 14px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.8)}
+html[data-season="playoffs"][data-vibe="daylight"] main h3.sec{text-shadow:0 0 14px rgba(255,255,255,1),0 0 4px rgba(255,255,255,1)}
+.po-opt.locked{opacity:.75}.po-opt.locked .pv{filter:grayscale(.6)}
+.seo-intro{max-width:720px;padding:28px 8px;color:var(--fg2)}.seo-intro h2{font:900 34px var(--stadium);text-transform:uppercase;color:var(--fg);margin:0 0 8px}
+.reqform{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px;padding:14px;border-radius:14px;border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 7%,var(--panel2))}.reqform p{margin:0}
+.pl-price{font:900 24px var(--stadium)!important;letter-spacing:.01em}.pl-found{color:var(--gold);font-weight:700;font-size:11.5px}.plans small{display:block;font-size:11.5px}
 /* ---- responsive ---- */
 @media (max-width:1320px){.kpis2{grid-template-columns:repeat(12,minmax(0,1fr))}.kpis2 .kp{grid-column:span 4}.kpis2 .kp.wide{grid-column:span 3}.kp.wide{border-left:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px}.lmet{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:1200px){.livegrid{grid-template-columns:minmax(0,1fr)}.livegrid>.ctx{position:static}.lgrid{grid-template-columns:minmax(0,1fr)}.labwrap{grid-template-columns:minmax(0,1fr)}.labtools{position:static}
@@ -1535,6 +1573,7 @@ html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
   </defs>
 </svg>
 
+<div class="po-stage" aria-hidden="true"></div>
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#live" aria-label="Poizen Lounge home">
@@ -1552,7 +1591,7 @@ html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
           <button class="vopt" type="button" data-vibe="vegas" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#0A0705 40%,#F2C14E 40% 70%,#E0284A 70%)"></span><span><b>Vegas</b><span>Casino gold and crimson</span></span></button>
           <button class="vopt" type="button" data-vibe="daylight" role="menuitem"><span class="pv" style="--pv:linear-gradient(120deg,#F3F4F6 40%,#FFFFFF 40% 66%,#00A386 66% 82%,#B0862F 82%)"></span><span><b>Daylight</b><span>Pearl white studio look</span></span></button>
           <div class="vm-h">Season</div>
-          <button class="vopt po-opt" type="button" id="poToggle" aria-pressed="false"><span class="pv" style="--pv:radial-gradient(circle at 20% 0,#fff8 0 8%,transparent 30%),radial-gradient(circle at 80% 0,#fff8 0 8%,transparent 30%),linear-gradient(160deg,#0B1A1A,#07090B 55%,#E8C26A)"></span><span><b>Playoffs <em class="po-tag">Elite</em></b><span>Stadium lights and gold, on Midnight or Daylight</span></span></button>
+          <button class="vopt po-opt" type="button" id="poToggle" aria-pressed="false"><span class="pv" style="--pv:radial-gradient(circle at 20% 0,#fff8 0 8%,transparent 30%),radial-gradient(circle at 80% 0,#fff8 0 8%,transparent 30%),linear-gradient(160deg,#0B1A1A,#07090B 55%,#E8C26A)"></span><span><b>Playoffs <em class="po-tag">Elite</em></b><span>The whole board goes stadium-night: lights, glow, players up front</span></span></button>
           <div class="vm-h">Your team <span>The whole board takes its colors</span></div>
           <input class="vm-q" id="teamQ" type="search" placeholder="Search any team — Cowboys, Dodgers, Lakers…" aria-label="Search teams" autocomplete="off">
           <div class="vm-tabs" role="tablist"><button type="button" data-league="nfl" role="tab">NFL</button><button type="button" data-league="mlb" role="tab">MLB</button><button type="button" data-league="nba" role="tab">NBA</button></div>
@@ -1563,13 +1602,12 @@ html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
       <div class="feed" id="feed" role="status"><span class="dot"></span><span id="feedTxt">Connecting…</span></div>
     </div>
   </div>
-  <div class="pobar" id="poBar" hidden><b>Playoffs preview</b><span>This look is part of Elite. It turns off when you leave.</span><button class="linkbtn" type="button" data-poplans>See plans</button><button class="linkbtn" type="button" data-pooff>Turn off</button></div>
   <div class="record" id="record" aria-label="Record"></div>
 </header>
 
 <div class="shell">
   <nav class="rail" id="rail" aria-label="Board sections"></nav>
-  <main id="main" tabindex="-1"></main>
+  <main id="main" tabindex="-1"><section class="seo-intro"><h2>Poizen Lounge</h2><p>PoiZen's live sports prediction-trading board. It tracks DraftKings Pick6 slips and DraftKings Predictions, Robinhood and Kalshi event contracts live, leg by leg, with the honest math on every slip.</p><ul><li>Live: every open slip and contract with its chance right now</li><li>Pick6, first touchdown and in-game scalps</li><li>Games with stadium, weather and TV, and the full NFL injury report</li><li>Lab, Ledger and a personal Coach for members</li></ul><p>Plans: Free, Pro and Elite. Loading the live board…</p></section></main>
 </div>
 <nav class="bottom" id="bottom" aria-label="Board sections"></nav>
 
@@ -2293,9 +2331,10 @@ html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
     return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
   }
   /* ---------- plans: the one definition of every tier ----------
-     status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release · pilot = by arrangement */
-  const PLAN_ORDER = ['free', 'pro', 'elite', 'creator'];
-  const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite', creator: 'Creator' };
+     status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release */
+  const PLAN_ORDER = ['free', 'pro', 'elite'];
+  const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite' };
+  const FOUNDING_CAP = 50;
   const FEATURES = {
     board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
     ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
@@ -2313,7 +2352,6 @@ html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
     books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
     exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
     exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
-    publish: { tier: 'creator', label: 'Your own board, OBS overlay, Pick\'em and Discord posting for your audience', status: 'pilot' },
   };
   const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
   function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
@@ -2341,7 +2379,7 @@ html[data-season="playoffs"] .lhero2 h2{-webkit-text-fill-color:transparent}
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, FOUNDING_CAP, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -2593,7 +2631,7 @@ S.custom = store.get('pz_custom_checks', []);
 const VIBES = { midnight: ['Midnight', 'linear-gradient(135deg,#11161A 45%,#D9B36A)'], vegas: ['Vegas', 'linear-gradient(135deg,#F2C14E,#E0284A)'], daylight: ['Daylight', 'linear-gradient(135deg,#F3F4F6 45%,#00A386)'] };
 function setVibe(v) { if (!VIBES[v]) v = 'midnight'; document.documentElement.dataset.vibe = v; store.set('pz_vibe', v); if (window.__teamReady) applyTeam(store.get('pz_team', '')); document.querySelectorAll('.vopt[data-vibe]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.vibe === v))); const n = document.getElementById('vibeName'); if (n) { n.textContent = VIBES[v][0]; document.getElementById('vibeSw').style.setProperty('--sw', VIBES[v][1]); } if (window.__teamReady) updateVibeBtn(); }
 setVibe(params.get('vibe') || store.get('pz_vibe', 'midnight'));
-S.playoffsOn = params.get('season') === 'playoffs' || store.get('pz_playoffs', false) === true;
+S.playoffsOn = store.get('pz_playoffs', false) === true;
 
 /* ---------------- helpers ---------------- */
 const $ = (s, r = document) => r.querySelector(s);
@@ -3088,11 +3126,11 @@ function afterData() {
 const ME_V = 2; // v2: 21+ confirmation
 /* plans: what each tier unlocks (only features that exist), price and checkout link come from Admin → Members → Plans */
 const OWNER_EMAIL = 'poizen2all95@gmail.com';
-function meTier() { const u = S.me.user; if (u && u.email === OWNER_EMAIL) return S.previewTier || 'creator'; const t = S.me.tier; if (!t || !t.tier) return 'free'; if (t.until && t.until < Date.now()) return 'free'; return M.PLAN_ORDER.includes(t.tier) ? t.tier : 'free'; }
+function meTier() { const u = S.me.user; if (u && u.email === OWNER_EMAIL) return S.previewTier || 'elite'; const t = S.me.tier; if (!t || !M.PLAN_ORDER.includes(t.tier) || t.tier === 'free') return 'free'; if (t.until && t.until < Date.now()) return 'free'; if (t.email && u && String(t.email).toLowerCase() !== String(u.email || '').toLowerCase()) return 'free'; return t.tier; }
 const isOwner = () => !!(S.me.user && S.me.user.email === OWNER_EMAIL);
 const can = (f) => M.canUse(meTier(), f);
 const isPro = () => can('ocr');
-const STATUS_TAG = { live: '', server: '<em class="fst srv">needs the Poizen server</em>', building: '<em class="fst bld">next release</em>', pilot: '<em class="fst">by arrangement</em>' };
+const STATUS_TAG = { live: '', server: '<em class="fst srv">needs the Poizen server</em>', building: '<em class="fst bld">next release</em>' };
 /* ---------- position desk (Elite) ----------
    One record per position from plan to settled. Until members can add their own, the owner preview shows sample positions, clearly marked. */
 const SAMPLE_POSITIONS = () => { const h = 36e5, n = Date.now(); return [
@@ -3118,7 +3156,7 @@ function deskRow(p) {
   return `<div class="dk-row st-${st.stage}"><div class="dk-m"><b>${esc(p.market)}</b><span>${esc(p.venue)} · ${esc((p.side || 'yes').toUpperCase())}${p.ticker ? ' · ' + esc(p.ticker) : ''}</span></div><span class="chip ${tone}">${lbl}</span><div class="dk-n"><span>${size}</span><small>contracts</small></div><div class="dk-n"><span>${price}</span><small>${st.fees ? money(st.fees) + ' fees' : 'no fees yet'}</small></div><div class="dk-n dk-pl">${pl}</div>${notes.length ? `<p class="dk-notes">${notes.join('<br>')}</p>` : ''}</div>`;
 }
 function deskHTML() {
-  const sample = !!S.previewTier; const f = M.FEATURES.positions;
+  const sample = !!S.previewTier || isOwner(); const f = M.FEATURES.positions;
   if (!can('positions')) return `<div class="card mecard melock desk" style="margin-top:16px"><b class="st-font" style="font-size:20px">${SVG.lock} Position desk</b><p class="muted">Part of Elite: ${esc(f.label.split(': ')[1] || f.label)}. <button class="linkbtn" type="button" data-me="plans">See plans</button></p></div>`;
   if (!sample) return `<div class="card mecard desk" style="margin-top:16px"><b class="st-font" style="font-size:20px">Position desk</b><p class="muted">Included in your plan and coming in the next release — each position from plan to settled, with partial exits, fees and corrections kept. Nothing here is charged until it's live.</p></div>`;
   const rows = SAMPLE_POSITIONS();
@@ -3135,33 +3173,50 @@ function previewPanel() {
   return `<div class="card mecard pvpanel"><b class="st-font" style="font-size:22px">${M.PLAN_NAMES[t]} — what a member sees</b><p class="muted">Every feature, in plan order. Switch plans above; your own account and data are untouched.</p><ul class="palist">${rows}</ul></div>` + deskHTML() + `<div class="grid2" style="margin-top:16px">${can('coach') ? '<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b><p class="muted">Unlocked on this plan. It needs 8+ graded picks per stat before it calls anything an edge or a leak.</p></div>' : proLock('Your Coach')}${can('gateEdit') ? '<div class="card mecard"><b class="st-font" style="font-size:20px">Your own gate rules</b><p class="muted">Unlocked on this plan.</p></div>' : proLock('Your own gate rules')}</div>` + planCard();
 }
 /* Playoffs: a season look on top of Midnight or Daylight. Elite keeps it on; everyone else can take a labelled look for this visit. */
+function playoffsArt() {
+  const evs = Object.values(S.events || {}); const pick = evs.find((e) => e.state === 'in' && venuePhoto(e)) || evs.find((e) => e.state === 'pre' && venuePhoto(e)) || evs.find((e) => venuePhoto(e));
+  const src = pick ? venuePhoto(pick) : ''; const root = document.documentElement;
+  if (src && /^https:\/\//.test(src)) root.style.setProperty('--po-stadium', `url("${src.replace(/["\\()]/g, '')}")`); else root.style.removeProperty('--po-stadium');
+}
 function applyPlayoffs() {
-  const want = !!S.playoffsOn; const own = can('playoffs'); const root = document.documentElement;
-  if (want) root.dataset.season = 'playoffs'; else delete root.dataset.season;
-  const bar = document.getElementById('poBar'); if (bar) { bar.hidden = !(want && !own); }
-  const b = document.getElementById('poToggle'); if (b) { b.setAttribute('aria-pressed', String(want)); const tag = b.querySelector('.po-tag'); if (tag) tag.textContent = own ? 'Elite' : 'Elite · preview'; }
-  if (own) store.set('pz_playoffs', want);
+  const own = can('playoffs'); const on = own && !!S.playoffsOn; const root = document.documentElement;
+  if (on) { root.dataset.season = 'playoffs'; playoffsArt(); } else delete root.dataset.season;
+  const b = document.getElementById('poToggle'); if (b) { b.setAttribute('aria-pressed', String(on)); b.classList.toggle('locked', !own); const tag = b.querySelector('.po-tag'); if (tag) tag.textContent = own ? 'Elite' : 'Elite only'; }
+  if (own && S.me.user) store.set('pz_playoffs', !!S.playoffsOn);
 }
+function foundingLeft() { const f = (S.plans && S.plans.founding) || {}; const cap = Number(f.cap) || M.FOUNDING_CAP; return { cap, left: Math.max(0, cap - (Number(f.taken) || 0)) }; }
+function planPrice(tier) { const c = (S.plans && S.plans[tier]) || {}; const { cap, left } = foundingLeft(); const founding = !!(c.founding && left > 0);
+  return { founding, now: founding ? c.founding : c.price || '', std: c.price || '', cap, left }; }
+const untilTxt = (ms) => new Date(ms).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
 function planCard() {
-  const PL = S.plans || {}; const t = meTier(); const u = S.me.user; const wl = S.me.waitlisted;
+  const t = meTier(); const u = S.me.user; const rq = S.me.request; const g = S.me.tier;
   const col = (tier) => {
-    const cfg = PL[tier] || {}; const feats = M.planFeatures(tier); const mine = !!u && t === tier;
-    const price = tier === 'free' ? '$0' : esc(cfg.price || (tier === 'elite' ? '$249 / month' : tier === 'creator' ? 'By arrangement' : 'Price coming soon'));
-    const link = u && cfg.open && /^https:\/\//.test(cfg.link || '') ? cfg.link + (cfg.link.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(u.uid) : '';
-    const cta = tier === 'free' ? '' : mine ? `<span class="chip win">Your plan</span>${S.me.tier && S.me.tier.source === 'stripe' && cfg.manage ? ` <a class="fbtn" href="${esc(cfg.manage)}" target="_blank" rel="noopener">Manage or cancel</a>` : ''}`
-      : M.tierRank(t) > M.tierRank(tier) && tier !== 'creator' ? '<span class="chip">Included in yours</span>'
-      : !u ? '<span class="dim" style="font-size:12px">Sign in with Google to join</span>'
-      : link ? `<a class="mebtn" href="${esc(link)}" target="_blank" rel="noopener">Get ${M.PLAN_NAMES[tier]} · ${price}</a>`
-      : wl && wl.tier === tier ? `<span class="chip win">You're on the ${M.PLAN_NAMES[tier]} waitlist</span>` : `<button class="mebtn" type="button" data-me="waitlist" data-tier="${tier}">Join the ${M.PLAN_NAMES[tier]} waitlist</button>`;
-    const prev = tier === 'free' ? '' : `Everything in ${M.PLAN_NAMES[M.PLAN_ORDER[M.PLAN_ORDER.indexOf(tier) - 1]]}, plus:`;
-    return `<div class="${mine ? 'hot' : ''} pl-${tier}"><b>${M.PLAN_NAMES[tier]}</b><span>${price}</span>${prev ? `<p class="mefine">${prev}</p>` : ''}<ul>${feats.map((f) => `<li>${esc(f.label)}${STATUS_TAG[f.status] || ''}</li>`).join('')}</ul>${cta}</div>`;
+    const feats = M.planFeatures(tier); const mine = !!u && t === tier; const P = planPrice(tier);
+    const price = tier === 'free' ? '<span class="pl-price">$0</span>' : P.now ? `<span class="pl-price">${esc(P.now)}</span>${P.founding ? `<small class="pl-found">Founding rate · ${P.left} of ${P.cap} spots left · yours for as long as you stay</small>${P.std ? `<small class="dim">Regular ${esc(P.std)}</small>` : ''}` : ''}` : '<span class="pl-price dim">Price posted soon</span>';
+    const paid = mine && g && g.until && !isOwner() ? `<small class="dim">Paid through ${untilTxt(g.until)}${g.rate === 'founding' ? ' · founding rate' : ''}</small>` : '';
+    const cta = tier === 'free' ? '' : mine ? `<span class="chip win">Your plan</span>${paid}`
+      : M.tierRank(t) > M.tierRank(tier) ? '<span class="chip">Included in yours</span>'
+      : !u ? '<button class="mebtn" type="button" data-me="signin">Sign in with Google to request</button>'
+      : rq && rq.tier === tier && rq.status === 'pending' ? `<span class="chip gold">Requested ${esc(new Date(rq.at || Date.now()).toLocaleDateString())}</span><small class="dim">PoiZen turns it on once your payment is in.</small>`
+      : `<button class="mebtn" type="button" data-me="request" data-tier="${tier}">Request ${M.PLAN_NAMES[tier]}</button>`;
+    const prev = tier === 'free' ? '' : `<p class="mefine">Everything in ${M.PLAN_NAMES[M.PLAN_ORDER[M.PLAN_ORDER.indexOf(tier) - 1]]}, plus:</p>`;
+    return `<div class="${mine ? 'hot' : ''} pl-${tier}"><b>${M.PLAN_NAMES[tier]}</b>${price}${prev}<ul>${feats.map((f) => `<li>${esc(f.label)}${STATUS_TAG[f.status] || ''}</li>`).join('')}</ul>${cta}</div>`;
   };
-  return `<div class="card mecard meplan"><b class="st-font" style="font-size:20px">Plans</b><div class="plans">${M.PLAN_ORDER.map(col).join('')}</div><p class="mefine">“Next release” items aren't live yet and won't be charged for until they are. Paid plans are analysis tools — no plan guarantees wins. 21+.</p></div>`;
+  return `<div class="card mecard meplan"><b class="st-font" style="font-size:20px">Plans</b><div class="plans">${M.PLAN_ORDER.map(col).join('')}</div>${requestForm()}<p class="mefine">How it works: request a plan, pay PoiZen, and he turns it on for the Google account you signed in with — it only works on that account. Access runs a month at a time. “Next release” items aren't live yet and aren't part of the price until they are. Analysis tools only — no plan guarantees wins. 21+.</p></div>`;
 }
-/* owner only: walk through the board as any plan. Nothing is saved; your real access is untouched. */
+function requestForm() {
+  const tier = S.me.requesting; const u = S.me.user; if (!tier || !u) return '';
+  const P = planPrice(tier); const PL = S.plans || {}; const link = /^https:\/\//.test((PL[tier] || {}).link || '') ? PL[tier].link : '';
+  return `<div class="reqform"><b class="st-font" style="font-size:18px">Request ${M.PLAN_NAMES[tier]}${P.now ? ' · ' + esc(P.now) : ''}</b>
+    <p class="muted">${PL.pay ? esc(PL.pay) : 'PoiZen will send you payment details.'}${link ? ` <a href="${esc(link)}" target="_blank" rel="noopener">Pay here</a>` : ''}</p>
+    <p class="mefine">Access will be locked to <b>${esc(u.email || '')}</b>.${P.founding ? ` You're requesting at the founding rate (${P.left} spots left) — it stays yours as long as you renew each month.` : ''}</p>
+    <label class="f">How you paid, or a reference (optional)<input id="reqNote" maxlength="140" placeholder="e.g. Cash App, sent 7:42 PM"></label>
+    <div class="row"><button class="mebtn" type="button" data-me="sendreq" data-tier="${tier}">Send request</button><button class="fbtn" type="button" data-me="cancelreq">Cancel</button></div></div>`;
+}
+/* owner only: walk through the board as each plan. Nothing is saved; your real access is untouched. */
 function previewBar() {
   if (!isOwner()) return '';
-  return `<div class="pvbar ${S.previewTier ? 'on' : ''}"><b>${S.previewTier ? `Previewing ${M.PLAN_NAMES[S.previewTier]}` : 'Preview as a plan'}</b>${M.PLAN_ORDER.map((t) => `<button class="fbtn" type="button" data-preview="${t}" aria-pressed="${(S.previewTier || 'creator') === t}">${M.PLAN_NAMES[t]}</button>`).join('')}<span class="dim">Owner only · nothing is saved and your real access is unchanged</span></div>`;
+  return `<div class="pvbar ${S.previewTier ? 'on' : ''}"><b>${S.previewTier ? `Previewing ${M.PLAN_NAMES[S.previewTier]}` : 'Preview as a plan'}</b>${M.PLAN_ORDER.map((t) => `<button class="fbtn" type="button" data-preview="${t}" aria-pressed="${S.previewTier === t}">${M.PLAN_NAMES[t]}</button>`).join('')}${S.previewTier ? '<button class="fbtn" type="button" data-preview="">Back to my view</button>' : ''}<span class="dim">Only you see this · nothing is saved and nobody's access changes</span></div>`;
 }
 const proLock = (what, tier = 'pro') => `<div class="card mecard melock"><b class="st-font" style="font-size:20px">${SVG.lock} ${esc(what)}</b><p class="muted">Part of ${M.PLAN_NAMES[tier]}. <button class="linkbtn" type="button" data-me="plans">See plans</button></p></div>`;
 function gateRulesCard() {
@@ -3197,12 +3252,12 @@ function meAmounts(id, x) { const s = S.me.slips[id] || {}; if (s.entry > 0) ret
 let meRefs = [];
 function meAttach(u) {
   meRefs.forEach((r) => r.off()); meRefs = [];
-  S.me.user = u && !u.isAnonymous ? u : null; S.me.profile = undefined; S.me.tier = null; S.previewTier = null; S.me.waitlisted = null; S.me.slips = {}; S.me.builder = null;
+  S.me.user = u && !u.isAnonymous ? u : null; S.me.profile = undefined; S.me.tier = null; S.previewTier = null; S.me.request = null; S.me.requesting = null; S.me.slips = {}; S.me.builder = null;
   if (!S.me.user) { if (S.tab === 'me') render(); return; }
   const db = firebase.database(); const base = 'users/' + S.me.user.uid;
   const pr = db.ref(base + '/profile'); pr.on('value', (snap) => { S.me.profile = snap.val(); if (S.tab === 'me') render(); }, (e) => { S.me.err = 'Could not load your account: ' + e.message; render(); }); meRefs.push(pr);
   const tr = db.ref('tiers/' + S.me.user.uid); tr.on('value', (snap) => { S.me.tier = snap.val(); applyPlayoffs(); if (S.tab === 'me') render(); }, () => { S.me.tier = null; }); meRefs.push(tr);
-  const wr = db.ref('waitlist/' + S.me.user.uid); wr.on('value', (snap) => { S.me.waitlisted = snap.val(); if (S.tab === 'me') render(); }, () => {}); meRefs.push(wr);
+  const wr = db.ref('requests/' + S.me.user.uid); wr.on('value', (snap) => { S.me.request = snap.val(); if (S.tab === 'me') render(); }, () => {}); meRefs.push(wr);
   const sr = db.ref(base + '/slips'); sr.on('value', (snap) => { S.me.slips = snap.val() || {}; Object.values(S.me.slips).forEach((x) => Object.assign(S.mePlayers, x.players || {})); S.projMemo = {}; afterData(); loadLogs(); poll(); }, () => {}); meRefs.push(sr);
 }
 async function meSignIn() {
@@ -3291,7 +3346,7 @@ async function meExport() {
 }
 async function meDelete() {
   const u = S.me.user; if (!u) return;
-  try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null, [`waitlist/${u.uid}`]: null }); store.set(amtKey(), {}); toast({ title: 'Deleted', body: 'Everything in your account is gone', tone: 'win' }); }
+  try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null, [`requests/${u.uid}`]: null }); store.set(amtKey(), {}); toast({ title: 'Deleted', body: 'Everything in your account is gone', tone: 'win' }); }
   catch (e) { toast({ title: 'Could not delete', body: e.message, tone: 'loss' }); }
 }
 function rgHTML() {
@@ -3374,7 +3429,15 @@ document.addEventListener('click', (e) => {
   else if (k === 'export') meExport();
   else if (k === 'csv') { if (can('csv')) meCSV(); }
   else if (k === 'plans') { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-  else if (k === 'waitlist') { const u = S.me.user; if (!u || !S.me.profile) return; firebase.database().ref('waitlist/' + u.uid).set({ tier: b.dataset.tier, at: Date.now(), name: S.me.profile.name }).then(() => toast({ title: 'You\'re on the list', body: 'You\'ll hear first when it opens', tone: 'win' })).catch((e) => toast({ title: 'Could not join', body: e.message, tone: 'loss' })); }
+  else if (k === 'request') { S.me.requesting = b.dataset.tier; render(); setTimeout(() => { const el = document.getElementById('reqNote'); if (el) el.focus(); }, 30); }
+  else if (k === 'cancelreq') { S.me.requesting = null; render(); }
+  else if (k === 'sendreq') { const u = S.me.user; const tier = b.dataset.tier; if (!u || !M.PLAN_ORDER.includes(tier) || tier === 'free') return;
+    if (!u.emailVerified) { toast({ title: 'Your Google email needs to be verified', tone: 'loss' }); return; }
+    const P = planPrice(tier); const name = ((S.me.profile && S.me.profile.name) || (u.displayName || '').split(' ')[0] || 'Member').slice(0, 24);
+    const note = ((document.getElementById('reqNote') || {}).value || '').trim().slice(0, 140); b.disabled = true;
+    firebase.database().ref('requests/' + u.uid).set({ tier, email: u.email, name, rate: P.founding ? 'founding' : 'standard', price: String(P.now || '').slice(0, 40), note, status: 'pending', at: firebase.database.ServerValue.TIMESTAMP })
+      .then(() => { S.me.requesting = null; toast({ title: 'Request sent', body: 'PoiZen turns it on once your payment is in', tone: 'win' }); render(); })
+      .catch((e) => { b.disabled = false; toast({ title: 'Could not send', body: e.message, tone: 'loss' }); }); }
   else if (k === 'limit') { const v = Number((document.getElementById('rgLimit') || {}).value); if (!(v >= 0) || (document.getElementById('rgLimit') || {}).value === '') { toast({ title: 'Enter a dollar amount', tone: 'loss' }); return; } meSetLimit(Math.round(v)); }
   else if (k === 'nolimit') meSetLimit(null);
   else if (k === 'cool') { if (b.dataset.armed) { meStartCool(Number(b.dataset.days)); } else { b.dataset.armed = 1; b.textContent = 'Tap again — can\'t be undone'; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = { 1: '24 hours', 7: '7 days', 30: '30 days' }[b.dataset.days]; } }, 4000); } }
@@ -4718,9 +4781,7 @@ document.addEventListener('click', (e) => {
   const jb = e.target.closest('[data-jump]'); if (jb) { const [tb, an] = jb.dataset.jump.split('|'); jump(tb, an); return; }
   const t = e.target.closest('[data-tab]'); if (t) { setTab(t.dataset.tab); return; }
   const vb = e.target.closest('#vibeBtn'); if (vb) { const m = $('#vibeMenu'); m.hidden = !m.hidden; vb.setAttribute('aria-expanded', String(!m.hidden)); return; }
-  if (e.target.closest('#poToggle')) { S.playoffsOn = !S.playoffsOn; applyPlayoffs(); return; }
-  if (e.target.closest('[data-pooff]')) { S.playoffsOn = false; applyPlayoffs(); return; }
-  if (e.target.closest('[data-poplans]')) { setTab('me'); setTimeout(() => { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); return; }
+  if (e.target.closest('#poToggle')) { if (!can('playoffs')) { toast({ title: 'Playoffs is part of Elite', body: 'Request Elite on My Lounge', tone: '' }); const m = document.getElementById('vibeMenu'); if (m) m.hidden = true; setTab('me'); setTimeout(() => { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60); return; } S.playoffsOn = !S.playoffsOn; applyPlayoffs(); return; }
   const v = e.target.closest('.vopt'); if (v && v.dataset.vibe) { setVibe(v.dataset.vibe); render(); return; }
   const tb = e.target.closest('[data-team]'); if (tb && tb.closest('#vibeMenu')) { store.set('pz_team', tb.dataset.team); applyTeam(tb.dataset.team); render(); return; }
   const lgb = e.target.closest('[data-league]'); if (lgb) { teamLeague = lgb.dataset.league; const q = $('#teamQ'); if (q) q.value = ''; renderTeamGrid(); return; }
@@ -4731,7 +4792,7 @@ document.addEventListener('click', (e) => {
   const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; renderSweat(); return; }
   const wi = e.target.closest('[data-wi]'); if (wi) { const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
   if (e.target.closest('[data-wiclear]')) { S.whatIf.clear(); render(); return; }
-  const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview === 'creator' ? null : pv.dataset.preview; applyPlayoffs(); render(); return; }
+  const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview || null; applyPlayoffs(); render(); return; }
   if (e.target.closest('[data-histall]')) { S.histAll = !S.histAll; render(); return; }
   const wk = e.target.closest('[data-week]'); if (wk) { S.week = wk.dataset.week; render(); return; }
   const lrb = e.target.closest('[data-lr]'); if (lrb) { S.ledgerRange = lrb.dataset.lr; render(); return; }
