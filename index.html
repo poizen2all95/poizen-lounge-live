@@ -279,7 +279,7 @@ body.overlay .toasts{bottom:90px}
   .rail{display:none}
   .bottom{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(10,11,14,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));overflow-x:auto;gap:4px;scrollbar-width:none}
   .bottom::-webkit-scrollbar{display:none}
-  .bottom .navbtn{flex:1 0 auto;flex-direction:column;gap:3px;padding:8px 10px;font-size:11px;text-align:center;min-width:64px}
+  .bottom .navbtn{flex:1 0 auto;width:auto;flex-direction:column;gap:3px;padding:8px 10px;font-size:11px;text-align:center;min-width:64px}
   .bottom .navbtn .cnt{display:none}
   .grid2,.grid3{grid-template-columns:minmax(0,1fr)}
   .shifts{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1123,7 +1123,8 @@ function gameCard(ev, compact) {
     }
     odds = `<div class="g-odds">${ev.odds.details ? `<span class="chip">${esc(ev.odds.details)}</span>` : ''}${isFinite(tot) && tot ? `<span class="chip">O/U ${tot}</span>` : ''}${implied}</div>`;
   }
-  const wx = ev.weather ? `<span class="chip">${ev.indoor ? 'Indoors' : esc(ev.weather.text || '') + (ev.weather.temp ? ' · ' + ev.weather.temp + '°' : '')}</span>` : ev.indoor ? '<span class="chip">Indoors</span>' : '';
+  const wxText = ev.weather && /[a-z]/i.test(ev.weather.text || '') ? ev.weather.text : '';
+  const wx = ev.indoor ? '<span class="chip">Indoors</span>' : ev.weather && (wxText || ev.weather.temp) ? `<span class="chip">${esc([wxText, ev.weather.temp ? ev.weather.temp + '°F' : ''].filter(Boolean).join(' · '))}</span>` : '';
   const sit = live && ev.sport === 'mlb' && ev.situation ? `<div class="sit">${ev.situation.outs ?? 0} out · ${[ev.situation.onFirst && '1st', ev.situation.onSecond && '2nd', ev.situation.onThird && '3rd'].filter(Boolean).join(', ') || 'bases empty'}${ev.situation.batter && ev.situation.batter.athlete ? ' · AB: ' + esc(ev.situation.batter.athlete.shortName || ev.situation.batter.athlete.displayName) : ''}</div>` : '';
   const mine = [];
   (S.G.pick6 || []).forEach(({ t, r }) => r.legs.forEach(({ leg, g: gr }) => { const e2 = eventFor(leg.player); if (e2 && e2.id === ev.id) mine.push({ leg, g: gr, t }); }));
