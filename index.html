@@ -1425,86 +1425,81 @@ details.hrow>summary{padding:7px 8px}
 @media (max-width:720px){.dk-row{grid-template-columns:minmax(0,1fr) auto;}.dk-row .dk-n{grid-column:auto}.dk-row .dk-pl{grid-column:2;grid-row:2;text-align:right}}
 .po-tag{font:800 10px var(--body);font-style:normal;text-transform:none;letter-spacing:0;margin-left:6px;padding:1px 6px;border-radius:999px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);color:var(--gold);vertical-align:2px}
 
-/* ---- Playoffs (Elite): the whole board becomes stadium night (Midnight) or a sunlit stadium (Daylight).
-   A real venue photo from today's games fills the screen behind glass panels; floodlights flare; players get rim light and a shine. ---- */
-html[data-season="playoffs"]{--po-gold:#FFD36B;--po-gold2:#FFF0C2;--po-teal:#38F0D0;--po-sky:#0A1B3A;--po-glass:rgba(8,12,20,.56);--po-glass2:rgba(14,20,32,.62);--po-edge:rgba(255,211,107,.42);--po-glow:rgba(56,240,208,.45);--po-photo-tone:linear-gradient(180deg,rgba(6,14,34,.30) 0%,rgba(4,8,18,.12) 38%,rgba(3,6,12,.62) 100%)}
-html[data-season="playoffs"] body{background:#03060C}
-html[data-season="playoffs"]{--panel:rgba(10,14,22,.58);--panel2:rgba(18,24,36,.55);--panel3:rgba(28,36,52,.6);--ink:rgba(8,12,20,.6);--card-grad:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0) 40%);--line:rgba(255,211,107,.16);--line2:rgba(255,211,107,.30)}
-html[data-season="playoffs"][data-vibe="daylight"]{--panel:rgba(255,255,255,.70);--panel2:rgba(255,255,255,.62);--panel3:rgba(240,244,250,.7);--ink:rgba(255,255,255,.7);--card-grad:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 50%);--line:rgba(160,110,10,.18);--line2:rgba(160,110,10,.32)}
+/* ---- Playoffs (Elite) — built from the playoffs-reference set.
+   Its own look, not the regular board with a filter: deep navy night, every panel gold-rimmed with lit corners,
+   page banners become a floodlit stadium (drawn, not a reused photo), in-card stadiums and players sharp and vivid. ---- */
 .po-stage{display:none}
-html[data-season="playoffs"] .po-stage{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(28% 22% at 8% 2%,rgba(255,250,228,.95),rgba(255,226,150,.35) 30%,transparent 70%),
-    radial-gradient(28% 22% at 92% 2%,rgba(255,250,228,.95),rgba(255,226,150,.35) 30%,transparent 70%),
-    radial-gradient(18% 14% at 30% 0%,rgba(255,244,210,.55),transparent 70%),radial-gradient(18% 14% at 70% 0%,rgba(255,244,210,.55),transparent 70%),
-    conic-gradient(from 148deg at 8% 0%,transparent 0deg,rgba(255,240,200,.16) 8deg,transparent 20deg,transparent 360deg),
-    conic-gradient(from 192deg at 92% 0%,transparent 0deg,rgba(255,240,200,.16) 12deg,transparent 24deg,transparent 360deg),
-    radial-gradient(120% 55% at 50% 118%,rgba(40,210,120,.55),rgba(20,120,70,.25) 45%,transparent 70%),
-    var(--po-photo-tone),
-    var(--po-stadium, radial-gradient(160% 90% at 50% 120%,#0D3B24 0 30%,#0A1A2E 31% 55%,#060B18 56%)) center 30%/cover no-repeat;
-  filter:saturate(1.35) contrast(1.08)}
-html[data-season="playoffs"] .po-stage::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.6) 100%)}
-html[data-season="playoffs"] .top{background:linear-gradient(180deg,rgba(3,6,12,.82),rgba(3,6,12,.5));backdrop-filter:blur(10px);border-bottom:1px solid var(--po-edge)}
-html[data-season="playoffs"] .rail,html[data-season="playoffs"] main .card,html[data-season="playoffs"] .kpis2,html[data-season="playoffs"] .pcard{background:var(--po-glass);backdrop-filter:blur(9px) saturate(1.25);-webkit-backdrop-filter:blur(9px) saturate(1.25);border-color:var(--po-edge);box-shadow:0 0 0 1px rgba(255,211,107,.10) inset,0 0 34px -14px var(--po-glow),0 22px 50px -28px rgba(0,0,0,.9)}
-html[data-season="playoffs"] .pcard{background:var(--po-glass2)}
-html[data-season="playoffs"] .brand h1{background:linear-gradient(180deg,#fff 10%,var(--po-gold2) 40%,var(--po-gold) 70%,#C8921E);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(255,211,107,.55))}
-html[data-season="playoffs"] .crest{filter:drop-shadow(0 0 16px rgba(255,211,107,.8))}
-html[data-season="playoffs"] #slateTitle::before{content:"Playoffs · ";color:var(--po-gold);font-weight:900;letter-spacing:.04em}
-html[data-season="playoffs"] .vh h2,html[data-season="playoffs"] .banner h2{text-shadow:0 0 28px rgba(255,211,107,.45)}
-html[data-season="playoffs"] .lhero2{border:1px solid var(--po-gold);box-shadow:0 0 0 1px rgba(255,211,107,.35),0 0 60px -10px rgba(255,211,107,.55),0 0 90px -30px var(--po-glow)}
-html[data-season="playoffs"] .lhero2::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(45% 80% at 80% -10%,rgba(255,246,220,.55),transparent 60%),radial-gradient(40% 60% at 15% -15%,rgba(255,246,220,.3),transparent 60%),linear-gradient(0deg,rgba(255,211,107,.22),transparent 35%)}
-html[data-season="playoffs"] .lhero2 h2{background:linear-gradient(180deg,#fff 30%,var(--po-gold2) 62%,var(--po-gold));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(255,211,107,.6))}
-/* players pop: rim light, color, a slow shine across their cards */
-html[data-season="playoffs"] img.hs,html[data-season="playoffs"] img.lh-hs,html[data-season="playoffs"] .faces img{filter:drop-shadow(0 0 2px rgba(255,240,200,.95)) drop-shadow(0 0 18px rgba(255,211,107,.65)) drop-shadow(0 16px 22px rgba(0,0,0,.65)) saturate(1.2) contrast(1.06) brightness(1.06)}
-html[data-season="playoffs"] .pcard::after,html[data-season="playoffs"] .ctx-art::after{content:"";position:absolute;inset:-40% -60%;z-index:3;pointer-events:none;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.28) 50%,transparent 58%);transform:translateX(-60%)}
-html[data-season="playoffs"] .pcard{box-shadow:0 0 0 1px rgba(255,211,107,.25) inset,0 0 26px -10px rgba(255,211,107,.55),0 18px 40px -24px #000}
-html[data-season="playoffs"] .kp b,html[data-season="playoffs"] .kp .big{text-shadow:0 0 18px rgba(255,211,107,.35)}
-html[data-season="playoffs"] .navbtn[aria-current="page"]{box-shadow:0 0 0 1px var(--po-gold) inset,0 0 22px -4px rgba(255,211,107,.7)!important}
-/* Daylight playoffs: a sunlit stadium, white glass */
-html[data-season="playoffs"][data-vibe="daylight"]{--po-gold:#C48A12;--po-gold2:#8A5A00;--po-glass:rgba(255,255,255,.68);--po-glass2:rgba(255,255,255,.76);--po-edge:rgba(196,138,18,.45);--po-glow:rgba(0,163,134,.35);--po-photo-tone:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(240,246,255,.04) 40%,rgba(243,244,246,.5) 100%)}
-html[data-season="playoffs"][data-vibe="daylight"] body{background:#DCE7F2}
-html[data-season="playoffs"][data-vibe="daylight"] .po-stage::after{background:radial-gradient(120% 90% at 50% 40%,transparent 60%,rgba(20,40,70,.25) 100%)}
-html[data-season="playoffs"][data-vibe="daylight"] .top{background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(255,255,255,.62))}
-html[data-season="playoffs"][data-vibe="daylight"] .brand h1{background:linear-gradient(180deg,#E9B13A,#8A5A00);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,200,80,.6))}
-html[data-season="playoffs"][data-vibe="daylight"] .vh h2,html[data-season="playoffs"][data-vibe="daylight"] .banner h2{text-shadow:0 0 22px rgba(255,200,80,.5)}
-@media (prefers-reduced-motion:no-preference){
-  html[data-season="playoffs"] .po-stage{animation:poLights 7s ease-in-out infinite alternate}
-  html[data-season="playoffs"] .pcard::after,html[data-season="playoffs"] .ctx-art::after{animation:poShine 6.5s ease-in-out infinite}
-  @keyframes poLights{from{opacity:.86}to{opacity:1}}
-  @keyframes poShine{0%,70%{transform:translateX(-60%)}100%{transform:translateX(60%)}}
+html[data-season="playoffs"]{
+  --bg:#040912;--ink:#071019;--panel:#08111B;--panel2:#0C1724;--panel3:#12202F;--card-grad:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0) 45%);
+  --line:rgba(232,190,92,.20);--line2:rgba(232,190,92,.38);--edge:rgba(232,190,92,.55);--edge2:#E8BE5C;
+  --gold:#F2C55C;--gold2:#FFE19A;--teal:#22E6C8;--teal2:#14BFA6;--on-teal:#03110F;
+  --po-gold:#F2C55C;--po-gold2:#FFE7A8;--po-teal:#22E6C8;--po-rim:rgba(242,197,92,.72);
+  --photo-shade:linear-gradient(90deg,rgba(4,9,18,.86) 0%,rgba(4,9,18,.38) 40%,rgba(4,9,18,0) 68%,rgba(4,9,18,.12) 100%);
+  --po-lights:
+    radial-gradient(circle at 6% 22%,#fff 0 1.6px,transparent 3px),radial-gradient(circle at 9% 18%,#fff6d8 0 1.4px,transparent 2.8px),radial-gradient(circle at 12% 23%,#fff 0 1.8px,transparent 3.4px),radial-gradient(circle at 15% 19%,#ffeab0 0 1.3px,transparent 2.6px),radial-gradient(circle at 18% 24%,#fff 0 1.5px,transparent 3px),
+    radial-gradient(circle at 34% 12%,#fff 0 1.5px,transparent 3px),radial-gradient(circle at 37% 9%,#fff4cc 0 1.8px,transparent 3.4px),radial-gradient(circle at 40% 13%,#fff 0 1.3px,transparent 2.6px),radial-gradient(circle at 43% 10%,#fff 0 1.6px,transparent 3px),
+    radial-gradient(circle at 62% 10%,#fff 0 1.6px,transparent 3px),radial-gradient(circle at 65% 13%,#fff6d8 0 1.4px,transparent 2.8px),radial-gradient(circle at 68% 9%,#fff 0 1.8px,transparent 3.4px),radial-gradient(circle at 71% 12%,#ffeab0 0 1.3px,transparent 2.6px),
+    radial-gradient(circle at 84% 20%,#fff 0 1.6px,transparent 3px),radial-gradient(circle at 87% 17%,#fff 0 1.8px,transparent 3.4px),radial-gradient(circle at 90% 22%,#fff4cc 0 1.4px,transparent 2.8px),radial-gradient(circle at 93% 18%,#fff 0 1.5px,transparent 3px),
+    radial-gradient(14% 26% at 12% 21%,rgba(255,240,200,.9),transparent 70%),radial-gradient(14% 26% at 39% 11%,rgba(255,240,200,.85),transparent 70%),radial-gradient(14% 26% at 66% 11%,rgba(255,240,200,.85),transparent 70%),radial-gradient(14% 26% at 88% 20%,rgba(255,240,200,.9),transparent 70%),radial-gradient(60% 50% at 70% 70%,rgba(60,140,255,.18),transparent 70%);
+  --po-beams:conic-gradient(from 160deg at 12% 21%,transparent 0deg,rgba(255,240,205,.22) 6deg,transparent 16deg,transparent 360deg),conic-gradient(from 188deg at 88% 20%,transparent 0deg,rgba(255,240,205,.22) 8deg,transparent 18deg,transparent 360deg),conic-gradient(from 172deg at 39% 11%,transparent 0deg,rgba(120,220,255,.14) 7deg,transparent 15deg,transparent 360deg);
+  --po-bowl:radial-gradient(120% 60% at 50% 125%,rgba(40,200,110,.55),rgba(20,110,70,.25) 40%,transparent 62%),repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 7px),linear-gradient(180deg,#0A1A36 0%,#12284A 34%,#1A2A3A 58%,#0B2A1C 100%);
 }
-html[data-season="playoffs"] main>h3.sec,html[data-season="playoffs"] main h3.sec{text-shadow:0 2px 14px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.8)}
-html[data-season="playoffs"][data-vibe="daylight"] main h3.sec{text-shadow:0 0 14px rgba(255,255,255,1),0 0 4px rgba(255,255,255,1)}
-/* reference-matched layer: stadium-light bokeh, stadium banners, neon rims, metallic gold headlines, lit player cards */
-html[data-season="playoffs"]{--po-bokeh:
-  radial-gradient(circle at 8% 14%,rgba(255,255,255,.95) 0 1.2px,transparent 2.4px),radial-gradient(circle at 15% 32%,rgba(255,236,180,.9) 0 1px,transparent 2px),
-  radial-gradient(circle at 23% 9%,rgba(255,255,255,.85) 0 1.6px,transparent 3px),radial-gradient(circle at 31% 26%,rgba(255,230,160,.8) 0 1px,transparent 2px),
-  radial-gradient(circle at 44% 12%,rgba(255,255,255,.9) 0 1.3px,transparent 2.6px),radial-gradient(circle at 57% 30%,rgba(255,240,200,.85) 0 1px,transparent 2px),
-  radial-gradient(circle at 66% 8%,rgba(255,255,255,.95) 0 1.8px,transparent 3.2px),radial-gradient(circle at 74% 22%,rgba(255,226,150,.9) 0 1.1px,transparent 2.2px),
-  radial-gradient(circle at 83% 11%,rgba(255,255,255,.9) 0 1.4px,transparent 2.8px),radial-gradient(circle at 92% 28%,rgba(255,240,200,.85) 0 1px,transparent 2px),
-  radial-gradient(circle at 37% 44%,rgba(255,255,255,.6) 0 1px,transparent 2px),radial-gradient(circle at 88% 46%,rgba(255,255,255,.6) 0 1px,transparent 2px),
-  radial-gradient(14% 22% at 20% 0%,rgba(255,240,200,.45),transparent 70%),radial-gradient(14% 22% at 50% -4%,rgba(255,240,200,.4),transparent 70%),radial-gradient(14% 22% at 80% 0%,rgba(255,240,200,.45),transparent 70%)}
-html[data-season="playoffs"] .lhero2::before,html[data-season="playoffs"] .banner::before,html[data-season="playoffs"] .pc-art::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--po-bokeh);mix-blend-mode:screen}
-html[data-season="playoffs"] .pc-art::before{z-index:-1}
-/* page banners become a lit stadium wall */
-html[data-season="playoffs"] .banner{border:1px solid var(--po-gold);color:#fff;background:linear-gradient(90deg,rgba(4,8,16,.94) 0%,rgba(4,8,16,.72) 45%,rgba(4,8,16,.25) 100%),var(--po-stadium,linear-gradient(160deg,#0B1A30,#04070D)) center 35%/cover;box-shadow:0 0 0 1px rgba(255,211,107,.35),0 0 40px -10px rgba(255,211,107,.55),inset 0 -30px 60px -40px var(--po-glow)}
-html[data-season="playoffs"] .banner h2{color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.8)}
-html[data-season="playoffs"] .banner p{color:rgba(255,255,255,.82)}
-html[data-season="playoffs"] .banner .wm{opacity:.18}
-html[data-season="playoffs"] .banner h2 span,html[data-season="playoffs"] .lhero2 h2 span{background:linear-gradient(180deg,#FFF6D6 0%,#FFD46A 38%,#C88A1A 58%,#FFE39A 78%,#B57A12 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 16px rgba(255,200,80,.55))}
-html[data-season="playoffs"] .lhero2 h2{background:none;-webkit-text-fill-color:#fff;color:#fff;filter:drop-shadow(0 4px 18px rgba(0,0,0,.6))}
-/* neon rim light: gold edge, teal underglow */
-html[data-season="playoffs"] main .card,html[data-season="playoffs"] .kpis2,html[data-season="playoffs"] .rail{box-shadow:0 0 0 1px rgba(255,211,107,.42),0 0 20px -6px rgba(255,211,107,.45),inset 0 -26px 40px -34px rgba(56,240,208,.9),inset 0 1px 0 rgba(255,240,200,.35),0 24px 50px -30px #000!important}
-html[data-season="playoffs"] details.p6{border-color:rgba(255,211,107,.6);box-shadow:0 0 0 1px rgba(255,211,107,.35),0 0 26px -8px rgba(255,211,107,.6)}
-/* player cards: team-color spotlight rays, bright jersey number */
-html[data-season="playoffs"] .pc-art{background:radial-gradient(70% 90% at 50% -10%,color-mix(in srgb,var(--tg) 55%,#fff 45%),transparent 62%),conic-gradient(from 180deg at 50% -20%,transparent 150deg,color-mix(in srgb,var(--tg) 60%,#fff) 165deg,transparent 172deg,transparent 188deg,color-mix(in srgb,var(--tg) 60%,#fff) 195deg,transparent 210deg),linear-gradient(180deg,color-mix(in srgb,var(--tg) 80%,#000),#05070C)}
-html[data-season="playoffs"] .pc-art .jn{color:transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--tg) 40%,#fff),color-mix(in srgb,var(--tg) 85%,#000));-webkit-background-clip:text;background-clip:text;opacity:.75}
-html[data-season="playoffs"] .lh-jn{color:rgba(255,230,170,.32)!important}
-/* Daylight playoffs: white glass, same lights */
-html[data-season="playoffs"][data-vibe="daylight"] .banner{color:var(--fg);background:linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.78) 45%,rgba(255,255,255,.2) 100%),var(--po-stadium,linear-gradient(160deg,#DDE8F5,#fff)) center 35%/cover}
-html[data-season="playoffs"][data-vibe="daylight"] .banner h2{color:#0E1720;text-shadow:0 0 18px rgba(255,255,255,.9)}
+html[data-season="playoffs"] body{background:radial-gradient(70% 40% at 50% -10%,rgba(34,230,200,.10),transparent 70%),radial-gradient(50% 30% at 100% 0%,rgba(242,197,92,.08),transparent 70%),#040912}
+/* every panel: dark glass, gold rim, lit corners, teal underglow */
+html[data-season="playoffs"] main .card,html[data-season="playoffs"] .kpis2,html[data-season="playoffs"] .rail,html[data-season="playoffs"] details.p6,html[data-season="playoffs"] .team-inj,html[data-season="playoffs"] .lstrip{
+  background:radial-gradient(28px 28px at 0 0,rgba(255,226,150,.55),transparent 70%),radial-gradient(28px 28px at 100% 0,rgba(255,226,150,.45),transparent 70%),radial-gradient(40px 30px at 0 100%,rgba(34,230,200,.35),transparent 70%),radial-gradient(40px 30px at 100% 100%,rgba(255,226,150,.35),transparent 70%),linear-gradient(180deg,#0B1622,#070E17)!important;
+  border:1px solid var(--po-rim)!important;
+  box-shadow:0 0 0 1px rgba(242,197,92,.10),0 0 18px -4px rgba(242,197,92,.45),inset 0 1px 0 rgba(255,236,190,.22),0 22px 46px -30px #000!important}
+html[data-season="playoffs"] .top{background:linear-gradient(180deg,#050B15,#040912);border-bottom:1px solid rgba(242,197,92,.35)}
+html[data-season="playoffs"] .navbtn[aria-current="page"]{background:linear-gradient(180deg,rgba(242,197,92,.16),rgba(242,197,92,.04))!important;color:var(--po-gold2)!important;box-shadow:0 0 0 1px var(--po-gold) inset,0 0 20px -4px rgba(242,197,92,.65)!important}
+html[data-season="playoffs"] .brand h1{background:linear-gradient(180deg,#FFF3C8,#F2C55C 55%,#B47E1A);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px rgba(242,197,92,.45))}
+html[data-season="playoffs"] .crest{filter:drop-shadow(0 0 14px rgba(242,197,92,.7))}
+html[data-season="playoffs"] #slateTitle::before{content:"Playoffs · ";color:var(--po-gold);font-weight:900}
+/* section headings: the reference's lit bar */
+html[data-season="playoffs"] .sec{font-size:26px;letter-spacing:.03em;color:#fff}
+html[data-season="playoffs"] .sec::before{width:5px;height:24px;border-radius:2px;background:linear-gradient(180deg,var(--po-teal),var(--po-gold));box-shadow:0 0 12px var(--po-teal)}
+/* page banners: a floodlit stadium drawn in CSS, title in chrome white + metallic gold */
+html[data-season="playoffs"] .banner{border:1px solid var(--po-gold);background:linear-gradient(90deg,rgba(4,9,18,.92) 0%,rgba(4,9,18,.55) 42%,rgba(4,9,18,.05) 75%),var(--po-lights),var(--po-beams),var(--po-bowl);box-shadow:0 0 0 1px rgba(242,197,92,.25),0 0 34px -8px rgba(242,197,92,.55)}
+html[data-season="playoffs"] .banner h2{color:#fff;background:linear-gradient(180deg,#fff 40%,#C9D3DE);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 12px rgba(0,0,0,.7))}
+html[data-season="playoffs"] .banner h2 span,html[data-season="playoffs"] .lhero2 h2 span{background:linear-gradient(180deg,#FFF6D6 0%,#FFD46A 38%,#C88A1A 58%,#FFE39A 78%,#B57A12 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(255,200,80,.5))}
+html[data-season="playoffs"] .banner p{color:rgba(255,255,255,.85)}
+html[data-season="playoffs"] .banner .wm{opacity:.35;color:var(--po-gold);filter:drop-shadow(0 0 18px rgba(242,197,92,.8))}
+/* hero: sharper, brighter stadium + floodlight sparkle; player pops */
+html[data-season="playoffs"] .lhero2{border:1px solid var(--po-gold);box-shadow:0 0 0 1px rgba(242,197,92,.35),0 0 46px -10px rgba(242,197,92,.6)}
+html[data-season="playoffs"] .lhero2::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--po-lights),var(--po-beams);mix-blend-mode:screen;opacity:.9}
+html[data-season="playoffs"] .lhero2 h2{color:#fff;-webkit-text-fill-color:#fff;background:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.6))}
+/* in-card stadiums: sharp, vivid, less shade (game cards, hero, context, player cards, team reports) */
+html[data-season="playoffs"] .vimg{filter:saturate(1.55) contrast(1.18) brightness(1.12)!important;opacity:1!important}
+html[data-season="playoffs"] .g-shade{background:linear-gradient(180deg,rgba(4,9,18,.25) 0%,rgba(4,9,18,.05) 40%,rgba(4,9,18,.7) 100%)}
+html[data-season="playoffs"] .ctx-shade{background:linear-gradient(180deg,rgba(4,9,18,.35) 0%,rgba(4,9,18,0) 40%,rgba(4,9,18,.6) 100%),linear-gradient(90deg,rgba(4,9,18,.55),transparent 55%)}
+/* players: crisp cutouts with gold rim light, a little larger */
+html[data-season="playoffs"] img.hs,html[data-season="playoffs"] img.lh-hs,html[data-season="playoffs"] .faces img{filter:drop-shadow(0 0 1.5px rgba(255,240,200,.95)) drop-shadow(0 0 14px rgba(242,197,92,.55)) drop-shadow(0 14px 20px rgba(0,0,0,.6)) saturate(1.2) contrast(1.1) brightness(1.06)}
+html[data-season="playoffs"] .pc-art .hs{transform:translateX(-50%) scale(1.1);transform-origin:50% 100%}
+html[data-season="playoffs"] .pc-art{border-bottom:1px solid var(--po-gold)}
+html[data-season="playoffs"] .pc-art .jn{color:transparent;background:linear-gradient(180deg,color-mix(in srgb,var(--tg) 35%,#fff),color-mix(in srgb,var(--tg) 90%,#000));-webkit-background-clip:text;background-clip:text;opacity:.85}
+html[data-season="playoffs"] .pcard{border:1px solid var(--po-rim);box-shadow:0 0 22px -6px rgba(242,197,92,.55)}
+/* team report headers: team-colour floodlit band */
+html[data-season="playoffs"] .ti-head{background:radial-gradient(60% 120% at 15% 0%,color-mix(in srgb,var(--c1) 80%,#fff 10%),transparent 70%),linear-gradient(90deg,color-mix(in srgb,var(--c1) 75%,#040912),#040912);color:#fff;border-bottom:1px solid var(--po-gold)}
+html[data-season="playoffs"] .ti-head b,html[data-season="playoffs"] .ti-head h3{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+/* numbers and chips */
+html[data-season="playoffs"] .kp b,html[data-season="playoffs"] .kp .big{text-shadow:0 0 16px rgba(242,197,92,.35)}
+html[data-season="playoffs"] .fbtn[aria-pressed="true"],html[data-season="playoffs"] .chip.gold{border-color:var(--po-gold);box-shadow:0 0 12px -3px rgba(242,197,92,.7)}
+/* Daylight playoffs: pearl panels, same gold rim and lights, bright day stadium in banners */
+html[data-season="playoffs"][data-vibe="daylight"]{--bg:#EEF2F7;--ink:#fff;--panel:#FFFFFF;--panel2:#F6F8FB;--panel3:#ECF0F5;--fg:#0E1720;--fg2:#3E4C5A;--fg3:#6E7C8A;--line:rgba(176,124,20,.20);--line2:rgba(176,124,20,.36);--gold:#B8860B;--gold2:#8A5E00;--teal:#00A386;--po-gold:#C48A12;--po-gold2:#8A5E00;--po-rim:rgba(196,138,18,.6);
+  --po-bowl:radial-gradient(120% 60% at 50% 125%,rgba(60,190,110,.55),rgba(40,150,90,.2) 40%,transparent 62%),repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 2px,transparent 2px 7px),linear-gradient(180deg,#9CC6EA 0%,#CFE3F4 38%,#B9C9D6 62%,#7FAF86 100%)}
+html[data-season="playoffs"][data-vibe="daylight"] body{background:radial-gradient(70% 40% at 50% -10%,rgba(255,215,120,.22),transparent 70%),#EEF2F7}
+html[data-season="playoffs"][data-vibe="daylight"] main .card,html[data-season="playoffs"][data-vibe="daylight"] .kpis2,html[data-season="playoffs"][data-vibe="daylight"] .rail,html[data-season="playoffs"][data-vibe="daylight"] details.p6,html[data-season="playoffs"][data-vibe="daylight"] .team-inj,html[data-season="playoffs"][data-vibe="daylight"] .lstrip{
+  background:radial-gradient(28px 28px at 0 0,rgba(255,206,100,.55),transparent 70%),radial-gradient(28px 28px at 100% 0,rgba(255,206,100,.45),transparent 70%),radial-gradient(40px 30px at 0 100%,rgba(0,190,160,.25),transparent 70%),linear-gradient(180deg,#fff,#F7F9FC)!important;
+  box-shadow:0 0 0 1px rgba(196,138,18,.10),0 0 18px -6px rgba(255,190,60,.55),0 18px 36px -26px rgba(20,40,70,.4)!important}
+html[data-season="playoffs"][data-vibe="daylight"] .top{background:linear-gradient(180deg,#fff,#F4F7FB)}
+html[data-season="playoffs"][data-vibe="daylight"] .sec{color:#0E1720}
+html[data-season="playoffs"][data-vibe="daylight"] .banner{background:linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.7) 42%,rgba(255,255,255,0) 75%),var(--po-lights),var(--po-bowl)}
+html[data-season="playoffs"][data-vibe="daylight"] .banner h2{background:linear-gradient(180deg,#0E1720 40%,#33424F);-webkit-background-clip:text;background-clip:text}
 html[data-season="playoffs"][data-vibe="daylight"] .banner p{color:#33414E}
-html[data-season="playoffs"][data-vibe="daylight"] main .card,html[data-season="playoffs"][data-vibe="daylight"] .kpis2,html[data-season="playoffs"][data-vibe="daylight"] .rail{box-shadow:0 0 0 1px rgba(196,138,18,.38),0 0 22px -8px rgba(255,190,60,.55),inset 0 -24px 40px -34px rgba(0,163,134,.6),0 20px 40px -28px rgba(20,40,70,.45)!important}
+html[data-season="playoffs"][data-vibe="daylight"] .banner h2 span{background:linear-gradient(180deg,#E7A928 0%,#B57A12 45%,#7A4E00 70%,#C88A1A 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,255,255,.9))}
+html[data-season="playoffs"][data-vibe="daylight"] .brand h1{background:linear-gradient(180deg,#E9B13A,#8A5A00);-webkit-background-clip:text;background-clip:text}
+html[data-season="playoffs"][data-vibe="daylight"] .navbtn[aria-current="page"]{color:#8A5E00!important}
+@media (prefers-reduced-motion:no-preference){html[data-season="playoffs"] .lhero2::before{animation:poTwinkle 3.2s ease-in-out infinite alternate}@keyframes poTwinkle{from{opacity:.65}to{opacity:1}}}
 .po-opt.locked{opacity:.75}.po-opt.locked .pv{filter:grayscale(.6)}
 .seo-intro{max-width:720px;padding:28px 8px;color:var(--fg2)}.seo-intro h2{font:900 34px var(--stadium);text-transform:uppercase;color:var(--fg);margin:0 0 8px}
 .reqform{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px;padding:14px;border-radius:14px;border:1px solid var(--gold);background:color-mix(in srgb,var(--gold) 7%,var(--panel2))}.reqform p{margin:0}
@@ -3210,7 +3205,7 @@ function playoffsArt() {
 }
 function applyPlayoffs() {
   const own = can('playoffs'); const on = own && !!S.playoffsOn; const root = document.documentElement;
-  if (on) { root.dataset.season = 'playoffs'; playoffsArt(); } else delete root.dataset.season;
+  if (on) root.dataset.season = 'playoffs'; else delete root.dataset.season;
   const b = document.getElementById('poToggle'); if (b) { b.setAttribute('aria-pressed', String(on)); b.classList.toggle('locked', !own); const tag = b.querySelector('.po-tag'); if (tag) tag.textContent = own ? 'Elite' : 'Elite only'; }
   if (own && S.me.user) store.set('pz_playoffs', !!S.playoffsOn);
 }
