@@ -638,6 +638,13 @@ body:not(.overlay) .mo .word{font-size:min(12vmin,110px)}
 .tog{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);cursor:pointer}.tog input{width:20px;height:20px;margin-top:2px;accent-color:var(--teal)}.tog b{display:block;font-size:14px}.tog em{display:block;font-style:normal;font-size:12px;color:var(--fg2);margin-top:2px}
 .meerr{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--loss) 14%,transparent);border:1px solid var(--loss);font-weight:700;margin-bottom:12px}
 .mehello{font-size:13px;color:var(--fg2);margin-bottom:10px}
+.mefine{font-size:12px;color:var(--fg3);margin:0}.mefine a,.mehelp a,.legal a,.mecool a{color:var(--teal)}
+.merg .rgrow{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:10px}.merg .rgrow>div{display:flex;flex-direction:column;gap:8px}.merg input{padding:10px 12px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);color:var(--fg);font:700 14px var(--body)}
+.rgbar{height:10px;border-radius:999px;background:var(--panel2);overflow:hidden}.rgbar i{display:block;height:100%;background:linear-gradient(90deg,var(--win),var(--live),var(--loss));background-size:300% 100%}
+.mehelp{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:var(--panel2);border-left:3px solid var(--gold);font-size:13px;color:var(--fg2)}
+.mecool{border-color:var(--gold)}
+footer.legal{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;margin:40px 0 8px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--fg3)}
+@media (max-width:760px){.merg .rgrow{grid-template-columns:1fr}footer.legal{margin-bottom:80px}}
 main .card.mecard{padding:22px}
 .melegs{display:flex;flex-direction:column;gap:6px;padding:10px 4px 4px}.mel{display:grid;grid-template-columns:36px minmax(0,1fr) auto auto;gap:10px;align-items:center;font-size:13px}.mel .av{width:36px;height:36px}.mel em{font-style:normal;font-weight:900}.mel.hit em{color:var(--win)}.mel.miss em{color:var(--loss)}.mel i{font-style:normal;font-size:11px;color:var(--fg3)}
 .metiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metiles>div{padding:14px 16px;border-radius:16px;background:var(--panel);border:1px solid var(--line)}.metiles span{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--fg3)}.metiles b{display:block;font:900 30px var(--stadium);margin:2px 0}.metiles b.win{color:var(--win)}.metiles b.loss{color:var(--loss)}.metiles em{font-style:normal;font-size:12px;color:var(--fg2)}
@@ -2301,7 +2308,22 @@ function afterData() {
    collected — that is what makes the honest numbers honest. Exact dollar amounts are the member's call: synced to
    their account only if they turn it on, otherwise they never leave this device. PoiZen sees a member's full
    account only if that member allows it. */
-const ME_V = 1;
+const ME_V = 2; // v2: 21+ confirmation
+const HELP = { call: '1-800-MY-RESET', digits: '18006973738', num: '1-800-697-3738', chat: 'https://www.ncpgambling.org/chat/' };
+const helpLine = (short) => short ? `Gambling problem? Call or text <a href="tel:${HELP.digits}">${HELP.call}</a>` : `Gambling problem? Call or text <a href="tel:${HELP.digits}">${HELP.call} (${HELP.num})</a> or <a href="${HELP.chat}" target="_blank" rel="noopener">chat</a> — free, confidential, 24/7.`;
+function footHTML() { return `<footer class="legal"><span><b>21+</b> · Analysis and entertainment, not betting advice.</span><span>${helpLine(true)}</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></footer>`; }
+/* responsible play: Monday-to-Sunday week in local time */
+function weekStart() { const d = new Date(); const day = (d.getDay() + 6) % 7; d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - day); return d.getTime(); }
+function meLimit() { const L = (S.me.profile && S.me.profile.limits) || {}; let v = L.weekly ?? null; if (L.next !== undefined && L.nextAt && Date.now() >= L.nextAt) v = L.next; return v === null || v < 0 ? null : v; }
+function meCooloff() { const c = S.me.profile && S.me.profile.cooloff; return c && c > Date.now() ? c : null; }
+/* money at risk this week: losses on slips settled this week plus entries on open slips, from amounts on this device or synced */
+function meWeekRisk() {
+  const ws = weekStart(); let lost = 0, open = 0, known = 0, unknown = 0;
+  Object.entries(S.me.slips).forEach(([id, x]) => { const a = meAmounts(id, x.x);
+    if (x.status === 'open') { if (a) { open += a.entry; known++; } else unknown++; }
+    else if ((x.settledAt || 0) >= ws) { if (a) { lost += a.entry - (x.result === 'won' ? a.toWin : 0); known++; } else unknown++; } });
+  return { lost: Math.max(0, lost), open, used: Math.max(0, lost) + open, known, unknown };
+}
 const amtKey = () => 'pz_amt_' + (S.me.user ? S.me.user.uid : 'x');
 const localAmts = () => store.get(amtKey(), {});
 function meAmounts(id, x) { const s = S.me.slips[id] || {}; if (s.entry > 0) return { entry: Number(s.entry), toWin: Number(s.toWin) || Number(s.entry) * (x || s.x || 0), synced: true }; const l = localAmts()[id]; return l && l.entry > 0 ? { entry: Number(l.entry), toWin: Number(l.toWin), synced: false } : null; }
@@ -2326,8 +2348,9 @@ async function meSaveConsent(form) {
   const name = String(form.name || '').trim().slice(0, 24); if (!name) { S.me.err = 'Pick a display name.'; render(); return; }
   if (!form.ack) { S.me.err = 'Check the box that says you understand what is always collected.'; render(); return; }
   const u = S.me.user; const now = Date.now(); const had = S.me.profile && S.me.profile.consent;
-  const consent = { v: ME_V, at: now, outcomes: true, amounts: !!form.amounts, owner: !!form.owner };
-  const up = { [`users/${u.uid}/profile`]: { name, createdAt: (S.me.profile && S.me.profile.createdAt) || now, consent }, [`directory/${u.uid}`]: { name, joined: (S.me.profile && S.me.profile.createdAt) || now, owner: consent.owner, amounts: consent.amounts, slips: Object.keys(S.me.slips).length, seen: now } };
+  if (!form.age21) { S.me.err = 'The Lounge is 21+ only. Confirm your age to continue.'; render(); return; }
+  const consent = { v: ME_V, at: now, outcomes: true, age21: true, amounts: !!form.amounts, owner: !!form.owner };
+  const up = { [`users/${u.uid}/profile`]: { name, createdAt: (S.me.profile && S.me.profile.createdAt) || now, consent, ...(S.me.profile && S.me.profile.limits ? { limits: S.me.profile.limits } : {}), ...(S.me.profile && S.me.profile.cooloff ? { cooloff: S.me.profile.cooloff } : {}) }, [`directory/${u.uid}`]: { name, joined: (S.me.profile && S.me.profile.createdAt) || now, owner: consent.owner, amounts: consent.amounts, slips: Object.keys(S.me.slips).length, seen: now } };
   // turning exact amounts off removes them from the account (kept on this device); turning on syncs what this device has
   if (had && had.amounts && !consent.amounts) { const L = localAmts(); Object.entries(S.me.slips).forEach(([id, x]) => { if (x.entry > 0) L[id] = { entry: x.entry, toWin: x.toWin }; up[`users/${u.uid}/slips/${id}/entry`] = null; up[`users/${u.uid}/slips/${id}/toWin`] = null; up[`users/${u.uid}/slips/${id}/payout`] = null; }); store.set(amtKey(), L); }
   try {
@@ -2356,9 +2379,13 @@ function memberBuilderCtx() {
     chance: (leg, meta) => { if (!S.slate.players[leg.player]) S.mePlayers[leg.player] = meta; const p = P(leg.player);
       if (p.espnId && (p.sport || 'nfl') === 'nfl' && !S.research[p.espnId]) { S.research[p.espnId] = { loading: true }; getJSON(E.ESPN.gamelog(p.espnId)).then((j) => { S.research[p.espnId] = { rows: E.gamelogRows(j) }; S.projMemo = {}; const el = document.getElementById('pzbM'); if (el) PZB.mountInto(el, S.me.builder, memberBuilderCtx()); }).catch((e) => { S.research[p.espnId] = { err: e.message }; }); }
       return legPre(leg).p; },
-    gate: (slip) => { const ps = slip.legs.map((l) => legPre(l).p); const v = M.slipValue(ps, slip.entry || 1, null, slip.toWin || 0, corrLegs(slip.legs).factor); return memberGate(slip, v ? { ...v, corr: corrLegs(slip.legs) } : null); },
+    gate: (slip) => { const ps = slip.legs.map((l) => legPre(l).p); const v = M.slipValue(ps, slip.entry || 1, null, slip.toWin || 0, corrLegs(slip.legs).factor); const G = memberGate(slip, v ? { ...v, corr: corrLegs(slip.legs) } : null);
+      const lim = meLimit(); if (lim !== null && slip.entry > 0) { const R = meWeekRisk(); const over = R.used + slip.entry > lim; G.checks.unshift({ id: 'limit', label: 'Inside your weekly limit', state: over ? 'fail' : 'pass', why: `${money(R.used + slip.entry)} of ${money(lim)} this week` }); if (over) G.verdict = 'fail'; }
+      return G; },
     onSave: async (slip, players, read) => {
       const u = S.me.user; if (!u || !S.me.profile) throw new Error('Sign in first');
+      const co = meCooloff(); if (co) throw new Error(`You're in a cool-off until ${new Date(co).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`);
+      const lim = meLimit(); if (lim !== null) { const R = meWeekRisk(); if (R.used + slip.entry > lim) throw new Error(`This slip would put ${money(R.used + slip.entry)} at risk this week — over your ${money(lim)} weekly limit.`); }
       const db = firebase.database(); const id = db.ref('users/' + u.uid + '/slips').push().key;
       const x = Math.round((slip.toWin / slip.entry) * 100) / 100;
       const doc = { title: slip.title.slice(0, 48), legs: slip.legs, players, x, status: 'open', createdAt: Date.now(), lab: { ps: (read.each || []).map((p) => Math.round((p || 0) * 1000) / 1000), pAll: Math.round((read.pAll || 0) * 10000) / 10000, roi: read.v ? Math.round(read.v.roi * 1000) / 1000 : null } };
@@ -2398,6 +2425,28 @@ async function meDelete() {
   try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null }); store.set(amtKey(), {}); toast({ title: 'Deleted', body: 'Everything in your account is gone', tone: 'win' }); }
   catch (e) { toast({ title: 'Could not delete', body: e.message, tone: 'loss' }); }
 }
+function rgHTML() {
+  const L = (S.me.profile && S.me.profile.limits) || {}; const lim = meLimit(); const R = meWeekRisk(); const co = meCooloff();
+  const pend = L.next !== undefined && L.nextAt && Date.now() < L.nextAt ? `<p class="muted">Raising to ${money(L.next)} on ${esc(new Date(L.nextAt).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' }))}.</p>` : '';
+  const bar = lim !== null ? `<div class="rgbar"><i style="width:${Math.min(100, lim > 0 ? (R.used / lim) * 100 : 100)}%"></i></div><p class="muted">${money(R.used)} of ${money(lim)} at risk this week (lost ${money(R.lost)}, ${money(R.open)} in open slips)${R.unknown ? ` · ${R.unknown} slip${R.unknown === 1 ? '' : 's'} with amounts on another device not counted` : ''}</p>` : '<p class="muted">No weekly limit set.</p>';
+  return `<div class="card mecard merg" style="margin-top:16px"><b class="st-font" style="font-size:20px">Play responsibly</b>
+    <div class="rgrow"><div><b>Weekly loss limit</b>${bar}${pend}<div class="row"><input id="rgLimit" type="number" min="0" step="1" inputmode="numeric" placeholder="$ per week" style="width:140px"><button class="fbtn" type="button" data-me="limit">Set limit</button>${lim !== null ? '<button class="fbtn" type="button" data-me="nolimit">Remove</button>' : ''}</div><p class="mefine">Lowering applies now. Raising or removing it takes 24 hours.</p></div>
+    <div><b>Take a break</b>${co ? `<p class="muted">Cool-off until ${esc(new Date(co).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}.</p>` : `<p class="muted">Pause building slips. Once it starts it can't be shortened.</p><div class="row">${[['1', '24 hours'], ['7', '7 days'], ['30', '30 days']].map(([d, l]) => `<button class="fbtn" type="button" data-me="cool" data-days="${d}">${l}</button>`).join('')}</div>`}</div></div>
+    <p class="mehelp">${helpLine(false)}</p></div>`;
+}
+async function meSetLimit(v) {
+  const u = S.me.user; if (!u) return; const cur = meLimit(); const L = { ...((S.me.profile && S.me.profile.limits) || {}) }; delete L.next; delete L.nextAt;
+  if (v === null) { if (cur === null) return; L.weekly = cur; L.next = -1; L.nextAt = Date.now() + 864e5; }
+  else if (cur === null || v <= cur) { L.weekly = v; }
+  else { L.weekly = cur; L.next = v; L.nextAt = Date.now() + 864e5; }
+  try { await firebase.database().ref(`users/${u.uid}/profile/limits`).set(L); toast({ title: 'Limit saved', body: v !== null && (cur === null || v <= cur) ? `Weekly limit is ${money(v)}` : 'The change applies in 24 hours', tone: 'win' }); }
+  catch (e) { toast({ title: 'Could not save', body: e.message, tone: 'loss' }); }
+}
+async function meStartCool(days) {
+  const u = S.me.user; if (!u) return; const until = Date.now() + days * 864e5;
+  try { await firebase.database().ref(`users/${u.uid}/profile/cooloff`).set(until); toast({ title: 'Cool-off started', body: `Back ${new Date(until).toLocaleDateString()}`, tone: 'win' }); }
+  catch (e) { toast({ title: 'Could not start', body: e.message, tone: 'loss' }); }
+}
 function meSlipCard({ t, r }) {
   const done = { won: 'Cashed', lost: 'Lost', dead: 'Busted', review: 'Check void rules' }[t.status === 'settled' ? t.result : r.state] || '';
   const liveN = r.legs.filter(({ g }) => g.state === 'live').length; const open = S.slipOpen[t.id] !== undefined ? S.slipOpen[t.id] : liveN > 0 || t.status !== 'settled';
@@ -2414,18 +2463,20 @@ function viewMe() {
   if (!FIREBASE) return head + '<div class="empty">Accounts need the live board.</div>';
   const err = S.me.err ? `<div class="meerr" role="alert">${esc(S.me.err)}</div>` : '';
   const collect = `<ul class="mecol"><li><b>Always collected:</b> each slip's picks, lines, More/Less, whether each pick hit, the payout multiple, and what the Lab said. This is what keeps the numbers honest for everyone.</li><li><b>Your call:</b> the exact dollars you put in and won. Off = they stay on this device only. On = they sync to your account.</li><li><b>Your call:</b> letting PoiZen see your whole account (slips, amounts if synced) to help you.</li><li>Never sold. Export or delete everything from here any time.</li></ul>`;
-  if (!S.me.user) return head + err + `<div class="card mecard mesign"><div><b class="st-font" style="font-size:26px">Your slips, tracked live</b><p class="muted">Sign in with Google to build slips, see the honest read before you play, and get a Coach that learns from your own results.</p>${collect}</div><button class="mebtn" type="button" data-me="signin" ${S.me.busy ? 'disabled' : ''}>${SVG.user} ${S.me.busy ? 'Signing in…' : 'Sign in with Google'}</button></div>`;
+  if (!S.me.user) return head + err + `<div class="card mecard mesign"><div><b class="st-font" style="font-size:26px">Your slips, tracked live</b><p class="muted">Sign in with Google to build slips, see the honest read before you play, and get a Coach that learns from your own results. 21+ only.</p>${collect}</div><button class="mebtn" type="button" data-me="signin" ${S.me.busy ? 'disabled' : ''}>${SVG.user} ${S.me.busy ? 'Signing in…' : 'Sign in with Google'}</button></div>`;
   if (S.me.profile === undefined) return head + '<div class="empty">Loading your account…</div>';
   const c = S.me.profile && S.me.profile.consent;
-  if (!c || S.me.editing) {
+  if (!c || (c.v || 1) < ME_V || S.me.editing) {
     const D = S.me.draft || {}; const n0 = D.name ?? ((S.me.profile && S.me.profile.name) || (S.me.user.displayName || '').split(' ')[0] || '');
     const ck = (k, def) => ((k in D ? D[k] : def) ? 'checked' : '');
     return head + err + `<form class="card mecard meconsent" data-meform><b class="st-font" style="font-size:24px">${c ? 'Your privacy choices' : 'Before you start'}</b>${collect}
       <label class="f">Display name<input id="meName" name="name" maxlength="24" value="${esc(n0)}" required></label>
       <label class="tog"><input type="checkbox" name="amounts" ${ck('amounts', c && c.amounts)}><span><b>Sync my exact amounts</b><em>Stake and payout saved to my account so they show on every device. Off keeps them on this device only.</em></span></label>
       <label class="tog"><input type="checkbox" name="owner" ${ck('owner', c && c.owner)}><span><b>Let PoiZen see my account</b><em>Your slips, and your amounts if synced. Turn it off any time.</em></span></label>
+      <label class="tog"><input type="checkbox" name="age21" ${ck('age21', !!(c && c.age21))} required><span><b>I'm 21 or older</b><em>The Lounge is for adults where sports betting is legal.</em></span></label>
       <label class="tog"><input type="checkbox" name="ack" ${ck('ack', !!c)} required><span><b>I understand outcomes are always collected</b><em>Picks, lines, hit or miss, payout multiple and the Lab's read — never your dollar amounts unless you sync them.</em></span></label>
-      <div class="row"><button class="mebtn" type="submit">${c ? 'Save choices' : 'Start my Lounge'}</button>${c ? '<button class="fbtn" type="button" data-me="cancel">Cancel</button>' : ''}<button class="fbtn" type="button" data-me="signout">Sign out</button></div></form>`;
+      <p class="mefine">By continuing you agree to the <a href="terms.html" target="_blank">terms</a> and <a href="privacy.html" target="_blank">privacy policy</a>.</p>
+      <div class="row"><button class="mebtn" type="submit">${c && (c.v || 1) >= ME_V ? 'Save choices' : 'Start my Lounge'}</button>${c ? '<button class="fbtn" type="button" data-me="cancel">Cancel</button>' : ''}<button class="fbtn" type="button" data-me="signout">Sign out</button></div></form>`;
   }
   const G = meGraded(); const open = G.filter(({ t }) => t.status !== 'settled'); const done = G.filter(({ t }) => t.status === 'settled');
   const won = done.filter(({ t }) => t.result === 'won').length; const picks = mePicks(); const hitRate = picks.length ? picks.filter((p) => p.result === 'hit').length / picks.length : null;
@@ -2438,10 +2489,10 @@ function viewMe() {
   const p = S.me.profile;
   const priv = `<div class="card mecard meprivacy"><b class="st-font" style="font-size:20px">${SVG.lock} Privacy</b><p class="muted" style="margin:6px 0 10px">Exact amounts: <b>${p.consent.amounts ? 'synced to your account' : 'this device only'}</b> · PoiZen can see your account: <b>${p.consent.owner ? 'yes' : 'no'}</b></p><div class="row"><button class="fbtn" type="button" data-me="edit">Change</button><button class="fbtn" type="button" data-me="export">Export my data</button><button class="fbtn danger" type="button" data-me="delete">Delete everything</button><button class="fbtn" type="button" data-me="signout">Sign out</button></div></div>`;
   return head + err + `<div class="mehello">Signed in as <b>${esc(p.name)}</b></div>` + tiles +
-    `<h3 class="sec">Build a slip</h3><div class="card mecard"><div id="pzbM"></div></div>` +
+    `<h3 class="sec">Build a slip</h3>` + (meCooloff() ? `<div class="card mecard mecool"><b class="st-font" style="font-size:22px">Cool-off on</b><p class="muted">Building slips is paused until <b>${esc(new Date(meCooloff()).toLocaleString([], { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</b>. It can't be shortened. Your open slips still track live.</p><p class="muted">${helpLine(false)}</p></div>` : `<div class="card mecard"><div id="pzbM"></div></div>`) +
     (open.length ? `<h3 class="sec">Open</h3><div class="slips">${open.map(meSlipCard).join('')}</div>` : '') +
     (done.length ? `<h3 class="sec">Settled</h3><div class="slips">${done.slice(0, 30).map(meSlipCard).join('')}</div>` : '') +
-    `<div class="grid2" style="margin-top:16px">${coach}${priv}</div>`;
+    `<div class="grid2" style="margin-top:16px">${coach}${priv}</div>` + rgHTML();
 }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-me]'); if (!b) return; const k = b.dataset.me;
@@ -2450,12 +2501,15 @@ document.addEventListener('click', (e) => {
   else if (k === 'edit') { S.me.editing = true; S.me.draft = null; render(); }
   else if (k === 'cancel') { S.me.editing = false; S.me.err = ''; S.me.draft = null; render(); }
   else if (k === 'export') meExport();
+  else if (k === 'limit') { const v = Number((document.getElementById('rgLimit') || {}).value); if (!(v >= 0) || (document.getElementById('rgLimit') || {}).value === '') { toast({ title: 'Enter a dollar amount', tone: 'loss' }); return; } meSetLimit(Math.round(v)); }
+  else if (k === 'nolimit') meSetLimit(null);
+  else if (k === 'cool') { if (b.dataset.armed) { meStartCool(Number(b.dataset.days)); } else { b.dataset.armed = 1; b.textContent = 'Tap again — can\'t be undone'; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = { 1: '24 hours', 7: '7 days', 30: '30 days' }[b.dataset.days]; } }, 4000); } }
   else if (k === 'delete') { if (b.dataset.armed) { meDelete(); delete b.dataset.armed; } else { b.dataset.armed = 1; b.textContent = 'Tap again to delete everything'; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = 'Delete everything'; } }, 4000); } }
 });
 document.addEventListener('input', (e) => { const f = e.target.closest && e.target.closest('[data-meform]'); if (!f || !e.target.name) return; S.me.draft = S.me.draft || {}; S.me.draft[e.target.name] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; });
 document.addEventListener('submit', (e) => {
   const f = e.target.closest('[data-meform]'); if (!f) return; e.preventDefault();
-  const fd = new FormData(f); meSaveConsent({ name: fd.get('name'), amounts: fd.get('amounts') === 'on', owner: fd.get('owner') === 'on', ack: fd.get('ack') === 'on' });
+  const fd = new FormData(f); meSaveConsent({ name: fd.get('name'), amounts: fd.get('amounts') === 'on', owner: fd.get('owner') === 'on', ack: fd.get('ack') === 'on', age21: fd.get('age21') === 'on' });
 });
 
 /* ---------------- viewer Pick'em ---------------- */
@@ -3613,7 +3667,7 @@ function render() {
   let body = (views[S.tab] || viewLive)();
   if (S.tab === 'live') body = body.replace('<!--pulse-->', pulseHTML());
   else { const strip = liveStrip(); if (strip) { const i = body.indexOf('</section>'); body = i > -1 ? body.slice(0, i + 10) + strip + body.slice(i + 10) : strip + body; } }
-  $('#main').innerHTML = body;
+  $('#main').innerHTML = body + footHTML();
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('main details').forEach((d) => { const s = d.querySelector('summary'); if (s && openD.includes(s.textContent)) d.open = true; });
   { const bEl = document.getElementById('pzbM'); if (bEl) { S.me.builder = S.me.builder || PZB.state(); PZB.mountInto(bEl, S.me.builder, memberBuilderCtx()); } }
