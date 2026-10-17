@@ -237,7 +237,7 @@ details.more[open] summary::before{content:"–"}
 .side.r{flex-direction:row-reverse;text-align:right}
 .side img{width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));background:rgba(255,255,255,.92);border-radius:50%;padding:5px}
 .side .tn{font:900 24px/1 var(--stadium)}
-.side .tr{font-size:11px;font-weight:700;color:rgba(255,255,255,.75)}
+.side .tr{font-size:11px;font-weight:700;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .side .sc{font:700 52px/1 var(--jersey);margin-left:auto}
 .side.r .sc{margin-left:0;margin-right:auto}
 .side.lose .sc{opacity:.55}
@@ -342,6 +342,8 @@ details.more[open] summary::before{content:"–"}
 .s-ir{color:#fff;background:#6D4FE0;border-color:#6D4FE0}
 .s-act{color:var(--win);border-color:color-mix(in srgb,var(--win) 40%,transparent)}
 
+.masonry{columns:2;column-gap:16px}.masonry>*{break-inside:avoid;margin-bottom:16px;display:block}
+@media (max-width:980px){.masonry{columns:1}}
 /* ---------- research ---------- */
 .checkbar{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) 110px auto;gap:8px;padding:14px;margin-bottom:18px}
 .verdict{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font:900 15px/1 var(--stadium);letter-spacing:.02em}
@@ -439,7 +441,8 @@ body.overlay .ticker{display:flex;position:fixed;left:16px;right:16px;bottom:16p
 body.overlay .toasts{bottom:96px}
 
 /* ---------- responsive ---------- */
-@media (max-width:1280px){.pulse{grid-template-columns:repeat(3,minmax(0,1fr))}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1240px){.pt .v{font-size:30px}}
+@media (max-width:1060px){.pulse{grid-template-columns:repeat(3,minmax(0,1fr))}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:980px){.grid2{grid-template-columns:minmax(0,1fr)}.checkbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
 @media (max-width:860px){
   .shell{grid-template-columns:minmax(0,1fr);padding-bottom:160px}
@@ -1409,7 +1412,7 @@ function viewInjuries() {
     }).join('');
     return `<article class="card team-inj" style="--c1:${c1}"><div class="ti-head"><img src="${esc(logo('nfl', t.abbr))}" alt="" onerror="this.remove()"><b>${esc(t.name)}</b><span>${mine.has(t.abbr) ? 'Your team' : facing ? 'Faces ' + esc(facing) : t.list.length + ' listed'}</span></div>${rows}</article>`;
   }).join('');
-  return head + tools + (cards ? `<div class="grid2">${cards}</div>` : '<div class="empty"><b>No injuries match</b>Try All 32 teams or All statuses.</div>');
+  return head + tools + (cards ? `<div class="masonry">${cards}</div>` : '<div class="empty"><b>No injuries match</b>Try All 32 teams or All statuses.</div>');
 }
 
 /* ---------------- research ---------------- */
