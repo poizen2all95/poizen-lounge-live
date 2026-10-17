@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Poizen Lounge Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0B0E;--card:#161922;--card2:#1B1F2A;--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.18);--fg:#F8FAFC;--fg2:#A3AEC2;--fg3:#69758A;--em:#10B981;--gold:#FBBF24;--red:#F43F5E;--sky:#38BDF8;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 'Plus Jakarta Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1100px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+h1,h2{font-family:'Barlow Condensed','Arial Narrow',sans-serif;text-transform:uppercase;letter-spacing:.02em;margin:0}
+h1{font-size:30px}h2{font-size:22px;margin-bottom:10px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.top .who{margin-left:auto;color:var(--fg2);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px;min-width:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{padding:9px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:700 13px 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+.btn.pri{background:var(--em);color:#04120C;border-color:var(--em)}.btn.warn{color:#FDA4AF;border-color:rgba(244,63,94,.45)}
+.btn:disabled{opacity:.5;cursor:default}
+input,select,textarea{padding:9px 11px;border-radius:12px;border:1px solid var(--line2);background:#0F1117;color:var(--fg);font:inherit;min-width:0}
+textarea{width:100%;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.muted{color:var(--fg2)}.dim{color:var(--fg3)}.em{color:#34D399}.red{color:#FDA4AF}.gold{color:var(--gold)}
+.tick{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card2);margin-bottom:8px}
+.tick b{font-size:15px}.legs{font-size:12px;color:var(--fg2);margin-top:4px}
+.chip{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid var(--line2)}
+.chip.em{color:#34D399;border-color:rgba(16,185,129,.4)}.chip.gold{color:var(--gold);border-color:rgba(251,191,36,.4)}.chip.red{color:#FDA4AF;border-color:rgba(244,63,94,.4)}
+.msg{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.msg:first-child{border-top:0}
+.gate{max-width:440px;margin:12vh auto;text-align:center}
+.gate p{color:var(--fg2)}
+.status{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);padding:10px 16px;border-radius:12px;background:#141824;border:1px solid var(--line2);font-weight:700;z-index:9}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+@media(max-width:800px){.grid{grid-template-columns:minmax(0,1fr)}}
+table{width:100%;border-collapse:collapse;font-size:12px}td,th{padding:6px;border-top:1px solid var(--line);text-align:left}
+.scroll{overflow-x:auto}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="gate" id="gate">
+    <h1>Poizen Lounge Admin</h1>
+    <p>Sign in with the owner Google account. Any other account can look at this page but cannot change anything — the database refuses the write.</p>
+    <button class="btn pri" id="signin" type="button">Sign in with Google</button>
+    <p class="dim" id="gateMsg" style="font-size:12px"></p>
+  </div>
+
+  <div id="app" hidden>
+    <div class="top"><h1>Admin</h1><a class="btn" href="./" target="_blank" rel="noopener">Open public board</a><span class="who" id="who"></span><button class="btn" id="signout" type="button">Sign out</button></div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h2 id="slateName">Slate</h2><div class="row"><span class="dim" id="saved"></span><button class="btn pri" id="publish" type="button">Publish to board</button></div></div>
+      <div class="row" style="margin-top:8px"><label class="muted">Board title <input id="title" style="width:260px"></label></div>
+      <p class="dim" style="font-size:12px;margin:8px 0 0">Publishing updates every open viewer within seconds. Changes below stay local until you publish.</p>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card"><h2>Pick6 tickets</h2><div id="tickets"></div></div>
+        <div class="card"><h2>First TD</h2><div id="ftd"></div></div>
+        <div class="card"><h2>Scalp cash-outs</h2><p class="dim" style="font-size:12px;margin-top:0">Type what DraftKings actually paid when you cash out. Leave blank while the bet is open.</p><div id="scalp"></div></div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>Import from an AI</h2>
+          <p class="muted" style="font-size:13px;margin-top:0">Copy the prompt, give it to Claude, ChatGPT or Gemini with your locked picks (or a DraftKings screenshot), then paste the JSON they return.</p>
+          <div class="row"><button class="btn" id="copyPrompt" type="button">Copy AI prompt</button><span class="dim" id="copyMsg"></span></div>
+          <textarea id="importBox" rows="8" placeholder='Paste JSON here: { "pick6": [ ... ] } or a full slate' style="margin-top:10px"></textarea>
+          <div class="row" style="margin-top:8px"><button class="btn" id="importAdd" type="button">Add these tickets</button><button class="btn warn" id="importReplace" type="button">Replace whole slate</button></div>
+          <div id="importMsg" class="muted" style="font-size:12px;margin-top:6px"></div>
+        </div>
+        <div class="card">
+          <h2>Results &amp; record</h2>
+          <p class="dim" style="font-size:12px;margin-top:0">Grade pulls final box scores from ESPN. Recording a ticket adds it to the win-rate strip everyone sees. DraftKings is the official settlement — fix any number before recording.</p>
+          <div class="row"><button class="btn" id="grade" type="button">Grade tickets now</button></div>
+          <div id="gradeOut" style="margin-top:10px"></div>
+          <h2 style="margin-top:14px;font-size:18px">Recorded</h2>
+          <div class="scroll"><table id="ledger"></table></div>
+          <details style="margin-top:10px"><summary class="muted" style="cursor:pointer">Add a past result by hand</summary>
+            <div class="row" style="margin-top:8px"><input id="rDate" type="date"><input id="rTitle" placeholder="Ticket" style="flex:1"><input id="rStake" type="number" step="0.01" placeholder="Stake" style="width:90px"><input id="rPay" type="number" step="0.01" placeholder="Paid" style="width:90px"><button class="btn" id="rAdd" type="button">Add</button></div>
+          </details>
+        </div>
+        <div class="card">
+          <h2>Chat moderation</h2>
+          <div class="row"><input id="ownerMsg" placeholder="Post as PoiZen (verified badge)" style="flex:1" maxlength="400"><button class="btn pri" id="ownerSend" type="button">Post</button></div>
+          <div id="chatMod" style="margin-top:10px"></div>
+        </div>
+        <div class="card">
+          <h2>Raw slate JSON</h2>
+          <details><summary class="muted" style="cursor:pointer">Edit everything directly</summary>
+            <textarea id="raw" rows="18" style="margin-top:8px"></textarea>
+            <div class="row" style="margin-top:8px"><button class="btn" id="rawApply" type="button">Apply JSON</button><span id="rawMsg" class="dim"></span></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="status" id="status" hidden></div>
+
+<script>/* Poizen Lounge — grading engine (pure functions, no DOM).
+   Works in the browser (window.PZE) and in Node (module.exports) for tests.
+   Data source: ESPN public site API (scoreboard + game summary). */
+(function (root) {
+  'use strict';
+
+  const ESPN = {
+    scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard`,
+    summary: (sport, id) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/summary?event=${id}`,
+    gamelog: (id) => `https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/${id}/gamelog`,
+    injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
+    search: (q) => `https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(q)}&type=player&limit=6`,
+  };
+  function sportPath(s) { return s === 'mlb' ? 'baseball/mlb' : 'football/nfl'; }
+
+  // ---------- names ----------
+  function norm(name) {
+    return String(name || '')
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .replace(/[.'’`]/g, '')
+      .replace(/-/g, ' ')
+      .replace(/\b(jr|sr|ii|iii|iv|v)\b/g, ' ')
+      .replace(/[^a-z ]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // ---------- odds ----------
+  function americanToDecimal(odds) {
+    const n = Number(String(odds).replace('+', ''));
+    if (!isFinite(n) || n === 0) return null;
+    return n > 0 ? 1 + n / 100 : 1 + 100 / Math.abs(n);
+  }
+
+  // ---------- number parsing ----------
+  function num(v) {
+    if (v === undefined || v === null || v === '' || v === '-' || v === '--') return 0;
+    const n = Number(v);
+    return isFinite(n) ? n : 0;
+  }
+  function ipToOuts(ip) { // "5.2" -> 17 outs
+    const [w, p] = String(ip || '0').split('.');
+    return num(w) * 3 + num(p);
+  }
+
+  // ---------- summary parsing ----------
+  function gameStatus(summary) {
+    const comp = summary && summary.header && summary.header.competitions && summary.header.competitions[0];
+    const st = (comp && comp.status) || {};
+    const t = st.type || {};
+    return {
+      state: t.state || 'pre',               // pre | in | post
+      name: t.name || '',
+      completed: !!t.completed,
+      detail: t.shortDetail || t.detail || '',
+      period: st.period || 0,
+      clock: st.displayClock || '',
+      postponed: /POSTPONED|CANCELED|CANCELLED|SUSPENDED/.test(t.name || ''),
+    };
+  }
+
+  function emptyStats() {
+    return {
+      passYds: 0, passTD: 0, passAtt: 0, completions: 0, ints: 0,
+      rushYds: 0, rushTD: 0, rushAtt: 0,
+      rec: 0, recYds: 0, recTD: 0, targets: 0,
+      // mlb batting
+      h: 0, r: 0, rbi: 0, hr: 0, bb: 0, k: 0, ab: 0,
+      // mlb pitching
+      pK: 0, pOuts: 0, pER: 0, pH: 0,
+    };
+  }
+
+  function parseBox(summary, sport) {
+    const players = {}; // key: espn id
+    const byName = {};  // norm name -> id
+    const teams = (summary && summary.boxscore && summary.boxscore.players) || [];
+    for (const t of teams) {
+      const team = t.team && t.team.abbreviation;
+      for (const cat of t.statistics || []) {
+        const keys = cat.keys || [];
+        const kind = cat.name || cat.type;
+        for (const a of cat.athletes || []) {
+          const id = String(a.athlete && a.athlete.id);
+          const name = a.athlete && a.athlete.displayName;
+          if (!players[id]) players[id] = { id, name, team, stats: emptyStats(), cats: [] };
+          const p = players[id];
+          p.cats.push(kind);
+          byName[norm(name)] = id;
+          const v = {};
+          keys.forEach((k, i) => { v[k] = (a.stats || [])[i]; });
+          const s = p.stats;
+          if (sport === 'mlb') {
+            if (kind === 'batting') {
+              s.h += num(v.hits); s.r += num(v.runs); s.rbi += num(v.RBIs); s.hr += num(v.homeRuns);
+              s.bb += num(v.walks); s.k += num(v.strikeouts); s.ab += num(v.atBats);
+            } else if (kind === 'pitching') {
+              s.pK += num(v.strikeouts); s.pER += num(v.earnedRuns); s.pH += num(v.hits);
+              s.pOuts += ipToOuts(v['fullInnings.partInnings']);
+            }
+          } else {
+            if (kind === 'passing') {
+              const ca = String(v['completions/passingAttempts'] || '0/0').split('/');
+              s.completions += num(ca[0]); s.passAtt += num(ca[1]);
+              s.passYds += num(v.passingYards); s.passTD += num(v.passingTouchdowns); s.ints += num(v.interceptions);
+            } else if (kind === 'rushing') {
+              s.rushAtt += num(v.rushingAttempts); s.rushYds += num(v.rushingYards); s.rushTD += num(v.rushingTouchdowns);
+            } else if (kind === 'receiving') {
+              s.rec += num(v.receptions); s.recYds += num(v.receivingYards); s.recTD += num(v.receivingTouchdowns);
+              s.targets += num(v.receivingTargets);
+            }
+          }
+        }
+      }
+    }
+    return { players, byName };
+  }
+
+  // Scorer of a touchdown play, from ESPN text like
+  // "J.K. Dobbins 4 Yd Rush (Wil Lutz Kick)" or "Rashid Shaheed 42 Yd pass from Sam Darnold (...)"
+  function tdScorerFromText(text) {
+    const m = String(text || '').match(/^(.+?)\s+-?\d+\s+(Yd|Yard|Yds)/i);
+    if (m) return m[1].trim();
+    const m2 = String(text || '').match(/^([^\d(]+?)\s+\d/);
+    return m2 ? m2[1].trim() : null;
+  }
+
+  function scoringPlays(summary) {
+    return ((summary && summary.scoringPlays) || []).map((p) => {
+      const isTD = ((p.scoringType && p.scoringType.abbreviation) || (p.type && p.type.abbreviation)) === 'TD';
+      const scorer = isTD ? tdScorerFromText(p.text) : null;
+      return {
+        isTD, scorer, scorerNorm: scorer ? norm(scorer) : null,
+        text: (p.text || '').trim(), team: p.team && p.team.abbreviation,
+        period: p.period && p.period.number, clock: p.clock && p.clock.displayValue,
+      };
+    });
+  }
+
+  function parseGame(summary, sport) {
+    const status = gameStatus(summary);
+    const box = parseBox(summary, sport);
+    const plays = sport === 'nfl' ? scoringPlays(summary) : [];
+    const firstTD = plays.find((p) => p.isTD) || null;
+    const comp = summary && summary.header && summary.header.competitions && summary.header.competitions[0];
+    const score = {};
+    for (const c of (comp && comp.competitors) || []) score[c.team && c.team.abbreviation] = num(c.score);
+    return { sport, status, box, plays, firstTD, score };
+  }
+
+  // ---------- markets ----------
+  const MARKETS = {
+    // NFL
+    pass_yds: { sport: 'nfl', label: 'Passing Yards', short: 'Pass Yds', f: (s) => s.passYds },
+    pass_td: { sport: 'nfl', label: 'Passing TDs', short: 'Pass TD', f: (s) => s.passTD },
+    pass_att: { sport: 'nfl', label: 'Pass Attempts', short: 'Pass Att', f: (s) => s.passAtt },
+    completions: { sport: 'nfl', label: 'Completions', short: 'Comp', f: (s) => s.completions },
+    rush_yds: { sport: 'nfl', label: 'Rushing Yards', short: 'Rush Yds', f: (s) => s.rushYds },
+    rush_att: { sport: 'nfl', label: 'Rush Attempts', short: 'Carries', f: (s) => s.rushAtt },
+    rec_yds: { sport: 'nfl', label: 'Receiving Yards', short: 'Rec Yds', f: (s) => s.recYds },
+    receptions: { sport: 'nfl', label: 'Receptions', short: 'Rec', f: (s) => s.rec },
+    rush_rec_yds: { sport: 'nfl', label: 'Rush + Rec Yards', short: 'Rush+Rec Yds', f: (s) => s.rushYds + s.recYds },
+    pass_rush_yds: { sport: 'nfl', label: 'Pass + Rush Yards', short: 'Pass+Rush Yds', f: (s) => s.passYds + s.rushYds },
+    anytime_td: { sport: 'nfl', label: 'Rush + Rec TDs', short: 'TDs', f: (s) => s.rushTD + s.recTD },
+    interceptions: { sport: 'nfl', label: 'Interceptions Thrown', short: 'INT', f: (s) => s.ints },
+    // MLB
+    hrr: { sport: 'mlb', label: 'Hits + Runs + RBIs', short: 'H+R+RBI', f: (s) => s.h + s.r + s.rbi },
+    hits: { sport: 'mlb', label: 'Hits', short: 'Hits', f: (s) => s.h },
+    runs: { sport: 'mlb', label: 'Runs', short: 'Runs', f: (s) => s.r },
+    rbis: { sport: 'mlb', label: 'RBIs', short: 'RBI', f: (s) => s.rbi },
+    home_runs: { sport: 'mlb', label: 'Home Runs', short: 'HR', f: (s) => s.hr },
+    batter_ks: { sport: 'mlb', label: 'Batter Strikeouts', short: 'K', f: (s) => s.k },
+    pitcher_ks: { sport: 'mlb', label: 'Pitcher Strikeouts', short: 'Ks', f: (s) => s.pK },
+    pitcher_outs: { sport: 'mlb', label: 'Pitching Outs', short: 'Outs', f: (s) => s.pOuts },
+  };
+
+  function findPlayer(game, ref) {
+    if (!game) return null;
+    const { players, byName } = game.box;
+    if (ref.espnId && players[String(ref.espnId)]) return players[String(ref.espnId)];
+    const id = byName[norm(ref.name)];
+    if (id) return players[id];
+    // last-name + team fallback ("Jose Ramirez" vs "José Ramírez" handled by norm; this covers "Kenneth Walker" vs "Kenneth Walker III")
+    const n = norm(ref.name);
+    const hit = Object.values(players).find((p) => {
+      const pn = norm(p.name);
+      return (pn.startsWith(n) || n.startsWith(pn)) && (!ref.team || p.team === ref.team);
+    });
+    return hit || null;
+  }
+
+  /* Grade one prop leg.
+     leg: { name, espnId, team, market, line, dir: 'over'|'under' }
+     game: parseGame() result or null (not started / not found)
+     returns { state, value, line, progress, note }
+       state: scheduled | live | hit | miss | dnp | void */
+  function gradeLeg(leg, game) {
+    const line = Number(leg.line);
+    const dir = leg.dir === 'under' ? 'under' : 'over';
+    const mk = MARKETS[leg.market];
+    if (!mk) return { state: 'error', value: null, line, progress: 0, note: `Unknown market "${leg.market}"` };
+    if (!game || game.status.state === 'pre') return { state: 'scheduled', value: 0, line, progress: 0, note: '' };
+    if (game.status.postponed) return { state: 'void', value: null, line, progress: 0, note: 'Game postponed — check DraftKings void rules' };
+    const p = findPlayer(game, leg);
+    const value = p ? mk.f(p.stats) : 0;
+    const final = game.status.state === 'post';
+    const progress = line > 0 ? Math.min(1, value / line) : (value > 0 ? 1 : 0);
+    if (dir === 'over') {
+      if (value > line) return { state: 'hit', value, line, progress: 1, note: final ? 'Final' : 'Cleared' };
+      if (final) {
+        if (!p) return { state: 'dnp', value: 0, line, progress: 0, note: 'No stats recorded — may be void (DNP). DraftKings rules decide.' };
+        return { state: 'miss', value, line, progress, note: 'Final' };
+      }
+      return { state: 'live', value, line, progress, note: p ? `Needs ${fmt(line - value + (Number.isInteger(line) ? 1 : 0.5))} more` : 'No stats yet' };
+    }
+    // under
+    if (value > line) return { state: 'miss', value, line, progress: 1, note: 'Went over' };
+    if (final) {
+      if (!p) return { state: 'dnp', value: 0, line, progress: 0, note: 'No stats recorded — may be void (DNP). DraftKings rules decide.' };
+      return { state: 'hit', value, line, progress, note: 'Final' };
+    }
+    return { state: 'live', value, line, progress, note: `${fmt(line - value)} of room left` };
+  }
+
+  function fmt(n) {
+    if (n === null || n === undefined || !isFinite(n)) return '–';
+    return Number.isInteger(n) ? String(n) : n.toFixed(1);
+  }
+
+  // ---------- tickets ----------
+  /* Pick6 entry: { entry, legs:[...], payouts:{ "8":221.9, "7":5.5 } | null, toWin }
+     payouts are DraftKings multipliers on the entry by number correct (when known). */
+  function gradePick6(slip, gameFor) {
+    const legs = slip.legs.map((l) => ({ leg: l, g: gradeLeg(l, gameFor(l)) }));
+    const n = legs.length;
+    const hits = legs.filter((x) => x.g.state === 'hit').length;
+    const misses = legs.filter((x) => x.g.state === 'miss').length;
+    const dnps = legs.filter((x) => x.g.state === 'dnp' || x.g.state === 'void').length;
+    const open = legs.filter((x) => x.g.state === 'live' || x.g.state === 'scheduled').length;
+    const started = legs.some((x) => x.g.state !== 'scheduled');
+    const entry = Number(slip.entry) || 0;
+    const tiers = slip.payouts || null;
+    const tierMult = (k) => (tiers && tiers[String(k)]) ? Number(tiers[String(k)]) : 0;
+    const allWin = Number(slip.toWin) || (tiers ? entry * tierMult(n) : 0);
+
+    // best still possible = everything open hits
+    const bestCorrect = hits + open;
+    let potential;
+    if (tiers) potential = entry * tierMult(bestCorrect);
+    else potential = misses === 0 ? allWin : 0;
+
+    let state = 'open';
+    let payout = null;
+    if (open === 0 && started) {
+      if (dnps > 0) { state = 'review'; }
+      else {
+        payout = tiers ? entry * tierMult(hits) : (misses === 0 ? allWin : 0);
+        state = payout > 0 ? (hits === n ? 'won' : 'partial') : 'lost';
+      }
+    } else if (started) {
+      state = potential > 0 ? 'live' : 'dead';
+    }
+    return { legs, n, hits, misses, dnps, open, potential, payout, state, entry };
+  }
+
+  /* First-TD bet: { name, team, stake, odds } in a game */
+  function gradeFirstTD(bet, game) {
+    const dec = americanToDecimal(bet.odds) || 0;
+    const ret = (Number(bet.stake) || 0) * dec;
+    if (!game || game.status.state === 'pre') return { state: 'scheduled', ret, scorer: null };
+    const ftd = game.firstTD;
+    if (!ftd) {
+      if (game.status.state === 'post') return { state: 'miss', ret, scorer: null, note: 'No touchdown scored' };
+      return { state: 'live', ret, scorer: null, note: 'No TD yet' };
+    }
+    const mine = ftd.scorerNorm && (ftd.scorerNorm === norm(bet.name) || norm(bet.name).startsWith(ftd.scorerNorm) || ftd.scorerNorm.startsWith(norm(bet.name)));
+    return { state: mine ? 'hit' : 'miss', ret, scorer: ftd.scorer, note: `First TD: ${ftd.scorer}` };
+  }
+
+  /* 2+ TD scalp target: { name, team, stake, odds, cashedOut } */
+  function gradeScalp(t, game) {
+    const dec = americanToDecimal(t.odds) || 0;
+    const full = (Number(t.stake) || 0) * dec;
+    if (t.cashedOut !== undefined && t.cashedOut !== null && t.cashedOut !== '') {
+      return { state: 'cashed', tds: null, realized: Number(t.cashedOut), full };
+    }
+    if (!game || game.status.state === 'pre') return { state: 'scheduled', tds: 0, full };
+    const p = findPlayer(game, t);
+    const tds = p ? p.stats.rushTD + p.stats.recTD : 0;
+    if (tds >= 2) return { state: 'hit', tds, full, realized: full };
+    if (game.status.state === 'post') return { state: 'miss', tds, full, realized: 0 };
+    if (tds === 1) return { state: 'td1', tds, full, note: 'TD #1 scored — check your cash-out offer on DraftKings' };
+    return { state: 'live', tds, full };
+  }
+
+  // ---------- alerts: diff two graded snapshots ----------
+  /* prev/next: { [key]: { kind, state, value, tds, label } } -> array of alert objects */
+  function diffAlerts(prev, next) {
+    const out = [];
+    if (!prev) return out;
+    for (const key of Object.keys(next)) {
+      const a = prev[key];
+      const b = next[key];
+      if (!a) continue;
+      if (b.kind === 'leg') {
+        if (a.state !== 'hit' && b.state === 'hit') out.push({ key, tone: 'win', title: `${b.label} cleared`, body: `${fmt(b.value)} ${b.unit} (line ${fmt(b.line)})` });
+        else if (a.state !== 'miss' && b.state === 'miss') out.push({ key, tone: 'loss', title: `${b.label} missed`, body: `${fmt(b.value)} ${b.unit} (line ${fmt(b.line)})` });
+        else if (a.state !== 'dnp' && b.state === 'dnp') out.push({ key, tone: 'warn', title: `${b.label}: no stats`, body: 'Possible void — check DraftKings' });
+      } else if (b.kind === 'scalp') {
+        if ((a.tds || 0) < 1 && b.tds >= 1) out.push({ key, tone: 'gold', title: `${b.label} scored TD #1`, body: 'Check your cash-out offer now' });
+        if ((a.tds || 0) < 2 && b.tds >= 2) out.push({ key, tone: 'win', title: `${b.label} scored TD #2`, body: '2+ TD ticket wins in full' });
+      } else if (b.kind === 'ftd') {
+        if (a.state !== b.state && (b.state === 'hit' || b.state === 'miss') && b.scorer) out.push({ key, tone: b.state === 'hit' ? 'win' : 'loss', title: b.state === 'hit' ? `${b.label} scored the first TD` : `First TD: ${b.scorer}`, body: b.state === 'hit' ? `Pays $${b.ret.toFixed(2)}` : `${b.label} first-TD bet lost` });
+      } else if (b.kind === 'player-td') {
+        if ((b.tds || 0) > (a.tds || 0)) out.push({ key, tone: 'gold', title: `TOUCHDOWN — ${b.label}`, body: `${b.tds} TD${b.tds > 1 ? 's' : ''} today` });
+      }
+    }
+    return out;
+  }
+
+  // ---------- research helpers (game logs) ----------
+  function gamelogRows(j) {
+    const names = j.names || [];
+    const st = (j.seasonTypes || []).find((s) => /Regular/i.test(s.displayName)) || (j.seasonTypes || [])[0];
+    const ev = j.events || {};
+    const rows = ((st && st.categories) || []).flatMap((c) => c.events || []).map((e) => {
+      const o = { eventId: e.eventId, week: ev[e.eventId] && ev[e.eventId].week, opp: ev[e.eventId] && ev[e.eventId].opponent && ev[e.eventId].opponent.abbreviation, atVs: ev[e.eventId] && ev[e.eventId].atVs, result: ev[e.eventId] && ev[e.eventId].gameResult };
+      names.forEach((n, i) => { o[n] = e.stats[i]; });
+      return o;
+    });
+    const seen = {};
+    return rows.filter((r) => (seen[r.eventId] ? false : (seen[r.eventId] = true))).sort((a, b) => a.week - b.week);
+  }
+  function rowStats(r) {
+    const s = emptyStats();
+    s.passYds = num(r.passingYards); s.passTD = num(r.passingTouchdowns); s.ints = num(r.interceptions);
+    s.completions = num(r.completions); s.passAtt = num(r.passingAttempts);
+    s.rushYds = num(r.rushingYards); s.rushTD = num(r.rushingTouchdowns); s.rushAtt = num(r.rushingAttempts);
+    s.rec = num(r.receptions); s.recYds = num(r.receivingYards); s.recTD = num(r.receivingTouchdowns); s.targets = num(r.receivingTargets);
+    return s;
+  }
+  function researchLine(rows, market, line, dir) {
+    const mk = MARKETS[market];
+    const vals = rows.map((r) => ({ week: r.week, opp: r.opp, v: mk.f(rowStats(r)) }));
+    const n = vals.length;
+    const sum = vals.reduce((a, x) => a + x.v, 0);
+    const avg = n ? sum / n : 0;
+    const sorted = vals.map((x) => x.v).sort((a, b) => a - b);
+    const median = n ? (n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2) : 0;
+    const over = vals.filter((x) => x.v > line).length;
+    const hits = dir === 'under' ? n - over : over;
+    const l3 = vals.slice(-3);
+    const l3avg = l3.length ? l3.reduce((a, x) => a + x.v, 0) / l3.length : 0;
+    return { vals, n, avg, median, hits, l3avg, max: sorted[n - 1] || 0, min: sorted[0] || 0 };
+  }
+
+  const api = { ESPN, norm, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, researchLine, rowStats, fmt };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.PZE = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>
+'use strict';
+const E = window.PZE;
+const SEED = {"version":1,"title":"NFL Week 6","updated":"2026-10-16T20:30:00-07:00","note":"Imported from the Gemini board. Tickets marked unconfirmed have not been matched to DraftKings yet.","players":{"henry":{"name":"Derrick Henry","sport":"nfl","team":"BAL","pos":"RB","number":"22","espnId":"3043078"},"bijan":{"name":"Bijan Robinson","sport":"nfl","team":"ATL","pos":"RB","number":"7","espnId":"4430807"},"allen":{"name":"Josh Allen","sport":"nfl","team":"BUF","pos":"QB","number":"17","espnId":"3918298"},"walker":{"name":"Kenneth Walker III","sport":"nfl","team":"KC","pos":"RB","number":"9","espnId":"4567048"},"watson":{"name":"Christian Watson","sport":"nfl","team":"GB","pos":"WR","number":"9","espnId":"4248528"},"cmc":{"name":"Christian McCaffrey","sport":"nfl","team":"SF","pos":"RB","number":"23","espnId":"3117251"},"daniels":{"name":"Jayden Daniels","sport":"nfl","team":"WSH","pos":"QB","number":"5","espnId":"4426348"},"young":{"name":"Bryce Young","sport":"nfl","team":"CAR","pos":"QB","number":"9","espnId":"4685720"},"mcmillan":{"name":"Tetairoa McMillan","sport":"nfl","team":"CAR","pos":"WR","number":"4","espnId":"4685472"},"warren":{"name":"Jaylen Warren","sport":"nfl","team":"PIT","pos":"RB","number":"30","espnId":"4569987"},"lamb":{"name":"CeeDee Lamb","sport":"nfl","team":"DAL","pos":"WR","number":"88","espnId":"4241389"},"dak":{"name":"Dak Prescott","sport":"nfl","team":"DAL","pos":"QB","number":"4","espnId":"2577417"},"taylor":{"name":"Jonathan Taylor","sport":"nfl","team":"IND","pos":"RB","number":"28","espnId":"4242335"},"irving":{"name":"Bucky Irving","sport":"nfl","team":"TB","pos":"RB","number":"7","espnId":"4596448"},"mahomes":{"name":"Patrick Mahomes","sport":"nfl","team":"KC","pos":"QB","number":"15","espnId":"3139477"},"stafford":{"name":"Matthew Stafford","sport":"nfl","team":"LAR","pos":"QB","number":"9","espnId":"12483"},"nacua":{"name":"Puka Nacua","sport":"nfl","team":"LAR","pos":"WR","number":"17","espnId":"4426515"},"caminero":{"name":"Junior Caminero","sport":"mlb","team":"TB","pos":"3B","number":"13","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/691406/headshot/67/current"},"ydiaz":{"name":"Yandy Díaz","sport":"mlb","team":"TB","pos":"1B","number":"2","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/650490/headshot/67/current"},"kwan":{"name":"Steven Kwan","sport":"mlb","team":"CLE","pos":"OF","number":"38","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680757/headshot/67/current"},"jram":{"name":"José Ramírez","sport":"mlb","team":"CLE","pos":"3B","number":"11","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/608070/headshot/67/current"},"halpin":{"name":"Petey Halpin","sport":"mlb","team":"CLE","pos":"OF","number":"0","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/690984/headshot/67/current"},"nlowe":{"name":"Nathaniel Lowe","sport":"mlb","team":"CLE","pos":"1B","number":"30","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/663993/headshot/67/current"},"simpson":{"name":"Chandler Simpson","sport":"mlb","team":"TB","pos":"OF","number":"14","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/802415/headshot/67/current"},"palacios":{"name":"Richie Palacios","sport":"mlb","team":"TB","pos":"2B","number":"1","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680700/headshot/67/current"},"rocchio":{"name":"Brayan Rocchio","sport":"mlb","team":"CLE","pos":"SS","number":"4","headshot":"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/677587/headshot/67/current"}},"pick6":[{"id":"dk-8-staged","title":"DraftKings 8-Pick — Dak Gimme","badge":"Staged on DraftKings","status":"unconfirmed","entry":10,"toWin":2219.81,"payouts":{"6":1.3,"7":5.5,"8":221.981},"legs":[{"player":"dak","market":"pass_yds","line":0.5,"mult":"Gimme","gimme":true},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"taylor","market":"rush_yds","line":99.5,"mult":"1.1x"},{"player":"allen","market":"pass_yds","line":259.5,"mult":"1.2x"},{"player":"irving","market":"rush_yds","line":79.5,"mult":"1.3x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mahomes","market":"pass_yds","line":259.5,"mult":"1.5x"}]},{"id":"mlb-4","title":"ALCS Game 4 — 4-Pick","badge":"MLB · $5 Bonus + Caminero Gimme","status":"unconfirmed","entry":5,"toWin":33,"legs":[{"player":"caminero","market":"hrr","line":0.5,"mult":"Gimme","gimme":true},{"player":"ydiaz","market":"hrr","line":1.5,"mult":"1.0x"},{"player":"kwan","market":"hrr","line":1.5,"mult":"1.0x"},{"player":"rocchio","market":"hrr","line":0.5,"mult":"0.8x"}]},{"id":"mlb-6","title":"ALCS Game 4 — 6-Pick","badge":"MLB · J. Ramírez Promo","status":"unconfirmed","entry":3,"toWin":40,"legs":[{"player":"jram","market":"hrr","line":0.5,"mult":"0.5x Promo"},{"player":"halpin","market":"hrr","line":1.5,"mult":"1.3x"},{"player":"nlowe","market":"hrr","line":1.5,"mult":"1.2x"},{"player":"simpson","market":"hrr","line":1.5,"mult":"0.8x"},{"player":"palacios","market":"hrr","line":0.5,"mult":"0.8x"},{"player":"rocchio","market":"hrr","line":0.5,"mult":"0.8x"}]},{"id":"nfl-3","title":"3-Pick Bankroll Builder","badge":"+50% Winnings Boost","status":"unconfirmed","entry":10,"toWin":131,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"}]},{"id":"nfl-8-lamb","title":"8-Pick CeeDee Lamb Re-Run","badge":"+50% Winnings Boost","status":"unconfirmed","entry":10,"toWin":2400,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mcmillan","market":"rec_yds","line":89.5,"mult":"1.6x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"},{"player":"walker","market":"rush_yds","line":119.5,"mult":"1.6x"},{"player":"lamb","market":"rec_yds","line":99.5,"mult":"1.3x"}]},{"id":"nfl-8-dak","title":"8-Pick Dak Gimme (Gemini version)","badge":"Dak 0.5 Pass Yds Gimme","status":"unconfirmed","entry":10,"toWin":1260.53,"legs":[{"player":"young","market":"pass_yds","line":269.5,"mult":"1.4x"},{"player":"mcmillan","market":"rec_yds","line":89.5,"mult":"1.6x"},{"player":"warren","market":"rush_rec_yds","line":109.5,"mult":"1.3x"},{"player":"bijan","market":"anytime_td","line":0.5,"mult":"0.7x"},{"player":"henry","market":"rush_rec_yds","line":109.5,"mult":"1.1x"},{"player":"allen","market":"anytime_td","line":0.5,"mult":"0.8x"},{"player":"walker","market":"rush_yds","line":119.5,"mult":"1.6x"},{"player":"dak","market":"pass_yds","line":0.5,"mult":"Gimme","gimme":true}]}],"firstTD":{"title":"$20 Tiered First-TD Portfolio","status":"unconfirmed","bets":[{"player":"bijan","stake":2,"odds":"+380"},{"player":"henry","stake":2,"odds":"+425"},{"player":"warren","stake":2,"odds":"+550"},{"player":"mcmillan","stake":5,"odds":"+850"},{"player":"walker","stake":2,"odds":"+360"},{"player":"allen","stake":2,"odds":"+500"},{"player":"lamb","stake":5,"odds":"+650"}]},"scalp":{"title":"2+ TD Live Scalp","seed":100,"status":"unconfirmed","rule":"Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.","shifts":[{"label":"Shift 1","targets":[{"player":"henry","stake":50,"odds":"+390"},{"player":"bijan","stake":50,"odds":"+410"}]},{"label":"Shift 2","targets":[{"player":"allen","stake":50,"odds":"+420"},{"player":"walker","stake":50,"odds":"+350"}]},{"label":"Shift 3 · SNF","targets":[{"player":"watson","stake":100,"odds":"+525"}]},{"label":"Shift 4 · MNF","targets":[{"player":"cmc","stake":50,"odds":"+330"},{"player":"daniels","stake":50,"odds":"+550"}]}]},"rules":{"maxLegs":4,"avgMustBeatLine":true,"cashOutOnFirstTD":true},"research":[{"player":"young","market":"pass_yds","line":269.5},{"player":"warren","market":"rush_rec_yds","line":109.5},{"player":"stafford","market":"pass_yds","line":309.5},{"player":"nacua","market":"rec_yds","line":109.5},{"player":"walker","market":"rush_yds","line":119.5},{"player":"mcmillan","market":"rec_yds","line":89.5},{"player":"allen","market":"anytime_td","line":0.5},{"player":"bijan","market":"rush_rec_yds","line":110},{"player":"henry","market":"rush_rec_yds","line":109.5},{"player":"lamb","market":"rec_yds","line":99.5},{"player":"watson","market":"rec_yds","line":89.5},{"player":"cmc","market":"anytime_td","line":0.5},{"player":"daniels","market":"anytime_td","line":0.5},{"player":"dak","market":"pass_yds","line":0.5},{"player":"taylor","market":"rush_yds","line":99.5},{"player":"irving","market":"rush_yds","line":79.5},{"player":"mahomes","market":"pass_yds","line":259.5},{"player":"allen","market":"pass_yds","line":259.5}]};
+const FIREBASE = {"apiKey":"AIzaSyDmlLzMBS4O28NvnvjGT5qQAA6otDA5WaQ","authDomain":"poizen-lounge.firebaseapp.com","databaseURL":"https://poizen-lounge-default-rtdb.firebaseio.com","projectId":"poizen-lounge","storageBucket":"poizen-lounge.firebasestorage.app","messagingSenderId":"1008348808294","appId":"1:1008348808294:web:fd7df53d2a921daec599a7"};
+const OWNER_EMAIL = 'poizen2all95@gmail.com';
+const TZ = 'America/Los_Angeles';
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = (n) => (n < 0 ? '-$' : '$') + Math.abs(Number(n) || 0).toFixed(2);
+const dayKey = (d = new Date()) => d.toLocaleDateString('en-CA', { timeZone: TZ });
+let slate = null, results = { entries: {} }, dirty = false, db, auth;
+
+function flash(msg, ms = 2600) { const s = $('#status'); s.textContent = msg; s.hidden = false; clearTimeout(flash.t); flash.t = setTimeout(() => (s.hidden = true), ms); }
+function setDirty(v = true) { dirty = v; $('#saved').textContent = v ? 'Unpublished changes' : 'Up to date'; $('#saved').className = v ? 'gold' : 'dim'; }
+function loadScripts(urls) { return urls.reduce((p, u) => p.then(() => new Promise((res, rej) => { const s = document.createElement('script'); s.src = u; s.onload = res; s.onerror = () => rej(new Error('load ' + u)); document.head.appendChild(s); })), Promise.resolve()); }
+function arr(x) { return Array.isArray(x) ? x : x && typeof x === 'object' ? Object.keys(x).sort((a, b) => a - b).map((k) => x[k]) : []; }
+function fixArrays(s) { s.pick6 = arr(s.pick6).map((t) => ({ ...t, legs: arr(t.legs) })); if (s.firstTD) s.firstTD.bets = arr(s.firstTD.bets); if (s.scalp) s.scalp.shifts = arr(s.scalp.shifts).map((sh) => ({ ...sh, targets: arr(sh.targets) })); s.research = arr(s.research); return s; }
+const P = (k) => (slate.players || {})[k] || { name: k };
+
+/* ---------- validation (also used for AI imports) ---------- */
+function validateSlate(s) {
+  const errs = [];
+  if (!s || typeof s !== 'object') return ['Not a JSON object'];
+  const players = s.players || {};
+  const need = (k, where) => { if (!players[k]) errs.push(`${where}: player "${k}" is missing from "players"`); };
+  for (const t of s.pick6 || []) {
+    if (!t.id) errs.push(`Ticket "${t.title || '?'}" needs an id`);
+    if (!(Number(t.entry) > 0)) errs.push(`Ticket "${t.title || t.id}" needs an entry amount`);
+    for (const l of t.legs || []) { need(l.player, `Ticket "${t.title || t.id}"`); if (!E.MARKETS[l.market]) errs.push(`Ticket "${t.title || t.id}": unknown market "${l.market}"`); if (!isFinite(Number(l.line))) errs.push(`Ticket "${t.title || t.id}": bad line for ${l.player}`); }
+  }
+  for (const b of (s.firstTD && s.firstTD.bets) || []) { need(b.player, 'First TD'); if (!E.americanToDecimal(b.odds)) errs.push(`First TD ${b.player}: bad odds "${b.odds}"`); }
+  for (const sh of (s.scalp && s.scalp.shifts) || []) for (const t of sh.targets || []) { need(t.player, 'Scalp'); if (!E.americanToDecimal(t.odds)) errs.push(`Scalp ${t.player}: bad odds "${t.odds}"`); }
+  for (const [k, p] of Object.entries(players)) { if (!p.name || !p.team) errs.push(`Player "${k}" needs name and team`); if (p.sport && !['nfl', 'mlb'].includes(p.sport)) errs.push(`Player "${k}": sport must be nfl or mlb`); }
+  return errs;
+}
+
+/* ---------- render ---------- */
+function render() {
+  $('#title').value = slate.title || '';
+  $('#slateName').textContent = slate.title || 'Slate';
+  $('#tickets').innerHTML = (slate.pick6 || []).map((t, i) => `<div class="tick"><div style="min-width:0"><b>${esc(t.title)}</b> <span class="chip ${t.status === 'unconfirmed' ? 'gold' : 'em'}">${t.status === 'unconfirmed' ? 'Unconfirmed' : 'Confirmed'}</span>
+    <div class="legs">${money(t.entry)} entry · to win ${money(t.toWin || 0)} · ${t.legs.length} legs</div>
+    <div class="legs">${t.legs.map((l) => `${esc(P(l.player).name)} ${l.dir === 'under' ? 'LESS' : 'MORE'} ${l.line} ${esc((E.MARKETS[l.market] || {}).short || l.market)}`).join(' · ')}</div></div>
+    <div class="row" style="flex-direction:column;align-items:stretch"><button class="btn" data-confirm="${i}" type="button">${t.status === 'unconfirmed' ? 'Mark confirmed' : 'Mark unconfirmed'}</button><button class="btn warn" data-del="${i}" type="button">Remove</button></div></div>`).join('') || '<p class="dim">No tickets.</p>';
+  const f = slate.firstTD;
+  $('#ftd').innerHTML = f ? `<div class="row" style="margin-bottom:8px"><span class="chip ${f.status === 'unconfirmed' ? 'gold' : 'em'}">${f.status === 'unconfirmed' ? 'Unconfirmed' : 'Confirmed'}</span><button class="btn" data-ftdconfirm type="button">${f.status === 'unconfirmed' ? 'Mark confirmed' : 'Mark unconfirmed'}</button><button class="btn warn" data-ftddel type="button">Remove all first-TD bets</button></div>` + f.bets.map((b) => `<div class="legs">${esc(P(b.player).name)} · ${money(b.stake)} at ${esc(b.odds)}</div>`).join('') : '<p class="dim">None.</p>';
+  const sc = slate.scalp;
+  $('#scalp').innerHTML = sc ? sc.shifts.map((sh, i) => `<div style="margin-bottom:10px"><b>${esc(sh.label)}</b>${sh.targets.map((t, j) => `<div class="row" style="margin-top:6px"><span style="flex:1">${esc(P(t.player).name)} · ${money(t.stake)} at ${esc(t.odds)}</span><input type="number" step="0.01" placeholder="Cashed out $" value="${t.cashedOut ?? ''}" data-cash="${i}:${j}" style="width:130px"></div>`).join('')}</div>`).join('') : '<p class="dim">None.</p>';
+  $('#raw').value = JSON.stringify(slate, null, 2);
+  renderLedger();
+}
+function renderLedger() {
+  const list = Object.entries(results.entries || {}).map(([k, e]) => ({ k, ...e })).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  $('#ledger').innerHTML = list.length ? '<tr><th>Date</th><th>Ticket</th><th>Stake</th><th>Paid</th><th>P/L</th><th></th></tr>' + list.map((e) => `<tr><td>${esc(e.date)}</td><td>${esc(e.title)}</td><td>${money(e.stake)}</td><td>${money(e.payout)}</td><td class="${e.payout > e.stake ? 'em' : 'red'}">${money(e.payout - e.stake)}</td><td><button class="btn warn" data-unrec="${esc(e.k)}" type="button">×</button></td></tr>`).join('') : '<tr><td class="dim">Nothing recorded yet.</td></tr>';
+}
+
+/* ---------- publish ---------- */
+async function publish() {
+  slate.title = $('#title').value.trim() || slate.title;
+  const errs = validateSlate(slate);
+  if (errs.length) { flash('Fix first: ' + errs[0], 5000); return; }
+  slate.updated = new Date().toISOString();
+  try { await db.ref('board/slate').set(JSON.parse(JSON.stringify(slate))); setDirty(false); flash('Published — the board is updating now'); }
+  catch (e) { flash('Publish failed: ' + e.message, 6000); }
+}
+async function saveResults() { try { await db.ref('board/results').set(JSON.parse(JSON.stringify(results))); flash('Record updated'); } catch (e) { flash('Could not save record: ' + e.message, 6000); } }
+
+/* ---------- grading for the record ---------- */
+async function grade() {
+  const out = $('#gradeOut'); out.innerHTML = '<span class="dim">Pulling box scores…</span>';
+  const sports = [...new Set(Object.values(slate.players).map((p) => p.sport || 'nfl'))];
+  const teamEvent = {}, games = {};
+  try {
+    for (const sp of sports) { const sb = await (await fetch(E.ESPN.scoreboard(sp), { cache: 'no-store' })).json(); for (const ev of sb.events || []) for (const c of ev.competitions[0].competitors) teamEvent[sp + ':' + c.team.abbreviation] = { id: ev.id, sp, state: ev.status.type.state }; }
+    const ids = {}; Object.values(slate.players).forEach((p) => { const e = teamEvent[(p.sport || 'nfl') + ':' + p.team]; if (e && e.state !== 'pre') ids[e.id] = e.sp; });
+    await Promise.all(Object.entries(ids).map(async ([id, sp]) => { games[id] = E.parseGame(await (await fetch(E.ESPN.summary(sp, id), { cache: 'no-store' })).json(), sp); }));
+  } catch (e) { out.innerHTML = `<span class="red">ESPN fetch failed: ${esc(e.message)}</span>`; return; }
+  const gameFor = (k) => { const p = P(k); const e = teamEvent[(p.sport || 'nfl') + ':' + p.team]; return e ? games[e.id] || null : null; };
+  const rows = (slate.pick6 || []).map((t) => {
+    const r = E.gradePick6({ ...t, legs: t.legs.map((l) => ({ ...l, name: P(l.player).name, espnId: P(l.player).espnId, team: P(l.player).team })) }, (l) => gameFor(l.player));
+    const settled = r.payout !== null;
+    return `<div class="tick"><div><b>${esc(t.title)}</b><div class="legs">${r.hits}/${r.n} hit · ${settled ? 'paid ' + money(r.payout) : r.state === 'review' ? 'a leg may be void — check DraftKings' : 'not final yet'}</div></div>${settled || r.state === 'review' ? `<div class="row"><input type="number" step="0.01" value="${settled ? r.payout.toFixed(2) : ''}" data-paid="${esc(t.id)}" style="width:100px" aria-label="Paid"><button class="btn pri" data-rec="${esc(t.id)}" type="button">Record</button></div>` : ''}</div>`;
+  }).join('');
+  out.innerHTML = rows || '<span class="dim">No tickets.</span>';
+}
+
+/* ---------- AI prompt ---------- */
+function aiPrompt() {
+  const markets = Object.entries(E.MARKETS).map(([k, m]) => `${k} = ${m.label} (${m.sport})`).join('\n');
+  return `You are formatting DraftKings picks for my live board (Poizen Lounge). Reply with ONLY valid JSON, no commentary.
+
+Shape:
+{
+  "players": { "<key>": { "name": "Full Name", "sport": "nfl|mlb", "team": "ESPN team abbreviation e.g. BAL, KC, WSH, LAR", "pos": "RB", "number": "22", "espnId": "ESPN athlete id if you know it, else omit" } },
+  "pick6": [ { "id": "unique-id", "title": "Short ticket name", "badge": "optional label", "status": "confirmed", "entry": 10, "toWin": 131.00,
+      "payouts": { "3": 13.1 }   // optional: multiplier on entry by number correct, exactly as DraftKings shows
+      , "legs": [ { "player": "<key>", "market": "<market key>", "line": 269.5, "dir": "over|under", "mult": "1.4x", "gimme": false } ] } ],
+  "firstTD": { "title": "First TD", "bets": [ { "player": "<key>", "stake": 2, "odds": "+380" } ] },
+  "scalp": { "title": "2+ TD Live Scalp", "seed": 100, "shifts": [ { "label": "Shift 1", "targets": [ { "player": "<key>", "stake": 50, "odds": "+390" } ] } ] },
+  "research": [ { "player": "<key>", "market": "<market key>", "line": 99.5 } ]
+}
+
+Market keys (use exactly):
+${markets}
+
+Rules: use the exact lines, odds, entry and payouts from my DraftKings screen. "dir" is "over" for MORE and "under" for LESS. Don't invent players or numbers. Include every player you reference in "players". Omit sections I didn't give you.
+
+Current board for reference:
+${JSON.stringify({ title: slate.title, pick6: slate.pick6.map((t) => ({ title: t.title, legs: t.legs.map((l) => `${P(l.player).name} ${l.market} ${l.line}`) })) })}
+
+My picks:
+`;
+}
+
+/* ---------- import ---------- */
+function parseImport() {
+  let txt = $('#importBox').value.trim();
+  txt = txt.replace(/^```(json)?/i, '').replace(/```$/, '').trim();
+  let j; try { j = JSON.parse(txt); } catch (e) { throw new Error('That is not valid JSON: ' + e.message); }
+  return j;
+}
+function doImport(replace) {
+  const msg = $('#importMsg');
+  try {
+    const j = parseImport();
+    let next;
+    if (replace) next = { version: 1, rules: slate.rules, ...j, players: { ...(j.players || {}) } };
+    else {
+      next = JSON.parse(JSON.stringify(slate));
+      next.players = { ...next.players, ...(j.players || {}) };
+      const ids = new Set(next.pick6.map((t) => t.id));
+      for (const t of j.pick6 || []) { let id = t.id || 'ticket'; while (ids.has(id)) id += '-2'; ids.add(id); next.pick6.push({ status: 'confirmed', ...t, id }); }
+      if (j.firstTD) next.firstTD = j.firstTD;
+      if (j.scalp) next.scalp = j.scalp;
+      if (j.research) next.research = [...(next.research || []), ...j.research];
+    }
+    const errs = validateSlate(next);
+    if (errs.length) { msg.innerHTML = '<span class="red">Not imported:</span><br>' + errs.slice(0, 8).map(esc).join('<br>'); return; }
+    slate = fixArrays(next); render(); setDirty(); msg.innerHTML = `<span class="em">Imported ${(j.pick6 || []).length} ticket(s). Check them, then Publish.</span>`;
+  } catch (e) { msg.innerHTML = '<span class="red">' + esc(e.message) + '</span>'; }
+}
+
+/* ---------- chat moderation ---------- */
+function watchChat() {
+  db.ref('chat/' + dayKey()).orderByChild('ts').limitToLast(100).on('value', (snap) => {
+    const list = Object.entries(snap.val() || {}).map(([id, m]) => ({ id, ...m })).sort((a, b) => b.ts - a.ts);
+    $('#chatMod').innerHTML = list.length ? list.map((m) => `<div class="msg"><div style="min-width:0"><b class="${m.owner ? 'gold' : ''}">${esc(m.name)}</b> <span class="dim" style="font-size:11px">${new Date(m.ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span><div style="overflow-wrap:anywhere">${esc(m.text)}</div></div><button class="btn warn" data-delmsg="${esc(m.id)}" type="button">Delete</button></div>`).join('') : '<p class="dim">No messages today.</p>';
+  });
+}
+async function ownerPost() {
+  const text = $('#ownerMsg').value.trim(); if (!text) return;
+  const uid = auth.currentUser.uid, day = dayKey(), key = db.ref('chat/' + day).push().key, T = firebase.database.ServerValue.TIMESTAMP;
+  try { await db.ref().update({ [`chat/${day}/${key}`]: { uid, name: 'PoiZen', text: text.slice(0, 400), ts: T, owner: true }, [`rate/${uid}`]: T }); $('#ownerMsg').value = ''; }
+  catch (e) { flash('Could not post: ' + e.message, 5000); }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', async (e) => {
+  const t = e.target;
+  if (t.dataset.confirm !== undefined) { const tk = slate.pick6[Number(t.dataset.confirm)]; tk.status = tk.status === 'unconfirmed' ? 'confirmed' : 'unconfirmed'; render(); setDirty(); }
+  if (t.dataset.del !== undefined) { const i = Number(t.dataset.del); if (t.dataset.armed) { slate.pick6.splice(i, 1); render(); setDirty(); } else { t.dataset.armed = 1; t.textContent = 'Tap again to remove'; setTimeout(() => { if (t.isConnected) { delete t.dataset.armed; t.textContent = 'Remove'; } }, 3000); } }
+  if (t.dataset.ftdconfirm !== undefined) { slate.firstTD.status = slate.firstTD.status === 'unconfirmed' ? 'confirmed' : 'unconfirmed'; render(); setDirty(); }
+  if (t.dataset.ftddel !== undefined) { if (t.dataset.armed) { delete slate.firstTD; render(); setDirty(); } else { t.dataset.armed = 1; t.textContent = 'Tap again to remove all'; } }
+  if (t.dataset.rec) {
+    const tk = slate.pick6.find((x) => x.id === t.dataset.rec); const paid = Number(document.querySelector(`[data-paid="${CSS.escape(t.dataset.rec)}"]`).value);
+    if (!isFinite(paid)) { flash('Enter what DraftKings paid (0 if it lost)'); return; }
+    const key = dayKey() + '_' + tk.id;
+    results.entries = results.entries || {};
+    results.entries[key] = { date: dayKey(), title: tk.title, type: 'pick6', stake: Number(tk.entry), payout: paid, legs: tk.legs.length };
+    await saveResults(); renderLedger(); t.textContent = 'Recorded'; t.disabled = true;
+  }
+  if (t.dataset.unrec) { delete results.entries[t.dataset.unrec]; await saveResults(); renderLedger(); }
+  if (t.dataset.delmsg) { try { await db.ref(`chat/${dayKey()}/${t.dataset.delmsg}`).remove(); } catch (er) { flash('Delete failed: ' + er.message, 5000); } }
+});
+document.addEventListener('change', (e) => {
+  if (e.target.dataset.cash) { const [i, j] = e.target.dataset.cash.split(':').map(Number); const v = e.target.value; const tg = slate.scalp.shifts[i].targets[j]; if (v === '') delete tg.cashedOut; else tg.cashedOut = Number(v); setDirty(); }
+  if (e.target.id === 'title') setDirty();
+});
+$('#publish').onclick = publish;
+$('#grade').onclick = grade;
+$('#importAdd').onclick = () => doImport(false);
+$('#importReplace').onclick = (e) => { if (e.target.dataset.armed) doImport(true); else { e.target.dataset.armed = 1; e.target.textContent = 'Tap again to replace'; setTimeout(() => { delete e.target.dataset.armed; e.target.textContent = 'Replace whole slate'; }, 3000); } };
+$('#copyPrompt').onclick = async () => { const p = aiPrompt(); try { await navigator.clipboard.writeText(p); $('#copyMsg').textContent = 'Copied. Paste it into any AI, then add your picks.'; } catch { $('#importBox').value = p; $('#copyMsg').textContent = 'Clipboard blocked — the prompt is in the box below; copy it from there.'; } };
+$('#rawApply').onclick = () => { try { const j = JSON.parse($('#raw').value); const errs = validateSlate(j); if (errs.length) { $('#rawMsg').textContent = errs[0]; return; } slate = fixArrays(j); render(); setDirty(); $('#rawMsg').textContent = 'Applied — publish to send it live.'; } catch (er) { $('#rawMsg').textContent = 'Invalid JSON: ' + er.message; } };
+$('#rAdd').onclick = async () => { const d = $('#rDate').value, ti = $('#rTitle').value.trim(), s = Number($('#rStake').value), p = Number($('#rPay').value); if (!d || !ti || !(s > 0) || !isFinite(p)) { flash('Fill in date, ticket, stake and paid'); return; } results.entries = results.entries || {}; results.entries[d + '_' + Date.now()] = { date: d, title: ti, type: 'manual', stake: s, payout: p }; await saveResults(); renderLedger(); };
+$('#ownerSend').onclick = ownerPost;
+window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- boot ---------- */
+(async function boot() {
+  try {
+    await loadScripts(['https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js', 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js', 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js']);
+    firebase.initializeApp(FIREBASE); auth = firebase.auth(); db = firebase.database();
+  } catch (e) { $('#gateMsg').textContent = 'Could not load sign-in: ' + e.message; return; }
+  $('#signin').onclick = async () => { try { await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); } catch (e) { if (/popup/i.test(e.code || '')) await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); else $('#gateMsg').textContent = e.message; } };
+  $('#signout').onclick = () => auth.signOut();
+  auth.onAuthStateChanged(async (u) => {
+    const owner = u && u.email === OWNER_EMAIL && u.emailVerified;
+    $('#gate').hidden = !!owner; $('#app').hidden = !owner;
+    if (u && !owner) { $('#gateMsg').textContent = `${u.email || 'This account'} is not the owner account. Nothing can be changed from it.`; return; }
+    if (!owner) return;
+    $('#who').textContent = u.email;
+    const s = (await db.ref('board/slate').get()).val();
+    slate = fixArrays(s && s.players ? s : JSON.parse(JSON.stringify(SEED)));
+    const r = (await db.ref('board/results').get()).val();
+    results = r || { entries: {} };
+    render(); setDirty(!(s && s.players));
+    if (!(s && s.players)) flash('Board not published yet — check the tickets, then Publish', 5000);
+    watchChat();
+  });
+})();
+</script>
+</body>
+</html>

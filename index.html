@@ -1295,8 +1295,8 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && Da
 /* ---------------- slate + results refresh (hosted) ---------------- */
 async function refreshFiles() {
   if (!/^https?:/.test(location.protocol)) return;
-  try { const s = await getJSON('slate.json?ts=' + Date.now()); if (s && s.players) { const changed = JSON.stringify(s) !== JSON.stringify(S.slate); S.slate = s; if (changed) { S.snap = null; S.G = null; afterData(); } } } catch {}
-  try { const r = await getJSON('results.json?ts=' + Date.now()); if (r && r.entries) { S.results = r; renderRecord(); } } catch {}
+  if (!S.fbSlate) try { const s = await getJSON('slate.json?ts=' + Date.now()); if (s && s.players && !S.fbSlate) { const changed = JSON.stringify(s) !== JSON.stringify(S.slate); S.slate = s; if (changed) { S.snap = null; S.G = null; afterData(); } } } catch {}
+  if (!S.fbResults) try { const r = await getJSON('results.json?ts=' + Date.now()); if (r && r.entries && !S.fbResults) { S.results = r; renderRecord(); } } catch {}
 }
 
 /* ---------------- chat (Firebase) ---------------- */
@@ -1316,8 +1316,7 @@ const Chat = {
     sel.addEventListener('change', () => this.watch(sel.value));
     if (!FIREBASE || OVERLAY) { if (!FIREBASE) $('#chatList').innerHTML = '<div class="chat-off">Chat is being set up.</div>'; return; }
     try {
-      await loadScripts(['https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js', 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js', 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js']);
-      firebase.initializeApp(FIREBASE);
+      await fbReady;
       this.auth = firebase.auth(); this.db = firebase.database();
       this.auth.onAuthStateChanged((u) => { this.uid = u ? u.uid : null; });
       this.watch(this.day);
@@ -1371,12 +1370,38 @@ const Chat = {
 };
 function loadScripts(urls) { return urls.reduce((p, u) => p.then(() => new Promise((res, rej) => { const s = document.createElement('script'); s.src = u; s.onload = res; s.onerror = () => rej(new Error('could not load ' + u.split('/').pop())); document.head.appendChild(s); })), Promise.resolve()); }
 
+/* ---------------- Firebase: live board sync (slate + results written by the admin page) ---------------- */
+const fbReady = FIREBASE ? loadScripts(['https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js', 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js', 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js']).then(() => { firebase.initializeApp(FIREBASE); return true; }) : Promise.reject(new Error('Firebase not configured'));
+fbReady.catch(() => {});
+function watchBoard() {
+  fbReady.then(() => {
+    const db = firebase.database();
+    db.ref('board/slate').on('value', (snap) => {
+      const s = snap.val(); if (!s || !s.players) return;
+      fixArrays(s); S.fbSlate = true;
+      if (JSON.stringify(s) === JSON.stringify(S.slate)) return;
+      S.slate = s; S.snap = null; S.shift = null; afterData(); poll();
+    }, () => {});
+    db.ref('board/results').on('value', (snap) => { const r = snap.val(); if (r) { r.entries = Object.values(r.entries || {}); S.fbResults = true; S.results = r; renderRecord(); renderTicker(); } }, () => {});
+  }).catch(() => {});
+}
+// Firebase stores arrays as objects when keys are sparse; normalise back
+function fixArrays(s) {
+  const arr = (x) => Array.isArray(x) ? x : x && typeof x === 'object' ? Object.keys(x).sort((a, b) => a - b).map((k) => x[k]) : [];
+  s.pick6 = arr(s.pick6).map((t) => ({ ...t, legs: arr(t.legs) }));
+  if (s.firstTD) s.firstTD.bets = arr(s.firstTD.bets);
+  if (s.scalp) s.scalp.shifts = arr(s.scalp.shifts).map((sh) => ({ ...sh, targets: arr(sh.targets) }));
+  s.research = arr(s.research);
+  return s;
+}
+
 /* ---------------- boot ---------------- */
 (async function boot() {
   S.G = gradeAll(); render();
   await refreshFiles();
   poll();
   setInterval(refreshFiles, 120000);
+  watchBoard();
   Chat.init();
 })();
 </script>
