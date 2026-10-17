@@ -70,7 +70,7 @@ a{color:var(--sky)}
 .nav[aria-current="page"]{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 60%,#000));color:#06080b;box-shadow:0 12px 26px -12px var(--acc)}
 .rail-foot{margin-top:6px;padding:10px 12px;border-radius:13px;background:var(--panel2);font-size:12px;color:var(--fg2)}
 main{min-width:0}
-body[data-sec="overview"]{--acc:#F2C14E} body[data-sec="slips"]{--acc:#8B6CFF} body[data-sec="gate"]{--acc:#2EE59D} body[data-sec="bets"]{--acc:#22D3EE} body[data-sec="contracts"]{--acc:#A3E635} body[data-sec="pickem"]{--acc:#F472B6}
+body[data-sec="overview"]{--acc:#F2C14E} body[data-sec="slips"]{--acc:#8B6CFF} body[data-sec="gate"]{--acc:#2EE59D} body[data-sec="bets"]{--acc:#22D3EE} body[data-sec="contracts"]{--acc:#A3E635} body[data-sec="members"]{--acc:#F97316} body[data-sec="pickem"]{--acc:#F472B6}
 body[data-sec="results"]{--acc:#7CF27C} body[data-sec="stream"]{--acc:#FF3B5C} body[data-sec="chat"]{--acc:#4CC9F0} body[data-sec="settings"]{--acc:#9FB0C0}
 
 /* banner */
@@ -831,6 +831,26 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
     return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
   }
+  // ---------- honest numbers ----------
+  /* DraftKings' own read on a leg, from its Pick6 multiplier: a lower multiplier means DK rates it likelier.
+     Checked on PoiZen's 28 graded Pick6 legs: legs this rates under 45% hit 25%, over 55% hit 64%
+     (Brier score .214 vs .250 for a coin flip). No multiplier -> 50/50, the line as the median. */
+  function multPrior(mult) {
+    const s = String(mult || ''); if (/gimme/i.test(s)) return 0.95;
+    const m = Number((s.match(/([\d.]+)\s*x/i) || [])[1]); if (!(m > 0)) return 0.5;
+    return clamp(0.5 - 0.25 * Math.log(m), 0.3, 0.75);
+  }
+  /* how much to trust our own model over DraftKings' read: more games in his log, more trust, never above 75% */
+  const trustOf = (n) => 0.75 * (n || 0) / ((n || 0) + 8);
+  function honest(raw, mult, n) { const prior = multPrior(mult); const w = trustOf(n); if (raw === null || raw === undefined) return { p: prior, raw, prior, w: 0 }; return { p: clamp(prior + (raw - prior) * w, 0.03, 0.97), raw, prior, w }; }
+  /* in-game: the box score earns trust as the game goes on; a decided leg stays decided */
+  function honestLive(raw, prior, w, frac) {
+    if (raw === null || raw === undefined || raw >= 0.999 || raw <= 0.001) return raw;
+    const k = (w || 0) + (1 - (w || 0)) * clamp(frac || 0, 0, 1); return clamp((prior ?? 0.5) + (raw - (prior ?? 0.5)) * k, 0, 1);
+  }
+  /* the hit rate every leg needs, on average, for an all-or-nothing slip to break even */
+  function breakEven(entry, toWin, n) { const x = Number(toWin) / Number(entry); return x > 1 && n ? Math.pow(1 / x, 1 / n) : null; }
+
   // ---------- event contracts (DK Predictions, Robinhood): $1 per contract, priced in cents ----------
   const mlProb = (ml) => { const m = Number(ml); if (!m) return null; return m < 0 ? -m / (-m + 100) : 100 / (m + 100); };
   /* moneylines -> no-vig win chance for the home side */
@@ -861,10 +881,222 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
+
+/* Poizen Lounge — slip builder (shared by the owner console and member accounts).
+   Build a Pick6 slip leg by leg: ESPN player search, stat, line, more/less, DraftKings multiplier,
+   entry and to-win. Shows the honest read while you build. Optional: read a DraftKings screenshot
+   (on-device OCR with Tesseract.js) to pre-fill the legs for review. Nothing is saved until you press Save. */
+(function () {
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const DEFAULT_MARKET = { QB: 'pass_yds', RB: 'rush_yds', FB: 'rush_yds', WR: 'rec_yds', TE: 'rec_yds', SP: 'pitcher_ks', RP: 'pitcher_ks', P: 'pitcher_ks' };
+  const SPORT_PATH = { nfl: 'football/nfl', mlb: 'baseball/mlb' };
+  /* DraftKings' stat names -> our market keys (longest first so "Rush + Rec Yds" wins over "Rec Yds") */
+  const ALIASES = [
+    ['pass + rush yds', 'pass_rush_yds'], ['pass+rush yds', 'pass_rush_yds'], ['passing + rushing yards', 'pass_rush_yds'],
+    ['rush + rec yds', 'rush_rec_yds'], ['rush+rec yds', 'rush_rec_yds'], ['rushing + receiving yards', 'rush_rec_yds'],
+    ['rush + rec tds', 'anytime_td'], ['rush+rec tds', 'anytime_td'], ['anytime td', 'anytime_td'], ['touchdowns', 'anytime_td'],
+    ['hits + runs + rbis', 'hrr'], ['hits+runs+rbis', 'hrr'], ['h+r+rbi', 'hrr'], ['h + r + rbi', 'hrr'],
+    ['passing yards', 'pass_yds'], ['pass yds', 'pass_yds'], ['passing tds', 'pass_td'], ['pass tds', 'pass_td'], ['pass td', 'pass_td'],
+    ['pass attempts', 'pass_att'], ['pass completions', 'completions'], ['completions', 'completions'],
+    ['rushing yards', 'rush_yds'], ['rush yds', 'rush_yds'], ['rush attempts', 'rush_att'], ['carries', 'rush_att'],
+    ['receiving yards', 'rec_yds'], ['rec yds', 'rec_yds'], ['receptions', 'receptions'], ['interceptions', 'interceptions'],
+    ['home runs', 'home_runs'], ['total bases', null], ['pitcher strikeouts', 'pitcher_ks'], ['pitching outs', 'pitcher_outs'], ['outs recorded', 'pitcher_outs'],
+    ['strikeouts', 'ks'], ['rbis', 'rbis'], ['runs', 'runs'], ['hits', 'hits'], ['tds', 'anytime_td'],
+  ];
+  const marketFromText = (t, pos) => { const s = String(t || '').toLowerCase().replace(/\s+/g, ' '); for (const [a, k] of ALIASES) if (s.includes(a)) return k === 'ks' ? (/^(SP|RP|P)$/.test(pos || '') ? 'pitcher_ks' : 'batter_ks') : k; return null; };
+
+  function state(opts = {}) { return { sport: opts.sport || 'nfl', entry: '', toWin: '', title: '', legs: [], q: '', results: [], searching: false, msg: '', ocr: null, saving: false }; }
+
+  async function search(st, q, ctx) {
+    st.q = q; if (q.trim().length < 3) { st.results = []; return; }
+    st.searching = true;
+    try {
+      const s = await ctx.getJSON(`https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(q.trim())}&type=player&limit=10`);
+      st.results = (s.items || []).filter((i) => i.type === 'player' && SPORT_PATH[i.league]).slice(0, 6).map((i) => {
+        const tm = (i.teamRelationships || []).find((r) => r.type === 'team'); const core = (tm && tm.core) || {};
+        return { espnId: String(i.id), name: i.displayName, sport: i.league, team: core.abbreviation || '', pos: (i.position && i.position.abbreviation) || '' };
+      });
+      st.msg = st.results.length ? '' : `No NFL or MLB player found for “${q}”.`;
+    } catch (e) { st.msg = 'Player search failed: ' + e.message + ' — try again in a moment.'; }
+    st.searching = false;
+  }
+  async function fillMeta(m, ctx) {
+    if (m.team && m.pos) return m;
+    try { const a = await ctx.getJSON(`https://site.web.api.espn.com/apis/common/v3/sports/${SPORT_PATH[m.sport]}/athletes/${m.espnId}`); const at = a.athlete || {}; m.team = m.team || (at.team && at.team.abbreviation) || ''; m.pos = m.pos || (at.position && at.position.abbreviation) || ''; } catch {}
+    return m;
+  }
+  function addLeg(st, meta, extra = {}) {
+    const market = extra.market || DEFAULT_MARKET[meta.pos] || (meta.sport === 'mlb' ? 'hrr' : 'rec_yds');
+    st.legs.push({ key: 'x' + meta.espnId, meta: { name: meta.name, sport: meta.sport, team: meta.team, pos: meta.pos, espnId: meta.espnId }, market, line: extra.line ?? '', dir: extra.dir || 'over', mult: extra.mult || '', check: !!extra.check });
+    st.sport = meta.sport; st.results = []; st.q = '';
+  }
+
+  /* the honest read on what is on the builder right now */
+  function read(st, ctx) {
+    const each = st.legs.map((l) => (l.line !== '' && isFinite(Number(l.line)) ? ctx.chance({ player: l.key, market: l.market, line: Number(l.line), dir: l.dir, mult: l.mult }, l.meta) : null));
+    const ps = each.filter((p) => p !== null && p !== undefined);
+    const entry = Number(st.entry), toWin = Number(st.toWin), n = ps.length;
+    if (!n || n < st.legs.length) return { n, ps, each };
+    const v = entry > 0 && toWin > 0 ? ctx.M.slipValue(ps, entry, null, toWin, 1) : null;
+    return { n, ps, each, v, be: entry > 0 && toWin > 0 ? ctx.M.breakEven(entry, toWin, n) : null, avg: Math.pow(ps.reduce((a, p) => a * p, 1), 1 / n), pAll: ps.reduce((a, p) => a * p, 1) };
+  }
+  const pct = (p) => (p === null || p === undefined ? '–' : p >= 0.995 ? '99%+' : p < 0.01 ? '<1%' : Math.round(p * 100) + '%');
+  const usd = (n) => (isFinite(n) ? (n < 0 ? '−$' : '$') + Math.abs(n).toFixed(2) : '–');
+
+  function html(st, ctx) {
+    const P = ctx.prefix; const mk = Object.entries(ctx.MARKETS);
+    const R = read(st, ctx); let gate = null; try { gate = ctx.gate && st.legs.length && R.n === st.legs.length ? ctx.gate(toSlip(st).slip, R) : null; } catch { gate = null; }
+    const legRow = (l, i) => `<div class="bl ${l.check ? 'chk' : ''}" ${l.check ? 'title="Read from a screenshot — confirm More/Less and the multiplier"' : ''}><img src="${esc(ctx.headshot(l.meta))}" alt="" onerror="this.style.visibility='hidden'"><div class="bw"><b>${esc(l.meta.name)}</b><span>${esc(l.meta.team)} ${esc(l.meta.pos)} · ${esc(l.meta.sport.toUpperCase())}</span></div>
+      <select id="${P}m${i}" data-bm="${i}" aria-label="Stat">${mk.filter(([, x]) => x.sport === l.meta.sport).map(([k, x]) => `<option value="${k}" ${k === l.market ? 'selected' : ''}>${esc(x.label)}</option>`).join('')}</select>
+      <div class="bdir" role="group" aria-label="More or less"><button type="button" data-bd="${i}|over" aria-pressed="${l.dir !== 'under'}">More</button><button type="button" data-bd="${i}|under" aria-pressed="${l.dir === 'under'}">Less</button></div>
+      <input id="${P}l${i}" data-bl="${i}" type="number" step="0.5" min="0" inputmode="decimal" placeholder="Line" value="${esc(l.line)}" aria-label="Line">
+      <input id="${P}x${i}" data-bx="${i}" placeholder="Mult" value="${esc(l.mult)}" aria-label="DraftKings multiplier" title="The multiplier DraftKings shows on this pick, or Gimme">
+      <em class="bp" title="Honest chance this pick hits">${R.each[i] !== null && R.each[i] !== undefined ? pct(R.each[i]) : ''}</em>
+      <button type="button" class="bx" data-brm="${i}" aria-label="Remove ${esc(l.meta.name)}">×</button></div>`;
+    const results = st.results.length ? `<div class="bres">${st.results.map((r, i) => `<button type="button" data-badd="${i}"><img src="${esc(ctx.headshot(r))}" alt="" onerror="this.style.visibility='hidden'"><b>${esc(r.name)}</b><span>${esc(r.team)} ${esc(r.pos)} · ${esc(r.sport.toUpperCase())}</span></button>`).join('')}</div>` : '';
+    const sum = R.v ? `<div class="bsum ${R.v.evNet < 0 ? 'no' : 'yes'}"><b>${R.v.evNet < 0 ? 'The numbers say no' : 'The numbers say yes'}</b><span>Expected back ${usd(R.v.ev)} on ${usd(Number(st.entry))} (${R.v.evNet < 0 ? '' : '+'}${usd(R.v.evNet)}) · all ${R.n} hit ${pct(R.pAll)}</span>${R.be ? `<span>To break even each leg needs about ${pct(R.be)}. The Lab has them at ${pct(R.avg)} on average.</span>` : ''}</div>`
+      : R.n && R.n === st.legs.length ? `<div class="bsum"><span>All ${R.n} hit about ${pct(R.pAll)}. Add the entry and the to-win amount to see if it's worth it.</span></div>` : '';
+    const g = gate ? `<div class="bgate ${gate.verdict}"><b>${gate.verdict === 'fail' ? `Breaks ${gate.checks.filter((c) => c.state === 'fail').length} gate rule${gate.checks.filter((c) => c.state === 'fail').length === 1 ? '' : 's'}` : gate.verdict === 'warn' ? 'Passes with warnings' : 'Passes the gate'}</b>${gate.checks.filter((c) => c.state === 'fail' || c.state === 'warn').map((c) => `<span>${c.state === 'fail' ? '✕' : '!'} ${esc(c.label)}${c.why ? " — " + esc(c.why) : ""}</span>`).join('')}</div>` : '';
+    const ocr = st.ocr ? `<div class="bocr">${esc(st.ocr)}</div>` : '';
+    return `<div class="pzb" id="${P}root">
+      <div class="brow"><label class="bf">Entry ($)<input id="${P}entry" data-bf="entry" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(st.entry)}" placeholder="10"></label><label class="bf">To win ($)<input id="${P}towin" data-bf="toWin" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(st.toWin)}" placeholder="131.00"></label><label class="bf grow">Title<input id="${P}title" data-bf="title" maxlength="48" value="${esc(st.title)}" placeholder="Built for you if blank"></label></div>
+      <div class="blegs">${st.legs.map(legRow).join('') || '<div class="bempty">Add your first pick: search a player below.</div>'}</div>
+      <div class="bsearch"><input id="${P}q" data-bq type="search" autocomplete="off" placeholder="Add a player — type 3+ letters (NFL or MLB)" value="${esc(st.q)}">${ctx.ocr ? `<label class="bshot"><input type="file" accept="image/*" data-bocr hidden>Read a screenshot</label>` : ''}</div>
+      ${st.searching ? '<div class="bmsg">Searching ESPN…</div>' : st.msg ? `<div class="bmsg">${esc(st.msg)}</div>` : ''}${results}${ocr}${sum}${g}
+      <div class="brow"><button type="button" class="bsave" data-bsave ${st.legs.length && !st.saving ? '' : 'disabled'}>${st.saving ? 'Saving…' : esc(ctx.saveLabel || 'Save slip')}</button>${st.legs.length ? '<button type="button" class="bclear" data-bclear>Start over</button>' : ''}</div></div>`;
+  }
+
+  function toSlip(st) {
+    const legs = st.legs.map((l) => ({ player: l.key, market: l.market, line: Number(l.line), dir: l.dir, ...(l.mult ? { mult: l.mult } : {}) }));
+    const players = {}; st.legs.forEach((l) => { players[l.key] = { ...l.meta }; });
+    const title = st.title.trim() || `${legs.length}-Pick ${st.legs.map((l) => String(l.meta.name).split(' ').slice(-1)[0]).slice(0, 2).join(' + ')}`;
+    return { slip: { title, entry: Number(st.entry) || 0, toWin: Number(st.toWin) || 0, legs }, players };
+  }
+  function problems(st) {
+    const out = []; if (!st.legs.length) out.push('Add at least one pick.');
+    st.legs.forEach((l) => { if (l.line === '' || !isFinite(Number(l.line))) out.push(`${l.meta.name}: enter the line.`); });
+    if (!(Number(st.entry) > 0)) out.push('Enter the entry amount.'); if (!(Number(st.toWin) > Number(st.entry))) out.push('Enter what it pays if every pick hits.');
+    return out;
+  }
+
+  /* ---------- screenshot reading (on-device; the image never leaves the browser) ---------- */
+  const TESS = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+  function loadTess(src) { if (window.Tesseract) return Promise.resolve(); return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src || TESS; s.onload = res; s.onerror = () => rej(new Error('could not load the screenshot reader')); document.head.appendChild(s); }); }
+  const NAME = /^[A-Z][A-Za-z.'’-]+(?: [A-Z][A-Za-z.'’-]+){1,2}(?: (?:Jr\.?|Sr\.?|II|III|IV))?$/;
+  const BAD = /\b(more|less|over|under|higher|lower|entry|win|payout|pick|picks|yds|yards|tds?|hits|runs|rbis?|strikeouts|receptions|vs|final|live|today|tomorrow|am|pm|my|lineup|flex|power|boost)\b/i;
+  function parse(text) {
+    const lines = String(text || '').split(/\n+/).map((x) => x.replace(/[|•·]/g, ' ').replace(/\s+/g, ' ').trim()).filter(Boolean);
+    const legs = []; const used = new Set();
+    lines.forEach((ln, i) => {
+      const m = ln.match(/(\d{1,3}(?:\.\d)?)\s*\+?\s*([A-Za-z][A-Za-z +]{1,30})/); if (!m) return;
+      const market = marketFromText(m[2]); if (!market) return;
+      let name = null; for (let k = i - 1; k >= Math.max(0, i - 4); k--) { const cand = lines[k].replace(/\s+\d.*$/, '').trim(); if (NAME.test(cand) && !BAD.test(cand) && !used.has(k)) { name = cand; used.add(k); break; } }
+      if (!name) { const inl = ln.slice(0, m.index).trim(); if (NAME.test(inl) && !BAD.test(inl)) name = inl; }
+      if (!name) return;
+      const near = lines.slice(Math.max(0, i - 2), i + 3).join(' ');
+      const own = lines.slice(Math.max(0, i - 2), i + 1).join(' ');
+      const saysLess = /\b(less|under|lower)\b/i.test(own), saysMore = /\b(more|over|higher)\b/i.test(own);
+      const dir = saysLess && !saysMore ? 'under' : 'over';
+      const mx = own.match(/(\d\.\d)\s*x\b/i) || (lines[i + 1] && !NAME.test(lines[i + 1]) ? lines[i + 1].match(/^(\d\.\d)\s*x\b/i) : null); const gimme = /gimme/i.test(own);
+      legs.push({ name, line: Number(m[1]), market, statText: m[2].trim(), dir, dirSure: saysLess !== saysMore, mult: gimme ? 'Gimme' : mx ? mx[1] + 'x' : '' });
+    });
+    const all = lines.join(' ');
+    const ent = all.match(/entry(?: fee)?[^$\d]{0,12}\$?\s*(\d+(?:\.\d{2})?)/i); const win = all.match(/(?:to win|payout|wins?|pays)[^$\d]{0,12}\$?\s*([\d,]+(?:\.\d{2})?)/i);
+    return { legs, entry: ent ? Number(ent[1]) : null, toWin: win ? Number(win[1].replace(/,/g, '')) : null, lines };
+  }
+  async function ocr(st, file, ctx, onStep) {
+    st.ocr = 'Reading the screenshot on this device…'; onStep();
+    try {
+      await loadTess(ctx.tessSrc);
+      const opts = ctx.tessOpts || {};
+      const { data } = await window.Tesseract.recognize(file, 'eng', opts);
+      const got = parse(data.text);
+      if (!got.legs.length) { st.ocr = 'Couldn’t find picks in that image. Crop to the picks and try again, or add them by hand.'; onStep(); return got; }
+      st.ocr = `Found ${got.legs.length} pick${got.legs.length === 1 ? '' : 's'} — looking up players…`; onStep();
+      let found = 0;
+      for (const L of got.legs) {
+        try {
+          await search(st, L.name, ctx); const hit = st.results.find((r) => r.name.toLowerCase() === L.name.toLowerCase()) || st.results[0];
+          if (hit) { await fillMeta(hit, ctx); addLeg(st, hit, { market: L.market, line: L.line, dir: L.dir, mult: L.mult, check: !L.dirSure || !L.mult }); found++; }
+        } catch {}
+      }
+      st.results = []; st.q = '';
+      if (got.entry && !st.entry) st.entry = String(got.entry); if (got.toWin && !st.toWin) st.toWin = String(got.toWin);
+      const unsure = st.legs.filter((l) => l.check).length;
+      st.ocr = `Read ${found} of ${got.legs.length} picks from the screenshot.${unsure ? ` ${unsure} highlighted — More/Less or the multiplier couldn't be read, so tap the right one.` : ''} Check every pick before you save; screenshot reading can be wrong.`;
+      onStep(); return got;
+    } catch (e) { st.ocr = 'Screenshot reading failed: ' + e.message + '. Add the picks by hand.'; onStep(); return null; }
+  }
+
+  /* ---------- events (host forwards delegated events here) ---------- */
+  let qT = null;
+  function bind(root, st, ctx, rerender) {
+    root.addEventListener('input', (e) => {
+      const t = e.target; const d = t.dataset || {};
+      if (d.bf !== undefined) { st[d.bf] = t.value; soft(); }
+      else if (d.bl !== undefined) { st.legs[+d.bl].line = t.value; soft(); }
+      else if (d.bx !== undefined) { st.legs[+d.bx].mult = t.value.trim(); st.legs[+d.bx].check = false; soft(); }
+      else if (d.bq !== undefined) { st.q = t.value; clearTimeout(qT); qT = setTimeout(async () => { await search(st, st.q, ctx); rerender(); }, 350); }
+    });
+    root.addEventListener('change', (e) => {
+      const t = e.target; const d = t.dataset || {};
+      if (d.bm !== undefined) { st.legs[+d.bm].market = t.value; rerender(); }
+      if (d.bocr !== undefined && t.files && t.files[0]) ocr(st, t.files[0], ctx, rerender);
+    });
+    root.addEventListener('click', async (e) => {
+      const b = e.target.closest('button'); if (!b || !root.contains(b)) return; const d = b.dataset;
+      if (d.badd !== undefined) { const r = st.results[+d.badd]; if (r) { await fillMeta(r, ctx); addLeg(st, r); rerender(`${ctx.prefix}l${st.legs.length - 1}`); } }
+      else if (d.bd) { const [i, dir] = d.bd.split('|'); st.legs[+i].dir = dir; st.legs[+i].check = false; rerender(); }
+      else if (d.brm !== undefined) { st.legs.splice(+d.brm, 1); rerender(); }
+      else if (d.bclear !== undefined) { Object.assign(st, state({ sport: st.sport })); rerender(); }
+      else if (d.bsave !== undefined) {
+        const pr = problems(st); if (pr.length) { st.msg = pr[0]; rerender(); return; }
+        st.saving = true; rerender();
+        try { const { slip, players } = toSlip(st); await ctx.onSave(slip, players, read(st, ctx)); Object.assign(st, state({ sport: st.sport })); st.msg = 'Saved.'; }
+        catch (er) { st.msg = 'Could not save: ' + er.message; }
+        st.saving = false; rerender();
+      }
+    });
+    let sT = null; function soft() { clearTimeout(sT); sT = setTimeout(() => rerender(), 450); }
+  }
+  const CSS = `.pzb{display:flex;flex-direction:column;gap:12px}
+.pzb .brow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}.pzb .bf{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--fg3);width:130px}.pzb .bf.grow{flex:1;min-width:160px}
+.pzb input,.pzb select{padding:10px 12px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);color:var(--fg);font:700 14px var(--body);min-width:0}
+.pzb .blegs{display:flex;flex-direction:column;gap:8px}.pzb .bempty{padding:16px;border-radius:12px;border:1px dashed var(--line2);color:var(--fg3);font-size:13px;text-align:center}
+.pzb .bl{display:grid;grid-template-columns:44px minmax(110px,1.2fr) minmax(120px,1fr) auto 84px 70px 48px 30px;gap:8px;align-items:center;padding:8px;border-radius:12px;background:var(--panel2);border:1px solid var(--line)}
+.pzb .bl.chk{border-color:var(--live);box-shadow:0 0 0 1px var(--live) inset}
+.pzb .bl img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:top;background:var(--panel3)}.pzb .bw{min-width:0}.pzb .bw b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pzb .bw span{font-size:11px;color:var(--fg3)}
+.pzb .bdir{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--line2)}.pzb .bdir button{padding:9px 10px;border:0;background:transparent;color:var(--fg2);font:800 12px var(--body);cursor:pointer}.pzb .bdir button[aria-pressed=true]{background:var(--teal);color:#04120f}
+.pzb .bp{font-style:normal;font:900 18px var(--stadium);text-align:right}.pzb .bx{width:30px;height:30px;border-radius:8px;border:1px solid var(--line2);background:transparent;color:var(--fg2);cursor:pointer;font-size:16px}
+.pzb .bsearch{display:flex;gap:8px}.pzb .bsearch input{flex:1}.pzb .bshot{padding:10px 14px;border-radius:10px;border:1px dashed var(--line2);font:800 13px var(--body);color:var(--fg2);cursor:pointer;white-space:nowrap}
+.pzb .bres{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}.pzb .bres button{display:grid;grid-template-columns:36px 1fr;grid-template-rows:auto auto;column-gap:10px;text-align:left;padding:8px;border-radius:12px;border:1px solid var(--line2);background:var(--panel2);color:var(--fg);cursor:pointer}
+.pzb .bres img{grid-row:span 2;width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:top;background:var(--panel3)}.pzb .bres b{font-size:13px}.pzb .bres span{font-size:11px;color:var(--fg3)}
+.pzb .bmsg,.pzb .bocr{font-size:12px;color:var(--fg2)}.pzb .bocr{padding:10px 12px;border-radius:10px;background:var(--panel2);border-left:3px solid var(--live)}
+.pzb .bsum{display:flex;flex-direction:column;gap:3px;padding:12px 14px;border-radius:12px;background:var(--panel2);border-left:4px solid var(--line2)}.pzb .bsum.no{border-left-color:var(--loss)}.pzb .bsum.yes{border-left-color:var(--win)}
+.pzb .bsum b{font:900 16px var(--stadium);text-transform:uppercase}.pzb .bsum.no b{color:var(--loss)}.pzb .bsum.yes b{color:var(--win)}.pzb .bsum span{font-size:12px;color:var(--fg2)}
+.pzb .bgate{display:flex;flex-direction:column;gap:3px;padding:10px 14px;border-radius:12px;border:1px solid var(--line2)}.pzb .bgate b{font-size:13px}.pzb .bgate.fail b{color:var(--loss)}.pzb .bgate.pass b{color:var(--win)}.pzb .bgate span{font-size:12px;color:var(--fg2)}
+.pzb .bsave{padding:12px 20px;border-radius:12px;border:0;background:var(--teal);color:#04120f;font:900 15px var(--body);cursor:pointer}.pzb .bsave[disabled]{opacity:.45;cursor:not-allowed}.pzb .bclear{padding:12px 16px;border-radius:12px;border:1px solid var(--line2);background:transparent;color:var(--fg2);font:800 13px var(--body);cursor:pointer}
+.pzb :focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+@media (max-width:760px){.pzb .bl{grid-template-columns:40px 1fr 30px;grid-template-areas:"img who x" "stat stat stat" "dir line mult" "p p p"}.pzb .bl img{grid-area:img;width:40px;height:40px}.pzb .bw{grid-area:who}.pzb .bx{grid-area:x}.pzb .bl select{grid-area:stat}.pzb .bdir{grid-area:dir}.pzb .bl input[data-bl]{grid-area:line}.pzb .bl input[data-bx]{grid-area:mult}.pzb .bp{grid-area:p;text-align:left;font-size:15px}.pzb .bf{width:calc(50% - 5px)}}`;
+  function style() { if (document.getElementById('pzb-css')) return; const st = document.createElement('style'); st.id = 'pzb-css'; st.textContent = CSS; document.head.appendChild(st); }
+  /* re-render only the builder, keeping focus and caret */
+  function mountInto(el, st, ctx) {
+    style();
+    const draw = (focusId) => {
+      const ae = document.activeElement; const id = focusId || (ae && el.contains(ae) ? ae.id : null); let caret = null; try { caret = ae && ae.selectionStart; } catch {}
+      el.innerHTML = html(st, ctx);
+      if (id) { const f = document.getElementById(id); if (f) { f.focus(); try { if (caret !== null && !focusId) f.setSelectionRange(caret, caret); } catch {} } }
+    };
+    if (!el.__pzb) { bind(el, st, ctx, draw); el.__pzb = true; }
+    draw(); return draw;
+  }
+
+  window.PZB = { state, html, mountInto, toSlip, problems, read, parse, marketFromText, search, addLeg };
+})();
 </script>
 <script>
 'use strict';
@@ -890,6 +1122,7 @@ const MLBC = { TB: ['092C5C', '8FBCE6'], CLE: ['002B5C', 'E31937'] };
 const ICON = {
   overview: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>',
   slips: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M10 9h4M10 13h4"/></svg>',
+  members: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5"/></svg>',
   contracts: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2A3 3 0 0 0 12 8c-1.7 0-3 .9-3 2s1.3 1.7 3 2 3 .9 3 2-1.3 2-3 2a3 3 0 0 1-2.8-1.2M12 6v2m0 8v2"/></svg>',
   bets: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
   pickem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>',
@@ -903,14 +1136,14 @@ const ICON = {
   warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>',
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
 };
-const SECTIONS = [['overview', 'Overview'], ['slips', 'Slips & Lab'], ['gate', 'Gate'], ['bets', '1st TD & Scalp'], ['contracts', 'Contracts'], ['pickem', "Pick'em"], ['results', 'Results'], ['stream', 'Stream'], ['chat', 'Chat'], ['settings', 'Settings']];
+const SECTIONS = [['overview', 'Overview'], ['slips', 'Slips & Lab'], ['gate', 'Gate'], ['bets', '1st TD & Scalp'], ['contracts', 'Contracts'], ['pickem', "Pick'em"], ['results', 'Results'], ['members', 'Members'], ['stream', 'Stream'],['chat', 'Chat'], ['settings', 'Settings']];
 
 /* ---------- state ---------- */
 const A = { sec: (location.hash || '#overview').slice(1), slate: null, results: { entries: {} }, dirty: false, publishedAt: null,
   gateRules: { ...M.GATE_DEFAULTS }, gateLog: {}, overrideFor: null, bankroll: null,
-  cKind: 'win', cSport: 'nfl', events: {}, teamEvent: {}, logs: {}, injuries: null, graded: {}, gradedAt: null, pickem: {}, locks: {}, champs: {}, chat: [], memo: {} };
+  cKind: 'win', cSport: 'nfl', mem: null, memOut: null, memView: null, memErr: '', xp: {}, builder: PZB.state(), events: {}, teamEvent: {}, logs: {}, injuries: null, graded: {}, gradedAt: null, pickem: {}, locks: {}, champs: {}, chat: [], memo: {} };
 let db, auth;
-const P = (k) => (A.slate.players || {})[k] || { name: k, team: '', sport: 'nfl' };
+const P = (k) => (A.slate.players || {})[k] || (A.xp || {})[k] || { name: k, team: '', sport: 'nfl' };
 const sportOf = (k) => P(k).sport || 'nfl';
 const confirmed = (t) => t.status !== 'unconfirmed';
 function teamColors(sport, abbr) { const m = (sport === 'mlb' ? MLBC : NFLC)[abbr]; return m ? ['#' + m[0], '#' + m[1]] : ['#1f2937', '#334155']; }
@@ -962,7 +1195,7 @@ const injFor = (abbr) => { const t = (A.injuries || []).find((x) => TEAMNAMES[x.
 const POSGROUP = { WR: 'rec', TE: 'rec', RB: 'run', FB: 'run', QB: 'qb' };
 const DEF = /^(CB|S|FS|SS|LB|ILB|OLB|MLB|DE|DT|NT|DL|EDGE|DB)$/;
 function legPre(leg) {
-  const key = leg.player + '|' + leg.market + '|' + leg.line + '|' + (leg.dir || 'over'); if (A.memo[key]) return A.memo[key];
+  const key = leg.player + '|' + leg.market + '|' + leg.line + '|' + (leg.dir || 'over') + '|' + (leg.mult || ''); if (A.memo[key]) return A.memo[key];
   const p = P(leg.player); const rows = p.espnId && A.logs[p.espnId]; let out;
   if (leg.gimme || (M.kindOf(leg.market) === 'yards' && Number(leg.line) <= 1.5)) out = { p: 0.97, drivers: [{ label: 'Gimme line', pct: 0 }], source: 'gimme' };
   else if ((p.sport || 'nfl') === 'nfl' && rows && rows.length) {
@@ -974,6 +1207,7 @@ function legPre(leg) {
     const rs = E.researchLine(rows, leg.market, Number(leg.line), leg.dir); const pr = M.project(leg.market, 'nfl', rs.vals, ctx); const c = M.legChance(leg, pr, rs.hits, rs.n);
     out = { p: c.p, drivers: pr.drivers, source: 'log', mu: pr.mu, n: rs.n, avg: rs.avg, hits: rs.hits, status: ctx.selfStatus };
   } else { const pr = M.priorProjection(leg.market, leg.line); out = { p: M.liveChance(leg, pr, 0, 0, 'scheduled'), drivers: pr.drivers, source: 'prior' }; }
+  if (out.source !== 'gimme') { const h = M.honest(out.p, leg.mult, out.n || 0); out.raw = out.p; out.p = h.p; out.prior = h.prior; out.w = h.w; out.drivers = [...(out.drivers || []), { label: `DraftKings' read${leg.mult ? ' (' + leg.mult + ')' : ''}: ${Math.round(h.prior * 100)}% · model gets ${Math.round(h.w * 100)}% of the say`, pct: 0 }]; }
   return (A.memo[key] = out);
 }
 function slipGrade(t) {
@@ -1066,9 +1300,10 @@ function render() {
   document.body.dataset.sec = A.sec; $('#rail').innerHTML = navHTML(); $('#weekName').textContent = (A.slate.title || 'This week') + ' · owner console';
   const keep = {}; document.querySelectorAll('#main [data-keep]').forEach((el) => { keep[el.id] = el.value; });
   const openD = [...document.querySelectorAll('#main details[open]')].map((d) => d.dataset.k);
-  $('#main').innerHTML = ({ overview: vOverview, gate: vGate, slips: vSlips, bets: vBets, contracts: vContracts, pickem: vPickem, results: vResults, stream: vStream, chat: vChat, settings: vSettings })[A.sec]();
+  $('#main').innerHTML = ({ overview: vOverview, gate: vGate, slips: vSlips, bets: vBets, contracts: vContracts, members: vMembers, pickem: vPickem, results: vResults, stream: vStream, chat: vChat, settings: vSettings })[A.sec]();
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('#main details').forEach((d) => { if (openD.includes(d.dataset.k)) d.open = true; });
+  const bEl = $('#pzbA'); if (bEl) PZB.mountInto(bEl, A.builder, builderCtx());
 }
 
 /* overview */
@@ -1112,7 +1347,8 @@ function ticketCard(t, i) {
 function vSlips() {
   const tix = A.slate.pick6 || [];
   return banner('slips', 'Slips <span>&amp; Lab</span>', 'Every leg shows the Lab’s hit chance (hover it for why). Every slip is priced against what DraftKings pays. Load picks, read the grade, then lock them on DraftKings.') +
-    `<div class="grid2"><div class="card"><b class="st" style="font-size:22px">Load picks from an AI</b><p class="muted" style="margin:6px 0 10px;font-size:13px">Copy the prompt, give it to Claude, ChatGPT or Gemini with a DraftKings screenshot, then paste back what it returns.</p>
+    `<div class="card" style="margin-bottom:16px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Build a slip</b><span class="dim" style="font-size:12px">Saves as unconfirmed — confirm it below and the gate checks it</span></div><div id="pzbA" style="margin-top:12px"></div></div>
+    <div class="grid2"><div class="card"><b class="st" style="font-size:22px">Load picks from an AI</b><p class="muted" style="margin:6px 0 10px;font-size:13px">Copy the prompt, give it to Claude, ChatGPT or Gemini with a DraftKings screenshot, then paste back what it returns.</p>
       <div class="row"><button class="btn" id="copyPrompt" type="button">${ICON.copy} Copy AI prompt</button><span class="dim" id="copyMsg" style="font-size:12px"></span></div>
       <textarea id="importBox" data-keep rows="6" placeholder='Paste the JSON here: { "players": {…}, "pick6": [ … ] }' style="margin-top:10px"></textarea>
       <div class="row" style="margin-top:8px"><button class="btn teal" id="importAdd" type="button">Add these slips</button><button class="btn warn" id="importReplace" type="button">Replace the whole week</button></div><div id="importMsg" style="font-size:12px;margin-top:6px"></div></div>
@@ -1205,6 +1441,34 @@ function closeContract(id, status) {
   A.results.entries = A.results.entries || {};
   A.results.entries['c_' + c.id] = { date: d, title: c.title, type: 'prediction', book: c.venue, market: c.kind === 'prop' ? c.market : CMARKET[c.kind], dir: c.dir || 'over', prob: avg / 100, stake: Math.round(cost * 100) / 100, payout: Math.round(payout * 100) / 100, result: status, contractId: c.id };
   saveResults(); setDirty(); render(); toast(`${c.title}: ${money(payout - cost, true)} recorded — publish to update the board`);
+}
+
+/* members: who joined, what they agreed to share, and how the Lab's numbers hold up across everyone's outcomes */
+async function loadMembers() {
+  if (!db) { A.mem = {}; A.memOut = {}; if (A.sec === 'members') render(); return; }
+  try { const [d, o] = await Promise.all([db.ref('directory').get(), db.ref('outcomes').get()]); A.mem = d.val() || {}; A.memOut = o.val() || {}; A.memErr = ''; }
+  catch (e) { A.mem = {}; A.memOut = {}; A.memErr = 'Could not load members: ' + e.message + ' — the database rules may not be published yet.'; }
+  if (A.sec === 'members') render();
+}
+function vMembers() {
+  if (A.mem === null) { A.mem = undefined; loadMembers(); }
+  if (!A.mem) return banner('members', 'Lounge <span>members</span>', 'Loading…');
+  const mem = Object.entries(A.mem); const outs = Object.entries(A.memOut || {}).flatMap(([uid, o]) => Object.values(o || {}).map((x) => ({ uid, ...x })));
+  const legs = outs.flatMap((o) => (o.legs || []).filter((l) => l.result === 'hit' || l.result === 'miss'));
+  const hit = legs.filter((l) => l.result === 'hit').length; const withLab = outs.filter((o) => o.lab && o.lab.pAll);
+  const expW = withLab.reduce((s, o) => s + o.lab.pAll, 0), actW = withLab.filter((o) => o.result === 'won').length;
+  const B = [[0, 0.4], [0.4, 0.5], [0.5, 0.6], [0.6, 1.01]].map(([lo, hi]) => { const L = legs.filter((l) => typeof l.p === 'number' && l.p >= lo && l.p < hi); const exp = L.reduce((s, l) => s + l.p, 0); return { lo, hi, n: L.length, exp: L.length ? exp / L.length : null, act: L.length ? L.filter((l) => l.result === 'hit').length / L.length : null }; });
+  const pc = (x) => (x === null || x === undefined ? '–' : Math.round(x * 100) + '%');
+  const calib = `<table><thead><tr><th>Lab said</th><th style="text-align:right">Picks</th><th style="text-align:right">Lab avg</th><th style="text-align:right">Actually hit</th></tr></thead><tbody>${B.map((b) => `<tr><td>${Math.round(b.lo * 100)}–${Math.min(100, Math.round(b.hi * 100))}%</td><td style="text-align:right">${b.n}</td><td style="text-align:right">${pc(b.exp)}</td><td style="text-align:right"><b class="${b.act === null ? '' : Math.abs(b.act - b.exp) <= 0.08 ? 'win' : 'loss'}">${pc(b.act)}</b></td></tr>`).join('')}</tbody></table>`;
+  const rows = mem.sort((x, y) => (y[1].seen || 0) - (x[1].seen || 0)).map(([uid, m]) => { const mo = Object.values((A.memOut || {})[uid] || {}); const w = mo.filter((o) => o.result === 'won').length;
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)}</b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}</span></div>${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div>`; }).join('');
+  let detail = '';
+  if (A.memView) { const v = A.memView; const sl = Object.values(v.data.slips || {}).sort((x, y) => (y.createdAt || 0) - (x.createdAt || 0));
+    detail = `<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">${esc((v.data.profile || {}).name || 'Member')}</b><button class="btn sm" data-memclose type="button">Close</button></div>${sl.map((x) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(x.title)}</b><span>${(x.legs || []).length} legs · ${x.x}× · Lab ${x.lab ? pc(x.lab.pAll) : '–'} all hit${x.entry ? ` · ${money(x.entry)} to win ${money(x.toWin)}` : ' · amounts private'}</span></div><span class="chip ${x.result === 'won' ? 'win' : x.result === 'lost' ? 'loss' : ''}">${esc(x.status === 'settled' ? x.result : 'open')}</span></div>`).join('') || '<div class="empty">No slips yet.</div>'}</div>`; }
+  return banner('members', 'Lounge <span>members</span>', 'Everyone with a My Lounge account. Outcomes are collected from all members; full accounts open only for members who turned on sharing with you. Dollar amounts appear only when a member syncs them.') +
+    (A.memErr ? `<div class="card" style="border-color:var(--loss);margin-bottom:16px">${esc(A.memErr)}</div>` : '') +
+    `<div class="tiles"><div class="tile t"><div class="k">Members</div><div class="v">${mem.length}</div><div class="s">${mem.filter(([, m]) => m.owner).length} share their account</div></div><div class="tile g"><div class="k">Settled slips</div><div class="v">${outs.length}</div><div class="s">${outs.filter((o) => o.result === 'won').length} cashed</div></div><div class="tile"><div class="k">Picks hit</div><div class="v">${legs.length ? pc(hit / legs.length) : '–'}</div><div class="s">${legs.length} graded picks</div></div><div class="tile"><div class="k">Lab vs reality</div><div class="v">${withLab.length ? `${actW} / ${expW.toFixed(1)}` : '–'}</div><div class="s">slips won / Lab expected</div></div></div>` +
+    `<div class="grid2" style="margin-top:16px"><div class="card"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Members</b><button class="btn sm" data-memreload type="button">Refresh</button></div><div style="margin-top:10px">${rows || '<div class="empty">No members yet.</div>'}</div></div><div class="card"><b class="st" style="font-size:22px">Is the Lab honest?</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Every member pick, grouped by what the Lab said before kickoff, against how often it actually hit. Green means within 8 points.</p>${calib}</div></div>${detail}`;
 }
 
 /* stream */
@@ -1303,6 +1567,22 @@ ${JSON.stringify({ title: A.slate.title, pick6: (A.slate.pick6 || []).map((t) =>
 My picks:
 `;
 }
+/* the slip builder, wired to this console's Lab, gate and slate */
+function builderCtx() {
+  return { prefix: 'ba', E, M, MARKETS: E.MARKETS, getJSON, ocr: true, saveLabel: 'Add to this week',
+    headshot: (m) => (m && m.espnId ? `https://a.espncdn.com/combiner/i?img=/i/headshots/${m.sport === 'mlb' ? 'mlb' : 'nfl'}/players/full/${m.espnId}.png&w=96&h=70&cb=1` : ''),
+    chance: (leg, meta) => { if (!A.slate.players[leg.player]) A.xp[leg.player] = meta; const p = P(leg.player);
+      if (p.espnId && (p.sport || 'nfl') === 'nfl' && !(p.espnId in A.logs)) { A.logs[p.espnId] = undefined; getJSON(E.ESPN.gamelog(p.espnId)).then((j) => { A.logs[p.espnId] = E.gamelogRows(j); A.memo = {}; const el = $('#pzbA'); if (el) PZB.mountInto(el, A.builder, builderCtx()); }).catch(() => { A.logs[p.espnId] = null; }); }
+      return legPre(leg).p; },
+    gate: (slip) => gateFor(slip),
+    onSave: async (slip, players) => {
+      A.slate.players = { ...A.slate.players, ...players }; const ids = new Set((A.slate.pick6 || []).map((t) => t.id));
+      let id = 'b-' + Date.now().toString(36); while (ids.has(id)) id += '2';
+      A.slate.pick6 = [...(A.slate.pick6 || []), { id, status: 'unconfirmed', ...slip, legs: slip.legs.map((l) => ({ ...l })) }];
+      const errs = validateSlate(A.slate); if (errs.length) { A.slate.pick6 = A.slate.pick6.filter((t) => t.id !== id); throw new Error(errs[0]); }
+      A.memo = {}; setDirty(); render(); loadESPN(); toast('Slip added as unconfirmed — confirm it to run the gate, then Publish');
+    } };
+}
 function doImport(replace) {
   const msg = $('#importMsg');
   try {
@@ -1352,6 +1632,9 @@ document.addEventListener('click', async (e) => {
     A.slate.contracts = (A.slate.contracts || []).concat(c); ['cQty', 'cAvg', 'cTitle', 'cLine', 'cTeam'].forEach((id) => { const el = $('#' + id); if (el) el.value = ''; });
     setDirty(); render(); toast('Added — publish to put it on the board'); return;
   }
+  if (t.dataset.memview) { try { const v = (await db.ref('users/' + t.dataset.memview).get()).val(); A.memView = { uid: t.dataset.memview, data: v || {} }; } catch (er) { toast('Could not open: ' + er.message, 'bad'); } render(); return; }
+  if (t.dataset.memclose !== undefined) { A.memView = null; render(); return; }
+  if (t.dataset.memreload !== undefined) { A.mem = null; render(); return; }
   if (t.dataset.csell) return closeContract(t.dataset.csell, 'sold');
   if (t.dataset.cwon) return closeContract(t.dataset.cwon, 'won');
   if (t.dataset.clost) return closeContract(t.dataset.clost, 'lost');

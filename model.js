@@ -251,6 +251,26 @@
     const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
     return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
   }
+  // ---------- honest numbers ----------
+  /* DraftKings' own read on a leg, from its Pick6 multiplier: a lower multiplier means DK rates it likelier.
+     Checked on PoiZen's 28 graded Pick6 legs: legs this rates under 45% hit 25%, over 55% hit 64%
+     (Brier score .214 vs .250 for a coin flip). No multiplier -> 50/50, the line as the median. */
+  function multPrior(mult) {
+    const s = String(mult || ''); if (/gimme/i.test(s)) return 0.95;
+    const m = Number((s.match(/([\d.]+)\s*x/i) || [])[1]); if (!(m > 0)) return 0.5;
+    return clamp(0.5 - 0.25 * Math.log(m), 0.3, 0.75);
+  }
+  /* how much to trust our own model over DraftKings' read: more games in his log, more trust, never above 75% */
+  const trustOf = (n) => 0.75 * (n || 0) / ((n || 0) + 8);
+  function honest(raw, mult, n) { const prior = multPrior(mult); const w = trustOf(n); if (raw === null || raw === undefined) return { p: prior, raw, prior, w: 0 }; return { p: clamp(prior + (raw - prior) * w, 0.03, 0.97), raw, prior, w }; }
+  /* in-game: the box score earns trust as the game goes on; a decided leg stays decided */
+  function honestLive(raw, prior, w, frac) {
+    if (raw === null || raw === undefined || raw >= 0.999 || raw <= 0.001) return raw;
+    const k = (w || 0) + (1 - (w || 0)) * clamp(frac || 0, 0, 1); return clamp((prior ?? 0.5) + (raw - (prior ?? 0.5)) * k, 0, 1);
+  }
+  /* the hit rate every leg needs, on average, for an all-or-nothing slip to break even */
+  function breakEven(entry, toWin, n) { const x = Number(toWin) / Number(entry); return x > 1 && n ? Math.pow(1 / x, 1 / n) : null; }
+
   // ---------- event contracts (DK Predictions, Robinhood): $1 per contract, priced in cents ----------
   const mlProb = (ml) => { const m = Number(ml); if (!m) return null; return m < 0 ? -m / (-m + 100) : 100 / (m + 100); };
   /* moneylines -> no-vig win chance for the home side */
@@ -281,7 +301,7 @@
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
