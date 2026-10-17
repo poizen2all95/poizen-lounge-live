@@ -318,9 +318,56 @@
     const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
     return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
   }
+  /* ---------- plans: the one definition of every tier ----------
+     status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release · pilot = by arrangement */
+  const PLAN_ORDER = ['free', 'pro', 'elite', 'creator'];
+  const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite', creator: 'Creator' };
+  const FEATURES = {
+    board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
+    ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
+    honest: { tier: 'free', label: 'The honest read on every slip', status: 'live' },
+    limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
+    exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
+    themes: { tier: 'free', label: 'Midnight, Daylight, Vegas and your team colors', status: 'live' },
+    ocr: { tier: 'pro', label: 'Read slips from a DraftKings screenshot', status: 'live' },
+    coach: { tier: 'pro', label: 'Your Coach: each stat judged against what it was priced at, feeding your gate', status: 'live' },
+    gateEdit: { tier: 'pro', label: 'Edit your own gate rules', status: 'live' },
+    history: { tier: 'pro', label: 'Your full settled history (Free keeps the last 10)', status: 'live' },
+    csv: { tier: 'pro', label: 'Ledger export to CSV', status: 'live' },
+    playoffs: { tier: 'elite', label: 'Playoffs atmosphere theme, Midnight and Daylight', status: 'live' },
+    positions: { tier: 'elite', label: 'Position desk: each position from plan to settled, with partial exits, fees and corrections kept', status: 'building' },
+    books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
+    exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
+    exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
+    publish: { tier: 'creator', label: 'Your own board, OBS overlay, Pick\'em and Discord posting for your audience', status: 'pilot' },
+  };
+  const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
+  function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
+  function planFeatures(tier) { return Object.entries(FEATURES).filter(([, f]) => f.tier === tier).map(([id, f]) => ({ id, ...f })); }
+  /* ---------- positions: one record from plan to settled ----------
+     Prices are dollars per contract (0–1). Exits and settlement are what you report until a venue confirms them.
+     Corrections never overwrite: the original stays, the correction is applied on top and listed. */
+  function positionState(p, mark) {
+    const fx = { ...p };
+    (p.corrections || []).forEach((c) => { if (c && c.field && c.field in fx) fx[c.field] = c.to; });
+    const qty = Number(fx.qty) || 0; const entry = Number(fx.entry); const feeIn = Number(fx.fee) || 0;
+    const exits = (fx.exits || []).filter((x) => x && x.qty > 0);
+    const sold = exits.reduce((a, x) => a + x.qty, 0); const open = Math.max(0, qty - sold);
+    const filled = qty > 0 && Number.isFinite(entry);
+    const cost = filled ? qty * entry : 0; const fees = (filled ? feeIn : 0) + exits.reduce((a, x) => a + (Number(x.fee) || 0), 0);
+    const proceeds = exits.reduce((a, x) => a + x.qty * x.price, 0);
+    const settle = fx.settled && (fx.settled.result === 'yes' || fx.settled.result === 'no') ? (fx.settled.result === (fx.side || 'yes') ? 1 : 0) : null;
+    const realizedCost = filled ? (settle !== null ? qty : sold) * entry : 0;
+    const realized = proceeds + (settle !== null ? open * settle : 0) - realizedCost - fees;
+    const m = Number(mark); const unrealized = filled && settle === null && open > 0 && Number.isFinite(m) ? open * (m - entry) : null;
+    const stage = !filled ? 'planned' : settle !== null ? 'settled' : open === 0 ? 'closed' : sold > 0 ? 'partial' : 'live';
+    const unconfirmed = exits.filter((x) => x.source !== 'venue').length + (fx.settled && fx.settled.source !== 'venue' ? 1 : 0);
+    return { stage, qty, open, sold, entry: filled ? entry : null, cost, proceeds, fees, realized, unrealized, settle,
+      net: realized + (unrealized || 0), corrected: (p.corrections || []).length > 0, unconfirmed, avgExit: sold ? proceeds / sold : null };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

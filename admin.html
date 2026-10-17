@@ -917,9 +917,56 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
     return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
   }
+  /* ---------- plans: the one definition of every tier ----------
+     status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release · pilot = by arrangement */
+  const PLAN_ORDER = ['free', 'pro', 'elite', 'creator'];
+  const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite', creator: 'Creator' };
+  const FEATURES = {
+    board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
+    ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
+    honest: { tier: 'free', label: 'The honest read on every slip', status: 'live' },
+    limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
+    exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
+    themes: { tier: 'free', label: 'Midnight, Daylight, Vegas and your team colors', status: 'live' },
+    ocr: { tier: 'pro', label: 'Read slips from a DraftKings screenshot', status: 'live' },
+    coach: { tier: 'pro', label: 'Your Coach: each stat judged against what it was priced at, feeding your gate', status: 'live' },
+    gateEdit: { tier: 'pro', label: 'Edit your own gate rules', status: 'live' },
+    history: { tier: 'pro', label: 'Your full settled history (Free keeps the last 10)', status: 'live' },
+    csv: { tier: 'pro', label: 'Ledger export to CSV', status: 'live' },
+    playoffs: { tier: 'elite', label: 'Playoffs atmosphere theme, Midnight and Daylight', status: 'live' },
+    positions: { tier: 'elite', label: 'Position desk: each position from plan to settled, with partial exits, fees and corrections kept', status: 'building' },
+    books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
+    exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
+    exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
+    publish: { tier: 'creator', label: 'Your own board, OBS overlay, Pick\'em and Discord posting for your audience', status: 'pilot' },
+  };
+  const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
+  function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
+  function planFeatures(tier) { return Object.entries(FEATURES).filter(([, f]) => f.tier === tier).map(([id, f]) => ({ id, ...f })); }
+  /* ---------- positions: one record from plan to settled ----------
+     Prices are dollars per contract (0–1). Exits and settlement are what you report until a venue confirms them.
+     Corrections never overwrite: the original stays, the correction is applied on top and listed. */
+  function positionState(p, mark) {
+    const fx = { ...p };
+    (p.corrections || []).forEach((c) => { if (c && c.field && c.field in fx) fx[c.field] = c.to; });
+    const qty = Number(fx.qty) || 0; const entry = Number(fx.entry); const feeIn = Number(fx.fee) || 0;
+    const exits = (fx.exits || []).filter((x) => x && x.qty > 0);
+    const sold = exits.reduce((a, x) => a + x.qty, 0); const open = Math.max(0, qty - sold);
+    const filled = qty > 0 && Number.isFinite(entry);
+    const cost = filled ? qty * entry : 0; const fees = (filled ? feeIn : 0) + exits.reduce((a, x) => a + (Number(x.fee) || 0), 0);
+    const proceeds = exits.reduce((a, x) => a + x.qty * x.price, 0);
+    const settle = fx.settled && (fx.settled.result === 'yes' || fx.settled.result === 'no') ? (fx.settled.result === (fx.side || 'yes') ? 1 : 0) : null;
+    const realizedCost = filled ? (settle !== null ? qty : sold) * entry : 0;
+    const realized = proceeds + (settle !== null ? open * settle : 0) - realizedCost - fees;
+    const m = Number(mark); const unrealized = filled && settle === null && open > 0 && Number.isFinite(m) ? open * (m - entry) : null;
+    const stage = !filled ? 'planned' : settle !== null ? 'settled' : open === 0 ? 'closed' : sold > 0 ? 'partial' : 'live';
+    const unconfirmed = exits.filter((x) => x.source !== 'venue').length + (fx.settled && fx.settled.source !== 'venue' ? 1 : 0);
+    return { stage, qty, open, sold, entry: filled ? entry : null, cost, proceeds, fees, realized, unrealized, settle,
+      net: realized + (unrealized || 0), corrected: (p.corrections || []).length > 0, unconfirmed, avgExit: sold ? proceeds / sold : null };
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -1494,13 +1541,14 @@ async function loadMembers() {
   catch (e) { A.mem = {}; A.memOut = {}; A.memErr = 'Could not load members: ' + e.message + ' — the database rules may not be published yet.'; }
   if (A.sec === 'members') render();
 }
+const TIER_NAMES = { pro: 'Pro', elite: 'Elite', creator: 'Creator' };
 function plansCard() {
-  const P2 = (A.plans && A.plans.pro) || {}, C2 = (A.plans && A.plans.creator) || {}; const wl = Object.values(A.waitlist || {});
-  return `<div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Plans &amp; checkout</b><span class="dim" style="font-size:12px">Waitlist: ${wl.filter((x) => x.tier === 'pro').length} Pro · ${wl.filter((x) => x.tier === 'creator').length} Creator</span></div>
-    <p class="dim" style="font-size:12px;margin:0">Paste a Stripe Payment Link (or any checkout link). The member's account ID is added to the link as client_reference_id so a payment can be matched to them. Until a link is set and opened, members see a waitlist button. You can always give or remove Pro by hand in the list below.</p>
-    <div class="row"><label class="f" style="width:160px">Pro price<input id="plProPrice" data-keep value="${esc(P2.price || '')}" placeholder="$14.99 / month"></label><label class="f" style="flex:1">Pro checkout link<input id="plProLink" data-keep value="${esc(P2.link || '')}" placeholder="https://buy.stripe.com/…"></label><label class="f" style="flex:1">Manage-subscription link<input id="plProManage" data-keep value="${esc(P2.manage || '')}" placeholder="Stripe customer portal link"></label></div>
-    <div class="row"><label class="f" style="width:160px">Creator price<input id="plCrPrice" data-keep value="${esc(C2.price || '')}" placeholder="Coming later"></label><label class="tog" style="flex:1"><input type="checkbox" id="plProOpen" ${P2.open ? 'checked' : ''}><span><b>Pro checkout is open</b><em>Off shows the waitlist even if a link is set</em></span></label><button class="btn teal" id="plSave" type="button">Save plans</button></div>
-    <div class="row"><label class="f" style="flex:1">Poizen server URL (Cloudflare Worker — live order books, Stripe, Discord)<input id="plServer" data-keep value="${esc((A.plans || {}).server || '')}" placeholder="https://poizen-lounge-server.you.workers.dev"></label></div></div>`;
+  const P = A.plans || {}; const wl = Object.values(A.waitlist || {});
+  const row = (t, id, ph) => { const c = P[t] || {}; return `<div class="row" style="align-items:flex-end"><b class="st" style="font-size:18px;width:76px">${TIER_NAMES[t]}</b><label class="f" style="width:150px">Price<input id="pl${id}Price" data-keep value="${esc(c.price || '')}" placeholder="${ph}"></label><label class="f" style="flex:1;min-width:200px">Checkout link<input id="pl${id}Link" data-keep value="${esc(c.link || '')}" placeholder="https://buy.stripe.com/…"></label><label class="f" style="flex:1;min-width:200px">Manage-subscription link<input id="pl${id}Manage" data-keep value="${esc(c.manage || '')}" placeholder="Stripe customer portal link"></label><label class="tog"><input type="checkbox" id="pl${id}Open" ${c.open ? 'checked' : ''}><span><b>Open</b><em>Off shows the waitlist</em></span></label></div>`; };
+  return `<div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Plans &amp; checkout</b><span class="dim" style="font-size:12px">Waitlist: ${['pro', 'elite', 'creator'].map((t) => `${wl.filter((x) => x.tier === t).length} ${TIER_NAMES[t]}`).join(' · ')}</span></div>
+    <p class="dim" style="font-size:12px;margin:0">Order is Free → Pro → Elite → Creator. What each plan includes is defined once in the board code and shown to members as-is. Paste a Stripe Payment Link per plan; the member's account ID is added as client_reference_id so the server can match the payment. In Stripe, map each link to its plan in the server's TIER_BY_LINK setting. You can always give or remove a plan by hand below.</p>
+    ${row('pro', 'Pro', '$14.99 / month')}${row('elite', 'El', '$249 / month')}${row('creator', 'Cr', 'By arrangement')}
+    <div class="row"><label class="f" style="flex:1">Poizen server URL (Cloudflare Worker — live order books, Stripe, Discord)<input id="plServer" data-keep value="${esc(P.server || '')}" placeholder="https://poizen-lounge-server.you.workers.dev"></label><button class="btn teal" id="plSave" type="button">Save plans</button></div></div>`;
 }
 function vMembers() {
   if (A.mem === null) { A.mem = undefined; loadMembers(); }
@@ -1513,8 +1561,8 @@ function vMembers() {
   const pc = (x) => (x === null || x === undefined ? '–' : Math.round(x * 100) + '%');
   const calib = `<table><thead><tr><th>Lab said</th><th style="text-align:right">Picks</th><th style="text-align:right">Lab avg</th><th style="text-align:right">Actually hit</th></tr></thead><tbody>${B.map((b) => `<tr><td>${Math.round(b.lo * 100)}–${Math.min(100, Math.round(b.hi * 100))}%</td><td style="text-align:right">${b.n}</td><td style="text-align:right">${pc(b.exp)}</td><td style="text-align:right"><b class="${b.act === null ? '' : Math.abs(b.act - b.exp) <= 0.08 ? 'win' : 'loss'}">${pc(b.act)}</b></td></tr>`).join('')}</tbody></table>`;
   const rows = mem.sort((x, y) => (y[1].seen || 0) - (x[1].seen || 0)).map(([uid, m]) => { const mo = Object.values((A.memOut || {})[uid] || {}); const w = mo.filter((o) => o.result === 'won').length;
-    const tr = (A.tiers || {})[uid]; const tierTxt = tr ? `${tr.tier === 'creator' ? 'Creator' : 'Pro'} (${tr.source})` : 'Free';
-    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)} <span class="chip ${tr ? 'win' : ''}" style="display:inline-flex">${esc(tierTxt)}</span></b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}${(A.waitlist || {})[uid] ? ' · on the ' + esc(A.waitlist[uid].tier) + ' waitlist' : ''}</span></div><div class="row" style="gap:6px;flex-wrap:nowrap">${tr ? `<button class="btn sm warn" data-tierset="${esc(uid)}|" type="button">Remove ${tr.tier === 'creator' ? 'Creator' : 'Pro'}</button>` : `<button class="btn sm teal" data-tierset="${esc(uid)}|pro" type="button">Give Pro</button>`}${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div></div>`; }).join('');
+    const tr = (A.tiers || {})[uid]; const tierTxt = tr ? `${TIER_NAMES[tr.tier] || tr.tier} (${tr.source})` : 'Free';
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)} <span class="chip ${tr ? 'win' : ''}" style="display:inline-flex">${esc(tierTxt)}</span></b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}${(A.waitlist || {})[uid] ? ' · on the ' + esc(A.waitlist[uid].tier) + ' waitlist' : ''}</span></div><div class="row" style="gap:6px;flex-wrap:nowrap">${['pro', 'elite'].filter((t) => !tr || tr.tier !== t).map((t) => `<button class="btn sm teal" data-tierset="${esc(uid)}|${t}" type="button">Give ${TIER_NAMES[t]}</button>`).join('')}${tr ? `<button class="btn sm warn" data-tierset="${esc(uid)}|" type="button">Remove ${TIER_NAMES[tr.tier] || 'plan'}</button>` : ''}${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div></div>`; }).join('');
   let detail = '';
   if (A.memView) { const v = A.memView; const sl = Object.values(v.data.slips || {}).sort((x, y) => (y.createdAt || 0) - (x.createdAt || 0));
     detail = `<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">${esc((v.data.profile || {}).name || 'Member')}</b><button class="btn sm" data-memclose type="button">Close</button></div>${sl.map((x) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(x.title)}</b><span>${(x.legs || []).length} legs · ${x.x}× · Lab ${x.lab ? pc(x.lab.pAll) : '–'} all hit${x.entry ? ` · ${money(x.entry)} to win ${money(x.toWin)}` : ' · amounts private'}</span></div><span class="chip ${x.result === 'won' ? 'win' : x.result === 'lost' ? 'loss' : ''}">${esc(x.status === 'settled' ? x.result : 'open')}</span></div>`).join('') || '<div class="empty">No slips yet.</div>'}</div>`; }
@@ -1713,11 +1761,13 @@ document.addEventListener('click', async (e) => {
   }
   if (t.dataset.memview) { try { const v = (await db.ref('users/' + t.dataset.memview).get()).val(); A.memView = { uid: t.dataset.memview, data: v || {} }; } catch (er) { toast('Could not open: ' + er.message, 'bad'); } render(); return; }
   if (t.dataset.memclose !== undefined) { A.memView = null; render(); return; }
-  if (t.dataset.tierset) { const [uid, tier] = t.dataset.tierset.split('|'); try { await db.ref('tiers/' + uid).set(tier ? { tier, since: Date.now(), source: 'manual' } : null); A.tiers = A.tiers || {}; if (tier) A.tiers[uid] = { tier, since: Date.now(), source: 'manual' }; else delete A.tiers[uid]; render(); toast(tier ? 'Pro given' : 'Plan removed'); } catch (er) { toast('Could not change the plan: ' + er.message, 'bad', 6000); } return; }
-  if (t.id === 'plSave') { const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : ''); const link = v('plProLink'), manage = v('plProManage');
-    if ((link && !/^https:\/\//.test(link)) || (manage && !/^https:\/\//.test(manage))) { toast('Links must start with https://', 'bad'); return; }
+  if (t.dataset.tierset) { const [uid, tier] = t.dataset.tierset.split('|'); try { await db.ref('tiers/' + uid).set(tier ? { tier, since: Date.now(), source: 'manual' } : null); A.tiers = A.tiers || {}; if (tier) A.tiers[uid] = { tier, since: Date.now(), source: 'manual' }; else delete A.tiers[uid]; render(); toast(tier ? (TIER_NAMES[tier] || tier) + ' given' : 'Plan removed'); } catch (er) { toast('Could not change the plan: ' + er.message, 'bad', 6000); } return; }
+  if (t.id === 'plSave') { const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : '');
+    const tierCfg = (id) => ({ price: v('pl' + id + 'Price').slice(0, 40), link: v('pl' + id + 'Link'), manage: v('pl' + id + 'Manage'), open: !!($('#pl' + id + 'Open') || {}).checked });
+    const cfg = { pro: tierCfg('Pro'), elite: tierCfg('El'), creator: tierCfg('Cr') };
+    if (Object.values(cfg).some((c) => (c.link && !/^https:\/\//.test(c.link)) || (c.manage && !/^https:\/\//.test(c.manage)))) { toast('Links must start with https://', 'bad'); return; }
     const server = v('plServer').replace(/\/+$/, ''); if (server && !/^https:\/\/[a-z0-9.-]+(\.workers\.dev|\.[a-z]{2,})$/i.test(server)) { toast('Server URL should look like https://poizen-lounge-server.you.workers.dev', 'bad'); return; }
-    const plans = { pro: { price: v('plProPrice').slice(0, 40), link, manage, open: !!($('#plProOpen') || {}).checked }, creator: { price: v('plCrPrice').slice(0, 40) }, server };
+    const plans = { ...cfg, server };
     try { await db.ref('board/plans').set(plans); A.plans = plans; toast('Plans saved — members see them now'); render(); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
   if (t.dataset.memreload !== undefined) { A.mem = null; render(); return; }
   if (t.dataset.csell) return closeContract(t.dataset.csell, 'sold');
