@@ -1,0 +1,709 @@
+{
+  "version": 1,
+  "title": "NFL Week 6",
+  "updated": "2026-10-16T20:30:00-07:00",
+  "note": "Imported from the Gemini board. Tickets marked unconfirmed have not been matched to DraftKings yet.",
+  "players": {
+    "henry": {
+      "name": "Derrick Henry",
+      "sport": "nfl",
+      "team": "BAL",
+      "pos": "RB",
+      "number": "22",
+      "espnId": "3043078"
+    },
+    "bijan": {
+      "name": "Bijan Robinson",
+      "sport": "nfl",
+      "team": "ATL",
+      "pos": "RB",
+      "number": "7",
+      "espnId": "4430807"
+    },
+    "allen": {
+      "name": "Josh Allen",
+      "sport": "nfl",
+      "team": "BUF",
+      "pos": "QB",
+      "number": "17",
+      "espnId": "3918298"
+    },
+    "walker": {
+      "name": "Kenneth Walker III",
+      "sport": "nfl",
+      "team": "KC",
+      "pos": "RB",
+      "number": "9",
+      "espnId": "4567048"
+    },
+    "watson": {
+      "name": "Christian Watson",
+      "sport": "nfl",
+      "team": "GB",
+      "pos": "WR",
+      "number": "9",
+      "espnId": "4248528"
+    },
+    "cmc": {
+      "name": "Christian McCaffrey",
+      "sport": "nfl",
+      "team": "SF",
+      "pos": "RB",
+      "number": "23",
+      "espnId": "3117251"
+    },
+    "daniels": {
+      "name": "Jayden Daniels",
+      "sport": "nfl",
+      "team": "WSH",
+      "pos": "QB",
+      "number": "5",
+      "espnId": "4426348"
+    },
+    "young": {
+      "name": "Bryce Young",
+      "sport": "nfl",
+      "team": "CAR",
+      "pos": "QB",
+      "number": "9",
+      "espnId": "4685720"
+    },
+    "mcmillan": {
+      "name": "Tetairoa McMillan",
+      "sport": "nfl",
+      "team": "CAR",
+      "pos": "WR",
+      "number": "4",
+      "espnId": "4685472"
+    },
+    "warren": {
+      "name": "Jaylen Warren",
+      "sport": "nfl",
+      "team": "PIT",
+      "pos": "RB",
+      "number": "30",
+      "espnId": "4569987"
+    },
+    "lamb": {
+      "name": "CeeDee Lamb",
+      "sport": "nfl",
+      "team": "DAL",
+      "pos": "WR",
+      "number": "88",
+      "espnId": "4241389"
+    },
+    "dak": {
+      "name": "Dak Prescott",
+      "sport": "nfl",
+      "team": "DAL",
+      "pos": "QB",
+      "number": "4",
+      "espnId": "2577417"
+    },
+    "taylor": {
+      "name": "Jonathan Taylor",
+      "sport": "nfl",
+      "team": "IND",
+      "pos": "RB",
+      "number": "28",
+      "espnId": "4242335"
+    },
+    "irving": {
+      "name": "Bucky Irving",
+      "sport": "nfl",
+      "team": "TB",
+      "pos": "RB",
+      "number": "7",
+      "espnId": "4596448"
+    },
+    "mahomes": {
+      "name": "Patrick Mahomes",
+      "sport": "nfl",
+      "team": "KC",
+      "pos": "QB",
+      "number": "15",
+      "espnId": "3139477"
+    },
+    "stafford": {
+      "name": "Matthew Stafford",
+      "sport": "nfl",
+      "team": "LAR",
+      "pos": "QB",
+      "number": "9",
+      "espnId": "12483"
+    },
+    "nacua": {
+      "name": "Puka Nacua",
+      "sport": "nfl",
+      "team": "LAR",
+      "pos": "WR",
+      "number": "17",
+      "espnId": "4426515"
+    },
+    "caminero": {
+      "name": "Junior Caminero",
+      "sport": "mlb",
+      "team": "TB",
+      "pos": "3B",
+      "number": "13",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/691406/headshot/67/current"
+    },
+    "ydiaz": {
+      "name": "Yandy Díaz",
+      "sport": "mlb",
+      "team": "TB",
+      "pos": "1B",
+      "number": "2",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/650490/headshot/67/current"
+    },
+    "kwan": {
+      "name": "Steven Kwan",
+      "sport": "mlb",
+      "team": "CLE",
+      "pos": "OF",
+      "number": "38",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680757/headshot/67/current"
+    },
+    "jram": {
+      "name": "José Ramírez",
+      "sport": "mlb",
+      "team": "CLE",
+      "pos": "3B",
+      "number": "11",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/608070/headshot/67/current"
+    },
+    "halpin": {
+      "name": "Petey Halpin",
+      "sport": "mlb",
+      "team": "CLE",
+      "pos": "OF",
+      "number": "0",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/690984/headshot/67/current"
+    },
+    "nlowe": {
+      "name": "Nathaniel Lowe",
+      "sport": "mlb",
+      "team": "CLE",
+      "pos": "1B",
+      "number": "30",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/663993/headshot/67/current"
+    },
+    "simpson": {
+      "name": "Chandler Simpson",
+      "sport": "mlb",
+      "team": "TB",
+      "pos": "OF",
+      "number": "14",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/802415/headshot/67/current"
+    },
+    "palacios": {
+      "name": "Richie Palacios",
+      "sport": "mlb",
+      "team": "TB",
+      "pos": "2B",
+      "number": "1",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680700/headshot/67/current"
+    },
+    "rocchio": {
+      "name": "Brayan Rocchio",
+      "sport": "mlb",
+      "team": "CLE",
+      "pos": "SS",
+      "number": "4",
+      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/677587/headshot/67/current"
+    }
+  },
+  "pick6": [
+    {
+      "id": "dk-8-staged",
+      "title": "DraftKings 8-Pick — Dak Gimme",
+      "badge": "Staged on DraftKings",
+      "status": "unconfirmed",
+      "entry": 10,
+      "toWin": 2219.81,
+      "payouts": {
+        "6": 1.3,
+        "7": 5.5,
+        "8": 221.981
+      },
+      "legs": [
+        {
+          "player": "dak",
+          "market": "pass_yds",
+          "line": 0.5,
+          "mult": "Gimme",
+          "gimme": true
+        },
+        {
+          "player": "bijan",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.7x"
+        },
+        {
+          "player": "taylor",
+          "market": "rush_yds",
+          "line": 99.5,
+          "mult": "1.1x"
+        },
+        {
+          "player": "allen",
+          "market": "pass_yds",
+          "line": 259.5,
+          "mult": "1.2x"
+        },
+        {
+          "player": "irving",
+          "market": "rush_yds",
+          "line": 79.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "henry",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.1x"
+        },
+        {
+          "player": "young",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "mahomes",
+          "market": "pass_yds",
+          "line": 259.5,
+          "mult": "1.5x"
+        }
+      ]
+    },
+    {
+      "id": "mlb-4",
+      "title": "ALCS Game 4 — 4-Pick",
+      "badge": "MLB · $5 Bonus + Caminero Gimme",
+      "status": "unconfirmed",
+      "entry": 5,
+      "toWin": 33,
+      "legs": [
+        {
+          "player": "caminero",
+          "market": "hrr",
+          "line": 0.5,
+          "mult": "Gimme",
+          "gimme": true
+        },
+        {
+          "player": "ydiaz",
+          "market": "hrr",
+          "line": 1.5,
+          "mult": "1.0x"
+        },
+        {
+          "player": "kwan",
+          "market": "hrr",
+          "line": 1.5,
+          "mult": "1.0x"
+        },
+        {
+          "player": "rocchio",
+          "market": "hrr",
+          "line": 0.5,
+          "mult": "0.8x"
+        }
+      ]
+    },
+    {
+      "id": "mlb-6",
+      "title": "ALCS Game 4 — 6-Pick",
+      "badge": "MLB · J. Ramírez Promo",
+      "status": "unconfirmed",
+      "entry": 3,
+      "toWin": 40,
+      "legs": [
+        {
+          "player": "jram",
+          "market": "hrr",
+          "line": 0.5,
+          "mult": "0.5x Promo"
+        },
+        {
+          "player": "halpin",
+          "market": "hrr",
+          "line": 1.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "nlowe",
+          "market": "hrr",
+          "line": 1.5,
+          "mult": "1.2x"
+        },
+        {
+          "player": "simpson",
+          "market": "hrr",
+          "line": 1.5,
+          "mult": "0.8x"
+        },
+        {
+          "player": "palacios",
+          "market": "hrr",
+          "line": 0.5,
+          "mult": "0.8x"
+        },
+        {
+          "player": "rocchio",
+          "market": "hrr",
+          "line": 0.5,
+          "mult": "0.8x"
+        }
+      ]
+    },
+    {
+      "id": "nfl-3",
+      "title": "3-Pick Bankroll Builder",
+      "badge": "+50% Winnings Boost",
+      "status": "unconfirmed",
+      "entry": 10,
+      "toWin": 131,
+      "legs": [
+        {
+          "player": "young",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "warren",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "allen",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.8x"
+        }
+      ]
+    },
+    {
+      "id": "nfl-8-lamb",
+      "title": "8-Pick CeeDee Lamb Re-Run",
+      "badge": "+50% Winnings Boost",
+      "status": "unconfirmed",
+      "entry": 10,
+      "toWin": 2400,
+      "legs": [
+        {
+          "player": "young",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "mcmillan",
+          "market": "rec_yds",
+          "line": 89.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "warren",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "bijan",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.7x"
+        },
+        {
+          "player": "henry",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.1x"
+        },
+        {
+          "player": "allen",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.8x"
+        },
+        {
+          "player": "walker",
+          "market": "rush_yds",
+          "line": 119.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "lamb",
+          "market": "rec_yds",
+          "line": 99.5,
+          "mult": "1.3x"
+        }
+      ]
+    },
+    {
+      "id": "nfl-8-dak",
+      "title": "8-Pick Dak Gimme (Gemini version)",
+      "badge": "Dak 0.5 Pass Yds Gimme",
+      "status": "unconfirmed",
+      "entry": 10,
+      "toWin": 1260.53,
+      "legs": [
+        {
+          "player": "young",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "mcmillan",
+          "market": "rec_yds",
+          "line": 89.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "warren",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.3x"
+        },
+        {
+          "player": "bijan",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.7x"
+        },
+        {
+          "player": "henry",
+          "market": "rush_rec_yds",
+          "line": 109.5,
+          "mult": "1.1x"
+        },
+        {
+          "player": "allen",
+          "market": "anytime_td",
+          "line": 0.5,
+          "mult": "0.8x"
+        },
+        {
+          "player": "walker",
+          "market": "rush_yds",
+          "line": 119.5,
+          "mult": "1.6x"
+        },
+        {
+          "player": "dak",
+          "market": "pass_yds",
+          "line": 0.5,
+          "mult": "Gimme",
+          "gimme": true
+        }
+      ]
+    }
+  ],
+  "firstTD": {
+    "title": "$20 Tiered First-TD Portfolio",
+    "status": "unconfirmed",
+    "bets": [
+      {
+        "player": "bijan",
+        "stake": 2,
+        "odds": "+380"
+      },
+      {
+        "player": "henry",
+        "stake": 2,
+        "odds": "+425"
+      },
+      {
+        "player": "warren",
+        "stake": 2,
+        "odds": "+550"
+      },
+      {
+        "player": "mcmillan",
+        "stake": 5,
+        "odds": "+850"
+      },
+      {
+        "player": "walker",
+        "stake": 2,
+        "odds": "+360"
+      },
+      {
+        "player": "allen",
+        "stake": 2,
+        "odds": "+500"
+      },
+      {
+        "player": "lamb",
+        "stake": 5,
+        "odds": "+650"
+      }
+    ]
+  },
+  "scalp": {
+    "title": "2+ TD Live Scalp",
+    "seed": 100,
+    "status": "unconfirmed",
+    "rule": "Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.",
+    "shifts": [
+      {
+        "label": "Shift 1",
+        "targets": [
+          {
+            "player": "henry",
+            "stake": 50,
+            "odds": "+390"
+          },
+          {
+            "player": "bijan",
+            "stake": 50,
+            "odds": "+410"
+          }
+        ]
+      },
+      {
+        "label": "Shift 2",
+        "targets": [
+          {
+            "player": "allen",
+            "stake": 50,
+            "odds": "+420"
+          },
+          {
+            "player": "walker",
+            "stake": 50,
+            "odds": "+350"
+          }
+        ]
+      },
+      {
+        "label": "Shift 3 · SNF",
+        "targets": [
+          {
+            "player": "watson",
+            "stake": 100,
+            "odds": "+525"
+          }
+        ]
+      },
+      {
+        "label": "Shift 4 · MNF",
+        "targets": [
+          {
+            "player": "cmc",
+            "stake": 50,
+            "odds": "+330"
+          },
+          {
+            "player": "daniels",
+            "stake": 50,
+            "odds": "+550"
+          }
+        ]
+      }
+    ]
+  },
+  "rules": {
+    "maxLegs": 4,
+    "avgMustBeatLine": true,
+    "cashOutOnFirstTD": true
+  },
+  "research": [
+    {
+      "player": "young",
+      "market": "pass_yds",
+      "line": 269.5
+    },
+    {
+      "player": "warren",
+      "market": "rush_rec_yds",
+      "line": 109.5
+    },
+    {
+      "player": "stafford",
+      "market": "pass_yds",
+      "line": 309.5
+    },
+    {
+      "player": "nacua",
+      "market": "rec_yds",
+      "line": 109.5
+    },
+    {
+      "player": "walker",
+      "market": "rush_yds",
+      "line": 119.5
+    },
+    {
+      "player": "mcmillan",
+      "market": "rec_yds",
+      "line": 89.5
+    },
+    {
+      "player": "allen",
+      "market": "anytime_td",
+      "line": 0.5
+    },
+    {
+      "player": "bijan",
+      "market": "rush_rec_yds",
+      "line": 110
+    },
+    {
+      "player": "henry",
+      "market": "rush_rec_yds",
+      "line": 109.5
+    },
+    {
+      "player": "lamb",
+      "market": "rec_yds",
+      "line": 99.5
+    },
+    {
+      "player": "watson",
+      "market": "rec_yds",
+      "line": 89.5
+    },
+    {
+      "player": "cmc",
+      "market": "anytime_td",
+      "line": 0.5
+    },
+    {
+      "player": "daniels",
+      "market": "anytime_td",
+      "line": 0.5
+    },
+    {
+      "player": "dak",
+      "market": "pass_yds",
+      "line": 0.5
+    },
+    {
+      "player": "taylor",
+      "market": "rush_yds",
+      "line": 99.5
+    },
+    {
+      "player": "irving",
+      "market": "rush_yds",
+      "line": 79.5
+    },
+    {
+      "player": "mahomes",
+      "market": "pass_yds",
+      "line": 259.5
+    },
+    {
+      "player": "allen",
+      "market": "pass_yds",
+      "line": 259.5
+    }
+  ]
+}
