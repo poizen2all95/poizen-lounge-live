@@ -251,9 +251,37 @@
     const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
     return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
   }
+  // ---------- event contracts (DK Predictions, Robinhood): $1 per contract, priced in cents ----------
+  const mlProb = (ml) => { const m = Number(ml); if (!m) return null; return m < 0 ? -m / (-m + 100) : 100 / (m + 100); };
+  /* moneylines -> no-vig win chance for the home side */
+  function devig(mlHome, mlAway) { const h = mlProb(mlHome), a = mlProb(mlAway); if (h === null || a === null) return null; return h / (h + a); }
+  /* best available win chance for one side: final > ESPN live win probability > DraftKings line (no vig) > ESPN matchup predictor */
+  function winChance(side, d) {
+    if (!d) return null;
+    if (d.final) return { p: d.winner === side ? 1 : 0, src: 'Final' };
+    const flip = (x) => (side === 'home' ? x : 1 - x);
+    if (typeof d.liveHome === 'number') return { p: clamp(flip(d.liveHome), 0, 1), src: 'ESPN live win probability' };
+    const ml = devig(d.mlHome, d.mlAway); if (ml !== null) return { p: flip(ml), src: 'DraftKings line, vig removed' };
+    if (typeof d.preHome === 'number') return { p: clamp(flip(d.preHome), 0, 1), src: 'ESPN matchup predictor' };
+    return null;
+  }
+  /* 2+ TD (or n+) contract: the entry price is the market's pre-game read; scale the scoring rate by time left */
+  function tdsChance(entryP, frac, tds, need = 2) {
+    if (tds >= need) return 1;
+    const lam = lambdaFrom2Plus(1 / clamp(entryP, 0.01, 0.95), 1) * clamp(1 - frac, 0, 1);
+    return 1 - poissonCdf(need - (tds || 0) - 1, lam);
+  }
+  /* sell-or-hold for a contract position: bid and avg in cents, p = chance it settles YES */
+  function contractCall(qty, avg, p, bid) {
+    const q = Number(qty) || 0; const cost = (q * (Number(avg) || 0)) / 100; const hold = p === null || p === undefined ? null : q * p;
+    const out = { qty: q, cost, hold, fairCents: hold === null ? null : p * 100, maxWin: q - cost };
+    const b = Number(bid);
+    if (b > 0) { out.proceeds = (q * b) / 100; out.pnlIfSold = out.proceeds - cost; out.call = hold === null ? null : cashoutCall(out.proceeds, hold); }
+    return out;
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

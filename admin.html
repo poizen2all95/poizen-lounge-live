@@ -70,7 +70,7 @@ a{color:var(--sky)}
 .nav[aria-current="page"]{background:linear-gradient(135deg,var(--acc),color-mix(in srgb,var(--acc) 60%,#000));color:#06080b;box-shadow:0 12px 26px -12px var(--acc)}
 .rail-foot{margin-top:6px;padding:10px 12px;border-radius:13px;background:var(--panel2);font-size:12px;color:var(--fg2)}
 main{min-width:0}
-body[data-sec="overview"]{--acc:#F2C14E} body[data-sec="slips"]{--acc:#8B6CFF} body[data-sec="gate"]{--acc:#2EE59D} body[data-sec="bets"]{--acc:#22D3EE} body[data-sec="pickem"]{--acc:#F472B6}
+body[data-sec="overview"]{--acc:#F2C14E} body[data-sec="slips"]{--acc:#8B6CFF} body[data-sec="gate"]{--acc:#2EE59D} body[data-sec="bets"]{--acc:#22D3EE} body[data-sec="contracts"]{--acc:#A3E635} body[data-sec="pickem"]{--acc:#F472B6}
 body[data-sec="results"]{--acc:#7CF27C} body[data-sec="stream"]{--acc:#FF3B5C} body[data-sec="chat"]{--acc:#4CC9F0} body[data-sec="settings"]{--acc:#9FB0C0}
 
 /* banner */
@@ -229,7 +229,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
     search: (q) => `https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(q)}&type=player&limit=6`,
   };
-  function sportPath(s) { return s === 'mlb' ? 'baseball/mlb' : 'football/nfl'; }
+  function sportPath(s) { return s === 'mlb' ? 'baseball/mlb' : s === 'nba' ? 'basketball/nba' : 'football/nfl'; }
 
   // ---------- names ----------
   function norm(name) {
@@ -831,9 +831,37 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const edge = offer - fair, ratio = fair > 0 ? offer / fair : Infinity;
     return { take: offer >= fair, edge, ratio, verdict: offer >= fair ? 'Take it' : ratio >= 0.9 ? 'Close call — take it if you want the sure thing' : 'Hold' };
   }
+  // ---------- event contracts (DK Predictions, Robinhood): $1 per contract, priced in cents ----------
+  const mlProb = (ml) => { const m = Number(ml); if (!m) return null; return m < 0 ? -m / (-m + 100) : 100 / (m + 100); };
+  /* moneylines -> no-vig win chance for the home side */
+  function devig(mlHome, mlAway) { const h = mlProb(mlHome), a = mlProb(mlAway); if (h === null || a === null) return null; return h / (h + a); }
+  /* best available win chance for one side: final > ESPN live win probability > DraftKings line (no vig) > ESPN matchup predictor */
+  function winChance(side, d) {
+    if (!d) return null;
+    if (d.final) return { p: d.winner === side ? 1 : 0, src: 'Final' };
+    const flip = (x) => (side === 'home' ? x : 1 - x);
+    if (typeof d.liveHome === 'number') return { p: clamp(flip(d.liveHome), 0, 1), src: 'ESPN live win probability' };
+    const ml = devig(d.mlHome, d.mlAway); if (ml !== null) return { p: flip(ml), src: 'DraftKings line, vig removed' };
+    if (typeof d.preHome === 'number') return { p: clamp(flip(d.preHome), 0, 1), src: 'ESPN matchup predictor' };
+    return null;
+  }
+  /* 2+ TD (or n+) contract: the entry price is the market's pre-game read; scale the scoring rate by time left */
+  function tdsChance(entryP, frac, tds, need = 2) {
+    if (tds >= need) return 1;
+    const lam = lambdaFrom2Plus(1 / clamp(entryP, 0.01, 0.95), 1) * clamp(1 - frac, 0, 1);
+    return 1 - poissonCdf(need - (tds || 0) - 1, lam);
+  }
+  /* sell-or-hold for a contract position: bid and avg in cents, p = chance it settles YES */
+  function contractCall(qty, avg, p, bid) {
+    const q = Number(qty) || 0; const cost = (q * (Number(avg) || 0)) / 100; const hold = p === null || p === undefined ? null : q * p;
+    const out = { qty: q, cost, hold, fairCents: hold === null ? null : p * 100, maxWin: q - cost };
+    const b = Number(bid);
+    if (b > 0) { out.proceeds = (q * b) / 100; out.pnlIfSold = out.proceeds - cost; out.call = hold === null ? null : cashoutCall(out.proceeds, hold); }
+    return out;
+  }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -862,6 +890,7 @@ const MLBC = { TB: ['092C5C', '8FBCE6'], CLE: ['002B5C', 'E31937'] };
 const ICON = {
   overview: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>',
   slips: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M10 9h4M10 13h4"/></svg>',
+  contracts: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2A3 3 0 0 0 12 8c-1.7 0-3 .9-3 2s1.3 1.7 3 2 3 .9 3 2-1.3 2-3 2a3 3 0 0 1-2.8-1.2M12 6v2m0 8v2"/></svg>',
   bets: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
   pickem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>',
   results: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-9"/><path d="M14 7h6v6"/></svg>',
@@ -874,12 +903,12 @@ const ICON = {
   warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>',
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
 };
-const SECTIONS = [['overview', 'Overview'], ['slips', 'Slips & Lab'], ['gate', 'Gate'], ['bets', '1st TD & Scalp'], ['pickem', "Pick'em"], ['results', 'Results'], ['stream', 'Stream'], ['chat', 'Chat'], ['settings', 'Settings']];
+const SECTIONS = [['overview', 'Overview'], ['slips', 'Slips & Lab'], ['gate', 'Gate'], ['bets', '1st TD & Scalp'], ['contracts', 'Contracts'], ['pickem', "Pick'em"], ['results', 'Results'], ['stream', 'Stream'], ['chat', 'Chat'], ['settings', 'Settings']];
 
 /* ---------- state ---------- */
 const A = { sec: (location.hash || '#overview').slice(1), slate: null, results: { entries: {} }, dirty: false, publishedAt: null,
   gateRules: { ...M.GATE_DEFAULTS }, gateLog: {}, overrideFor: null, bankroll: null,
-  events: {}, teamEvent: {}, logs: {}, injuries: null, graded: {}, gradedAt: null, pickem: {}, locks: {}, champs: {}, chat: [], memo: {} };
+  cKind: 'win', cSport: 'nfl', events: {}, teamEvent: {}, logs: {}, injuries: null, graded: {}, gradedAt: null, pickem: {}, locks: {}, champs: {}, chat: [], memo: {} };
 let db, auth;
 const P = (k) => (A.slate.players || {})[k] || { name: k, team: '', sport: 'nfl' };
 const sportOf = (k) => P(k).sport || 'nfl';
@@ -892,7 +921,7 @@ const avatar = (k) => { const p = P(k); const s = headshot(k); return `<div clas
 function toast(msg, kind = 'ok', ms = 2800) { const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), ms); }
 function setDirty(v = true) { A.dirty = v; const s = $('#state'); s.classList.toggle('dirty', v); s.querySelector('span').textContent = v ? 'Unpublished changes' : A.publishedAt ? 'Live on the board' : 'Up to date'; }
 function arr(x) { return Array.isArray(x) ? x : x && typeof x === 'object' ? Object.keys(x).sort((a, b) => a - b).map((k) => x[k]) : []; }
-function fixArrays(s) { s.pick6 = arr(s.pick6).map((t) => ({ ...t, legs: arr(t.legs) })); if (s.firstTD) s.firstTD.bets = arr(s.firstTD.bets); if (s.scalp) s.scalp.shifts = arr(s.scalp.shifts).map((sh) => ({ ...sh, targets: arr(sh.targets) })); s.research = arr(s.research); return s; }
+function fixArrays(s) { s.contracts = arr(s.contracts); s.pick6 = arr(s.pick6).map((t) => ({ ...t, legs: arr(t.legs) })); if (s.firstTD) s.firstTD.bets = arr(s.firstTD.bets); if (s.scalp) s.scalp.shifts = arr(s.scalp.shifts).map((sh) => ({ ...sh, targets: arr(sh.targets) })); s.research = arr(s.research); return s; }
 async function getJSON(url) { const c = new AbortController(); const t = setTimeout(() => c.abort(), 12000); try { const r = await fetch(url, { cache: 'no-store', signal: c.signal }); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.json(); } finally { clearTimeout(t); } }
 function loadScripts(urls) { return urls.reduce((p, u) => p.then(() => new Promise((res, rej) => { const s = document.createElement('script'); s.src = u; s.onload = res; s.onerror = () => rej(new Error('could not load ' + u.split('/').pop())); document.head.appendChild(s); })), Promise.resolve()); }
 
@@ -903,13 +932,15 @@ function validateSlate(s) {
   for (const t of s.pick6 || []) { if (!t.id) errs.push(`Slip "${t.title || '?'}" needs an id`); if (!(Number(t.entry) > 0)) errs.push(`Slip "${t.title || t.id}" needs an entry amount`); for (const l of t.legs || []) { need(l.player, `Slip "${t.title || t.id}"`); if (!E.MARKETS[l.market]) errs.push(`Slip "${t.title || t.id}": unknown market "${l.market}"`); if (!isFinite(Number(l.line))) errs.push(`Slip "${t.title || t.id}": bad line for ${l.player}`); } }
   for (const b of (s.firstTD && s.firstTD.bets) || []) { need(b.player, 'First TD'); if (!E.americanToDecimal(b.odds)) errs.push(`First TD ${b.player}: bad odds "${b.odds}"`); }
   for (const sh of (s.scalp && s.scalp.shifts) || []) for (const t of sh.targets || []) { need(t.player, 'Scalp'); if (!E.americanToDecimal(t.odds)) errs.push(`Scalp ${t.player}: bad odds "${t.odds}"`); }
+  for (const c of s.contracts || []) { const nm = `Contract "${c.title || c.id || '?'}"`; if (!c.id) errs.push(nm + ' needs an id'); if (!CKINDS[c.kind]) errs.push(nm + ': unknown kind'); if (!(Number(c.qty) > 0)) errs.push(nm + ' needs a contract count'); if (!(Number(c.avg) >= 1 && Number(c.avg) <= 99)) errs.push(nm + ': price must be 1–99¢');
+    if (c.kind === 'win' && !c.team) errs.push(nm + ' needs a team'); if (['prop', 'two_td', 'first_td'].includes(c.kind)) need(c.player, nm); if (c.kind === 'prop' && !E.MARKETS[c.market]) errs.push(nm + ': unknown stat'); }
   for (const [k, p] of Object.entries(players)) { if (!p.name || !p.team) errs.push(`Player "${k}" needs name and team`); if (p.sport && !['nfl', 'mlb'].includes(p.sport)) errs.push(`Player "${k}": sport must be nfl or mlb`); }
   return errs;
 }
 
 /* ---------- ESPN data for the Lab, grading and Pick'em locks ---------- */
 async function loadESPN() {
-  const sports = [...new Set(Object.values(A.slate.players || {}).map((p) => p.sport || 'nfl'))]; if (!sports.includes('nfl')) sports.push('nfl');
+  const sports = [...new Set(Object.values(A.slate.players || {}).map((p) => p.sport || 'nfl'))]; ['nfl', 'mlb', 'nba'].forEach((x) => { if (!sports.includes(x)) sports.push(x); });
   for (const sp of sports) {
     try { const sb = await getJSON(E.ESPN.scoreboard(sp));
       for (const ev of sb.events || []) { const c = (ev.competitions || [])[0] || {}; const st = (ev.status && ev.status.type) || {}; const odds = (c.odds || [])[0] || null;
@@ -1035,7 +1066,7 @@ function render() {
   document.body.dataset.sec = A.sec; $('#rail').innerHTML = navHTML(); $('#weekName').textContent = (A.slate.title || 'This week') + ' · owner console';
   const keep = {}; document.querySelectorAll('#main [data-keep]').forEach((el) => { keep[el.id] = el.value; });
   const openD = [...document.querySelectorAll('#main details[open]')].map((d) => d.dataset.k);
-  $('#main').innerHTML = ({ overview: vOverview, gate: vGate, slips: vSlips, bets: vBets, pickem: vPickem, results: vResults, stream: vStream, chat: vChat, settings: vSettings })[A.sec]();
+  $('#main').innerHTML = ({ overview: vOverview, gate: vGate, slips: vSlips, bets: vBets, contracts: vContracts, pickem: vPickem, results: vResults, stream: vStream, chat: vChat, settings: vSettings })[A.sec]();
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('#main details').forEach((d) => { if (openD.includes(d.dataset.k)) d.open = true; });
 }
@@ -1136,6 +1167,46 @@ function vResults() {
     `<h3 class="sec">Recorded</h3><div class="card scroll">${list.length ? `<table><thead><tr><th>Date</th><th>Slip</th><th style="text-align:right">Stake</th><th style="text-align:right">Paid</th><th style="text-align:right">P/L</th><th></th></tr></thead><tbody>${list.map((e) => `<tr><td>${esc(e.date)}</td><td><b>${esc(e.title)}</b>${e.legs ? ` <span class="dim">· ${e.hits ?? '?'}/${e.legs}</span>` : ''}</td><td class="n">${money(e.stake)}</td><td class="n">${money(e.payout)}</td><td class="n ${e.payout > e.stake ? 'win' : 'loss'}">${money(e.payout - e.stake, true)}</td><td style="text-align:right"><button class="btn sm warn" data-unrec="${esc(e.k)}" type="button">Delete</button></td></tr>`).join('')}</tbody></table>` : '<div class="empty">Nothing recorded yet.</div>'}</div>`;
 }
 
+/* contracts: DK Predictions / Robinhood positions the board tracks with a sell-or-hold call */
+const CKINDS = { win: 'Team to win', prop: 'Player stat', two_td: '2+ TDs', first_td: 'First TD', other: 'Something else' };
+const CVENUES = ['DraftKings Predictions', 'Robinhood', 'Kalshi', 'Other'];
+const CMARKET = { win: 'moneyline', two_td: 'two_td', first_td: 'first_td', other: 'other' };
+function contractTitle(c) {
+  if (c.title) return c.title; const p = c.player ? P(c.player) : null;
+  if (c.kind === 'win') return `${c.team} to win`; if (c.kind === 'two_td') return `${p.name} 2+ TDs`; if (c.kind === 'first_td') return `${p.name} first TD`;
+  if (c.kind === 'prop') return `${p.name} ${c.dir === 'under' ? 'under' : 'over'} ${E.fmt(c.line)} ${(E.MARKETS[c.market] || {}).short || c.market}`; return 'Contract';
+}
+function vContracts() {
+  const list = A.slate.contracts || []; const k = A.cKind; const pl = Object.entries(A.slate.players || {}).sort((a, b) => a[1].name.localeCompare(b[1].name));
+  const teams = [...new Set(Object.keys(A.teamEvent).filter((x) => x.startsWith(A.cSport + ':')).map((x) => x.split(':')[1]))].sort();
+  const sel = (id, opts, cur) => `<select id="${id}" data-keep>${opts.map(([v, l]) => `<option value="${esc(v)}" ${v === cur ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+  const who = k === 'win' ? `<div class="row">${sel('cSport', [['nfl', 'NFL'], ['mlb', 'MLB'], ['nba', 'NBA']], A.cSport)}<input id="cTeam" data-keep list="cTeams" placeholder="Team (e.g. DAL)" style="flex:1;text-transform:uppercase"><datalist id="cTeams">${teams.map((t) => `<option value="${esc(t)}">`).join('')}</datalist></div>`
+    : k === 'other' ? '<p class="dim" style="font-size:12px;margin:0">No live model for this one — the board shows your cost and what selling returns.</p>'
+    : `<select id="cPlayer" data-keep>${pl.map(([key, p]) => `<option value="${esc(key)}">${esc(p.name)} · ${esc(p.team)}</option>`).join('')}</select>${pl.length ? '' : '<p class="dim" style="font-size:12px">Add the player to a slip or the Lab first.</p>'}`;
+  const stat = k === 'prop' ? `<div class="row"><select id="cMarket" data-keep>${Object.entries(E.MARKETS).filter(([, x]) => { const cp = $('#cPlayer') ? $('#cPlayer').value : (pl[0] || [])[0]; return !cp || x.sport === ((A.slate.players[cp] || {}).sport || 'nfl'); }).map(([m, x]) => `<option value="${m}">${esc(x.label)} (${x.sport.toUpperCase()})</option>`).join('')}</select><select id="cDir" data-keep><option value="over">Over</option><option value="under">Under</option></select><input id="cLine" data-keep type="number" step="0.5" placeholder="Line" style="width:90px"></div>` : '';
+  const form = `<div class="card" style="display:flex;flex-direction:column;gap:10px"><b class="st" style="font-size:22px">Add a position</b>
+    <div class="row">${sel('cVenue', CVENUES.map((v) => [v, v]), $('#cVenue') ? $('#cVenue').value : CVENUES[0])}${sel('cKind', Object.entries(CKINDS), k)}</div>${who}${stat}
+    <div class="row"><label class="f" style="flex:1">Contracts<input id="cQty" data-keep type="number" min="1" step="1" placeholder="100"></label><label class="f" style="flex:1">Avg price (¢)<input id="cAvg" data-keep type="number" min="1" max="99" step="1" placeholder="40"></label></div>
+    <input id="cTitle" data-keep maxlength="60" placeholder="Title (optional — built for you)">
+    <button class="btn teal" id="cAdd" type="button">Add to the board</button>
+    <p class="dim" style="font-size:12px;margin:0">Each contract pays $1 if it hits. The board puts a live chance on it and, when you type the sell price you see, says sell or hold.</p></div>`;
+  const row = (c) => { const qty = Number(c.qty), avg = Number(c.avg), cost = (qty * avg) / 100; const open = !c.status || c.status === 'open';
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(c.title)}</b><span>${esc(c.venue)} · ${qty} at ${avg}¢ · cost ${money(cost)}${open ? '' : ` · ${c.status === 'sold' ? 'sold at ' + c.exit + '¢' : c.status}`}</span></div>${open ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="cx-${esc(c.id)}" data-keep type="number" min="1" max="99" step="1" placeholder="¢" style="width:64px"><button class="btn sm teal" data-csell="${esc(c.id)}" type="button">Sold</button><button class="btn sm" data-cwon="${esc(c.id)}" type="button">Won</button><button class="btn sm warn" data-clost="${esc(c.id)}" type="button">Lost</button><button class="btn sm" data-cdel="${esc(c.id)}" type="button" aria-label="Remove">×</button></div>` : `<span class="chip ${c.status === 'lost' ? 'loss' : 'win'}">Recorded</span>`}</div>`; };
+  return banner('contracts', 'Event <span>contracts</span>', 'DK Predictions and Robinhood positions. Add what you hold; the board tracks the live chance and gives a sell-or-hold call against the price you see. Closing one records it in your Ledger.') +
+    `<div class="grid2">${form}<div class="card"><b class="st" style="font-size:22px">Positions</b><div style="margin-top:10px">${list.length ? list.slice().reverse().map(row).join('') : '<div class="empty">No contracts yet.</div>'}</div></div></div>`;
+}
+function closeContract(id, status) {
+  const c = (A.slate.contracts || []).find((x) => x.id === id); if (!c) return;
+  const qty = Number(c.qty), avg = Number(c.avg), cost = (qty * avg) / 100; let payout = 0;
+  if (status === 'sold') { const x = Number(($('#cx-' + id) || {}).value); if (!(x >= 1 && x <= 99)) { toast('Type the price you sold at, in cents', 'bad'); return; } c.exit = x; payout = (qty * x) / 100; }
+  if (status === 'won') payout = qty;
+  c.status = status; c.closedAt = new Date().toISOString();
+  const d = new Date().toLocaleDateString('en-CA');
+  A.results.entries = A.results.entries || {};
+  A.results.entries['c_' + c.id] = { date: d, title: c.title, type: 'prediction', book: c.venue, market: c.kind === 'prop' ? c.market : CMARKET[c.kind], dir: c.dir || 'over', prob: avg / 100, stake: Math.round(cost * 100) / 100, payout: Math.round(payout * 100) / 100, result: status, contractId: c.id };
+  saveResults(); setDirty(); render(); toast(`${c.title}: ${money(payout - cost, true)} recorded — publish to update the board`);
+}
+
 /* stream */
 function vStream() {
   const ov = BOARD + '?overlay', demo = BOARD + '?overlay&demo';
@@ -1148,7 +1219,16 @@ function vStream() {
         <button type="button" data-fire="hit|Cashed|"><b>Cashed</b><span>Green burst</span></button>
         <button type="button" data-fire="slipwin|Slip cashed|"><b>Slip cashed</b><span>Gold rain</span></button>
         <button type="button" data-fire="bust|Busted|"><b>Busted</b><span>Red shake</span></button></div>
-        <div class="row" style="margin-top:12px"><input id="fWord" data-keep maxlength="24" placeholder="Custom big word" style="flex:1"><input id="fSub" data-keep maxlength="80" placeholder="Line under it" style="flex:2"><button class="btn gold" id="fireCustom" type="button">Fire</button></div></div></div>`;
+        <div class="row" style="margin-top:12px"><input id="fWord" data-keep maxlength="24" placeholder="Custom big word" style="flex:1"><input id="fSub" data-keep maxlength="80" placeholder="Line under it" style="flex:2"><button class="btn gold" id="fireCustom" type="button">Fire</button></div></div></div>
+    <div class="grid2" style="margin-top:16px"><div class="card"><b class="st" style="font-size:22px">Put a pick on screen</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Shows the real card — faces, lines, live numbers — on every board and overlay. Use it when chat asks what you're sweating.</p>
+      ${(A.slate.pick6 || []).filter(confirmed).map((t) => `<div style="margin-bottom:12px"><div class="row" style="justify-content:space-between"><b>${esc(t.title)}</b><button class="btn sm gold" data-showslip="${esc(t.id)}" type="button">Show slip</button></div><div class="row" style="gap:6px;margin-top:6px">${t.legs.map((l, i) => `<button class="btn sm" data-showslip="${esc(t.id)}|${i}" type="button">${esc(P(l.player).name.split(' ').slice(-1)[0])}</button>`).join('')}</div></div>`).join('') || '<div class="empty">Confirm a slip first.</div>'}</div>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px"><b class="st" style="font-size:22px">OBS scene control</b>
+        <p class="dim" style="font-size:12px;margin:0">The overlay can switch your OBS scenes: a moment cuts to your moment scene and back, a close call or danger leg cuts to your sweat scene for 20 seconds. In OBS: Tools → WebSocket Server Settings → Enable, then copy the password from “Show Connect Info”.</p>
+        <div class="row"><label class="f" style="flex:1">OBS WebSocket password<input id="obsPw" data-keep type="password" autocomplete="new-password" placeholder="From Show Connect Info"></label><label class="f" style="width:90px">Port<input id="obsPort" data-keep type="number" value="4455"></label></div>
+        <div class="row"><label class="f" style="flex:1">Moment scene<input id="obsMoment" data-keep value="PZ Moment"></label><label class="f" style="flex:1">Slip-cashed scene<input id="obsWin" data-keep placeholder="Same as moment"></label><label class="f" style="flex:1">Sweat scene<input id="obsSweat" data-keep value="PZ Sweat"></label></div>
+        <div class="row"><button class="btn teal" id="obsCopy" type="button">${ICON.copy} Copy OBS overlay URL</button></div>
+        <p class="dim" style="font-size:12px;margin:0">The copied URL holds your OBS password after the #, which never gets sent to any server. Paste it only into one OBS browser source, and don't show it on stream. Scene names must match OBS exactly; leave one blank to skip that cut.</p>
+        <div class="row" style="border-top:1px solid var(--line);padding-top:10px"><input id="sceneName" data-keep placeholder="Switch OBS to scene…" style="flex:1"><select id="sceneSecs" data-keep><option value="8">for 8s</option><option value="15">for 15s</option><option value="30">for 30s</option><option value="0">and stay</option></select><button class="btn gold" id="sceneGo" type="button">Switch</button></div></div></div>`;
 }
 
 /* chat */
@@ -1260,6 +1340,25 @@ document.addEventListener('click', async (e) => {
   }
   if (t.id === 'bankSave') { const v = Number($('#bankIn').value); if (!(v > 0)) { toast('Enter your bankroll in dollars', 'bad'); return; } try { await db.ref('private/bankroll').set(v); A.bankroll = v; render(); toast('Bankroll saved — only you can see it'); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
   if (t.id === 'bankEdit') { A.bankroll = null; render(); return; }
+  if (t.id === 'cAdd') {
+    const k = A.cKind, v = (id) => ($('#' + id) ? $('#' + id).value.trim() : '');
+    const c = { id: 'c' + Date.now().toString(36), venue: v('cVenue'), kind: k, qty: Math.round(Number(v('cQty'))), avg: Math.round(Number(v('cAvg'))), status: 'open', at: new Date().toISOString() };
+    if (k === 'win') { c.sport = A.cSport; c.team = v('cTeam').toUpperCase(); if (!c.team) { toast('Pick the team', 'bad'); return; } if (!A.teamEvent[c.sport + ':' + c.team]) toast(`No ${c.sport.toUpperCase()} game for ${c.team} on ESPN right now — the board will pick it up when one is listed`, 'warn', 6000); }
+    if (['prop', 'two_td', 'first_td'].includes(k)) { c.player = v('cPlayer'); if (!c.player) { toast('Pick the player', 'bad'); return; } }
+    if (k === 'prop') { c.market = v('cMarket'); c.dir = v('cDir') || 'over'; c.line = Number(v('cLine')); if (!(c.line >= 0) || v('cLine') === '') { toast('Enter the line', 'bad'); return; } }
+    if (!(c.qty > 0)) { toast('How many contracts?', 'bad'); return; } if (!(c.avg >= 1 && c.avg <= 99)) { toast('Average price is in cents, 1–99', 'bad'); return; }
+    if (k === 'other' && !v('cTitle')) { toast('Give it a title', 'bad'); return; }
+    c.title = v('cTitle') || contractTitle(c);
+    A.slate.contracts = (A.slate.contracts || []).concat(c); ['cQty', 'cAvg', 'cTitle', 'cLine', 'cTeam'].forEach((id) => { const el = $('#' + id); if (el) el.value = ''; });
+    setDirty(); render(); toast('Added — publish to put it on the board'); return;
+  }
+  if (t.dataset.csell) return closeContract(t.dataset.csell, 'sold');
+  if (t.dataset.cwon) return closeContract(t.dataset.cwon, 'won');
+  if (t.dataset.clost) return closeContract(t.dataset.clost, 'lost');
+  if (t.dataset.cdel) { A.slate.contracts = (A.slate.contracts || []).filter((c) => c.id !== t.dataset.cdel); setDirty(); render(); return; }
+  if (t.dataset.showslip) { const [id, leg] = t.dataset.showslip.split('|'); try { await db.ref('board/moment').set({ type: 'card', slipId: id, ...(leg !== undefined ? { leg: Number(leg) } : {}), word: '', sub: '', at: Date.now() }); toast('On screen now on every board and overlay'); } catch (er) { toast('Could not send: ' + er.message, 'bad'); } return; }
+  if (t.id === 'obsCopy') { try { await navigator.clipboard.writeText(obsUrl()); toast('Copied — paste it into the OBS browser source URL'); } catch { toast('Copy blocked by the browser', 'bad'); } return; }
+  if (t.id === 'sceneGo') { const name = ($('#sceneName').value || '').trim(); if (!name) { toast('Type the OBS scene name exactly', 'bad'); return; } try { await db.ref('board/scene').set({ name: name.slice(0, 80), secs: Number($('#sceneSecs').value) || 0, at: Date.now() }); toast(`Switching OBS to “${name}”`); } catch (er) { toast('Could not send: ' + er.message, 'bad'); } return; }
   if (t.id === 'backup') return backup();
   if (t.id === 'gateCsv') return exportGateLog();
   if (t.id === 'saveRules') { try { await db.ref('board/gate').set(A.gateRules); toast('Gate rules saved'); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
@@ -1301,7 +1400,16 @@ document.addEventListener('change', (e) => {
   if (el.dataset.share !== undefined) { const tk = A.slate.pick6[Number(el.dataset.share)]; const v = el.value.trim(); if (v) tk.shareUrl = v; else delete tk.shareUrl; setDirty(); }
   if (el.id === 'title') { A.slate.title = el.value.trim() || A.slate.title; setDirty(); $('#weekName').textContent = A.slate.title + ' · owner console'; }
   if (el.id === 'dkLink') { A.slate.dkLink = el.value.trim(); setDirty(); }
+  if (el.id === 'cKind') { A.cKind = el.value; render(); }
+  if (el.id === 'cSport') { A.cSport = el.value; render(); }
+  if (el.id === 'cPlayer' && A.cKind === 'prop') render();
 });
+function obsUrl() {
+  const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : ''); const h = new URLSearchParams();
+  h.set('obs', v('obsPw')); if (v('obsPort') && v('obsPort') !== '4455') h.set('port', v('obsPort'));
+  if (v('obsMoment')) h.set('moment', v('obsMoment')); if (v('obsWin')) h.set('win', v('obsWin')); if (v('obsSweat')) h.set('sweat', v('obsSweat'));
+  return BOARD + '?overlay#' + h.toString().replace(/\+/g, '%20');
+}
 async function fire(type, word, sub) { try { await db.ref('board/moment').set({ type, word, sub: sub || '', at: Date.now() }); toast(`Fired “${word}” on every board and overlay`); } catch (e) { toast('Could not fire: ' + e.message, 'bad'); } }
 async function ownerPost() {
   const text = $('#ownerMsg').value.trim(); if (!text) return;
