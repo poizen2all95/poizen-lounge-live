@@ -287,6 +287,8 @@ details.gatebox>summary::-webkit-details-marker{display:none}
       h: 0, r: 0, rbi: 0, hr: 0, bb: 0, k: 0, ab: 0,
       // mlb pitching
       pK: 0, pOuts: 0, pER: 0, pH: 0,
+      // nba
+      pts: 0, reb: 0, ast: 0, threes: 0, stl: 0, blk: 0, tov: 0, min: 0,
     };
   }
 
@@ -317,6 +319,10 @@ details.gatebox>summary::-webkit-details-marker{display:none}
               s.pK += num(v.strikeouts); s.pER += num(v.earnedRuns); s.pH += num(v.hits);
               s.pOuts += ipToOuts(v['fullInnings.partInnings']);
             }
+          } else if (sport === 'nba') {
+            s.pts += num(v.points); s.reb += num(v.rebounds); s.ast += num(v.assists);
+            s.threes += num(String(v['threePointFieldGoalsMade-threePointFieldGoalsAttempted'] || '0-0').split('-')[0]);
+            s.stl += num(v.steals); s.blk += num(v.blocks); s.tov += num(v.turnovers); s.min += num(v.minutes);
           } else {
             if (kind === 'passing') {
               const ca = String(v['completions/passingAttempts'] || '0/0').split('/');
@@ -391,6 +397,19 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     batter_ks: { sport: 'mlb', label: 'Batter Strikeouts', short: 'K', f: (s) => s.k },
     pitcher_ks: { sport: 'mlb', label: 'Pitcher Strikeouts', short: 'Ks', f: (s) => s.pK },
     pitcher_outs: { sport: 'mlb', label: 'Pitching Outs', short: 'Outs', f: (s) => s.pOuts },
+    // NBA
+    pts: { sport: 'nba', label: 'Points', short: 'Pts', f: (s) => s.pts },
+    reb: { sport: 'nba', label: 'Rebounds', short: 'Reb', f: (s) => s.reb },
+    ast: { sport: 'nba', label: 'Assists', short: 'Ast', f: (s) => s.ast },
+    threes: { sport: 'nba', label: '3-Pointers Made', short: '3PM', f: (s) => s.threes },
+    pra: { sport: 'nba', label: 'Pts + Reb + Ast', short: 'PRA', f: (s) => s.pts + s.reb + s.ast },
+    pr: { sport: 'nba', label: 'Pts + Reb', short: 'P+R', f: (s) => s.pts + s.reb },
+    pa: { sport: 'nba', label: 'Pts + Ast', short: 'P+A', f: (s) => s.pts + s.ast },
+    ra: { sport: 'nba', label: 'Reb + Ast', short: 'R+A', f: (s) => s.reb + s.ast },
+    stl: { sport: 'nba', label: 'Steals', short: 'Stl', f: (s) => s.stl },
+    blk: { sport: 'nba', label: 'Blocks', short: 'Blk', f: (s) => s.blk },
+    stocks: { sport: 'nba', label: 'Steals + Blocks', short: 'Stl+Blk', f: (s) => s.stl + s.blk },
+    tov: { sport: 'nba', label: 'Turnovers', short: 'TO', f: (s) => s.tov },
   };
 
   function findPlayer(game, ref) {
@@ -601,7 +620,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
 
   // markets that are counts (discrete, small) vs yardage (continuous)
   const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs']);
-  const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs']);
+  const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs', 'reb', 'ast', 'threes', 'stl', 'blk', 'stocks', 'tov', 'ra']);
   const kindOf = (market) => (TD_MARKETS.has(market) ? 'td' : COUNT_MARKETS.has(market) ? 'count' : 'yards');
 
   /* P(final stat clears the line) for a stat with mean mu and spread sd, given direction */
@@ -892,10 +911,12 @@ details.gatebox>summary::-webkit-details-marker{display:none}
    (on-device OCR with Tesseract.js) to pre-fill the legs for review. Nothing is saved until you press Save. */
 (function () {
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const DEFAULT_MARKET = { QB: 'pass_yds', RB: 'rush_yds', FB: 'rush_yds', WR: 'rec_yds', TE: 'rec_yds', SP: 'pitcher_ks', RP: 'pitcher_ks', P: 'pitcher_ks' };
-  const SPORT_PATH = { nfl: 'football/nfl', mlb: 'baseball/mlb' };
+  const DEFAULT_MARKET = { G: 'pts', F: 'pts', C: 'reb', PG: 'pts', SG: 'pts', SF: 'pts', PF: 'pts', QB: 'pass_yds', RB: 'rush_yds', FB: 'rush_yds', WR: 'rec_yds', TE: 'rec_yds', SP: 'pitcher_ks', RP: 'pitcher_ks', P: 'pitcher_ks' };
+  const SPORT_PATH = { nfl: 'football/nfl', mlb: 'baseball/mlb', nba: 'basketball/nba' };
   /* DraftKings' stat names -> our market keys (longest first so "Rush + Rec Yds" wins over "Rec Yds") */
   const ALIASES = [
+    ['pts + rebs + asts', 'pra'], ['pts+rebs+asts', 'pra'], ['points + rebounds + assists', 'pra'], ['pra', 'pra'], ['pts + rebs', 'pr'], ['points + rebounds', 'pr'], ['pts + asts', 'pa'], ['points + assists', 'pa'], ['rebs + asts', 'ra'], ['rebounds + assists', 'ra'],
+    ['3-pointers made', 'threes'], ['3-pt made', 'threes'], ['threes', 'threes'], ['3pm', 'threes'], ['steals + blocks', 'stocks'], ['blocks + steals', 'stocks'], ['rebounds', 'reb'], ['assists', 'ast'], ['steals', 'stl'], ['blocks', 'blk'], ['turnovers', 'tov'], ['points', 'pts'],
     ['pass + rush yds', 'pass_rush_yds'], ['pass+rush yds', 'pass_rush_yds'], ['passing + rushing yards', 'pass_rush_yds'],
     ['rush + rec yds', 'rush_rec_yds'], ['rush+rec yds', 'rush_rec_yds'], ['rushing + receiving yards', 'rush_rec_yds'],
     ['rush + rec tds', 'anytime_td'], ['rush+rec tds', 'anytime_td'], ['anytime td', 'anytime_td'], ['touchdowns', 'anytime_td'],
@@ -920,7 +941,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
         const tm = (i.teamRelationships || []).find((r) => r.type === 'team'); const core = (tm && tm.core) || {};
         return { espnId: String(i.id), name: i.displayName, sport: i.league, team: core.abbreviation || '', pos: (i.position && i.position.abbreviation) || '' };
       });
-      st.msg = st.results.length ? '' : `No NFL or MLB player found for “${q}”.`;
+      st.msg = st.results.length ? '' : `No NFL, MLB or NBA player found for “${q}”.`;
     } catch (e) { st.msg = 'Player search failed: ' + e.message + ' — try again in a moment.'; }
     st.searching = false;
   }
@@ -929,8 +950,10 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     try { const a = await ctx.getJSON(`https://site.web.api.espn.com/apis/common/v3/sports/${SPORT_PATH[m.sport]}/athletes/${m.espnId}`); const at = a.athlete || {}; m.team = m.team || (at.team && at.team.abbreviation) || ''; m.pos = m.pos || (at.position && at.position.abbreviation) || ''; } catch {}
     return m;
   }
+  const ctxNbaOk = (m) => ['pts', 'reb', 'ast'].includes(m);
   function addLeg(st, meta, extra = {}) {
-    const market = extra.market || DEFAULT_MARKET[meta.pos] || (meta.sport === 'mlb' ? 'hrr' : 'rec_yds');
+    const cand = DEFAULT_MARKET[meta.pos]; const candSport = cand ? (ctxNbaOk(cand) ? 'nba' : cand === 'pitcher_ks' ? 'mlb' : 'nfl') : null;
+    const market = extra.market || (cand && candSport === meta.sport ? cand : null) || (meta.sport === 'mlb' ? 'hrr' : meta.sport === 'nba' ? 'pts' : 'rec_yds');
     st.legs.push({ key: 'x' + meta.espnId, meta: { name: meta.name, sport: meta.sport, team: meta.team, pos: meta.pos, espnId: meta.espnId }, market, line: extra.line ?? '', dir: extra.dir || 'over', mult: extra.mult || '', check: !!extra.check });
     st.sport = meta.sport; st.results = []; st.q = '';
   }
@@ -965,7 +988,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     return `<div class="pzb" id="${P}root">
       <div class="brow"><label class="bf">Entry ($)<input id="${P}entry" data-bf="entry" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(st.entry)}" placeholder="10"></label><label class="bf">To win ($)<input id="${P}towin" data-bf="toWin" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(st.toWin)}" placeholder="131.00"></label><label class="bf grow">Title<input id="${P}title" data-bf="title" maxlength="48" value="${esc(st.title)}" placeholder="Built for you if blank"></label></div>
       <div class="blegs">${st.legs.map(legRow).join('') || '<div class="bempty">Add your first pick: search a player below.</div>'}</div>
-      <div class="bsearch"><input id="${P}q" data-bq type="search" autocomplete="off" placeholder="Add a player — type 3+ letters (NFL or MLB)" value="${esc(st.q)}">${ctx.ocr ? `<label class="bshot"><input type="file" accept="image/*" data-bocr hidden>Read a screenshot</label>` : ''}</div>
+      <div class="bsearch"><input id="${P}q" data-bq type="search" autocomplete="off" placeholder="Add a player — type 3+ letters (NFL, MLB or NBA)" value="${esc(st.q)}">${ctx.ocr === 'locked' ? '<button type="button" class="bshot" data-blocked>Read a screenshot · Pro</button>' : ctx.ocr ? `<label class="bshot"><input type="file" accept="image/*" data-bocr hidden>Read a screenshot</label>` : ''}</div>
       ${st.searching ? '<div class="bmsg">Searching ESPN…</div>' : st.msg ? `<div class="bmsg">${esc(st.msg)}</div>` : ''}${results}${ocr}${sum}${g}
       <div class="brow"><button type="button" class="bsave" data-bsave ${st.legs.length && !st.saving ? '' : 'disabled'}>${st.saving ? 'Saving…' : esc(ctx.saveLabel || 'Save slip')}</button>${st.legs.length ? '<button type="button" class="bclear" data-bclear>Start over</button>' : ''}</div></div>`;
   }
@@ -1049,6 +1072,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     });
     root.addEventListener('click', async (e) => {
       const b = e.target.closest('button'); if (!b || !root.contains(b)) return; const d = b.dataset;
+      if (d.blocked !== undefined) { if (ctx.onLocked) ctx.onLocked(); return; }
       if (d.badd !== undefined) { const r = st.results[+d.badd]; if (r) { await fillMeta(r, ctx); addLeg(st, r); rerender(`${ctx.prefix}l${st.legs.length - 1}`); } }
       else if (d.bd) { const [i, dir] = d.bd.split('|'); st.legs[+i].dir = dir; st.legs[+i].check = false; rerender(); }
       else if (d.brm !== undefined) { st.legs.splice(+d.brm, 1); rerender(); }
@@ -1148,7 +1172,7 @@ const sportOf = (k) => P(k).sport || 'nfl';
 const confirmed = (t) => t.status !== 'unconfirmed';
 function teamColors(sport, abbr) { const m = (sport === 'mlb' ? MLBC : NFLC)[abbr]; return m ? ['#' + m[0], '#' + m[1]] : ['#1f2937', '#334155']; }
 const tg = (sport, abbr) => { const [a, b] = teamColors(sport, abbr); return `radial-gradient(circle at 50% 16%, ${b}cc 0%, ${a} 52%, #05070b 100%)`; };
-function headshot(k, w = 200) { const p = P(k); if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport === 'mlb' ? 'mlb' : 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`; return p.headshot || ''; }
+function headshot(k, w = 200) { const p = P(k); if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`; return p.headshot || ''; }
 const avatar = (k) => { const p = P(k); const s = headshot(k); return `<div class="av" style="--tg:${tg(p.sport || 'nfl', p.team)}">${s ? `<img src="${esc(s)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`; };
 
 function toast(msg, kind = 'ok', ms = 2800) { const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), ms); }
@@ -1167,7 +1191,7 @@ function validateSlate(s) {
   for (const sh of (s.scalp && s.scalp.shifts) || []) for (const t of sh.targets || []) { need(t.player, 'Scalp'); if (!E.americanToDecimal(t.odds)) errs.push(`Scalp ${t.player}: bad odds "${t.odds}"`); }
   for (const c of s.contracts || []) { const nm = `Contract "${c.title || c.id || '?'}"`; if (!c.id) errs.push(nm + ' needs an id'); if (!CKINDS[c.kind]) errs.push(nm + ': unknown kind'); if (!(Number(c.qty) > 0)) errs.push(nm + ' needs a contract count'); if (!(Number(c.avg) >= 1 && Number(c.avg) <= 99)) errs.push(nm + ': price must be 1–99¢');
     if (c.kind === 'win' && !c.team) errs.push(nm + ' needs a team'); if (['prop', 'two_td', 'first_td'].includes(c.kind)) need(c.player, nm); if (c.kind === 'prop' && !E.MARKETS[c.market]) errs.push(nm + ': unknown stat'); }
-  for (const [k, p] of Object.entries(players)) { if (!p.name || !p.team) errs.push(`Player "${k}" needs name and team`); if (p.sport && !['nfl', 'mlb'].includes(p.sport)) errs.push(`Player "${k}": sport must be nfl or mlb`); }
+  for (const [k, p] of Object.entries(players)) { if (!p.name || !p.team) errs.push(`Player "${k}" needs name and team`); if (p.sport && !['nfl', 'mlb', 'nba'].includes(p.sport)) errs.push(`Player "${k}": sport must be nfl, mlb or nba`); }
   return errs;
 }
 
@@ -1369,7 +1393,7 @@ function vBets() {
     <button class="btn ${sc.status === 'placed' ? '' : 'teal'}" data-scalpplaced type="button">${sc.status === 'placed' ? 'Mark as plan only' : 'Mark as placed'}</button></div>` : '<div class="empty">No scalp this week.</div>';
   return banner('bets', '1st TD <span>&amp; Scalp</span>', 'Planned bets show on the board as a game plan. Mark them placed once they are on DraftKings so they count toward In play and Settled.') + `<div class="grid2">${ftd}${scalp}</div>`;
 }
-function gameFrac(ev) { if (!ev) return 0; if (ev.state === 'post') return 1; if (ev.state !== 'in') return 0; const per = Number(ev.period) || 1; if (/half/i.test(ev.detail || '')) return 0.5; const [m, s] = String(ev.clock || '15:00').split(':').map(Number); const left = Math.min(15, (m || 0) + (s || 0) / 60); return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 15 + (15 - left)) / 60)); }
+function gameFrac(ev) { if (!ev) return 0; if (ev.state === 'post') return 1; if (ev.state !== 'in') return 0; const per = Number(ev.period) || 1; if (ev.sport === 'nba') { const [m, s] = String(ev.clock || '12:00').split(':').map(Number); return /half/i.test(ev.detail || '') ? 0.5 : Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 12 + (12 - Math.min(12, (m || 0) + (s || 0) / 60))) / 48)); } if (/half/i.test(ev.detail || '')) return 0.5; const [m, s] = String(ev.clock || '15:00').split(':').map(Number); const left = Math.min(15, (m || 0) + (s || 0) / 60); return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 15 + (15 - left)) / 60)); }
 
 /* pick'em */
 function pickemLegs() { const seen = new Map(); (A.slate.pick6 || []).filter(confirmed).forEach((t) => t.legs.forEach((l) => { const id = legIdOf(l); if (!seen.has(id)) seen.set(id, { id, leg: l }); })); return [...seen.values()]; }
@@ -1445,10 +1469,17 @@ function closeContract(id, status) {
 
 /* members: who joined, what they agreed to share, and how the Lab's numbers hold up across everyone's outcomes */
 async function loadMembers() {
-  if (!db) { A.mem = {}; A.memOut = {}; if (A.sec === 'members') render(); return; }
-  try { const [d, o] = await Promise.all([db.ref('directory').get(), db.ref('outcomes').get()]); A.mem = d.val() || {}; A.memOut = o.val() || {}; A.memErr = ''; }
+  if (!db) { A.mem = {}; A.memOut = {}; A.tiers = A.tiers || {}; A.waitlist = A.waitlist || {}; A.plans = A.plans || {}; if (A.sec === 'members') render(); return; }
+  try { const [d, o, t, w, pl] = await Promise.all([db.ref('directory').get(), db.ref('outcomes').get(), db.ref('tiers').get(), db.ref('waitlist').get(), db.ref('board/plans').get()]); A.mem = d.val() || {}; A.memOut = o.val() || {}; A.tiers = t.val() || {}; A.waitlist = w.val() || {}; A.plans = pl.val() || {}; A.memErr = ''; }
   catch (e) { A.mem = {}; A.memOut = {}; A.memErr = 'Could not load members: ' + e.message + ' — the database rules may not be published yet.'; }
   if (A.sec === 'members') render();
+}
+function plansCard() {
+  const P2 = (A.plans && A.plans.pro) || {}, C2 = (A.plans && A.plans.creator) || {}; const wl = Object.values(A.waitlist || {});
+  return `<div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Plans &amp; checkout</b><span class="dim" style="font-size:12px">Waitlist: ${wl.filter((x) => x.tier === 'pro').length} Pro · ${wl.filter((x) => x.tier === 'creator').length} Creator</span></div>
+    <p class="dim" style="font-size:12px;margin:0">Paste a Stripe Payment Link (or any checkout link). The member's account ID is added to the link as client_reference_id so a payment can be matched to them. Until a link is set and opened, members see a waitlist button. You can always give or remove Pro by hand in the list below.</p>
+    <div class="row"><label class="f" style="width:160px">Pro price<input id="plProPrice" data-keep value="${esc(P2.price || '')}" placeholder="$14.99 / month"></label><label class="f" style="flex:1">Pro checkout link<input id="plProLink" data-keep value="${esc(P2.link || '')}" placeholder="https://buy.stripe.com/…"></label><label class="f" style="flex:1">Manage-subscription link<input id="plProManage" data-keep value="${esc(P2.manage || '')}" placeholder="Stripe customer portal link"></label></div>
+    <div class="row"><label class="f" style="width:160px">Creator price<input id="plCrPrice" data-keep value="${esc(C2.price || '')}" placeholder="Coming later"></label><label class="tog" style="flex:1"><input type="checkbox" id="plProOpen" ${P2.open ? 'checked' : ''}><span><b>Pro checkout is open</b><em>Off shows the waitlist even if a link is set</em></span></label><button class="btn teal" id="plSave" type="button">Save plans</button></div></div>`;
 }
 function vMembers() {
   if (A.mem === null) { A.mem = undefined; loadMembers(); }
@@ -1461,14 +1492,15 @@ function vMembers() {
   const pc = (x) => (x === null || x === undefined ? '–' : Math.round(x * 100) + '%');
   const calib = `<table><thead><tr><th>Lab said</th><th style="text-align:right">Picks</th><th style="text-align:right">Lab avg</th><th style="text-align:right">Actually hit</th></tr></thead><tbody>${B.map((b) => `<tr><td>${Math.round(b.lo * 100)}–${Math.min(100, Math.round(b.hi * 100))}%</td><td style="text-align:right">${b.n}</td><td style="text-align:right">${pc(b.exp)}</td><td style="text-align:right"><b class="${b.act === null ? '' : Math.abs(b.act - b.exp) <= 0.08 ? 'win' : 'loss'}">${pc(b.act)}</b></td></tr>`).join('')}</tbody></table>`;
   const rows = mem.sort((x, y) => (y[1].seen || 0) - (x[1].seen || 0)).map(([uid, m]) => { const mo = Object.values((A.memOut || {})[uid] || {}); const w = mo.filter((o) => o.result === 'won').length;
-    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)}</b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}</span></div>${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div>`; }).join('');
+    const tr = (A.tiers || {})[uid]; const tierTxt = tr ? `${tr.tier === 'creator' ? 'Creator' : 'Pro'} (${tr.source})` : 'Free';
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)} <span class="chip ${tr ? 'win' : ''}" style="display:inline-flex">${esc(tierTxt)}</span></b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}${(A.waitlist || {})[uid] ? ' · on the ' + esc(A.waitlist[uid].tier) + ' waitlist' : ''}</span></div><div class="row" style="gap:6px;flex-wrap:nowrap">${tr ? `<button class="btn sm warn" data-tierset="${esc(uid)}|" type="button">Remove ${tr.tier === 'creator' ? 'Creator' : 'Pro'}</button>` : `<button class="btn sm teal" data-tierset="${esc(uid)}|pro" type="button">Give Pro</button>`}${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div></div>`; }).join('');
   let detail = '';
   if (A.memView) { const v = A.memView; const sl = Object.values(v.data.slips || {}).sort((x, y) => (y.createdAt || 0) - (x.createdAt || 0));
     detail = `<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">${esc((v.data.profile || {}).name || 'Member')}</b><button class="btn sm" data-memclose type="button">Close</button></div>${sl.map((x) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(x.title)}</b><span>${(x.legs || []).length} legs · ${x.x}× · Lab ${x.lab ? pc(x.lab.pAll) : '–'} all hit${x.entry ? ` · ${money(x.entry)} to win ${money(x.toWin)}` : ' · amounts private'}</span></div><span class="chip ${x.result === 'won' ? 'win' : x.result === 'lost' ? 'loss' : ''}">${esc(x.status === 'settled' ? x.result : 'open')}</span></div>`).join('') || '<div class="empty">No slips yet.</div>'}</div>`; }
   return banner('members', 'Lounge <span>members</span>', 'Everyone with a My Lounge account. Outcomes are collected from all members; full accounts open only for members who turned on sharing with you. Dollar amounts appear only when a member syncs them.') +
     (A.memErr ? `<div class="card" style="border-color:var(--loss);margin-bottom:16px">${esc(A.memErr)}</div>` : '') +
     `<div class="tiles"><div class="tile t"><div class="k">Members</div><div class="v">${mem.length}</div><div class="s">${mem.filter(([, m]) => m.owner).length} share their account</div></div><div class="tile g"><div class="k">Settled slips</div><div class="v">${outs.length}</div><div class="s">${outs.filter((o) => o.result === 'won').length} cashed</div></div><div class="tile"><div class="k">Picks hit</div><div class="v">${legs.length ? pc(hit / legs.length) : '–'}</div><div class="s">${legs.length} graded picks</div></div><div class="tile"><div class="k">Lab vs reality</div><div class="v">${withLab.length ? `${actW} / ${expW.toFixed(1)}` : '–'}</div><div class="s">slips won / Lab expected</div></div></div>` +
-    `<div class="grid2" style="margin-top:16px"><div class="card"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Members</b><button class="btn sm" data-memreload type="button">Refresh</button></div><div style="margin-top:10px">${rows || '<div class="empty">No members yet.</div>'}</div></div><div class="card"><b class="st" style="font-size:22px">Is the Lab honest?</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Every member pick, grouped by what the Lab said before kickoff, against how often it actually hit. Green means within 8 points.</p>${calib}</div></div>${detail}`;
+    plansCard() + `<div class="grid2" style="margin-top:16px"><div class="card"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Members</b><button class="btn sm" data-memreload type="button">Refresh</button></div><div style="margin-top:10px">${rows || '<div class="empty">No members yet.</div>'}</div></div><div class="card"><b class="st" style="font-size:22px">Is the Lab honest?</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Every member pick, grouped by what the Lab said before kickoff, against how often it actually hit. Green means within 8 points.</p>${calib}</div></div>${detail}`;
 }
 
 /* stream */
@@ -1484,6 +1516,9 @@ function vStream() {
         <button type="button" data-fire="slipwin|Slip cashed|"><b>Slip cashed</b><span>Gold rain</span></button>
         <button type="button" data-fire="bust|Busted|"><b>Busted</b><span>Red shake</span></button></div>
         <div class="row" style="margin-top:12px"><input id="fWord" data-keep maxlength="24" placeholder="Custom big word" style="flex:1"><input id="fSub" data-keep maxlength="80" placeholder="Line under it" style="flex:2"><button class="btn gold" id="fireCustom" type="button">Fire</button></div></div></div>
+    <div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><b class="st" style="font-size:22px">Discord</b><p class="dim" style="font-size:12px;margin:0">In Discord: channel settings → Integrations → Webhooks → New webhook → Copy URL. These links are saved privately; anyone with one can post to that channel, so never share them. Slips post when you Publish (each slip once, and only before its games finish). The Pick'em champion posts when you crown them.</p>
+      <div class="row"><label class="f" style="flex:1">#slips webhook<input id="dhSlips" data-keep type="password" autocomplete="off" value="${esc((A.discord || {}).slips || '')}"></label><label class="f" style="flex:1">#pickem webhook<input id="dhPickem" data-keep type="password" autocomplete="off" value="${esc((A.discord || {}).pickem || '')}"></label><label class="f" style="flex:1">#debrief webhook<input id="dhDebrief" data-keep type="password" autocomplete="off" value="${esc((A.discord || {}).debrief || '')}"></label></div>
+      <div class="row"><button class="btn teal" id="dhSave" type="button">Save webhooks</button><button class="btn" id="dhTest" type="button">Send a test post</button><button class="btn gold" id="dhDebriefPost" type="button">Post this week's debrief</button><span class="dim" style="font-size:12px">${A.discord && (A.discord.slips || A.discord.pickem || A.discord.debrief) ? 'Connected: ' + ['slips', 'pickem', 'debrief'].filter((k) => A.discord[k]).map((k) => '#' + k).join(', ') : 'Not connected'}</span></div></div>
     <div class="grid2" style="margin-top:16px"><div class="card"><b class="st" style="font-size:22px">Put a pick on screen</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Shows the real card — faces, lines, live numbers — on every board and overlay. Use it when chat asks what you're sweating.</p>
       ${(A.slate.pick6 || []).filter(confirmed).map((t) => `<div style="margin-bottom:12px"><div class="row" style="justify-content:space-between"><b>${esc(t.title)}</b><button class="btn sm gold" data-showslip="${esc(t.id)}" type="button">Show slip</button></div><div class="row" style="gap:6px;margin-top:6px">${t.legs.map((l, i) => `<button class="btn sm" data-showslip="${esc(t.id)}|${i}" type="button">${esc(P(l.player).name.split(' ').slice(-1)[0])}</button>`).join('')}</div></div>`).join('') || '<div class="empty">Confirm a slip first.</div>'}</div>
       <div class="card" style="display:flex;flex-direction:column;gap:10px"><b class="st" style="font-size:22px">OBS scene control</b>
@@ -1492,6 +1527,7 @@ function vStream() {
         <div class="row"><label class="f" style="flex:1">Moment scene<input id="obsMoment" data-keep value="PZ Moment"></label><label class="f" style="flex:1">Slip-cashed scene<input id="obsWin" data-keep placeholder="Same as moment"></label><label class="f" style="flex:1">Sweat scene<input id="obsSweat" data-keep value="PZ Sweat"></label></div>
         <div class="row"><button class="btn teal" id="obsCopy" type="button">${ICON.copy} Copy OBS overlay URL</button></div>
         <p class="dim" style="font-size:12px;margin:0">The copied URL holds your OBS password after the #, which never gets sent to any server. Paste it only into one OBS browser source, and don't show it on stream. Scene names must match OBS exactly; leave one blank to skip that cut.</p>
+        <label class="f">Discord #live webhook (optional — moments post there while the overlay runs)<input id="obsDiscord" data-keep type="password" autocomplete="off" placeholder="https://discord.com/api/webhooks/…"></label>
         <div class="row" style="border-top:1px solid var(--line);padding-top:10px"><input id="sceneName" data-keep placeholder="Switch OBS to scene…" style="flex:1"><select id="sceneSecs" data-keep><option value="8">for 8s</option><option value="15">for 15s</option><option value="30">for 30s</option><option value="0">and stay</option></select><button class="btn gold" id="sceneGo" type="button">Switch</button></div></div></div>`;
 }
 
@@ -1522,13 +1558,33 @@ async function syncLocks(silent) {
   catch (e) { toast('Could not open Pick’em: ' + e.message, 'bad', 6000); }
   return opened;
 }
+/* ---------- Discord: posts go straight from this console to your channel webhooks (kept in private/, owner-only) ---------- */
+const HOOK_RE = /^https:\/\/(?:ptb\.|canary\.)?(?:discord|discordapp)\.com\/api\/webhooks\/\d+\/[\w-]+$/;
+const DFOOT = { text: '21+ · Analysis, not betting advice · Gambling problem? Call or text 1-800-MY-RESET' };
+async function discordPost(kind, payload) {
+  const url = A.discord && A.discord[kind]; if (!url || !HOOK_RE.test(url)) return false;
+  const r = await fetch(url + '?wait=true', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'Poizen Lounge', allowed_mentions: { parse: [] }, ...payload }) });
+  if (!r.ok) throw new Error('Discord said ' + r.status); return true;
+}
+function slipEmbed(t) {
+  const g = slipGrade(t); const G = gateFor(t);
+  const legs = t.legs.map((l) => `• **${P(l.player).name}** ${l.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(l.line)} ${(E.MARKETS[l.market] || {}).short || l.market}${l.mult ? ' · ' + l.mult : ''} — ${Math.round(legPre(l).p * 100)}%`).join('\n');
+  const read = g ? `\n\n**${g.evNet < 0 ? 'The numbers said no' : 'The numbers said yes'}**: expected back ${money(g.ev)} on ${money(Number(t.entry))} · all ${t.legs.length} hit ${Math.max(1, Math.round(g.pAll * 100))}%` : '';
+  const why = t.gate && t.gate.status === 'override' ? `\nPlayed anyway: “${t.gate.reason}”` : G.verdict === 'pass' ? '\nPassed every gate rule' : '';
+  return { title: t.title, url: BOARD + '#pick6', color: g && g.evNet < 0 ? 0xff3b5c : 0x14f1c7, description: `${legs}\n\n**${money(Number(t.entry))}** to win **${money(Number(t.toWin) || 0)}**${read}${why}`, footer: DFOOT };
+}
+async function postNewSlips() {
+  if (!A.discord || !A.discord.slips) return 0; let n = 0; A.discord.posted = A.discord.posted || {};
+  for (const t of (A.slate.pick6 || []).filter(confirmed)) { if (A.discord.posted[t.id]) continue; if (t.legs.every((l) => { const e = eventFor(l.player); return e && e.state === 'post'; })) continue; try { await discordPost('slips', { embeds: [slipEmbed(t)] }); A.discord.posted[t.id] = Date.now(); if (db) await db.ref('private/discord/posted/' + t.id).set(A.discord.posted[t.id]); n++; } catch (e) { toast('Discord post failed: ' + e.message, 'bad', 6000); break; } }
+  return n;
+}
 async function publish() {
   const t = $('#title'); if (t) A.slate.title = t.value.trim() || A.slate.title;
   const errs = validateSlate(A.slate); if (errs.length) { toast('Fix first: ' + errs[0], 'bad', 6000); return; }
   // stamp the Lab's pre-game read on legs whose game has not started, so the Coach can check the model later
   (A.slate.pick6 || []).forEach((tk) => tk.legs.forEach((l) => { const ev = eventFor(l.player); if (ev && ev.state !== 'pre') return; const pre = legPre(l); if (pre && pre.source === 'log') l.prob = Math.round(pre.p * 1000) / 1000; }));
   A.slate.updated = new Date().toISOString();
-  try { await db.ref('board/slate').set(JSON.parse(JSON.stringify(A.slate))); A.publishedAt = Date.now(); setDirty(false); const n = await syncLocks(true); toast(`Published — the board is updating${n ? ` · ${n} Pick’em legs opened` : ''}`); render(); }
+  try { await db.ref('board/slate').set(JSON.parse(JSON.stringify(A.slate))); A.publishedAt = Date.now(); setDirty(false); const n = await syncLocks(true); const dn = await postNewSlips(); toast(`Published — the board is updating${n ? ` · ${n} Pick’em legs opened` : ''}${dn ? ` · ${dn} slip${dn === 1 ? '' : 's'} posted to Discord` : ''}`); render(); }
   catch (e) { toast('Publish failed: ' + e.message, 'bad', 6000); }
 }
 async function saveResults() { try { await db.ref('board/results').set(JSON.parse(JSON.stringify(A.results))); toast('Record updated'); } catch (e) { toast('Could not save the record: ' + e.message, 'bad', 6000); } }
@@ -1570,7 +1626,7 @@ My picks:
 /* the slip builder, wired to this console's Lab, gate and slate */
 function builderCtx() {
   return { prefix: 'ba', E, M, MARKETS: E.MARKETS, getJSON, ocr: true, saveLabel: 'Add to this week',
-    headshot: (m) => (m && m.espnId ? `https://a.espncdn.com/combiner/i?img=/i/headshots/${m.sport === 'mlb' ? 'mlb' : 'nfl'}/players/full/${m.espnId}.png&w=96&h=70&cb=1` : ''),
+    headshot: (m) => (m && m.espnId ? `https://a.espncdn.com/combiner/i?img=/i/headshots/${m.sport || 'nfl'}/players/full/${m.espnId}.png&w=96&h=70&cb=1` : ''),
     chance: (leg, meta) => { if (!A.slate.players[leg.player]) A.xp[leg.player] = meta; const p = P(leg.player);
       if (p.espnId && (p.sport || 'nfl') === 'nfl' && !(p.espnId in A.logs)) { A.logs[p.espnId] = undefined; getJSON(E.ESPN.gamelog(p.espnId)).then((j) => { A.logs[p.espnId] = E.gamelogRows(j); A.memo = {}; const el = $('#pzbA'); if (el) PZB.mountInto(el, A.builder, builderCtx()); }).catch(() => { A.logs[p.espnId] = null; }); }
       return legPre(leg).p; },
@@ -1634,12 +1690,23 @@ document.addEventListener('click', async (e) => {
   }
   if (t.dataset.memview) { try { const v = (await db.ref('users/' + t.dataset.memview).get()).val(); A.memView = { uid: t.dataset.memview, data: v || {} }; } catch (er) { toast('Could not open: ' + er.message, 'bad'); } render(); return; }
   if (t.dataset.memclose !== undefined) { A.memView = null; render(); return; }
+  if (t.dataset.tierset) { const [uid, tier] = t.dataset.tierset.split('|'); try { await db.ref('tiers/' + uid).set(tier ? { tier, since: Date.now(), source: 'manual' } : null); A.tiers = A.tiers || {}; if (tier) A.tiers[uid] = { tier, since: Date.now(), source: 'manual' }; else delete A.tiers[uid]; render(); toast(tier ? 'Pro given' : 'Plan removed'); } catch (er) { toast('Could not change the plan: ' + er.message, 'bad', 6000); } return; }
+  if (t.id === 'plSave') { const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : ''); const link = v('plProLink'), manage = v('plProManage');
+    if ((link && !/^https:\/\//.test(link)) || (manage && !/^https:\/\//.test(manage))) { toast('Links must start with https://', 'bad'); return; }
+    const plans = { pro: { price: v('plProPrice').slice(0, 40), link, manage, open: !!($('#plProOpen') || {}).checked }, creator: { price: v('plCrPrice').slice(0, 40) } };
+    try { await db.ref('board/plans').set(plans); A.plans = plans; toast('Plans saved — members see them now'); render(); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
   if (t.dataset.memreload !== undefined) { A.mem = null; render(); return; }
   if (t.dataset.csell) return closeContract(t.dataset.csell, 'sold');
   if (t.dataset.cwon) return closeContract(t.dataset.cwon, 'won');
   if (t.dataset.clost) return closeContract(t.dataset.clost, 'lost');
   if (t.dataset.cdel) { A.slate.contracts = (A.slate.contracts || []).filter((c) => c.id !== t.dataset.cdel); setDirty(); render(); return; }
   if (t.dataset.showslip) { const [id, leg] = t.dataset.showslip.split('|'); try { await db.ref('board/moment').set({ type: 'card', slipId: id, ...(leg !== undefined ? { leg: Number(leg) } : {}), word: '', sub: '', at: Date.now() }); toast('On screen now on every board and overlay'); } catch (er) { toast('Could not send: ' + er.message, 'bad'); } return; }
+  if (t.id === 'dhSave') { const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : ''); const d = { slips: v('dhSlips'), pickem: v('dhPickem'), debrief: v('dhDebrief') };
+    const bad = Object.entries(d).find(([, u]) => u && !HOOK_RE.test(u)); if (bad) { toast(`The #${bad[0]} link isn't a Discord webhook link`, 'bad'); return; }
+    try { await db.ref('private/discord').update(d); toast('Discord webhooks saved'); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
+  if (t.id === 'dhTest') { let sent = 0; for (const k of ['slips', 'pickem', 'debrief']) { try { if (await discordPost(k, { content: `Poizen Lounge is connected to #${k}.` })) sent++; } catch (er) { toast(`#${k}: ${er.message}`, 'bad', 6000); } } toast(sent ? `Test sent to ${sent} channel${sent === 1 ? '' : 's'}` : 'No webhooks saved yet'); return; }
+  if (t.id === 'dhDebriefPost') { const rows = (A.slate.pick6 || []).filter(confirmed).map((tk) => { const r = A.graded[tk.id]; return r ? `• **${tk.title}** — ${r.hits}/${r.n} hit${r.payout !== null ? ' · paid ' + money(r.payout) + ' on ' + money(Number(tk.entry)) : ''}` : `• **${tk.title}** — not graded yet`; });
+    try { if (await discordPost('debrief', { embeds: [{ title: `Debrief · ${A.slate.title || 'this week'}`, description: rows.join('\n') || 'No slips this week.', url: BOARD + '#live', color: 0xf2c14e, footer: DFOOT }] })) toast('Debrief posted'); else toast('Save a #debrief webhook first', 'bad'); } catch (er) { toast('Discord post failed: ' + er.message, 'bad'); } return; }
   if (t.id === 'obsCopy') { try { await navigator.clipboard.writeText(obsUrl()); toast('Copied — paste it into the OBS browser source URL'); } catch { toast('Copy blocked by the browser', 'bad'); } return; }
   if (t.id === 'sceneGo') { const name = ($('#sceneName').value || '').trim(); if (!name) { toast('Type the OBS scene name exactly', 'bad'); return; } try { await db.ref('board/scene').set({ name: name.slice(0, 80), secs: Number($('#sceneSecs').value) || 0, at: Date.now() }); toast(`Switching OBS to “${name}”`); } catch (er) { toast('Could not send: ' + er.message, 'bad'); } return; }
   if (t.id === 'backup') return backup();
@@ -1690,7 +1757,7 @@ document.addEventListener('change', (e) => {
 function obsUrl() {
   const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : ''); const h = new URLSearchParams();
   h.set('obs', v('obsPw')); if (v('obsPort') && v('obsPort') !== '4455') h.set('port', v('obsPort'));
-  if (v('obsMoment')) h.set('moment', v('obsMoment')); if (v('obsWin')) h.set('win', v('obsWin')); if (v('obsSweat')) h.set('sweat', v('obsSweat'));
+  if (v('obsMoment')) h.set('moment', v('obsMoment')); if (v('obsDiscord') && HOOK_RE.test(v('obsDiscord'))) h.set('dlive', v('obsDiscord')); if (v('obsWin')) h.set('win', v('obsWin')); if (v('obsSweat')) h.set('sweat', v('obsSweat'));
   return BOARD + '?overlay#' + h.toString().replace(/\+/g, '%20');
 }
 async function fire(type, word, sub) { try { await db.ref('board/moment').set({ type, word, sub: sub || '', at: Date.now() }); toast(`Fired “${word}” on every board and overlay`); } catch (e) { toast('Could not fire: ' + e.message, 'bad'); } }
@@ -1701,7 +1768,7 @@ async function ownerPost() {
 }
 async function crown() {
   const lb = pickemRows(); if (!lb.length) return; const top = lb[0]; const wk = weekKeyOf(A.slate.title);
-  try { await db.ref('pickemChamps/' + wk).set({ uid: top.uid, name: top.name, points: top.pts, of: top.of, title: A.slate.title, at: new Date().toISOString() }); toast(`${top.name} crowned for ${A.slate.title}`); await fire('leader', 'Champion', `${top.name} · ${top.pts} correct`); } catch (e) { toast('Could not crown: ' + e.message, 'bad'); }
+  try { await db.ref('pickemChamps/' + wk).set({ uid: top.uid, name: top.name, points: top.pts, of: top.of, title: A.slate.title, at: new Date().toISOString() }); toast(`${top.name} crowned for ${A.slate.title}`); discordPost('pickem', { embeds: [{ title: `👑 ${top.name} wins Pick'em`, description: `${top.pts} of ${top.of} correct · ${A.slate.title}`, url: BOARD + '#pickem', color: 0x9b7bff, footer: DFOOT }] }).catch((e) => toast('Discord post failed: ' + e.message, 'bad')); await fire('leader', 'Champion', `${top.name} · ${top.pts} correct`); } catch (e) { toast('Could not crown: ' + e.message, 'bad'); }
 }
 async function archiveWeek() {
   const key = weekKeyOf(A.slate.title) + '-' + dayKey();
@@ -1730,6 +1797,7 @@ window.addEventListener('hashchange', () => { A.sec = location.hash.slice(1); re
     db.ref('pickem/' + wk + '/players').on('value', (snap) => { A.pickem = snap.val() || {}; if (['pickem', 'overview'].includes(A.sec)) render(); else $('#rail').innerHTML = navHTML(); }, () => {});
     db.ref('board/gate').on('value', (snap) => { const g = snap.val(); if (g) { A.gateRules = { ...M.GATE_DEFAULTS, ...g }; if (['gate', 'slips'].includes(A.sec)) render(); } }, () => {});
     db.ref('private/bankroll').on('value', (snap) => { A.bankroll = snap.val(); if (A.sec === 'overview') render(); }, () => {});
+    db.ref('private/discord').on('value', (snap) => { A.discord = snap.val() || {}; if (A.sec === 'stream') render(); }, () => {});
     db.ref('gateLog').on('value', (snap) => { A.gateLog = snap.val() || {}; if (A.sec === 'gate') render(); }, () => {});
     db.ref('pickemLocks/' + wk).on('value', (snap) => { A.locks = snap.val() || {}; if (['pickem', 'overview'].includes(A.sec)) render(); }, () => {});
     db.ref('chat/' + dayKey()).orderByChild('ts').limitToLast(150).on('value', (snap) => { A.chat = Object.entries(snap.val() || {}).map(([id, m]) => ({ id, ...m })).sort((a, b) => b.ts - a.ts); if (['chat', 'overview'].includes(A.sec)) render(); else $('#rail').innerHTML = navHTML(); }, () => {});

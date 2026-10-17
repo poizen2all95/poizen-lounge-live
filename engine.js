@@ -69,6 +69,8 @@
       h: 0, r: 0, rbi: 0, hr: 0, bb: 0, k: 0, ab: 0,
       // mlb pitching
       pK: 0, pOuts: 0, pER: 0, pH: 0,
+      // nba
+      pts: 0, reb: 0, ast: 0, threes: 0, stl: 0, blk: 0, tov: 0, min: 0,
     };
   }
 
@@ -99,6 +101,10 @@
               s.pK += num(v.strikeouts); s.pER += num(v.earnedRuns); s.pH += num(v.hits);
               s.pOuts += ipToOuts(v['fullInnings.partInnings']);
             }
+          } else if (sport === 'nba') {
+            s.pts += num(v.points); s.reb += num(v.rebounds); s.ast += num(v.assists);
+            s.threes += num(String(v['threePointFieldGoalsMade-threePointFieldGoalsAttempted'] || '0-0').split('-')[0]);
+            s.stl += num(v.steals); s.blk += num(v.blocks); s.tov += num(v.turnovers); s.min += num(v.minutes);
           } else {
             if (kind === 'passing') {
               const ca = String(v['completions/passingAttempts'] || '0/0').split('/');
@@ -173,6 +179,19 @@
     batter_ks: { sport: 'mlb', label: 'Batter Strikeouts', short: 'K', f: (s) => s.k },
     pitcher_ks: { sport: 'mlb', label: 'Pitcher Strikeouts', short: 'Ks', f: (s) => s.pK },
     pitcher_outs: { sport: 'mlb', label: 'Pitching Outs', short: 'Outs', f: (s) => s.pOuts },
+    // NBA
+    pts: { sport: 'nba', label: 'Points', short: 'Pts', f: (s) => s.pts },
+    reb: { sport: 'nba', label: 'Rebounds', short: 'Reb', f: (s) => s.reb },
+    ast: { sport: 'nba', label: 'Assists', short: 'Ast', f: (s) => s.ast },
+    threes: { sport: 'nba', label: '3-Pointers Made', short: '3PM', f: (s) => s.threes },
+    pra: { sport: 'nba', label: 'Pts + Reb + Ast', short: 'PRA', f: (s) => s.pts + s.reb + s.ast },
+    pr: { sport: 'nba', label: 'Pts + Reb', short: 'P+R', f: (s) => s.pts + s.reb },
+    pa: { sport: 'nba', label: 'Pts + Ast', short: 'P+A', f: (s) => s.pts + s.ast },
+    ra: { sport: 'nba', label: 'Reb + Ast', short: 'R+A', f: (s) => s.reb + s.ast },
+    stl: { sport: 'nba', label: 'Steals', short: 'Stl', f: (s) => s.stl },
+    blk: { sport: 'nba', label: 'Blocks', short: 'Blk', f: (s) => s.blk },
+    stocks: { sport: 'nba', label: 'Steals + Blocks', short: 'Stl+Blk', f: (s) => s.stl + s.blk },
+    tov: { sport: 'nba', label: 'Turnovers', short: 'TO', f: (s) => s.tov },
   };
 
   function findPlayer(game, ref) {

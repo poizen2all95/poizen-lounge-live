@@ -646,6 +646,11 @@ body:not(.overlay) .mo .word{font-size:min(12vmin,110px)}
 footer.legal{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between;margin:40px 0 8px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--fg3)}
 @media (max-width:760px){.merg .rgrow{grid-template-columns:1fr}footer.legal{margin-bottom:80px}}
 main .card.mecard{padding:22px}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}.plans>div{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:14px;background:var(--panel2);border:1px solid var(--line)}.plans>div.hot{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset}
+.plans b{font:900 20px var(--stadium);text-transform:uppercase}.plans span{font-weight:800;color:var(--fg)}.plans ul{margin:4px 0 8px;padding-left:18px;font-size:12px;color:var(--fg2);display:flex;flex-direction:column;gap:4px}.plans .mebtn{justify-content:center;margin-top:auto;text-decoration:none;font-size:14px;padding:12px}
+.melock{border-style:dashed}.melock svg{width:18px;height:18px;vertical-align:-2px}.linkbtn{border:0;background:none;color:var(--teal);font:800 13px var(--body);cursor:pointer;padding:0;text-decoration:underline}
+.megate .mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0}.megate .f{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:800;color:var(--fg3)}.megate input[type=number]{padding:10px;border-radius:10px;border:1px solid var(--line2);background:var(--panel2);color:var(--fg);font:700 14px var(--body)}.megate .tog{margin-top:8px}
+@media (max-width:760px){.plans,.megate .mgrid{grid-template-columns:1fr}}
 .melegs{display:flex;flex-direction:column;gap:6px;padding:10px 4px 4px}.mel{display:grid;grid-template-columns:36px minmax(0,1fr) auto auto;gap:10px;align-items:center;font-size:13px}.mel .av{width:36px;height:36px}.mel em{font-style:normal;font-weight:900}.mel.hit em{color:var(--win)}.mel.miss em{color:var(--loss)}.mel i{font-style:normal;font-size:11px;color:var(--fg3)}
 .metiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metiles>div{padding:14px 16px;border-radius:16px;background:var(--panel);border:1px solid var(--line)}.metiles span{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--fg3)}.metiles b{display:block;font:900 30px var(--stadium);margin:2px 0}.metiles b.win{color:var(--win)}.metiles b.loss{color:var(--loss)}.metiles em{font-style:normal;font-size:12px;color:var(--fg2)}
 .meprivacy .st-font svg{width:18px;height:18px;vertical-align:-2px}.fbtn.danger{border-color:var(--loss);color:var(--loss)}
@@ -1081,6 +1086,8 @@ details.hrow>summary::-webkit-details-marker{display:none}
       h: 0, r: 0, rbi: 0, hr: 0, bb: 0, k: 0, ab: 0,
       // mlb pitching
       pK: 0, pOuts: 0, pER: 0, pH: 0,
+      // nba
+      pts: 0, reb: 0, ast: 0, threes: 0, stl: 0, blk: 0, tov: 0, min: 0,
     };
   }
 
@@ -1111,6 +1118,10 @@ details.hrow>summary::-webkit-details-marker{display:none}
               s.pK += num(v.strikeouts); s.pER += num(v.earnedRuns); s.pH += num(v.hits);
               s.pOuts += ipToOuts(v['fullInnings.partInnings']);
             }
+          } else if (sport === 'nba') {
+            s.pts += num(v.points); s.reb += num(v.rebounds); s.ast += num(v.assists);
+            s.threes += num(String(v['threePointFieldGoalsMade-threePointFieldGoalsAttempted'] || '0-0').split('-')[0]);
+            s.stl += num(v.steals); s.blk += num(v.blocks); s.tov += num(v.turnovers); s.min += num(v.minutes);
           } else {
             if (kind === 'passing') {
               const ca = String(v['completions/passingAttempts'] || '0/0').split('/');
@@ -1185,6 +1196,19 @@ details.hrow>summary::-webkit-details-marker{display:none}
     batter_ks: { sport: 'mlb', label: 'Batter Strikeouts', short: 'K', f: (s) => s.k },
     pitcher_ks: { sport: 'mlb', label: 'Pitcher Strikeouts', short: 'Ks', f: (s) => s.pK },
     pitcher_outs: { sport: 'mlb', label: 'Pitching Outs', short: 'Outs', f: (s) => s.pOuts },
+    // NBA
+    pts: { sport: 'nba', label: 'Points', short: 'Pts', f: (s) => s.pts },
+    reb: { sport: 'nba', label: 'Rebounds', short: 'Reb', f: (s) => s.reb },
+    ast: { sport: 'nba', label: 'Assists', short: 'Ast', f: (s) => s.ast },
+    threes: { sport: 'nba', label: '3-Pointers Made', short: '3PM', f: (s) => s.threes },
+    pra: { sport: 'nba', label: 'Pts + Reb + Ast', short: 'PRA', f: (s) => s.pts + s.reb + s.ast },
+    pr: { sport: 'nba', label: 'Pts + Reb', short: 'P+R', f: (s) => s.pts + s.reb },
+    pa: { sport: 'nba', label: 'Pts + Ast', short: 'P+A', f: (s) => s.pts + s.ast },
+    ra: { sport: 'nba', label: 'Reb + Ast', short: 'R+A', f: (s) => s.reb + s.ast },
+    stl: { sport: 'nba', label: 'Steals', short: 'Stl', f: (s) => s.stl },
+    blk: { sport: 'nba', label: 'Blocks', short: 'Blk', f: (s) => s.blk },
+    stocks: { sport: 'nba', label: 'Steals + Blocks', short: 'Stl+Blk', f: (s) => s.stl + s.blk },
+    tov: { sport: 'nba', label: 'Turnovers', short: 'TO', f: (s) => s.tov },
   };
 
   function findPlayer(game, ref) {
@@ -1395,7 +1419,7 @@ details.hrow>summary::-webkit-details-marker{display:none}
 
   // markets that are counts (discrete, small) vs yardage (continuous)
   const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs']);
-  const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs']);
+  const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs', 'reb', 'ast', 'threes', 'stl', 'blk', 'stocks', 'tov', 'ra']);
   const kindOf = (market) => (TD_MARKETS.has(market) ? 'td' : COUNT_MARKETS.has(market) ? 'count' : 'yards');
 
   /* P(final stat clears the line) for a stat with mean mu and spread sd, given direction */
@@ -1686,10 +1710,12 @@ details.hrow>summary::-webkit-details-marker{display:none}
    (on-device OCR with Tesseract.js) to pre-fill the legs for review. Nothing is saved until you press Save. */
 (function () {
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const DEFAULT_MARKET = { QB: 'pass_yds', RB: 'rush_yds', FB: 'rush_yds', WR: 'rec_yds', TE: 'rec_yds', SP: 'pitcher_ks', RP: 'pitcher_ks', P: 'pitcher_ks' };
-  const SPORT_PATH = { nfl: 'football/nfl', mlb: 'baseball/mlb' };
+  const DEFAULT_MARKET = { G: 'pts', F: 'pts', C: 'reb', PG: 'pts', SG: 'pts', SF: 'pts', PF: 'pts', QB: 'pass_yds', RB: 'rush_yds', FB: 'rush_yds', WR: 'rec_yds', TE: 'rec_yds', SP: 'pitcher_ks', RP: 'pitcher_ks', P: 'pitcher_ks' };
+  const SPORT_PATH = { nfl: 'football/nfl', mlb: 'baseball/mlb', nba: 'basketball/nba' };
   /* DraftKings' stat names -> our market keys (longest first so "Rush + Rec Yds" wins over "Rec Yds") */
   const ALIASES = [
+    ['pts + rebs + asts', 'pra'], ['pts+rebs+asts', 'pra'], ['points + rebounds + assists', 'pra'], ['pra', 'pra'], ['pts + rebs', 'pr'], ['points + rebounds', 'pr'], ['pts + asts', 'pa'], ['points + assists', 'pa'], ['rebs + asts', 'ra'], ['rebounds + assists', 'ra'],
+    ['3-pointers made', 'threes'], ['3-pt made', 'threes'], ['threes', 'threes'], ['3pm', 'threes'], ['steals + blocks', 'stocks'], ['blocks + steals', 'stocks'], ['rebounds', 'reb'], ['assists', 'ast'], ['steals', 'stl'], ['blocks', 'blk'], ['turnovers', 'tov'], ['points', 'pts'],
     ['pass + rush yds', 'pass_rush_yds'], ['pass+rush yds', 'pass_rush_yds'], ['passing + rushing yards', 'pass_rush_yds'],
     ['rush + rec yds', 'rush_rec_yds'], ['rush+rec yds', 'rush_rec_yds'], ['rushing + receiving yards', 'rush_rec_yds'],
     ['rush + rec tds', 'anytime_td'], ['rush+rec tds', 'anytime_td'], ['anytime td', 'anytime_td'], ['touchdowns', 'anytime_td'],
@@ -1714,7 +1740,7 @@ details.hrow>summary::-webkit-details-marker{display:none}
         const tm = (i.teamRelationships || []).find((r) => r.type === 'team'); const core = (tm && tm.core) || {};
         return { espnId: String(i.id), name: i.displayName, sport: i.league, team: core.abbreviation || '', pos: (i.position && i.position.abbreviation) || '' };
       });
-      st.msg = st.results.length ? '' : `No NFL or MLB player found for “${q}”.`;
+      st.msg = st.results.length ? '' : `No NFL, MLB or NBA player found for “${q}”.`;
     } catch (e) { st.msg = 'Player search failed: ' + e.message + ' — try again in a moment.'; }
     st.searching = false;
   }
@@ -1723,8 +1749,10 @@ details.hrow>summary::-webkit-details-marker{display:none}
     try { const a = await ctx.getJSON(`https://site.web.api.espn.com/apis/common/v3/sports/${SPORT_PATH[m.sport]}/athletes/${m.espnId}`); const at = a.athlete || {}; m.team = m.team || (at.team && at.team.abbreviation) || ''; m.pos = m.pos || (at.position && at.position.abbreviation) || ''; } catch {}
     return m;
   }
+  const ctxNbaOk = (m) => ['pts', 'reb', 'ast'].includes(m);
   function addLeg(st, meta, extra = {}) {
-    const market = extra.market || DEFAULT_MARKET[meta.pos] || (meta.sport === 'mlb' ? 'hrr' : 'rec_yds');
+    const cand = DEFAULT_MARKET[meta.pos]; const candSport = cand ? (ctxNbaOk(cand) ? 'nba' : cand === 'pitcher_ks' ? 'mlb' : 'nfl') : null;
+    const market = extra.market || (cand && candSport === meta.sport ? cand : null) || (meta.sport === 'mlb' ? 'hrr' : meta.sport === 'nba' ? 'pts' : 'rec_yds');
     st.legs.push({ key: 'x' + meta.espnId, meta: { name: meta.name, sport: meta.sport, team: meta.team, pos: meta.pos, espnId: meta.espnId }, market, line: extra.line ?? '', dir: extra.dir || 'over', mult: extra.mult || '', check: !!extra.check });
     st.sport = meta.sport; st.results = []; st.q = '';
   }
@@ -1759,7 +1787,7 @@ details.hrow>summary::-webkit-details-marker{display:none}
     return `<div class="pzb" id="${P}root">
       <div class="brow"><label class="bf">Entry ($)<input id="${P}entry" data-bf="entry" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(st.entry)}" placeholder="10"></label><label class="bf">To win ($)<input id="${P}towin" data-bf="toWin" type="number" min="0" step="0.01" inputmode="decimal" value="${esc(st.toWin)}" placeholder="131.00"></label><label class="bf grow">Title<input id="${P}title" data-bf="title" maxlength="48" value="${esc(st.title)}" placeholder="Built for you if blank"></label></div>
       <div class="blegs">${st.legs.map(legRow).join('') || '<div class="bempty">Add your first pick: search a player below.</div>'}</div>
-      <div class="bsearch"><input id="${P}q" data-bq type="search" autocomplete="off" placeholder="Add a player — type 3+ letters (NFL or MLB)" value="${esc(st.q)}">${ctx.ocr ? `<label class="bshot"><input type="file" accept="image/*" data-bocr hidden>Read a screenshot</label>` : ''}</div>
+      <div class="bsearch"><input id="${P}q" data-bq type="search" autocomplete="off" placeholder="Add a player — type 3+ letters (NFL, MLB or NBA)" value="${esc(st.q)}">${ctx.ocr === 'locked' ? '<button type="button" class="bshot" data-blocked>Read a screenshot · Pro</button>' : ctx.ocr ? `<label class="bshot"><input type="file" accept="image/*" data-bocr hidden>Read a screenshot</label>` : ''}</div>
       ${st.searching ? '<div class="bmsg">Searching ESPN…</div>' : st.msg ? `<div class="bmsg">${esc(st.msg)}</div>` : ''}${results}${ocr}${sum}${g}
       <div class="brow"><button type="button" class="bsave" data-bsave ${st.legs.length && !st.saving ? '' : 'disabled'}>${st.saving ? 'Saving…' : esc(ctx.saveLabel || 'Save slip')}</button>${st.legs.length ? '<button type="button" class="bclear" data-bclear>Start over</button>' : ''}</div></div>`;
   }
@@ -1843,6 +1871,7 @@ details.hrow>summary::-webkit-details-marker{display:none}
     });
     root.addEventListener('click', async (e) => {
       const b = e.target.closest('button'); if (!b || !root.contains(b)) return; const d = b.dataset;
+      if (d.blocked !== undefined) { if (ctx.onLocked) ctx.onLocked(); return; }
       if (d.badd !== undefined) { const r = st.results[+d.badd]; if (r) { await fillMeta(r, ctx); addLeg(st, r); rerender(`${ctx.prefix}l${st.legs.length - 1}`); } }
       else if (d.bd) { const [i, dir] = d.bd.split('|'); st.legs[+i].dir = dir; st.legs[+i].check = false; rerender(); }
       else if (d.brm !== undefined) { st.legs.splice(+d.brm, 1); rerender(); }
@@ -2015,15 +2044,15 @@ applyTeam(params.get('team') ? params.get('team').replace('-', ':').toLowerCase(
 function tg(sport, abbr) { const [a, b] = teamColors(sport, abbr); return `radial-gradient(circle at 50% 16%, ${b}cc 0%, ${a} 52%, #05070b 100%)`; }
 function headshot(key, w = 350) {
   const p = P(key);
-  if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport === 'mlb' ? 'mlb' : 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`;
+  if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`;
   if (p.headshot) return p.headshot;
   const g = gameFor(key); const pl = g && E.findPlayer(g, { name: p.name, team: p.team });
-  if (pl) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport === 'mlb' ? 'mlb' : 'nfl'}/players/full/${pl.id}.png&w=${w}&h=${Math.round(w * 0.727)}`;
+  if (pl) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${pl.id}.png&w=${w}&h=${Math.round(w * 0.727)}`;
   return '';
 }
 const initials = (n) => String(n || '?').replace(/\s+(Jr\.?|Sr\.?|II|III|IV)$/i, '').split(' ').map((x) => x[0]).slice(0, 2).join('');
 const lastName = (n) => String(n || '').replace(/\s+(Jr\.?|Sr\.?|II|III|IV|V)$/i, '').split(' ').slice(-1)[0];
-const logo = (sport, abbr) => `https://a.espncdn.com/i/teamlogos/${sport === 'mlb' ? 'mlb' : 'nfl'}/500/${String(abbr).toLowerCase()}.png`;
+const logo = (sport, abbr) => `https://a.espncdn.com/i/teamlogos/${sport || 'nfl'}/500/${String(abbr).toLowerCase()}.png`;
 function avatar(key, cls = 'av') { const p = P(key); const src = headshot(key, 200); return `<div class="${cls}" style="--tg:${tg(p.sport || 'nfl', p.team)}">${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`; }
 
 /* ---------------- time ---------------- */
@@ -2309,6 +2338,33 @@ function afterData() {
    their account only if they turn it on, otherwise they never leave this device. PoiZen sees a member's full
    account only if that member allows it. */
 const ME_V = 2; // v2: 21+ confirmation
+/* plans: what each tier unlocks (only features that exist), price and checkout link come from Admin → Members → Plans */
+const OWNER_EMAIL = 'poizen2all95@gmail.com';
+function meTier() { const u = S.me.user; if (u && u.email === OWNER_EMAIL) return 'creator'; const t = S.me.tier; if (!t || !t.tier) return 'free'; if (t.until && t.until < Date.now()) return 'free'; return t.tier; }
+const isPro = () => meTier() !== 'free';
+const PRO_FEATURES = ['Read slips from a DraftKings screenshot', 'Your Coach: the stats you keep losing on, blocked by your own gate', 'Edit your own gate rules', 'Your full settled history (Free keeps the last 10)', 'Ledger export to CSV for spreadsheets'];
+const FREE_FEATURES = ['PoiZen\'s live board, Lab, Pick\'em and chat', 'Build and track your own slips live', 'The honest read on every slip', 'Weekly limit and cool-off', 'Export or delete all your data'];
+function planCard() {
+  const P2 = (S.plans && S.plans.pro) || {}; const C2 = (S.plans && S.plans.creator) || {}; const t = meTier();
+  if (t !== 'free') return `<div class="card mecard meplan pro"><b class="st-font" style="font-size:20px">${t === 'creator' ? 'Creator' : 'Pro'} plan</b><p class="muted">${PRO_FEATURES.map(esc).join(' · ')}</p>${S.me.tier && S.me.tier.source === 'stripe' && P2.manage ? `<a class="fbtn" href="${esc(P2.manage)}" target="_blank" rel="noopener">Manage or cancel</a>` : ''}</div>`;
+  const uid = S.me.user.uid; const link = P2.open && /^https:\/\//.test(P2.link || '') ? P2.link + (P2.link.includes('?') ? '&' : '?') + 'client_reference_id=' + encodeURIComponent(uid) : '';
+  const wl = S.me.waitlisted;
+  const cta = link ? `<a class="mebtn" href="${esc(link)}" target="_blank" rel="noopener">Get Pro${P2.price ? ' · ' + esc(P2.price) : ''}</a>` : wl ? `<span class="chip win">You're on the ${esc(wl.tier === 'creator' ? 'Creator' : 'Pro')} waitlist</span>` : `<button class="mebtn" type="button" data-me="waitlist" data-tier="pro">Join the Pro waitlist</button>`;
+  return `<div class="card mecard meplan"><b class="st-font" style="font-size:20px">Plans</b><div class="plans"><div><b>Free</b><span>$0</span><ul>${FREE_FEATURES.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div><div class="hot"><b>Pro</b><span>${esc(P2.price || 'Price coming soon')}</span><ul>${PRO_FEATURES.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>${cta}</div><div><b>Creator</b><span>${esc(C2.price || 'Coming later')}</span><ul><li>Everything in Pro</li><li>Your own public board, overlay and Pick'em for your audience</li></ul><p class="mefine">Not built yet. Join the waitlist and you'll hear first.</p>${wl && wl.tier === 'creator' ? '' : '<button class="fbtn" type="button" data-me="waitlist" data-tier="creator">Creator waitlist</button>'}</div></div><p class="mefine">Paid plans are analysis tools. No plan guarantees wins. 21+.</p></div>`;
+}
+const proLock = (what) => `<div class="card mecard melock"><b class="st-font" style="font-size:20px">${SVG.lock} ${esc(what)}</b><p class="muted">Part of Pro. <button class="linkbtn" type="button" data-me="plans">See plans</button></p></div>`;
+function gateRulesCard() {
+  const R = { ...M.GATE_DEFAULTS, ...((S.me.profile && S.me.profile.gate) || {}) };
+  const tog = (k, label) => `<label class="tog"><input type="checkbox" data-mgate="${k}" ${R[k] ? 'checked' : ''}><span><b>${esc(label)}</b></span></label>`;
+  const num = (k, label, step) => `<label class="f">${esc(label)}<input type="number" step="${step}" data-mgate="${k}" value="${esc(R[k])}"></label>`;
+  return `<div class="card mecard megate"><b class="st-font" style="font-size:20px">Your gate</b><p class="muted">Checked on every slip you build. Breaking a rule shows before you save.</p><div class="mgrid">${num('maxLegs', 'Most legs on one slip', 1)}${num('minLegChance', 'Lowest chance per leg (0.45 = 45%)', 0.01)}${num('minEV', 'Least expected profit ($)', 1)}</div>${tog('noNegCorr', 'No legs that work against each other')}${tog('coachLeaks', 'Block stats the Coach calls a leak')}${tog('avgBeatsLine', 'Season average must beat the line')}</div>`;
+}
+function meCSV() {
+  const rows = [['date', 'title', 'legs', 'payout_x', 'result', 'hits', 'lab_all_hit', 'entry', 'to_win']];
+  meGraded().filter(({ t }) => t.status === 'settled').forEach(({ t }) => { const a = meAmounts(t.sid, t.x); rows.push([new Date(t.settledAt || t.createdAt).toISOString().slice(0, 10), t.title, t.legs.length, t.x, t.result, t.hits, t.lab ? t.lab.pAll : '', a ? a.entry : '', a ? a.toWin : '']); });
+  const csv = rows.map((r) => r.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'my-lounge-ledger.csv'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
 const HELP = { call: '1-800-MY-RESET', digits: '18006973738', num: '1-800-697-3738', chat: 'https://www.ncpgambling.org/chat/' };
 const helpLine = (short) => short ? `Gambling problem? Call or text <a href="tel:${HELP.digits}">${HELP.call}</a>` : `Gambling problem? Call or text <a href="tel:${HELP.digits}">${HELP.call} (${HELP.num})</a> or <a href="${HELP.chat}" target="_blank" rel="noopener">chat</a> — free, confidential, 24/7.`;
 function footHTML() { return `<footer class="legal"><span><b>21+</b> · Analysis and entertainment, not betting advice.</span><span>${helpLine(true)}</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></footer>`; }
@@ -2330,10 +2386,12 @@ function meAmounts(id, x) { const s = S.me.slips[id] || {}; if (s.entry > 0) ret
 let meRefs = [];
 function meAttach(u) {
   meRefs.forEach((r) => r.off()); meRefs = [];
-  S.me.user = u && !u.isAnonymous ? u : null; S.me.profile = undefined; S.me.slips = {}; S.me.builder = null;
+  S.me.user = u && !u.isAnonymous ? u : null; S.me.profile = undefined; S.me.tier = null; S.me.waitlisted = null; S.me.slips = {}; S.me.builder = null;
   if (!S.me.user) { if (S.tab === 'me') render(); return; }
   const db = firebase.database(); const base = 'users/' + S.me.user.uid;
   const pr = db.ref(base + '/profile'); pr.on('value', (snap) => { S.me.profile = snap.val(); if (S.tab === 'me') render(); }, (e) => { S.me.err = 'Could not load your account: ' + e.message; render(); }); meRefs.push(pr);
+  const tr = db.ref('tiers/' + S.me.user.uid); tr.on('value', (snap) => { S.me.tier = snap.val(); if (S.tab === 'me') render(); }, () => { S.me.tier = null; }); meRefs.push(tr);
+  const wr = db.ref('waitlist/' + S.me.user.uid); wr.on('value', (snap) => { S.me.waitlisted = snap.val(); if (S.tab === 'me') render(); }, () => {}); meRefs.push(wr);
   const sr = db.ref(base + '/slips'); sr.on('value', (snap) => { S.me.slips = snap.val() || {}; Object.values(S.me.slips).forEach((x) => Object.assign(S.mePlayers, x.players || {})); S.projMemo = {}; afterData(); loadLogs(); poll(); }, () => {}); meRefs.push(sr);
 }
 async function meSignIn() {
@@ -2350,7 +2408,7 @@ async function meSaveConsent(form) {
   const u = S.me.user; const now = Date.now(); const had = S.me.profile && S.me.profile.consent;
   if (!form.age21) { S.me.err = 'The Lounge is 21+ only. Confirm your age to continue.'; render(); return; }
   const consent = { v: ME_V, at: now, outcomes: true, age21: true, amounts: !!form.amounts, owner: !!form.owner };
-  const up = { [`users/${u.uid}/profile`]: { name, createdAt: (S.me.profile && S.me.profile.createdAt) || now, consent, ...(S.me.profile && S.me.profile.limits ? { limits: S.me.profile.limits } : {}), ...(S.me.profile && S.me.profile.cooloff ? { cooloff: S.me.profile.cooloff } : {}) }, [`directory/${u.uid}`]: { name, joined: (S.me.profile && S.me.profile.createdAt) || now, owner: consent.owner, amounts: consent.amounts, slips: Object.keys(S.me.slips).length, seen: now } };
+  const up = { [`users/${u.uid}/profile`]: { name, createdAt: (S.me.profile && S.me.profile.createdAt) || now, consent, ...(S.me.profile && S.me.profile.limits ? { limits: S.me.profile.limits } : {}), ...(S.me.profile && S.me.profile.cooloff ? { cooloff: S.me.profile.cooloff } : {}), ...(S.me.profile && S.me.profile.gate ? { gate: S.me.profile.gate } : {}) }, [`directory/${u.uid}`]: { name, joined: (S.me.profile && S.me.profile.createdAt) || now, owner: consent.owner, amounts: consent.amounts, slips: Object.keys(S.me.slips).length, seen: now } };
   // turning exact amounts off removes them from the account (kept on this device); turning on syncs what this device has
   if (had && had.amounts && !consent.amounts) { const L = localAmts(); Object.entries(S.me.slips).forEach(([id, x]) => { if (x.entry > 0) L[id] = { entry: x.entry, toWin: x.toWin }; up[`users/${u.uid}/slips/${id}/entry`] = null; up[`users/${u.uid}/slips/${id}/toWin`] = null; up[`users/${u.uid}/slips/${id}/payout`] = null; }); store.set(amtKey(), L); }
   try {
@@ -2369,13 +2427,13 @@ function mePicks() {
 function memberGate(t, v) {
   const legs = t.legs.map((l) => { const pre = legPre(l); const p = P(l.player); const inj = S.injuries && injuriesFor(p.team).find((i) => E.norm(i.athlete && i.athlete.displayName) === E.norm(p.name));
     return { name: lastName(p.name), line: Number(l.line), dir: l.dir || 'over', p: pre.p, source: pre.source, avg: pre.rs ? pre.rs.avg : undefined, hits: pre.rs ? pre.rs.hits : undefined, n: pre.rs ? pre.rs.n : undefined, status: inj && inj.status, market: l.market }; });
-  const leaks = M.leaks(mePicks()).map((x) => ({ ...x, label: mkLabel(x.market) + (x.dir === 'under' ? ' (less)' : '') }));
-  const checks = M.gate({ entry: t.entry, legs, corr: v && v.corr, value: v, sizeRecord: null, injuriesLoaded: !!S.injuries, leaks }, { ...M.GATE_DEFAULTS, ...((S.me.profile && S.me.profile.gate) || {}) });
+  const leaks = isPro() ? M.leaks(mePicks()).map((x) => ({ ...x, label: mkLabel(x.market) + (x.dir === 'under' ? ' (less)' : '') })) : [];
+  const checks = M.gate({ entry: t.entry, legs, corr: v && v.corr, value: v, sizeRecord: null, injuriesLoaded: !!S.injuries, leaks }, { ...M.GATE_DEFAULTS, ...(isPro() && S.me.profile && S.me.profile.gate ? S.me.profile.gate : {}), ...(isPro() ? {} : { coachLeaks: false }) });
   return { checks, verdict: M.gateVerdict(checks) };
 }
 function memberBuilderCtx() {
-  return { prefix: 'bm', E, M, MARKETS: E.MARKETS, getJSON, ocr: true, saveLabel: 'Save to My Lounge',
-    headshot: (m) => (m && m.espnId ? `https://a.espncdn.com/combiner/i?img=/i/headshots/${m.sport === 'mlb' ? 'mlb' : 'nfl'}/players/full/${m.espnId}.png&w=96&h=70` : ''),
+  return { prefix: 'bm', E, M, MARKETS: E.MARKETS, getJSON, ocr: isPro() ? true : 'locked', onLocked: () => { S.me.showPlans = true; render(); const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, saveLabel: 'Save to My Lounge',
+    headshot: (m) => (m && m.espnId ? `https://a.espncdn.com/combiner/i?img=/i/headshots/${m.sport || 'nfl'}/players/full/${m.espnId}.png&w=96&h=70` : ''),
     chance: (leg, meta) => { if (!S.slate.players[leg.player]) S.mePlayers[leg.player] = meta; const p = P(leg.player);
       if (p.espnId && (p.sport || 'nfl') === 'nfl' && !S.research[p.espnId]) { S.research[p.espnId] = { loading: true }; getJSON(E.ESPN.gamelog(p.espnId)).then((j) => { S.research[p.espnId] = { rows: E.gamelogRows(j) }; S.projMemo = {}; const el = document.getElementById('pzbM'); if (el) PZB.mountInto(el, S.me.builder, memberBuilderCtx()); }).catch((e) => { S.research[p.espnId] = { err: e.message }; }); }
       return legPre(leg).p; },
@@ -2422,7 +2480,7 @@ async function meExport() {
 }
 async function meDelete() {
   const u = S.me.user; if (!u) return;
-  try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null }); store.set(amtKey(), {}); toast({ title: 'Deleted', body: 'Everything in your account is gone', tone: 'win' }); }
+  try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null, [`waitlist/${u.uid}`]: null }); store.set(amtKey(), {}); toast({ title: 'Deleted', body: 'Everything in your account is gone', tone: 'win' }); }
   catch (e) { toast({ title: 'Could not delete', body: e.message, tone: 'loss' }); }
 }
 function rgHTML() {
@@ -2485,14 +2543,15 @@ function viewMe() {
   const lab = done.filter(({ t }) => t.lab && t.lab.pAll); const expW = lab.reduce((s, { t }) => s + t.lab.pAll, 0); const actW = lab.filter(({ t }) => t.result === 'won').length;
   const leaks = M.leaks(picks);
   const tiles = `<div class="metiles"><div><span>Record</span><b>${won}-${done.length - won}</b><em>${open.length} open</em></div><div><span>Picks hit</span><b>${hitRate === null ? '–' : Math.round(hitRate * 100) + '%'}</b><em>${picks.length} graded</em></div><div><span>Profit</span><b class="${pl > 0 ? 'win' : pl < 0 ? 'loss' : ''}">${withAmt.length ? money(pl, true) : '–'}</b><em>${withAmt.length ? withAmt.length + ' slips with amounts' : 'Amounts stay private'}</em></div><div><span>Lab vs you</span><b>${lab.length ? `${actW} / ${expW.toFixed(1)}` : '–'}</b><em>${lab.length ? 'slips won / Lab expected' : 'Settle a slip to compare'}</em></div></div>`;
-  const coach = picks.length >= 3 ? `<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b>${leaks.length ? `<p class="muted" style="margin:6px 0 8px">These stats are under 40% for you. Your gate blocks them until they climb back.</p>${leaks.map((x) => `<span class="chip loss">${esc(mkLabel(x.market))}${x.dir === 'under' ? ' (less)' : ''} · ${x.hit}/${x.n}</span>`).join(' ')}` : '<p class="muted" style="margin:6px 0 0">No leaks yet — nothing under 40% with 3+ graded calls.</p>'}</div>` : '';
+  const coach = !isPro() ? proLock('Your Coach') : picks.length >= 3 ? `<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b>${leaks.length ? `<p class="muted" style="margin:6px 0 8px">These stats are under 40% for you. Your gate blocks them until they climb back.</p>${leaks.map((x) => `<span class="chip loss">${esc(mkLabel(x.market))}${x.dir === 'under' ? ' (less)' : ''} · ${x.hit}/${x.n}</span>`).join(' ')}` : '<p class="muted" style="margin:6px 0 0">No leaks yet — nothing under 40% with 3+ graded calls.</p>'}</div>` : '';
   const p = S.me.profile;
-  const priv = `<div class="card mecard meprivacy"><b class="st-font" style="font-size:20px">${SVG.lock} Privacy</b><p class="muted" style="margin:6px 0 10px">Exact amounts: <b>${p.consent.amounts ? 'synced to your account' : 'this device only'}</b> · PoiZen can see your account: <b>${p.consent.owner ? 'yes' : 'no'}</b></p><div class="row"><button class="fbtn" type="button" data-me="edit">Change</button><button class="fbtn" type="button" data-me="export">Export my data</button><button class="fbtn danger" type="button" data-me="delete">Delete everything</button><button class="fbtn" type="button" data-me="signout">Sign out</button></div></div>`;
-  return head + err + `<div class="mehello">Signed in as <b>${esc(p.name)}</b></div>` + tiles +
+  const priv = `<div class="card mecard meprivacy"><b class="st-font" style="font-size:20px">${SVG.lock} Privacy</b><p class="muted" style="margin:6px 0 10px">Exact amounts: <b>${p.consent.amounts ? 'synced to your account' : 'this device only'}</b> · PoiZen can see your account: <b>${p.consent.owner ? 'yes' : 'no'}</b></p><div class="row"><button class="fbtn" type="button" data-me="edit">Change</button><button class="fbtn" type="button" data-me="export">Export my data</button>${isPro() ? '<button class="fbtn" type="button" data-me="csv">Ledger CSV</button>' : ''}<button class="fbtn danger" type="button" data-me="delete">Delete everything</button><button class="fbtn" type="button" data-me="signout">Sign out</button></div></div>`;
+  const tierChip = isPro() ? `<span class="chip win">${meTier() === 'creator' ? 'Creator' : 'Pro'}</span>` : '<span class="chip">Free</span> <button class="linkbtn" type="button" data-me="plans">See plans</button>';
+  return head + err + `<div class="mehello">Signed in as <b>${esc(p.name)}</b> ${tierChip}</div>` + tiles +
     `<h3 class="sec">Build a slip</h3>` + (meCooloff() ? `<div class="card mecard mecool"><b class="st-font" style="font-size:22px">Cool-off on</b><p class="muted">Building slips is paused until <b>${esc(new Date(meCooloff()).toLocaleString([], { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</b>. It can't be shortened. Your open slips still track live.</p><p class="muted">${helpLine(false)}</p></div>` : `<div class="card mecard"><div id="pzbM"></div></div>`) +
     (open.length ? `<h3 class="sec">Open</h3><div class="slips">${open.map(meSlipCard).join('')}</div>` : '') +
-    (done.length ? `<h3 class="sec">Settled</h3><div class="slips">${done.slice(0, 30).map(meSlipCard).join('')}</div>` : '') +
-    `<div class="grid2" style="margin-top:16px">${coach}${priv}</div>` + rgHTML();
+    (done.length ? `<h3 class="sec">Settled</h3><div class="slips">${done.slice(0, isPro() ? 200 : 10).map(meSlipCard).join('')}</div>${!isPro() && done.length > 10 ? `<p class="mefine">${done.length - 10} older slips are kept — Pro shows your full history. Your data export always includes everything.</p>` : ''}` : '') +
+    `<div class="grid2" style="margin-top:16px">${coach}${isPro() ? gateRulesCard() : proLock('Your own gate rules')}</div><div class="grid2" style="margin-top:16px">${priv}${planCard()}</div>` + rgHTML();
 }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-me]'); if (!b) return; const k = b.dataset.me;
@@ -2501,11 +2560,16 @@ document.addEventListener('click', (e) => {
   else if (k === 'edit') { S.me.editing = true; S.me.draft = null; render(); }
   else if (k === 'cancel') { S.me.editing = false; S.me.err = ''; S.me.draft = null; render(); }
   else if (k === 'export') meExport();
+  else if (k === 'csv') { if (isPro()) meCSV(); }
+  else if (k === 'plans') { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  else if (k === 'waitlist') { const u = S.me.user; if (!u || !S.me.profile) return; firebase.database().ref('waitlist/' + u.uid).set({ tier: b.dataset.tier, at: Date.now(), name: S.me.profile.name }).then(() => toast({ title: 'You\'re on the list', body: 'You\'ll hear first when it opens', tone: 'win' })).catch((e) => toast({ title: 'Could not join', body: e.message, tone: 'loss' })); }
   else if (k === 'limit') { const v = Number((document.getElementById('rgLimit') || {}).value); if (!(v >= 0) || (document.getElementById('rgLimit') || {}).value === '') { toast({ title: 'Enter a dollar amount', tone: 'loss' }); return; } meSetLimit(Math.round(v)); }
   else if (k === 'nolimit') meSetLimit(null);
   else if (k === 'cool') { if (b.dataset.armed) { meStartCool(Number(b.dataset.days)); } else { b.dataset.armed = 1; b.textContent = 'Tap again — can\'t be undone'; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = { 1: '24 hours', 7: '7 days', 30: '30 days' }[b.dataset.days]; } }, 4000); } }
   else if (k === 'delete') { if (b.dataset.armed) { meDelete(); delete b.dataset.armed; } else { b.dataset.armed = 1; b.textContent = 'Tap again to delete everything'; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = 'Delete everything'; } }, 4000); } }
 });
+document.addEventListener('change', (e) => { const el = e.target; if (!el.dataset || el.dataset.mgate === undefined || !S.me.user || !isPro()) return; const k = el.dataset.mgate; const v = el.type === 'checkbox' ? el.checked : Number(el.value); if (el.type !== 'checkbox' && !isFinite(v)) return;
+  firebase.database().ref(`users/${S.me.user.uid}/profile/gate/${k}`).set(v).then(() => toast({ title: 'Gate updated', tone: 'win' })).catch((er) => toast({ title: 'Could not save', body: er.message, tone: 'loss' })); });
 document.addEventListener('input', (e) => { const f = e.target.closest && e.target.closest('[data-meform]'); if (!f || !e.target.name) return; S.me.draft = S.me.draft || {}; S.me.draft[e.target.name] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; });
 document.addEventListener('submit', (e) => {
   const f = e.target.closest('[data-meform]'); if (!f) return; e.preventDefault();
@@ -2735,7 +2799,7 @@ const Moments = {
     if (m.type === 'slipwin') extra = Array.from({ length: 46 }, () => `<i class="p" style="left:${Math.random() * 100}vw;--s:${10 + Math.random() * 16}px;--t:${2.2 + Math.random() * 1.8}s;--d:${Math.random() * 1.6}s"></i>`).join('');
     if (m.type === 'hit' || m.type === 'td' || m.type === 'leader' || m.type === 'hype') extra = Array.from({ length: 28 }, (_, i) => `<i class="spark" style="--a:${(i / 28) * 360}deg;--r:${30 + Math.random() * 25}vmin"></i>`).join('');
     el.innerHTML = `<div class="flash"></div>${m.type === 'bust' ? '' : '<div class="rays"></div>'}${extra}${m.card ? moCardHTML(m) : `<div class="core">${face}<div class="word">${esc(m.word)}</div>${m.sub ? `<div class="sub">${esc(m.sub)}</div>` : ''}</div>`}`;
-    box.appendChild(el); fanfare(m.type); OBS.cut(OBS.sceneFor(m.type), dur + 0.6);
+    box.appendChild(el); fanfare(m.type); OBS.cut(OBS.sceneFor(m.type), dur + 0.6); discordLive(m);
     setTimeout(() => { el.remove(); this.busy = false; this.next(); }, dur * 1000);
   },
 };
@@ -2774,6 +2838,17 @@ function remoteMoment(m) {
     return { type: lost ? 'bust' : won ? 'slipwin' : 'hype', word: lost ? 'Busted' : won ? 'Slip cashed' : r.legs.some(({ g }) => g.state === 'live') ? 'Sweating' : 'On the board', card: slipCardOf(f.t, r) }; }
   return null;
 }
+/* overlay → Discord #live: one post per real moment (demo moments never post), at most one every 4 seconds */
+let dlLast = 0;
+function discordLive(m) {
+  const url = OBS.cfg.dlive; if (!OVERLAY || !url || m.demo) return; const now = Date.now(); if (now - dlLast < 4000) return; dlLast = now;
+  const c = m.card || {}; const col = { hit: 0x2ee59d, td: 0xf2c14e, slipwin: 0xf2c14e, bust: 0xff3b5c, leader: 0x9b7bff }[m.type] || 0x14f1c7;
+  let desc = m.sub || '';
+  if (c.kind === 'leg') desc = `**${c.name}** ${c.pick} — **${E.fmt(c.value)}**${c.score ? '\n' + c.score : ''}${c.box ? '\n' + c.box : ''}${c.slip ? `\n${c.slip.title}: ${c.slip.hits}/${c.slip.n} hit` : ''}`;
+  else if (c.kind === 'slip') desc = `**${c.title}** — ${c.hits}/${c.n} hit${c.payout ? ' · paid ' + money(c.payout) : ''}\n${c.legs.map((x) => `${x.state === 'hit' ? '✅' : x.state === 'miss' ? '❌' : '⏳'} ${x.last} ${x.pick}${x.value !== null ? ' — ' + E.fmt(x.value) : ''}`).join('\n')}`;
+  else if (c.kind === 'td') desc = `**${c.name}**${c.score ? ' · ' + c.score : ''}${c.imp ? '\n' + c.imp : ''}`;
+  fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'Poizen Lounge', allowed_mentions: { parse: [] }, embeds: [{ title: m.word, description: desc.slice(0, 1800), url: location.origin + location.pathname, color: col, timestamp: new Date().toISOString(), footer: { text: '21+ · Analysis, not betting advice' } }] }) }).catch(() => {});
+}
 function fanfare(type) {
   if (OVERLAY && params.get('sound') === 'off') return;
   try {
@@ -2789,6 +2864,7 @@ function fanfare(type) {
 const OBS = (() => {
   const h = new URLSearchParams(location.hash.slice(1)); const st = { on: false, ready: false, last: '' };
   const cfg = { pw: h.get('obs') || '', port: Number(h.get('port')) || 4455, moment: h.get('moment') || '', win: h.get('win') || '', bust: h.get('bust') || '', sweat: h.get('sweat') || '', quiet: h.has('quiet') };
+  cfg.dlive = /^https:\/\/(?:ptb\.|canary\.)?(?:discord|discordapp)\.com\/api\/webhooks\/\d+\/[\w-]+$/.test(h.get('dlive') || '') ? h.get('dlive') : '';
   const api = { cfg, st, cut() {}, sceneFor: () => '' };
   if (!OVERLAY || !h.has('obs')) return api;
   st.on = true; let ws = null, tries = 0, rid = 0, home = null, timer = null, current = null; const pending = new Map();
@@ -2834,6 +2910,8 @@ function boxLine(key) {
   if (sportOf(key) === 'mlb') {
     if (s.ab || s.h) out.push(`${s.h}-for-${s.ab}`); if (s.hr) out.push(`${s.hr} HR`); if (s.r) out.push(`${s.r} R`); if (s.rbi) out.push(`${s.rbi} RBI`); if (s.bb) out.push(`${s.bb} BB`);
     if (s.pOuts) out.push(`${Math.floor(s.pOuts / 3)}.${s.pOuts % 3} IP, ${s.pK} K, ${s.pER} ER`);
+  } else if (sportOf(key) === 'nba') {
+    out.push(`${s.pts} pts, ${s.reb} reb, ${s.ast} ast${s.threes ? ', ' + s.threes + ' 3PM' : ''}${s.stl || s.blk ? `, ${s.stl} stl, ${s.blk} blk` : ''}${s.min ? ' in ' + s.min + ' min' : ''}`);
   } else {
     if (s.passAtt) out.push(`${s.completions}/${s.passAtt}, ${s.passYds} pass yds${s.passTD ? ', ' + s.passTD + ' TD' : ''}${s.ints ? ', ' + s.ints + ' INT' : ''}`);
     if (s.rushAtt) out.push(`${s.rushAtt} car, ${s.rushYds} rush yds${s.rushTD ? ', ' + s.rushTD + ' TD' : ''}`);
@@ -3216,6 +3294,7 @@ function gameFrac(ev) {
     const left = Math.min(15, (m || 0) + (sec || 0) / 60);
     return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 15 + (15 - left)) / 60));
   }
+  if (ev.sport === 'nba') { if (/half/i.test(ev.detail || '')) return 0.5; const [m, sec] = String(ev.clock || '12:00').split(':').map(Number); const left = Math.min(12, (m || 0) + (sec || 0) / 60); return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 12 + (12 - left)) / 48)); }
   const half = /bot|mid|end/i.test(ev.detail || '') ? 0.5 : 0;
   return Math.max(0, Math.min(1, (per - 1 + half + 0.25) / 9));
 }
@@ -3753,6 +3832,7 @@ function watchBoard() {
       S.slate = s; S.snap = null; S.shift = null; afterData(); poll(); loadLogs();
     }, () => {});
     db.ref('.info/connected').on('value', (snap) => { const was = S.fbConnected; S.fbConnected = !!snap.val(); if (was === true && !S.fbConnected) S.alertLog.unshift({ tone: 'warn', title: 'Board sync dropped', body: 'Reconnecting automatically', at: Date.now() }); if (was === false && S.fbConnected) S.alertLog.unshift({ tone: 'win', title: 'Board sync back', body: '', at: Date.now() }); renderNav(); }, () => {});
+    db.ref('board/plans').on('value', (snap) => { S.plans = snap.val() || {}; if (S.tab === 'me') render(); }, () => {});
     db.ref('board/gate').on('value', (snap) => { S.gateRules = snap.val(); if (S.tab === 'research') render(); }, () => {});
     let firstMoment = true; db.ref('board/moment').on('value', (snap) => { const m = snap.val(); if (firstMoment) { firstMoment = false; return; } if (m && m.type && Date.now() - (m.at || 0) < 20000) { const rm = m.slipId ? remoteMoment(m) : null; if (m.slipId && !rm) return; Moments.push(rm || { type: m.type, word: String(m.word || '').slice(0, 24), sub: String(m.sub || '').slice(0, 80), player: m.player && S.slate.players[m.player] ? m.player : undefined }); } }, () => {});
     if (OVERLAY) { let firstScene = true; db.ref('board/scene').on('value', (snap) => { const c = snap.val(); if (firstScene) { firstScene = false; return; } if (c && c.name && Date.now() - (c.at || 0) < 20000) OBS.cut(String(c.name).slice(0, 80), Number(c.secs) || 0); }, () => {}); }

@@ -21,7 +21,7 @@
 
   // markets that are counts (discrete, small) vs yardage (continuous)
   const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs']);
-  const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs']);
+  const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs', 'reb', 'ast', 'threes', 'stl', 'blk', 'stocks', 'tov', 'ra']);
   const kindOf = (market) => (TD_MARKETS.has(market) ? 'td' : COUNT_MARKETS.has(market) ? 'count' : 'yards');
 
   /* P(final stat clears the line) for a stat with mean mu and spread sd, given direction */
