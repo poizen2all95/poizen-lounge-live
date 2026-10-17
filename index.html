@@ -1510,8 +1510,8 @@ html[data-season="playoffs"] .pc-art .poart,html[data-season="playoffs"] .ath-he
 html[data-season="playoffs"] .ctx-art .poart,html[data-season="playoffs"] .ti-head .poart{background:linear-gradient(90deg,color-mix(in srgb,var(--c1,#123) 75%,transparent),transparent 70%),var(--po-scene) center 35%/cover}
 html[data-season="playoffs"] .ti-head .poart{width:100%;-webkit-mask-image:none;mask-image:none}
 html[data-season="playoffs"] .lhero2 .poart{background:linear-gradient(90deg,color-mix(in srgb,var(--c1,#123) 55%,transparent),transparent 60%),var(--po-scene) center 45%/cover}
-html[data-season="playoffs"] .banner{background:linear-gradient(90deg,rgba(4,9,18,.9) 0%,rgba(4,9,18,.5) 40%,rgba(4,9,18,0) 72%),var(--po-scene) center 38%/cover!important}
-html[data-season="playoffs"][data-vibe="daylight"] .banner{background:linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.65) 40%,rgba(255,255,255,0) 72%),var(--po-scene) center 38%/cover!important}
+html[data-season="playoffs"] .banner{background:linear-gradient(90deg,rgba(4,9,18,.9) 0%,rgba(4,9,18,.5) 40%,rgba(4,9,18,0) 72%),var(--po-stadium,var(--po-scene)) center 45%/cover!important}
+html[data-season="playoffs"][data-vibe="daylight"] .banner{background:linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.65) 40%,rgba(255,255,255,0) 72%),var(--po-stadium,var(--po-scene)) center 45%/cover!important}
 html[data-season="playoffs"] .lh-shade,html[data-season="playoffs"] .g-shade{background:linear-gradient(90deg,rgba(4,9,18,.7),rgba(4,9,18,.15) 50%,transparent)}
 html[data-season="playoffs"] .pc-tint,html[data-season="playoffs"] .ath-tint,html[data-season="playoffs"] .pk-tint{opacity:.35}
 
@@ -1527,8 +1527,8 @@ html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:ra
 html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:radial-gradient(90% 60% at 0% 0%,color-mix(in srgb,var(--team-a) 30%,transparent),transparent 65%),radial-gradient(80% 60% at 100% 0%,color-mix(in srgb,var(--team-b) 24%,transparent),transparent 65%),#EEF2F7}
 html[data-season="playoffs"][data-team] .navbtn[aria-current="page"]{background:linear-gradient(90deg,var(--team-a),color-mix(in srgb,var(--team-a) 40%,transparent))!important;color:#fff!important;box-shadow:0 0 0 1px var(--team-acc) inset,0 0 22px -4px var(--team-acc)!important}
 html[data-season="playoffs"] body[data-view]{--po-rim:color-mix(in srgb,var(--acc) 60%,#F2C55C)}
-html[data-season="playoffs"] .banner{background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 38%,rgba(4,9,18,.94)) 0%,rgba(4,9,18,.55) 42%,rgba(4,9,18,0) 74%),var(--po-scene) center 38%/cover!important;border-color:var(--acc)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 40%,transparent),0 0 40px -8px var(--acc)!important}
-html[data-season="playoffs"][data-vibe="daylight"] .banner{background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 18%,rgba(255,255,255,.95)) 0%,rgba(255,255,255,.65) 42%,rgba(255,255,255,0) 74%),var(--po-scene) center 38%/cover!important}
+html[data-season="playoffs"] .banner{background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 38%,rgba(4,9,18,.94)) 0%,rgba(4,9,18,.55) 42%,rgba(4,9,18,0) 74%),var(--po-stadium,var(--po-scene)) center 45%/cover!important;border-color:var(--acc)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 40%,transparent),0 0 40px -8px var(--acc)!important}
+html[data-season="playoffs"][data-vibe="daylight"] .banner{background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 18%,rgba(255,255,255,.95)) 0%,rgba(255,255,255,.65) 42%,rgba(255,255,255,0) 74%),var(--po-stadium,var(--po-scene)) center 45%/cover!important}
 html[data-season="playoffs"] .banner .wm{color:var(--acc);opacity:.6;filter:drop-shadow(0 0 24px var(--acc))}
 html[data-season="playoffs"] .banner h2 span{background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--acc) 70%,#fff) 35%,var(--acc) 60%,color-mix(in srgb,var(--acc) 55%,#000) 100%)!important;-webkit-background-clip:text!important;background-clip:text!important}
 html[data-season="playoffs"] .sec::before{background:linear-gradient(180deg,var(--acc),var(--po-gold))}
@@ -1581,6 +1581,7 @@ html[data-season="playoffs"] .ath-hero .jn,html[data-season="playoffs"] .pk-art 
 html[data-season="playoffs"] .ath-hero .hs,html[data-season="playoffs"] .pk-art .hs{height:100%;max-height:none}
 html[data-season="playoffs"] .pk-name b,html[data-season="playoffs"] .ath-hero b{text-shadow:0 2px 10px rgba(0,0,0,.7)}
 html[data-season="playoffs"] .card.ath,html[data-season="playoffs"] .card.pk{border:1.5px solid var(--po-rim)!important}
+html[data-season="playoffs"] .pc-art .vimg,html[data-season="playoffs"] .ath-hero .vimg,html[data-season="playoffs"] .pk-art .vimg{opacity:.3!important;mix-blend-mode:luminosity}
 /* team background: louder in Playoffs */
 html[data-season="playoffs"][data-team] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 62%,#040912) 0%,color-mix(in srgb,var(--team-a) 30%,#040912) 35%,#040912 70%),radial-gradient(70% 50% at 100% 0%,color-mix(in srgb,var(--team-b) 45%,transparent),transparent 70%),#040912!important}
 html[data-season="playoffs"][data-team][data-vibe="daylight"] body{background:linear-gradient(160deg,color-mix(in srgb,var(--team-a) 62%,#EEF2F7) 0%,color-mix(in srgb,var(--team-a) 32%,#EEF2F7) 45%,color-mix(in srgb,var(--team-b) 14%,#EEF2F7) 100%)!important}
@@ -3088,7 +3089,8 @@ function tvHTML(ev) {
 const PO_PHOTOS = new Set([]);
 const venueSlug = (ev) => String((ev && ev.venue) || '').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const poKey = (ev) => { const h = ev && (ev.comps || []).find((t) => t.ha === 'home'); const slug = venueSlug(ev); const neutral = /wembley|tottenham|allianz|bernab|maracan|azteca|croke|olympiastadion|stade|dublin|melbourne/.test(slug); const team = h ? `${ev.sport}-${h.abbr}`.toLowerCase() : ''; return !neutral && PO_PHOTOS.has(team) ? team : PO_PHOTOS.has(slug) ? slug : ''; };
-function venueArt(ev, eager) { if (document.documentElement.dataset.season === 'playoffs') { const sl = poKey(ev); return sl ? `<img class="vimg poimg" src="playoffs-art/${sl}.jpg" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.outerHTML='<i class=&quot;vimg poart&quot;></i>'">` : '<i class="vimg poart" aria-hidden="true"></i>'; } const src = venuePhoto(ev); return src ? `<img class="vimg" src="${esc(src)}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">` : ''; }
+function venueArt(ev, eager) { if (document.documentElement.dataset.season === 'playoffs') { const sl = poKey(ev); if (!sl && venuePhoto(ev)) return `<img class="vimg poimg" src="${esc(venuePhoto(ev))}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">`;
+    return sl ? `<img class="vimg poimg" src="playoffs-art/${sl}.jpg" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.outerHTML='<i class=&quot;vimg poart&quot;></i>'">` : '<i class="vimg poart" aria-hidden="true"></i>'; } const src = venuePhoto(ev); return src ? `<img class="vimg" src="${esc(src)}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">` : ''; }
 
 let pollTimer = null;
 async function poll() {
@@ -3345,7 +3347,7 @@ function playoffsArt() {
 }
 function applyPlayoffs() {
   const own = can('playoffs'); const on = own && !!S.playoffsOn; const root = document.documentElement;
-  if (on) root.dataset.season = 'playoffs'; else delete root.dataset.season;
+  if (on) { root.dataset.season = 'playoffs'; playoffsArt(); } else delete root.dataset.season;
   const b = document.getElementById('poToggle'); if (b) { b.setAttribute('aria-pressed', String(on)); b.classList.toggle('locked', !own); const tag = b.querySelector('.po-tag'); if (tag) tag.textContent = own ? 'Elite' : 'Elite only'; }
   if (own && S.me.user) store.set('pz_playoffs', !!S.playoffsOn);
 }
