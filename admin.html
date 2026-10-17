@@ -1304,6 +1304,7 @@ window.addEventListener('hashchange', () => { A.sec = location.hash.slice(1); re
   catch (e) { $('#gateMsg').textContent = 'Could not load sign-in: ' + e.message; return; }
   $('#signin').onclick = async () => { try { await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); } catch (e) { if (/popup/i.test(e.code || '')) await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); else $('#gateMsg').textContent = e.message; } };
   auth.onAuthStateChanged(async (u) => {
+    if (u && u.isAnonymous) u = null; // the board's anonymous chat sign-in is not an owner attempt
     const owner = u && u.email === OWNER_EMAIL && u.emailVerified;
     $('#gate').hidden = !!owner; $('#app').hidden = !owner;
     if (u && !owner) { $('#gateMsg').textContent = `${u.email || 'This account'} is not the owner account. Nothing can be changed from it.`; return; }
