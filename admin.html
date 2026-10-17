@@ -781,11 +781,19 @@ details.gatebox>summary::-webkit-details-marker{display:none}
 
   // ---------- coach ----------
   /* picks: [{market, dir, result, prob}] → hit rates by market+direction and calibration buckets */
+  const COACH_MIN = 8;
+  /* Wilson score interval (90% by default) for a hit rate */
+  function wilson(h, n, z = 1.645) { if (!n) return [0, 1]; const p = h / n, d = 1 + z * z / n, c = p + z * z / (2 * n), m = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)); return [Math.max(0, (c - m) / d), Math.min(1, (c + m) / d)]; }
   function coach(picks, edges) {
     const done = picks.filter((p) => p.result === 'hit' || p.result === 'miss');
     const by = {};
-    done.forEach((p) => { const k = p.market + '|' + (p.dir || 'over'); const o = (by[k] = by[k] || { market: p.market, dir: p.dir || 'over', n: 0, hit: 0 }); o.n++; if (p.result === 'hit') o.hit++; });
-    const markets = Object.values(by).sort((a, b) => b.hit / b.n - a.hit / a.n || b.n - a.n);
+    done.forEach((p) => { const k = p.market + '|' + (p.dir || 'over'); const o = (by[k] = by[k] || { market: p.market, dir: p.dir || 'over', n: 0, hit: 0, baseSum: 0, priced: 0 }); o.n++; if (p.result === 'hit') o.hit++;
+      if (typeof p.prob === 'number') { o.baseSum += p.prob; o.priced++; } else o.baseSum += 0.5; });
+    /* judge each stat against what it was priced at (price paid or the Lab's number), not a blanket hit-rate cutoff,
+       and only once there is enough evidence: 8+ graded and the 90% range clear of the baseline */
+    const markets = Object.values(by).map((o) => { const base = o.baseSum / o.n; const [lo, hi] = wilson(o.hit, o.n); const verdict = o.n < COACH_MIN ? 'early' : lo > base ? 'edge' : hi < base ? 'leak' : 'even';
+      return { market: o.market, dir: o.dir, n: o.n, hit: o.hit, base, lo, hi, verdict, baseKind: o.priced === o.n ? 'price' : o.priced ? 'mixed' : 'coin' }; })
+      .sort((a, b) => b.hit / b.n - a.hit / a.n || b.n - a.n);
     const buckets = (edges || [[0, 0.45, 'Under 45%'], [0.45, 0.6, '45–60%'], [0.6, 0.75, '60–75%'], [0.75, 1.01, '75%+']]).map(([lo, hi, label]) => {
       const xs = done.filter((p) => typeof p.prob === 'number' && p.prob >= lo && p.prob < hi);
       return { label, n: xs.length, expected: xs.length ? xs.reduce((a, p) => a + p.prob, 0) / xs.length : null, actual: xs.length ? xs.filter((p) => p.result === 'hit').length / xs.length : null };
@@ -842,8 +850,8 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     if (R.sizeGuard && slip.sizeRecord && slip.sizeRecord.n >= 3) { const s = slip.sizeRecord; add('sizeGuard', `Slip size is making money for you`, s.pl >= 0 ? 'pass' : 'fail', `${s.label}: ${s.w}-${s.l}, ${s.pl >= 0 ? '+' : '-'}$${Math.abs(s.pl).toFixed(2)}`, 'Your ledger'); }
     return out;
   }
-  /* stats the Coach calls a leak: at least 3 graded calls and under 40% hit */
-  function leaks(picks, minN = 3, maxRate = 0.4) { return coach(picks).markets.filter((m) => m.n >= minN && m.hit / m.n < maxRate); }
+  /* stats the Coach calls a leak: enough graded calls and a hit rate clearly below what they were priced at */
+  function leaks(picks) { return coach(picks).markets.filter((m) => m.verdict === 'leak'); }
   /* scalp cash-out call: compare the book's offer with what holding is worth */
   function cashoutCall(offer, fair) {
     if (!(offer > 0) || !(fair >= 0)) return null;
@@ -911,7 +919,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

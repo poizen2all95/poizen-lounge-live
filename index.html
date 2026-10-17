@@ -105,6 +105,7 @@ a{color:var(--sky)}
 .rec{flex:none;display:flex;align-items:baseline;gap:8px;padding:6px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:12px;white-space:nowrap}
 .rec b{font:800 16px/1 var(--stadium);letter-spacing:.03em}
 .rec .lbl{color:var(--fg2);font-weight:800;font-size:11px}
+.rec sup{font-size:9px;margin-left:1px}.recnote{background:transparent;border-style:dashed}
 
 /* ---------- shell ---------- */
 .shell{max-width:none;margin:0;padding:18px max(20px,env(safe-area-inset-right,0px)) 120px max(12px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:228px minmax(0,1fr);gap:24px;align-items:start}
@@ -2070,11 +2071,19 @@ details.labslip>*:not(summary){margin:0 18px 14px}
 
   // ---------- coach ----------
   /* picks: [{market, dir, result, prob}] → hit rates by market+direction and calibration buckets */
+  const COACH_MIN = 8;
+  /* Wilson score interval (90% by default) for a hit rate */
+  function wilson(h, n, z = 1.645) { if (!n) return [0, 1]; const p = h / n, d = 1 + z * z / n, c = p + z * z / (2 * n), m = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)); return [Math.max(0, (c - m) / d), Math.min(1, (c + m) / d)]; }
   function coach(picks, edges) {
     const done = picks.filter((p) => p.result === 'hit' || p.result === 'miss');
     const by = {};
-    done.forEach((p) => { const k = p.market + '|' + (p.dir || 'over'); const o = (by[k] = by[k] || { market: p.market, dir: p.dir || 'over', n: 0, hit: 0 }); o.n++; if (p.result === 'hit') o.hit++; });
-    const markets = Object.values(by).sort((a, b) => b.hit / b.n - a.hit / a.n || b.n - a.n);
+    done.forEach((p) => { const k = p.market + '|' + (p.dir || 'over'); const o = (by[k] = by[k] || { market: p.market, dir: p.dir || 'over', n: 0, hit: 0, baseSum: 0, priced: 0 }); o.n++; if (p.result === 'hit') o.hit++;
+      if (typeof p.prob === 'number') { o.baseSum += p.prob; o.priced++; } else o.baseSum += 0.5; });
+    /* judge each stat against what it was priced at (price paid or the Lab's number), not a blanket hit-rate cutoff,
+       and only once there is enough evidence: 8+ graded and the 90% range clear of the baseline */
+    const markets = Object.values(by).map((o) => { const base = o.baseSum / o.n; const [lo, hi] = wilson(o.hit, o.n); const verdict = o.n < COACH_MIN ? 'early' : lo > base ? 'edge' : hi < base ? 'leak' : 'even';
+      return { market: o.market, dir: o.dir, n: o.n, hit: o.hit, base, lo, hi, verdict, baseKind: o.priced === o.n ? 'price' : o.priced ? 'mixed' : 'coin' }; })
+      .sort((a, b) => b.hit / b.n - a.hit / a.n || b.n - a.n);
     const buckets = (edges || [[0, 0.45, 'Under 45%'], [0.45, 0.6, '45–60%'], [0.6, 0.75, '60–75%'], [0.75, 1.01, '75%+']]).map(([lo, hi, label]) => {
       const xs = done.filter((p) => typeof p.prob === 'number' && p.prob >= lo && p.prob < hi);
       return { label, n: xs.length, expected: xs.length ? xs.reduce((a, p) => a + p.prob, 0) / xs.length : null, actual: xs.length ? xs.filter((p) => p.result === 'hit').length / xs.length : null };
@@ -2131,8 +2140,8 @@ details.labslip>*:not(summary){margin:0 18px 14px}
     if (R.sizeGuard && slip.sizeRecord && slip.sizeRecord.n >= 3) { const s = slip.sizeRecord; add('sizeGuard', `Slip size is making money for you`, s.pl >= 0 ? 'pass' : 'fail', `${s.label}: ${s.w}-${s.l}, ${s.pl >= 0 ? '+' : '-'}$${Math.abs(s.pl).toFixed(2)}`, 'Your ledger'); }
     return out;
   }
-  /* stats the Coach calls a leak: at least 3 graded calls and under 40% hit */
-  function leaks(picks, minN = 3, maxRate = 0.4) { return coach(picks).markets.filter((m) => m.n >= minN && m.hit / m.n < maxRate); }
+  /* stats the Coach calls a leak: enough graded calls and a hit rate clearly below what they were priced at */
+  function leaks(picks) { return coach(picks).markets.filter((m) => m.verdict === 'leak'); }
   /* scalp cash-out call: compare the book's offer with what holding is worth */
   function cashoutCall(offer, fair) {
     if (!(offer > 0) || !(fair >= 0)) return null;
@@ -2200,7 +2209,7 @@ details.labslip>*:not(summary){margin:0 18px 14px}
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, multPrior, trustOf, honest, honestLive, breakEven };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -3149,7 +3158,7 @@ function viewMe() {
   const lab = done.filter(({ t }) => t.lab && t.lab.pAll); const expW = lab.reduce((s, { t }) => s + t.lab.pAll, 0); const actW = lab.filter(({ t }) => t.result === 'won').length;
   const leaks = M.leaks(picks);
   const tiles = `<div class="metiles"><div><span>Record</span><b>${won}-${done.length - won}</b><em>${open.length} open</em></div><div><span>Picks hit</span><b>${hitRate === null ? '–' : Math.round(hitRate * 100) + '%'}</b><em>${picks.length} graded</em></div><div><span>Profit</span><b class="${pl > 0 ? 'win' : pl < 0 ? 'loss' : ''}">${withAmt.length ? money(pl, true) : '–'}</b><em>${withAmt.length ? withAmt.length + ' slips with amounts' : 'Amounts stay private'}</em></div><div><span>Lab vs you</span><b>${lab.length ? `${actW} / ${expW.toFixed(1)}` : '–'}</b><em>${lab.length ? 'slips won / Lab expected' : 'Settle a slip to compare'}</em></div></div>`;
-  const coach = !isPro() ? proLock('Your Coach') : picks.length >= 3 ? `<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b>${leaks.length ? `<p class="muted" style="margin:6px 0 8px">These stats are under 40% for you. Your gate blocks them until they climb back.</p>${leaks.map((x) => `<span class="chip loss">${esc(mkLabel(x.market))}${x.dir === 'under' ? ' (less)' : ''} · ${x.hit}/${x.n}</span>`).join(' ')}` : '<p class="muted" style="margin:6px 0 0">No leaks yet — nothing under 40% with 3+ graded calls.</p>'}</div>` : '';
+  const coach = !isPro() ? proLock('Your Coach') : picks.length >= 3 ? `<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b>${leaks.length ? `<p class="muted" style="margin:6px 0 8px">These stats are hitting clearly below what they were priced at, across 8+ graded picks. Your gate blocks them until they climb back.</p>${leaks.map((x) => `<span class="chip loss">${esc(mkLabel(x.market))}${x.dir === 'under' ? ' (less)' : ''} · ${x.hit}/${x.n}</span>`).join(' ')}` : '<p class="muted" style="margin:6px 0 0">No leaks yet — nothing under 40% with 3+ graded calls.</p>'}</div>` : '';
   const p = S.me.profile;
   const priv = `<div class="card mecard meprivacy"><b class="st-font" style="font-size:20px">${SVG.lock} Privacy</b><p class="muted" style="margin:6px 0 10px">Exact amounts: <b>${p.consent.amounts ? 'synced to your account' : 'this device only'}</b> · PoiZen can see your account: <b>${p.consent.owner ? 'yes' : 'no'}</b></p><div class="row"><button class="fbtn" type="button" data-me="edit">Change</button><button class="fbtn" type="button" data-me="export">Export my data</button>${isPro() ? '<button class="fbtn" type="button" data-me="csv">Ledger CSV</button>' : ''}<button class="fbtn danger" type="button" data-me="delete">Delete everything</button><button class="fbtn" type="button" data-me="signout">Sign out</button></div></div>`;
   const tierChip = isPro() ? `<span class="chip win">${meTier() === 'creator' ? 'Creator' : 'Pro'}</span>` : '<span class="chip">Free</span> <button class="linkbtn" type="button" data-me="plans">See plans</button>';
@@ -3238,7 +3247,7 @@ async function makePick(id, side) {
 }
 function viewPickem() {
   const { legs, rows } = pickemBoard(); const uid = myUid(); const me = uid && PK.players[uid]; const mine = (me && me.picks) || {};
-  const now = Date.now(); const open = legs.filter((x) => { const l = lockAt(x); return l && now < l; }).length;
+  const now = Date.now(); const isOpen = (x) => { const l = lockAt(x); const ev = eventFor(x.leg.player); return (x.id in PK.locks) && l && now < l && !(ev && ev.state !== 'pre'); }; const open = legs.filter(isOpen).length; const published = legs.filter((x) => x.id in PK.locks).length;
   const crowd = (id) => { let o = 0, u = 0; Object.values(PK.players).forEach((p) => { const v = p.picks && p.picks[id]; if (v === 'over') o++; else if (v === 'under') u++; }); return { o, u, n: o + u }; };
   const cards = legs.map((x) => {
     const p = P(x.leg.player), mk = E.MARKETS[x.leg.market] || { short: x.leg.market }; const lk = lockAt(x); const evx = eventFor(x.leg.player); const locked = !lk || now >= lk || !(x.id in PK.locks) || (evx && evx.state !== 'pre');
@@ -3261,7 +3270,7 @@ function viewPickem() {
   const lb = rows.length ? rows.slice(0, 25).map((r, i) => `<div class="lbr ${r.uid === uid ? 'me' : ''} ${i === 0 && r.pts ? 'top' : ''}"><span class="rk">${i + 1}</span><div class="nm"><b>${esc(r.name)}${r.uid === uid ? ' <em>you</em>' : ''}</b><span>${r.graded}/${r.n} graded${r.pending ? ` · ${r.pending} live or pending` : ''}</span>${r.badges.length ? `<div class="bdg">${r.badges.map((b) => `<i>${b}</i>`).join('')}</div>` : ''}</div><span class="pts">${r.pts}</span></div>`).join('') : '<div class="dim" style="padding:14px">No one has played yet. First pick takes the top spot.</div>';
   const champs = Object.entries(PK.champs).sort((a, b) => String(b[1].at || '').localeCompare(String(a[1].at || ''))).slice(0, 6);
   const join = `<div class="card pkjoin"><div><b class="st-font" style="font-size:22px">${me ? `You're in as ${esc(me.name || 'Anonymous')}` : 'Play along — free'}</b><div class="muted" style="font-size:13px">Call MORE or LESS on every leg PoiZen played. Tail him or fade him. Each correct call is a point; picks lock at kickoff. No money, just bragging rights.</div></div><div class="row2"><input class="inp" id="pkName" maxlength="24" placeholder="Your name on the board" value="${esc((me && me.name !== 'Anonymous' && me.name) || store.get('pz_chat_name', ''))}"><span class="chip">${Object.keys(mine).length}/${legs.length} picked</span>${meRow > -1 ? `<span class="chip gold">Rank #${meRow + 1}</span>` : ''}</div></div>`;
-  return vh("Lounge <span>Pick'em</span>", 'The whole lounge sweats with PoiZen. Lock your calls before kickoff, then watch the leaderboard move live.', `<span class="chip">${rows.length} playing</span><span class="chip">${legs.length} legs</span><span class="chip">${open} still open</span>`) +
+  return vh("Lounge <span>Pick'em</span>", 'The whole lounge sweats with PoiZen. Lock your calls before kickoff, then watch the leaderboard move live.', `<span class="chip">${rows.length} playing</span><span class="chip">${legs.length} legs</span><span class="chip">${published ? `${open} open to pick` : 'Opens when PoiZen publishes'}</span>`) +
     (FIREBASE ? '' : '<div class="empty"><b>Pick\'em is being set up</b></div>') + join +
     `<div class="pkwrap"><div class="pkgrid">${cards || '<div class="empty"><b>No legs this week yet</b>They appear when PoiZen publishes his slips.</div>'}</div>
       <aside class="card lb"><div class="lb-h">${SVG.crown}<b>Leaderboard</b></div>${lb}${champs.length ? `<div class="lb-h" style="margin-top:12px">${SVG.trophy}<b>Hall of champs</b></div>${champs.map(([k, c]) => `<div class="lbr"><span class="rk">${SVG.crown}</span><div class="nm"><b>${esc(c.name)}</b><span>${esc(c.title || k)} · ${c.points}/${c.of}</span></div></div>`).join('')}` : ''}</aside></div>`;
@@ -4165,7 +4174,7 @@ function researchItems() {
   const seen = new Set(); const out = [];
   const add = (x) => { const k = x.player + '|' + x.market + '|' + Number(x.line) + '|' + (x.dir || 'over'); if (seen.has(k)) return; seen.add(k); out.push(x); };
   S.custom.forEach((c) => add({ ...c, custom: true }));
-  activeTickets().forEach((t) => t.legs.forEach((l) => { if (sportOf(l.player) === 'nfl' && E.MARKETS[l.market] && Number(l.line) > 0.5 || (l.market === 'anytime_td' && sportOf(l.player) === 'nfl')) add({ player: l.player, market: l.market, line: Number(l.line), dir: l.dir }); }));
+  activeTickets().forEach((t) => t.legs.forEach((l) => { if (sportOf(l.player) === 'nfl' && E.MARKETS[l.market] && Number(l.line) > 0.5 || (l.market === 'anytime_td' && sportOf(l.player) === 'nfl')) add({ player: l.player, market: l.market, line: Number(l.line), dir: l.dir, mult: l.mult }); }));
   (S.slate.research || []).forEach(add);
   return out;
 }
@@ -4202,7 +4211,7 @@ function researchCard(x) {
   const onSlip = activeTickets().filter((t) => t.legs.some((l) => l.player === x.player && l.market === x.market && Number(l.line) === line)).length;
   const corner = `<span class="chip gold">${dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(line)} ${esc(mk.short)}</span>${onSlip ? `<span class="chip">On ${onSlip} slip${onSlip > 1 ? 's' : ''}</span>` : ''}${x.custom ? `<button class="chip" type="button" data-uncheck="${esc(x.player + '|' + x.market + '|' + x.line)}" style="cursor:pointer">Remove</button>` : ''}`;
   const pre = legPre(x); const inWi = S.whatIf.has(wiKey(x));
-  const model = `<div class="modelrow"><div><div class="k">Model hit chance</div><div class="v" style="color:${pColor(pre.p)}">${fmtP(pre.p)}</div></div><div class="drv">${driverChips(pre.drivers)}</div><button class="fbtn" type="button" data-wi="${esc(wiKey(x))}" aria-pressed="${inWi}">${inWi ? 'In what-if' : 'Add to what-if'}</button></div>`;
+  const model = `<div class="modelrow"><div><div class="k">${x.mult ? 'Hit chance · same as on the slip' : 'Lab hit chance · model only'}</div><div class="v" style="color:${pColor(pre.p)}">${fmtP(pre.p)}</div></div><div class="drv">${driverChips(pre.drivers)}</div><button class="fbtn" type="button" data-wi="${esc(wiKey(x))}" aria-pressed="${inWi}">${inWi ? 'In what-if' : 'Add to what-if'}</button></div>`;
   return heroCard(x.player, model + stats + chart + ladder + kv, '', 'r-' + x.player + '-' + x.market, corner, verdict);
 }
 
@@ -4321,8 +4330,9 @@ function periods() {
 }
 function renderRecord() {
   const p = periods();
-  const cell = (lbl, a) => `<div class="rec"><span class="lbl">${lbl}</span><b>${a.w}-${a.l}</b><span class="${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : 'dim'}" style="font-weight:900">${money(a.pl, true)}</span>${a.n ? `<span class="dim">${Math.round((a.w / a.n) * 100)}%</span>` : ''}</div>`;
-  $('#record').innerHTML = cell('Today', p.today) + cell('Week', p.week) + cell('Month', p.month) + cell('All-time', p.all) + (p.all.n ? '' : '<div class="rec"><span class="dim">Record starts with this week’s graded slips</span></div>');
+  const cell = (lbl, a) => `<div class="rec" title="${a.unknown ? `P/L counts entries with a known stake only; ${a.unknown} entr${a.unknown === 1 ? 'y has' : 'ies have'} no stake shown (paid ${money(a.unknownPaid)})` : 'Every entry here has a known stake'}"><span class="lbl">${lbl}</span><b>${a.w}-${a.l}</b><span class="${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : 'dim'}" style="font-weight:900">${money(a.pl, true)}${a.unknown ? '<sup>*</sup>' : ''}</span>${a.n ? `<span class="dim">${Math.round((a.w / a.n) * 100)}%</span>` : ''}</div>`;
+  const anyUnknown = [p.today, p.week, p.month, p.all].some((a) => a.unknown);
+  $('#record').innerHTML = cell('Today', p.today) + cell('Week', p.week) + cell('Month', p.month) + cell('All-time', p.all) + (p.all.n ? '' : '<div class="rec"><span class="dim">Record starts with this week’s graded slips</span></div>') + (anyUnknown ? `<div class="rec recnote"><span class="dim"><sup>*</sup>P/L on entries with a known stake · ${p.all.unknown} without one</span></div>` : '');
 }
 async function loadArchive() {
   if (S.archive) return;
@@ -4396,14 +4406,17 @@ function coachHTML(L) {
   const c = M.coach(picks);
   const lab = M.coach(picks.filter((p) => p.kind === 'pick6'));
   const mkt = M.coach(picks.filter((p) => p.kind === 'market'), [[0, 0.1, 'Under 10¢'], [0.1, 0.2, '10–20¢'], [0.2, 0.35, '20–35¢'], [0.35, 1.01, '35¢+']]);
-  const ready = c.markets.filter((m) => m.n >= 3);
-  const best = ready.filter((m) => m.hit / m.n >= 0.55).slice(0, 3), worst = [...ready].reverse().filter((m) => m.hit / m.n < 0.4).slice(0, 3);
+  const best = c.markets.filter((m) => m.verdict === 'edge').slice(0, 3), worst = [...c.markets].reverse().filter((m) => m.verdict === 'leak').slice(0, 3);
+  const early = c.markets.filter((m) => m.verdict === 'early'); const even = c.markets.filter((m) => m.verdict === 'even');
+  const vsTxt = (m) => (m.baseKind === 'price' ? 'the ' + fmtP(m.base) + ' you paid on average' : m.baseKind === 'mixed' ? 'about ' + fmtP(m.base) + ' priced in' : 'a coin flip');
   const bySize = {}; L.forEach((e) => { if (!e.legs) return; (bySize[e.legs] = bySize[e.legs] || []).push(e); });
   const sizes = Object.entries(bySize).map(([n, l]) => ({ ...agg(l), size: Number(n) })).filter((x) => x.n);
   const big = sizes.filter((x) => x.size >= 5); const bigAgg = agg(L.filter((e) => e.legs >= 5)); const smallAgg = agg(L.filter((e) => e.legs && e.legs <= 3));
   const rules = [];
-  best.forEach((m) => rules.push({ good: true, text: `${mkLabel(m.market)}${m.dir === 'under' ? ' (less)' : ''}: ${m.hit} of ${m.n} hit. That's an edge — keep leaning on it.` }));
-  worst.forEach((m) => rules.push({ good: false, text: `${mkLabel(m.market)}${m.dir === 'under' ? ' (less)' : ''}: ${m.hit} of ${m.n} hit. That's a leak — raise the bar before adding one.` }));
+  best.forEach((m) => rules.push({ good: true, text: `${mkLabel(m.market)}${m.dir === 'under' ? ' (less)' : ''}: ${m.hit} of ${m.n} hit vs ${vsTxt(m)}. Beating its price so far — keep leaning on it.` }));
+  worst.forEach((m) => rules.push({ good: false, text: `${mkLabel(m.market)}${m.dir === 'under' ? ' (less)' : ''}: ${m.hit} of ${m.n} hit vs ${vsTxt(m)}. Clearly under its price — raise the bar before adding one.` }));
+  if (early.length) rules.push({ neutral: true, text: `Too early to call (needs ${M.COACH_MIN}+ graded each): ${early.slice(0, 8).map((m) => `${mkLabel(m.market)}${m.dir === 'under' ? ' less' : ''} ${m.hit}/${m.n}`).join(', ')}${early.length > 8 ? ` and ${early.length - 8} more` : ''}.` });
+  if (even.length) rules.push({ neutral: true, text: `No clear edge either way yet: ${even.slice(0, 6).map((m) => `${mkLabel(m.market)} ${m.hit}/${m.n}`).join(', ')}.` });
   if (big.length && bigAgg.n) rules.push({ good: bigAgg.pl > 0, text: `5+ leg Pick6 slips: ${bigAgg.w}-${bigAgg.l}${bigAgg.staked ? `, ${money(bigAgg.pl, true)}` : ''}. ${bigAgg.w ? '' : 'None have cashed yet.'}` });
   if (smallAgg.n) rules.push({ good: smallAgg.pl > 0, text: `3-pick and shorter: ${smallAgg.w}-${smallAgg.l}${smallAgg.staked ? `, ${money(smallAgg.pl, true)}` : ''}.` });
   const mPicks = picks.filter((p) => p.kind === 'market' && typeof p.prob === 'number');
@@ -4414,8 +4427,8 @@ function coachHTML(L) {
   const bar = (label, r, n, exp) => `<div class="cm"><span>${label}</span><div class="ptrack"><div class="fill" style="width:${Math.max(4, r * 100)}%;background:${pColor(r)}"></div>${exp !== undefined ? `<div class="goal" style="right:auto;left:${Math.min(99, exp * 100)}%" title="Expected"></div>` : ''}</div><b>${fmtP(r)} <span class="dim">(${n})</span></b></div>`;
   const calib = (co, title, empty) => { const b = co.buckets.filter((x) => x.n); return `<div><div class="subh">${title}</div>${b.length ? `<div class="cmk">${b.map((x) => bar(esc(x.label), x.actual, x.n, x.expected)).join('')}</div><div class="dim" style="font-size:11px;margin-top:6px">White tick = the price or Lab estimate. Bar past the tick = you beat it.</div>` : `<div class="dim" style="font-size:13px">${empty}</div>`}</div>`; };
   return `<section class="panel coach"><div class="ph">${SVG.research}<h3>The Coach</h3><span class="ph-r">${c.n} graded calls</span></div><p class="cdesc">Built from ${c.n} graded calls across Pick6, DraftKings Predictions and the board — ${c.n ? `${c.hits} hit (${fmtP(c.hits / c.n)})` : 'nothing graded yet'}.</p>
-    ${rules.length ? `<div class="rules">${rules.map((r) => `<div class="rule ${r.good ? 'good' : 'bad'}">${r.good ? SVG.check : SVG.x}<span>${esc(r.text)}</span></div>`).join('')}</div>` : '<div class="rule"><span>Rules appear once picks start grading. Every pick counts, even on slips that lose.</span></div>'}
-    <div class="coachgrid"><div><div class="subh">Hit rate by stat</div><div class="cmk">${c.markets.map((m) => bar(`${esc(mkLabel(m.market))} <em>${m.dir === 'under' ? 'less' : ''}</em>`, m.hit / m.n, m.n)).join('')}</div></div>
+    ${rules.length ? `<div class="rules">${rules.map((r) => `<div class="rule ${r.neutral ? '' : r.good ? 'good' : 'bad'}">${r.neutral ? SVG.clock : r.good ? SVG.check : SVG.x}<span>${esc(r.text)}</span></div>`).join('')}</div>` : '<div class="rule"><span>Rules appear once picks start grading. Every pick counts, even on slips that lose.</span></div>'}
+    <div class="coachgrid"><div><div class="subh">Hit rate by stat · white tick = what it was priced at</div><div class="cmk">${c.markets.map((m) => bar(`${esc(mkLabel(m.market))} <em>${m.dir === 'under' ? 'less' : ''}</em>`, m.hit / m.n, m.n, m.base)).join('')}</div></div>
       <div style="display:flex;flex-direction:column;gap:16px">${calib(mkt, 'Prediction buys vs the price you paid', 'Settled prediction-market buys show up here.')}${calib(lab, 'Is the Lab honest?', 'Lab odds are saved with each slip when you publish from admin. Once those picks grade, this shows whether a “70%” really hits 70% of the time.')}</div></div></section>`;
 }
 function viewLedger() {
