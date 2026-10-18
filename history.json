@@ -1,12 +1,693 @@
 {
-  "updated": "2026-10-17",
+  "updated": "2026-10-18T06:28:45.614026Z",
   "note": "Imported history. Every row says where it came from. stake null = the amount risked was not visible in the source, so the row counts toward hit rates but not toward profit and loss.",
   "sources": {
     "dk-pick6": "DraftKings Pick6 → My Picks → Recent, owner screenshot taken Oct 16 2026. The page header says 14 pick sets; 7 were visible in the screenshot.",
     "dk-predictions": "DraftKings Predictions → My Trades → Settled, owner screenshot taken Oct 16 2026 (Oct 5–15 visible; older trades cut off). The percentage is the contract price DraftKings shows; stakes are not shown on that screen.",
-    "robinhood": "Robinhood connector, realized P&L trade history, account ••••6668 (PoiZen Method), span all, read Oct 17 2026. Prediction-market rows have no symbol; payout = contracts × close price, stake = payout − realized gain."
+    "robinhood": "Robinhood connector, realized P&L trade history, account ••••6668 (PoiZen Method), span all, read Oct 17 2026. Prediction-market rows have no symbol; payout = contracts × close price, stake = payout − realized gain.",
+    "dk-pick6-1017": "DraftKings Pick6 → Upcoming and Recent, owner screenshots Oct 17 2026.",
+    "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades."
   },
   "entries": [
+    {
+      "id": "dkp-1017-01",
+      "date": "2026-10-17",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "Florida State @ Miami",
+      "title": "Florida State to win",
+      "market": "win",
+      "prob": 0.09,
+      "stake": null,
+      "payout": 4.61,
+      "result": "sold",
+      "note": "Paid $4.61; Florida State lost 35–43"
+    },
+    {
+      "id": "dkp-1017-02",
+      "date": "2026-10-17",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "Notre Dame @ BYU",
+      "title": "BYU to win",
+      "market": "win",
+      "prob": 0.23,
+      "stake": null,
+      "payout": 4.8,
+      "result": "won"
+    },
+    {
+      "id": "dkp-1017-03",
+      "date": "2026-10-17",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "Kentucky @ Oklahoma",
+      "title": "Kentucky to win",
+      "market": "win",
+      "prob": 0.32,
+      "stake": null,
+      "payout": 7,
+      "result": "won"
+    },
+    {
+      "id": "dkp-1017-04",
+      "date": "2026-10-17",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "Oklahoma State @ Houston",
+      "title": "Oklahoma State to win",
+      "market": "win",
+      "prob": 0.38,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "rh-1016-2037",
+      "date": "2026-10-16",
+      "book": "Robinhood",
+      "type": "event",
+      "src": "robinhood",
+      "title": "Event contract · settled 8:37 PM",
+      "contracts": 2,
+      "close": 1,
+      "stake": 0.56,
+      "payout": 2,
+      "result": "won"
+    },
+    {
+      "id": "dk6-1016-a",
+      "date": "2026-10-16",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "ALCS 4-Pick · TB @ CLE · Caminero gimme",
+      "stake": 5,
+      "payout": 52.44,
+      "legs": 4,
+      "hits": 4,
+      "result": "won",
+      "note": "Won 10.4x — $33.48 boosted to $52.44",
+      "picks": [
+        {
+          "name": "Junior Caminero",
+          "market": "hrr",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "Gimme"
+        },
+        {
+          "name": "Yandy Díaz",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "hit"
+        },
+        {
+          "name": "Steven Kwan",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "hit"
+        },
+        {
+          "name": "Brayan Rocchio",
+          "market": "hrr",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.8x"
+        }
+      ]
+    },
+    {
+      "id": "dk6-1016-b",
+      "date": "2026-10-16",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "ALCS 6-Pick Bases · TB @ CLE",
+      "stake": 5,
+      "payout": 0,
+      "legs": 6,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Junior Caminero",
+          "market": "total_bases",
+          "line": 1.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.2x"
+        },
+        {
+          "name": "Nick Martinez",
+          "market": "pitcher_ks",
+          "line": 2.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.1x"
+        },
+        {
+          "name": "Steven Kwan",
+          "market": "hits",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.7x"
+        },
+        {
+          "name": "José Ramírez",
+          "market": "total_bases",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.2x"
+        },
+        {
+          "name": "Chandler Simpson",
+          "market": "total_bases",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.2x"
+        },
+        {
+          "name": "Taylor Walls",
+          "market": "total_bases",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "2.1x"
+        }
+      ]
+    },
+    {
+      "id": "dk6-1016-c",
+      "date": "2026-10-16",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "ALCS 6-Pick · TB @ CLE · Ramírez gimme",
+      "stake": 3,
+      "payout": 0,
+      "legs": 6,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Richie Palacios",
+          "market": "hrr",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.8x"
+        },
+        {
+          "name": "Brayan Rocchio",
+          "market": "hrr",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.8x"
+        },
+        {
+          "name": "Patrick Halpin",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.3x"
+        },
+        {
+          "name": "Nathaniel Lowe",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.2x"
+        },
+        {
+          "name": "José Ramírez",
+          "market": "hrr",
+          "line": 0.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "Gimme"
+        },
+        {
+          "name": "Chandler Simpson",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss"
+        }
+      ]
+    },
+    {
+      "id": "dkp-1015-01",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Alex Singleton 1.5+ sacks",
+      "market": "sacks",
+      "prob": 0.04,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-02",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "2-pick combo: 1.5+ sacks, 1.5+ sacks",
+      "market": "combo",
+      "prob": 0.095,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-03",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Leonard Williams 1.5+ sacks",
+      "market": "sacks",
+      "prob": 0.08,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-04",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Byron Murphy II 1.5+ sacks",
+      "market": "sacks",
+      "prob": 0.12,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-05",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "5-pick combo: SEA to win, Jaxon Smith-Njigba, 60+, 40+, 90+ (2 of 5 hit)",
+      "market": "combo",
+      "prob": 0.08,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-06",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "RJ Harvey first TD",
+      "market": "first_td",
+      "prob": 0.06,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-07",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Courtland Sutton first TD",
+      "market": "first_td",
+      "prob": 0.06,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-08",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "J.K. Dobbins first TD",
+      "market": "first_td",
+      "prob": 0.11,
+      "stake": null,
+      "payout": 17,
+      "result": "won"
+    },
+    {
+      "id": "dkp-1015-09",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Emanuel Wilson first TD",
+      "market": "first_td",
+      "prob": 0.14,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-10",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Jaxon Smith-Njigba first TD",
+      "market": "first_td",
+      "prob": 0.14,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-11",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Jaylen Waddle first TD",
+      "market": "first_td",
+      "prob": 0.07,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-12",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Jaxon Smith-Njigba 2+ TDs",
+      "market": "two_td",
+      "prob": 0.1393,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1015-13",
+      "date": "2026-10-15",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "SEA @ DEN",
+      "title": "Nate Adkins 2+ TDs",
+      "market": "two_td",
+      "prob": 0.0142,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dk6-1015-a",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "6-Pick NFL · SEA @ DEN · Nix gimme",
+      "stake": 10,
+      "payout": 0,
+      "legs": 6,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Bo Nix",
+          "market": "pass_yds",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "Gimme"
+        },
+        {
+          "name": "Courtland Sutton",
+          "market": "rec_yds",
+          "line": 31.5,
+          "dir": "under",
+          "result": "hit"
+        },
+        {
+          "name": "Jaylen Waddle",
+          "market": "rec_yds",
+          "line": 49.5,
+          "dir": "under",
+          "result": "hit"
+        },
+        {
+          "name": "Sam Darnold",
+          "market": "pass_yds",
+          "line": 220.5,
+          "dir": "under",
+          "result": "miss"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "market": "rec_yds",
+          "line": 92.5,
+          "dir": "under",
+          "result": "miss"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "market": "rush_yds",
+          "line": 65.5,
+          "dir": "over",
+          "result": "miss"
+        }
+      ]
+    },
+    {
+      "id": "dk6-1015-b",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "8-Pick NFL · SEA @ DEN · 30% boost",
+      "stake": 10,
+      "payout": 0,
+      "legs": 8,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "RJ Harvey",
+          "market": "rush_rec_yds",
+          "line": 49.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.2x"
+        },
+        {
+          "name": "Cooper Kupp",
+          "market": "rec_yds",
+          "line": 39.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.7x"
+        },
+        {
+          "name": "Bo Nix",
+          "market": "pass_yds",
+          "line": 198.5,
+          "dir": "under",
+          "result": "hit"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "market": "rec_yds",
+          "line": 109.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.2x"
+        },
+        {
+          "name": "Sam Darnold",
+          "market": "pass_td",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.1x"
+        },
+        {
+          "name": "J.K. Dobbins",
+          "market": "rush_yds",
+          "line": 59.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.3x"
+        },
+        {
+          "name": "Rashid Shaheed",
+          "market": "anytime_td",
+          "line": 0.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "3.1x"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "market": "anytime_td",
+          "line": 0.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.1x"
+        }
+      ]
+    },
+    {
+      "id": "dk6-1015-c",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "5-Pick NFL · SEA @ DEN",
+      "stake": 5,
+      "payout": 0,
+      "legs": 5,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Cooper Kupp",
+          "market": "rec_yds",
+          "line": 39.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.7x"
+        },
+        {
+          "name": "J.K. Dobbins",
+          "market": "rush_yds",
+          "line": 69.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.8x"
+        },
+        {
+          "name": "Evan Engram",
+          "market": "rec_yds",
+          "line": 24.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.1x"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "market": "rec_yds",
+          "line": 139.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "2.2x"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "market": "rush_yds",
+          "line": 89.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.7x"
+        }
+      ]
+    },
+    {
+      "id": "dk6-1015-d",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "7-Pick NFL · SEA @ DEN",
+      "stake": 5,
+      "payout": 0,
+      "legs": 7,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Sam Darnold",
+          "market": "pass_yds",
+          "line": 169.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.6x"
+        },
+        {
+          "name": "RJ Harvey",
+          "market": "anytime_td",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "2.1x"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "market": "rec_yds",
+          "line": 59.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.6x"
+        },
+        {
+          "name": "J.K. Dobbins",
+          "market": "rush_yds",
+          "line": 59.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.3x"
+        },
+        {
+          "name": "Bo Nix",
+          "market": "pass_yds",
+          "line": 149.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "0.6x"
+        },
+        {
+          "name": "Jaylen Waddle",
+          "market": "rec_yds",
+          "line": 39.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "0.8x"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "market": "rush_yds",
+          "line": 79.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "1.3x"
+        }
+      ]
+    },
     {
       "id": "dk6-1014-a",
       "date": "2026-10-14",
@@ -180,6 +861,107 @@
           "dir": "over",
           "mult": "7.9x",
           "result": "miss"
+        }
+      ]
+    },
+    {
+      "id": "dkp-1014-01",
+      "date": "2026-10-14",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "MIL @ LAD",
+      "title": "Andy Pages 3+ hits",
+      "market": "hits",
+      "prob": 0.05,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1014-02",
+      "date": "2026-10-14",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "MIL @ LAD",
+      "title": "Jake Bauers 2+ home runs",
+      "market": "home_runs",
+      "prob": 0.01,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dkp-1014-03",
+      "date": "2026-10-14",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-predictions",
+      "game": "MIL @ LAD",
+      "title": "Andy Pages 2+ home runs",
+      "market": "home_runs",
+      "prob": 0.01,
+      "stake": null,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "dk6-1014-d",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "MLB 6-Pick · MIL @ LAD · 60% boost",
+      "stake": 25,
+      "payout": 0,
+      "legs": 6,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Robert Gasser",
+          "market": "pitcher_ks",
+          "line": 3.5,
+          "dir": "under",
+          "result": "hit",
+          "mult": "0.9x"
+        },
+        {
+          "name": "Shohei Ohtani",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "under",
+          "result": "hit"
+        },
+        {
+          "name": "Mookie Betts",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "0.9x"
+        },
+        {
+          "name": "Jackson Chourio",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "under",
+          "result": "miss"
+        },
+        {
+          "name": "Teoscar Hernández",
+          "market": "hrr",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss"
+        },
+        {
+          "name": "Blake Snell",
+          "market": "pitcher_ks",
+          "line": 6.5,
+          "dir": "under",
+          "result": "miss",
+          "mult": "0.9x"
         }
       ]
     },
@@ -413,230 +1195,6 @@
           "result": "miss"
         }
       ]
-    },
-    {
-      "id": "dkp-1015-01",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Alex Singleton 1.5+ sacks",
-      "market": "sacks",
-      "prob": 0.04,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-02",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "2-pick combo: 1.5+ sacks, 1.5+ sacks",
-      "market": "combo",
-      "prob": 0.095,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-03",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Leonard Williams 1.5+ sacks",
-      "market": "sacks",
-      "prob": 0.08,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-04",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Byron Murphy II 1.5+ sacks",
-      "market": "sacks",
-      "prob": 0.12,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-05",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "5-pick combo: SEA to win, Jaxon Smith-Njigba, 60+, 40+, 90+ (2 of 5 hit)",
-      "market": "combo",
-      "prob": 0.08,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-06",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "RJ Harvey first TD",
-      "market": "first_td",
-      "prob": 0.06,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-07",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Courtland Sutton first TD",
-      "market": "first_td",
-      "prob": 0.06,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-08",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "J.K. Dobbins first TD",
-      "market": "first_td",
-      "prob": 0.11,
-      "stake": null,
-      "payout": 17,
-      "result": "won"
-    },
-    {
-      "id": "dkp-1015-09",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Emanuel Wilson first TD",
-      "market": "first_td",
-      "prob": 0.14,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-10",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Jaxon Smith-Njigba first TD",
-      "market": "first_td",
-      "prob": 0.14,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-11",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Jaylen Waddle first TD",
-      "market": "first_td",
-      "prob": 0.07,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-12",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Jaxon Smith-Njigba 2+ TDs",
-      "market": "two_td",
-      "prob": 0.1393,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1015-13",
-      "date": "2026-10-15",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "SEA @ DEN",
-      "title": "Nate Adkins 2+ TDs",
-      "market": "two_td",
-      "prob": 0.0142,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1014-01",
-      "date": "2026-10-14",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "MIL @ LAD",
-      "title": "Andy Pages 3+ hits",
-      "market": "hits",
-      "prob": 0.05,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1014-02",
-      "date": "2026-10-14",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "MIL @ LAD",
-      "title": "Jake Bauers 2+ home runs",
-      "market": "home_runs",
-      "prob": 0.01,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "dkp-1014-03",
-      "date": "2026-10-14",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-predictions",
-      "game": "MIL @ LAD",
-      "title": "Andy Pages 2+ home runs",
-      "market": "home_runs",
-      "prob": 0.01,
-      "stake": null,
-      "payout": 0,
-      "result": "lost"
     },
     {
       "id": "dkp-1011-01",
@@ -977,6 +1535,32 @@
       "result": "won"
     },
     {
+      "id": "rh-1008-2031",
+      "date": "2026-10-08",
+      "book": "Robinhood",
+      "type": "event",
+      "src": "robinhood",
+      "title": "Event contract · settled 8:31 PM",
+      "contracts": 54,
+      "close": 0,
+      "stake": 43.2,
+      "payout": 0,
+      "result": "lost"
+    },
+    {
+      "id": "rh-1008-1748",
+      "date": "2026-10-08",
+      "book": "Robinhood",
+      "type": "event",
+      "src": "robinhood",
+      "title": "Event contract · sold 5:48 PM",
+      "contracts": 224,
+      "close": 0.21,
+      "stake": 29.12,
+      "payout": 47.04,
+      "result": "sold"
+    },
+    {
       "id": "dkp-1005-01",
       "date": "2026-10-05",
       "book": "DraftKings Predictions",
@@ -1045,45 +1629,6 @@
       "stake": null,
       "payout": 5.31,
       "result": "won"
-    },
-    {
-      "id": "rh-1016-2037",
-      "date": "2026-10-16",
-      "book": "Robinhood",
-      "type": "event",
-      "src": "robinhood",
-      "title": "Event contract · settled 8:37 PM",
-      "contracts": 2,
-      "close": 1,
-      "stake": 0.56,
-      "payout": 2,
-      "result": "won"
-    },
-    {
-      "id": "rh-1008-2031",
-      "date": "2026-10-08",
-      "book": "Robinhood",
-      "type": "event",
-      "src": "robinhood",
-      "title": "Event contract · settled 8:31 PM",
-      "contracts": 54,
-      "close": 0,
-      "stake": 43.2,
-      "payout": 0,
-      "result": "lost"
-    },
-    {
-      "id": "rh-1008-1748",
-      "date": "2026-10-08",
-      "book": "Robinhood",
-      "type": "event",
-      "src": "robinhood",
-      "title": "Event contract · sold 5:48 PM",
-      "contracts": 224,
-      "close": 0.21,
-      "stake": 29.12,
-      "payout": 47.04,
-      "result": "sold"
     },
     {
       "id": "rh-1005-2106",
@@ -1253,6 +1798,129 @@
       "stake": 0.2,
       "payout": 0,
       "result": "lost"
+    },
+    {
+      "id": "dk6-1015-cfb-b",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "CFB 6-Pick · Thu 10/15 slate",
+      "stake": 5,
+      "payout": 0,
+      "legs": 6,
+      "hits": 4,
+      "result": "lost",
+      "picks": [
+        {
+          "name": "Bear Bachmeier",
+          "market": "pass_td",
+          "line": 0.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.9x"
+        },
+        {
+          "name": "Dylan Mensah",
+          "market": "pass_yds",
+          "line": 256.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.9x"
+        },
+        {
+          "name": "Drew Mestemaker",
+          "market": "pass_yds",
+          "line": 299.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "1.1x"
+        },
+        {
+          "name": "Malachi Toney",
+          "market": "rec_yds",
+          "line": 99.5,
+          "dir": "over",
+          "result": "hit",
+          "mult": "0.9x"
+        },
+        {
+          "name": "CJ Carr",
+          "market": "pass_td",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "0.9x"
+        },
+        {
+          "name": "C. Hernandez",
+          "market": "unknown",
+          "line": 99.5,
+          "dir": "over",
+          "result": "miss"
+        }
+      ],
+      "note": "From DK Pick6 screenshot Oct 18: 4/6, To Win $0."
+    },
+    {
+      "id": "dk6-1015-cfb-c",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-pick6",
+      "title": "CFB 6-Pick Yards · Thu 10/15 slate",
+      "stake": null,
+      "payout": 0,
+      "legs": 6,
+      "hits": 3,
+      "result": "lost",
+      "picks": [
+        {
+          "name": "Dylan Mensah",
+          "market": "unknown",
+          "line": 279.5,
+          "dir": "over",
+          "result": "hit"
+        },
+        {
+          "name": "Drew Mestemaker",
+          "market": "unknown",
+          "line": 299.5,
+          "dir": "over",
+          "result": "hit"
+        },
+        {
+          "name": "Malachi Toney",
+          "market": "unknown",
+          "line": 109.5,
+          "dir": "over",
+          "result": "hit"
+        },
+        {
+          "name": "CJ Carr",
+          "market": "pass_td",
+          "line": 1.5,
+          "dir": "over",
+          "result": "miss",
+          "mult": "0.8x"
+        },
+        {
+          "name": "A. Daniels",
+          "market": "pass_td",
+          "line": 0.5,
+          "dir": "under",
+          "result": "miss",
+          "mult": "1.1x"
+        },
+        {
+          "name": "C. Hernandez",
+          "market": "unknown",
+          "line": 99.5,
+          "dir": "over",
+          "result": "miss"
+        }
+      ],
+      "note": "From DK Pick6 screenshot Oct 18: 3/6. Entry amount was cut off in the screenshot — stake unknown."
     }
   ]
 }
