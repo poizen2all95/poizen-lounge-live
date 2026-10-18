@@ -1679,6 +1679,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<link rel="stylesheet" href="tiers.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1730,6 +1731,12 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 <nav class="bottom" id="bottom" aria-label="Mobile navigation"></nav>
 <dialog class="mobile-more" id="mobileMore" aria-labelledby="mobileMoreTitle"><div class="mobile-more-head"><h2 id="mobileMoreTitle">Explore the Lounge</h2><button type="button" data-close-more aria-label="Close navigation">✕</button></div><div class="mobile-more-grid"></div><p class="mobile-more-note">Research a line, follow the public board, or track your own slips in My Lounge.</p></dialog>
 <script src="mobile.js"></script>
+<script src="tiers.js"></script>
+<script src="trade-cards.js"></script>
+<script src="member-save.js"></script>
+<script src="workspace.js"></script>
+<script src="alerts.js"></script>
+<script src="elite-ui.js"></script>
 
 <div class="ticker" aria-hidden="true"><div class="tag"><img src="crest.png" alt="">Poizen Lounge</div><div class="scroll"><div class="track" id="ticker"></div></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -2456,9 +2463,12 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
   const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite' };
   const FOUNDING_CAP = 50;
   const FEATURES = {
-    board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
-    ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
-    honest: { tier: 'free', label: 'The honest read on every slip', status: 'live' },
+    board: { tier: 'free', label: "Scores, game context, public results, community Pick'em and a featured slip preview", status: 'live' },
+    ownSlips: { tier: 'free', label: 'Build and track one active personal slip; keep your last 10 settled slips visible', status: 'live' },
+    moreSlips: { tier: 'pro', label: 'Track multiple active slips with no Free-plan cap', status: 'live' },
+    research: { tier: 'pro', label: 'Full Lab: player research, line checks, fair-payout comparison and what-if building', status: 'live' },
+    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns', status: 'live' },
+    honest: { tier: 'pro', label: 'Expected payout and model reasoning for each slip, alongside the price you are offered', status: 'live' },
     limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
     exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
     themes: { tier: 'free', label: 'Midnight, Daylight and Vegas themes — always free', status: 'live' },
@@ -2469,10 +2479,11 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
     history: { tier: 'pro', label: 'Your full settled history (Free keeps the last 10)', status: 'live' },
     csv: { tier: 'pro', label: 'Ledger export to CSV', status: 'live' },
     playoffs: { tier: 'elite', label: 'Playoffs atmosphere theme, Midnight and Daylight', status: 'live' },
-    positions: { tier: 'elite', label: 'Position desk: each position from plan to settled, with partial exits, fees and corrections kept', status: 'building' },
+    positions: { tier: 'elite', label: 'Private synced position journal: plans, fills, partial exits, fees, settlement and auditable corrections', status: 'live' },
     books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
-    exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
-    exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
+    exposure: { tier: 'elite', label: 'Combined open exposure by player, team and game across your recorded positions and personal slips', status: 'live' },
+    studio: { tier: 'elite', label: 'Strategy Studio: save personal scenarios and rules across your devices; compare their impact across your open slips', status: 'live' },
+    exitPlans: { tier: 'elite', label: 'Target, stop and expiry alerts with a private inbox and optional device notifications', status: 'server' },
   };
   const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
   function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
@@ -2680,7 +2691,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
       else if (d.bsave !== undefined) {
         const pr = problems(st); if (pr.length) { st.msg = pr[0]; rerender(); return; }
         st.saving = true; rerender();
-        try { const { slip, players } = toSlip(st); await ctx.onSave(slip, players, read(st, ctx)); Object.assign(st, state({ sport: st.sport })); st.msg = 'Saved.'; }
+        try { const { slip, players } = toSlip(st); const result = await ctx.onSave(slip, players, read(st, ctx)); if(result && result.preserveDraft){st.msg='Previous save confirmed. Your newer edits are retained.';}else{Object.assign(st, state({ sport: st.sport })); st.msg = 'Saved.';} }
         catch (er) { st.msg = 'Could not save: ' + er.message; }
         st.saving = false; rerender();
       }
@@ -2711,9 +2722,9 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
   function mountInto(el, st, ctx) {
     style();
     const draw = (focusId) => {
-      const ae = document.activeElement; const id = focusId || (ae && el.contains(ae) ? ae.id : null); let caret = null; try { caret = ae && ae.selectionStart; } catch {}
+      const ae = document.activeElement; const id = focusId || (ae && el.contains(ae) ? ae.id : null); let caret = null; try { caret = ae ? {start:ae.selectionStart,end:ae.selectionEnd} : null; } catch {}
       el.innerHTML = html(st, ctx);
-      if (id) { const f = document.getElementById(id); if (f) { f.focus(); try { if (caret !== null && !focusId) f.setSelectionRange(caret, caret); } catch {} } }
+      if (id) { const f = document.getElementById(id); if (f) { f.focus({preventScroll:true}); try { if (caret !== null && !focusId) f.setSelectionRange(caret.start, caret.end); } catch {} } }
     };
     if (!el.__pzb) { bind(el, st, ctx, draw); el.__pzb = true; }
     draw(); return draw;
@@ -2940,9 +2951,9 @@ function tickCountdowns() {
 const dayKey = (d = new Date()) => d.toLocaleDateString('en-CA', { timeZone: TZ });
 
 /* ---------------- data: ESPN ---------------- */
-async function fetchJSON(url) {
+async function fetchJSON(url, headers = {}) {
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 12000);
-  try { const r = await fetch(url, { cache: 'no-store', signal: ctl.signal }); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.json(); }
+  try { const r = await fetch(url, { cache: 'no-store', signal: ctl.signal, headers }); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.json(); }
   catch (e) { throw new Error(e.name === 'AbortError' ? 'timed out after 12s' : e.message); }
   finally { clearTimeout(t); }
 }
@@ -3312,7 +3323,7 @@ function meTier() { const u = S.me.user; if (u && u.email === OWNER_EMAIL) retur
 const isOwner = () => !!(S.me.user && S.me.user.email === OWNER_EMAIL);
 const can = (f) => M.canUse(meTier(), f);
 const isPro = () => can('ocr');
-const STATUS_TAG = { live: '', server: '<em class="fst srv">needs the Poizen server</em>', building: '<em class="fst bld">next release</em>' };
+const STATUS_TAG = { live: '', server: '<em class="fst srv">live service connection required</em>', building: '<em class="fst bld">next release</em>' };
 /* ---------- position desk (Elite) ----------
    One record per position from plan to settled. Until members can add their own, the owner preview shows sample positions, clearly marked. */
 const SAMPLE_POSITIONS = () => { const h = 36e5, n = Date.now(); return [
@@ -3338,11 +3349,19 @@ function deskRow(p) {
   return `<div class="dk-row st-${st.stage}"><div class="dk-m"><b>${esc(p.market)}</b><span>${esc(p.venue)} · ${esc((p.side || 'yes').toUpperCase())}${p.ticker ? ' · ' + esc(p.ticker) : ''}</span></div><span class="chip ${tone}">${lbl}</span><div class="dk-n"><span>${size}</span><small>contracts</small></div><div class="dk-n"><span>${price}</span><small>${st.fees ? money(st.fees) + ' fees' : 'no fees yet'}</small></div><div class="dk-n dk-pl">${pl}</div>${notes.length ? `<p class="dk-notes">${notes.join('<br>')}</p>` : ''}</div>`;
 }
 function deskHTML() {
-  const sample = !!S.previewTier || isOwner(); const f = M.FEATURES.positions;
-  if (!can('positions')) return `<div class="card mecard melock desk" style="margin-top:16px"><b class="st-font" style="font-size:20px">${SVG.lock} Position desk</b><p class="muted">Part of Elite: ${esc(f.label.split(': ')[1] || f.label)}. <button class="linkbtn" type="button" data-me="plans">See plans</button></p></div>`;
-  if (!sample) return `<div class="card mecard desk" style="margin-top:16px"><b class="st-font" style="font-size:20px">Position desk</b><p class="muted">Included in your plan and coming in the next release — each position from plan to settled, with partial exits, fees and corrections kept. Nothing here is charged until it's live.</p></div>`;
-  const rows = SAMPLE_POSITIONS();
-  return `<div class="card mecard desk" style="margin-top:16px"><div class="dk-h"><b class="st-font" style="font-size:20px">Position desk</b><span class="chip gold">Sample positions — not real trades</span></div><div class="dk-list">${rows.map(deskRow).join('')}</div><p class="mefine">Prices are per contract. Exits you type stay marked “reported” until matched to a venue statement. A correction never erases the original — both are kept.</p></div>`;
+  if (!S.me.user) return '';
+  if (S.previewTier) return `<div class="card mecard"><h3>Elite workspace</h3><p class="muted">${S.previewTier === 'elite' ? 'The real member workspace includes the manual position journal, exposure and saved Strategy Studio. Exit preview to use your own data.' : 'Position journal, exposure and Strategy Studio unlock with Elite.'}</p></div>`;
+  return '<div id="eliteWorkspace"></div>';
+}
+function eliteContext() {
+  const graded = meGraded().filter(({ t }) => t.status !== 'settled');
+  const slips = graded.map(({ t }) => {
+    const a = meAmounts(t.sid, t.x); const labels = t.legs.map(l => { const p = P(l.player); const e = eventFor(l.player); return { player: p.name || l.player, team: p.team ? (p.sport || 'nfl').toUpperCase() + ': ' + p.team : '', game: e ? (e.comps || []).map(c => c.abbr).join(' @ ') + ' · ' + String(e.date || '').slice(0,10) : '' }; });
+    return { stake: a ? a.entry : null, players: labels.map(x => x.player), teams: labels.map(x => x.team), games: labels.map(x => x.game) };
+  });
+  return { uid: S.me.user.uid, db: firebase.database(), firebaseConfig:FIREBASE, vapidKey:(S.plans||{}).vapidKey||'', loadScripts, onMessage:()=>toast({title:'Private workspace alert',body:'Open your alert inbox to review it.',tone:'warn'}), refresh:()=>{if(S.tab==='me')render();}, tier: meTier(), currentTier: meTier, slips, loadBooks, bookHTML: p => p.ticker ? bookHTML({ ...p, kalshi:p.ticker, qty:window.PZT.positionState(p).open, fee:undefined }, null).html : '<p class="mefine">Add an exact Kalshi ticker when creating this position to connect its order book. Other venue records remain reported.</p>', scenarios: graded.map(({ t }) => ({ ...t, unit: t.units })),
+    compare: (t, strategy) => { const ps = t.legs.map(l => scenarioChance(l, strategy.factors)); const corr = corrLegs(t.legs); const v = M.slipValue(ps, t.entry, t.payouts, t.toWin, corr.factor); return { pAll: v.pAll, net: v.evNet, passes: t.legs.length <= strategy.maxLegs && ps.every(p => p >= strategy.minChance) }; },
+    onError: message => toast({ title: 'Workspace not saved', body: message, tone: 'loss' }) };
 }
 /* owner preview: what the chosen plan includes, what's locked, and what's waiting on an integration */
 function previewPanel() {
@@ -3366,7 +3385,7 @@ function applyPlayoffs() {
   const b = document.getElementById('poToggle'); if (b) { b.setAttribute('aria-pressed', String(on)); b.classList.toggle('locked', !own); const tag = b.querySelector('.po-tag'); if (tag) tag.textContent = own ? 'Elite' : 'Elite only'; }
   if (own && S.me.user) store.set('pz_playoffs', !!S.playoffsOn);
 }
-function foundingLeft() { const f = (S.plans && S.plans.founding) || {}; const cap = Number(f.cap) || M.FOUNDING_CAP; return { cap, left: Math.max(0, cap - (Number(f.taken) || 0)) }; }
+function foundingLeft() { const f = (S.plans && S.plans.founding) || {}; const cap = f.cap !== undefined && f.cap !== null && Number.isFinite(Number(f.cap)) ? Math.max(0,Number(f.cap)) : M.FOUNDING_CAP; return { cap, left: Math.max(0, cap - (Number(f.taken) || 0)) }; }
 const PRICE_DEFAULT = { pro: { price: '$79 / month', founding: '$29 / month' }, elite: { price: '$249 / month', founding: '$149 / month' } };
 function planPrice(tier) { const c = { ...(PRICE_DEFAULT[tier] || {}), ...Object.fromEntries(Object.entries((S.plans && S.plans[tier]) || {}).filter(([, v]) => v)) }; const { cap, left } = foundingLeft(); const founding = !!(c.founding && left > 0);
   return { founding, now: founding ? c.founding : c.price || '', std: c.price || '', cap, left }; }
@@ -3376,16 +3395,18 @@ function planCard() {
   const col = (tier) => {
     const feats = M.planFeatures(tier); const mine = !!u && t === tier; const P = planPrice(tier);
     const price = tier === 'free' ? '<span class="pl-price">$0</span>' : P.now ? `<span class="pl-price">${esc(P.now)}</span>${P.founding ? `<small class="pl-found">Founding rate · ${P.left} of ${P.cap} spots left · yours for as long as you stay</small>${P.std ? `<small class="dim">Regular ${esc(P.std)}</small>` : ''}` : ''}` : '<span class="pl-price dim">Price posted soon</span>';
-    const paid = mine && g && g.until && !isOwner() ? `<small class="dim">Paid through ${untilTxt(g.until)}${g.rate === 'founding' ? ' · founding rate' : ''}</small>` : '';
-    const cta = tier === 'free' ? '' : mine ? `<span class="chip win">Your plan</span>${paid}`
+    const paid = mine && g && g.until && !isOwner() ? `<small class="dim">${g.accessType==='trial'?'Trial ends':'Paid through'} ${untilTxt(g.until)}${g.rate === 'founding' ? ' · founding rate' : ''}</small>` : '';
+    const cta = tier === 'free' ? '' : mine ? `<span class="chip win">${g && g.accessType==='trial'?'Your trial':'Your plan'}</span>${paid}`
       : M.tierRank(t) > M.tierRank(tier) ? '<span class="chip">Included in yours</span>'
       : !u ? '<button class="mebtn" type="button" data-me="signin">Sign in with Google to request</button>'
       : rq && rq.tier === tier && rq.status === 'pending' ? `<span class="chip gold">Requested ${esc(new Date(rq.at || Date.now()).toLocaleDateString())}</span><small class="dim">PoiZen turns it on once your payment is in.</small>`
       : `<button class="mebtn" type="button" data-me="request" data-tier="${tier}">Request ${M.PLAN_NAMES[tier]}</button>`;
+    const value = {free:['Follow the action','Scores, community calls and your first personal slip.'],pro:['Build with a reason','Check the line and payout, apply your rules, then learn from your settled history.'],elite:['Manage the whole slate','See overlapping exposure, test scenarios, and compare an exit against real visible depth.']}[tier];
     const prev = tier === 'free' ? '' : `<p class="mefine">Everything in ${M.PLAN_NAMES[M.PLAN_ORDER[M.PLAN_ORDER.indexOf(tier) - 1]]}, plus:</p>`;
-    return `<div class="${mine ? 'hot' : ''} pl-${tier}"><b>${M.PLAN_NAMES[tier]}</b>${price}${prev}<ul>${feats.map((f) => `<li>${esc(f.label)}${STATUS_TAG[f.status] || ''}</li>`).join('')}</ul>${cta}</div>`;
+    return `<div class="${mine ? 'hot' : ''} pl-${tier}"><b>${M.PLAN_NAMES[tier]}</b>${price}<p class="pl-value"><strong>${value[0]}</strong><br>${value[1]}</p>${prev}<ul>${feats.map((f) => `<li>${esc(f.label)}${STATUS_TAG[f.status] || ''}</li>`).join('')}</ul>${cta}</div>`;
   };
-  return `<div class="card mecard meplan"><b class="st-font" style="font-size:20px">Plans</b><div class="plans">${M.PLAN_ORDER.map(col).join('')}</div>${requestForm()}<p class="mefine">How it works: request a plan, pay PoiZen, and he turns it on for the Google account you signed in with — it only works on that account. Access runs a month at a time. “Next release” items aren't live yet and aren't part of the price until they are. Analysis tools only — no plan guarantees wins. 21+.</p></div>`;
+  const trialNotice=g&&g.accessType==='trial'?`<p class="tier-limit">${g.until>Date.now()?'Your '+esc(M.PLAN_NAMES[g.tier])+' trial ends '+esc(untilTxt(g.until)):'Your trial has ended'}. No automatic charge. Your saved data is retained; arrange paid access with PoiZen when you are ready.</p>`:'';
+  return `<div class="card mecard meplan">${trialNotice}<b class="st-font" style="font-size:20px">Plans</b><div class="plans">${M.PLAN_ORDER.map(col).join('')}</div>${requestForm()}<p class="mefine">How it works: request a plan, pay PoiZen, and he turns it on for the Google account you signed in with — it only works on that account. Paid access runs a month at a time. PoiZen can also grant a 7-day Pro or Elite trial, or a 3-day pilot. Trials end automatically with no charge; paid access starts only after you arrange it with PoiZen. “Next release” items aren't live yet and aren't part of the price until they are. Analysis tools only — no plan guarantees wins. 21+.</p></div>`;
 }
 function requestForm() {
   const tier = S.me.requesting; const u = S.me.user; if (!tier || !u) return '';
@@ -3434,6 +3455,7 @@ const localAmts = () => store.get(amtKey(), {});
 function meAmounts(id, x) { const s = S.me.slips[id] || {}; if (s.entry > 0) return { entry: Number(s.entry), toWin: Number(s.toWin) || Number(s.entry) * (x || s.x || 0), synced: true }; const l = localAmts()[id]; return l && l.entry > 0 ? { entry: Number(l.entry), toWin: Number(l.toWin), synced: false } : null; }
 let meRefs = [];
 function meAttach(u) {
+  window.PZElite.dispose();
   meRefs.forEach((r) => r.off()); meRefs = [];
   S.me.user = u && !u.isAnonymous ? u : null; S.me.profile = undefined; S.me.tier = null; S.previewTier = null; S.me.request = null; S.me.requesting = null; S.me.slips = {}; S.me.builder = null;
   if (!S.me.user) { applyTeam(''); applyPlayoffs(); render(); return; }
@@ -3491,14 +3513,26 @@ function memberBuilderCtx() {
       return G; },
     onSave: async (slip, players, read) => {
       const u = S.me.user; if (!u || !S.me.profile) throw new Error('Sign in first');
+      S.me.builder=S.me.builder||PZB.state();
+      const result=await window.PZMemberSave.persist(S.me.builder,{slips:S.me.slips,create:()=>{
+      const activeCount = Object.values(S.me.slips).filter(x => x.status !== 'settled').length;
+      if (!window.PZT.canAddSlip(meTier(), activeCount)) throw new Error('Free includes one active slip. Pro lets you track more. Your existing slips are retained.');
       const co = meCooloff(); if (co) throw new Error(`You're in a cool-off until ${new Date(co).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`);
       const lim = meLimit(); if (lim !== null) { const R = meWeekRisk(); if (R.used + slip.entry > lim) throw new Error(`This slip would put ${money(R.used + slip.entry)} at risk this week — over your ${money(lim)} weekly limit.`); }
-      const db = firebase.database(); const id = db.ref('users/' + u.uid + '/slips').push().key;
+      const db = firebase.database(); S.me.builder = S.me.builder || PZB.state(); const id = db.ref('users/' + u.uid + '/slips').push().key;
       const x = Math.round((slip.toWin / slip.entry) * 100) / 100;
       const doc = { title: slip.title.slice(0, 48), legs: slip.legs, players, x, status: 'open', createdAt: Date.now(), lab: { ps: (read.each || []).map((p) => Math.round((p || 0) * 1000) / 1000), pAll: Math.round((read.pAll || 0) * 10000) / 10000, roi: read.v ? Math.round(read.v.roi * 1000) / 1000 : null } };
       if (S.me.profile.consent.amounts) { doc.entry = slip.entry; doc.toWin = slip.toWin; } else { const L = localAmts(); L[id] = { entry: slip.entry, toWin: slip.toWin }; store.set(amtKey(), L); }
-      await db.ref().update({ [`users/${u.uid}/slips/${id}`]: doc, [`directory/${u.uid}/slips`]: Object.keys(S.me.slips).length + 1, [`directory/${u.uid}/seen`]: Date.now() });
-      toast({ title: 'Saved to My Lounge', body: 'It tracks live from kickoff', tone: 'win' });
+        return {id,...doc};
+      },send:async payload=>{
+        const server=String((S.plans||{}).server||'').replace(/\/+$/,'');
+        if(!server)throw Object.assign(Error('Member saving is waiting for the Lounge service connection. Your draft is retained.'),{definitive:true});
+        const response=await fetch(server+'/slips',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+await u.getIdToken()},body:JSON.stringify(payload),signal:AbortSignal.timeout(15000)});
+        const saved=await response.json();if(!response.ok)throw Object.assign(Error(saved.message||saved.error||'Your slip could not be saved. Keep this draft and retry.'),{definitive:response.status>=400&&response.status<500});return saved;
+      }});
+      await firebase.database().ref('directory/'+u.uid).update({slips:Object.keys(S.me.slips).length,seen:Date.now()}).catch(()=>{});
+      toast({ title: result.replayed?'Previous save confirmed':'Saved to My Lounge', body: result.replayed?'Your original submitted slip is saved once. Any newer edits remain in the builder.':'It tracks live from kickoff', tone: 'win' });
+      return {preserveDraft:result.replayed};
     } };
 }
 function meGraded() {
@@ -3519,17 +3553,17 @@ function meSettle() {
     const legResults = r.legs.map(({ g }) => g.state); const at = Date.now(); const u = S.me.user.uid;
     const out = { at: t.createdAt || at, settledAt: at, n: r.n, x: t.x || null, result, hits: r.hits, sport: sportOf(t.legs[0].player), legs: t.legs.map((l, i) => ({ market: l.market, line: Number(l.line), dir: l.dir || 'over', mult: l.mult || '', result: legResults[i], p: t.lab && t.lab.ps ? t.lab.ps[i] ?? null : null })), lab: t.lab || null };
     const up = { [`users/${u}/slips/${t.sid}/status`]: 'settled', [`users/${u}/slips/${t.sid}/result`]: result, [`users/${u}/slips/${t.sid}/hits`]: r.hits, [`users/${u}/slips/${t.sid}/legResults`]: legResults, [`users/${u}/slips/${t.sid}/settledAt`]: at, [`outcomes/${u}/${t.sid}`]: out };
-    if (S.me.profile.consent.amounts && t.entry > 0 && !t.units) up[`users/${u}/slips/${t.sid}/payout`] = result === 'won' ? Number(t.toWin) : 0;
+    if (result !== 'review' && S.me.profile.consent.amounts && t.entry > 0 && !t.units) up[`users/${u}/slips/${t.sid}/payout`] = result === 'won' ? Number(t.toWin) : 0;
     firebase.database().ref().update(up).catch((e) => { S.me.settling[t.sid] = false; console.warn('settle failed', e.message); });
   });
 }
 async function meExport() {
-  const blob = new Blob([JSON.stringify({ profile: S.me.profile, slips: S.me.slips, amountsOnThisDevice: localAmts(), exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' });
+  const blob = new Blob([JSON.stringify({ profile: S.me.profile, slips: S.me.slips, amountsOnThisDevice: localAmts(), eliteWorkspace: await window.PZElite.exportData(S.me.user.uid,firebase.database()), exportedAt: new Date().toISOString() }, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'poizen-lounge-my-data.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
 async function meDelete() {
   const u = S.me.user; if (!u) return;
-  try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null, [`requests/${u.uid}`]: null }); store.set(amtKey(), {}); toast({ title: 'Deleted', body: 'Everything in your account is gone', tone: 'win' }); }
+  try { await firebase.database().ref().update({ [`users/${u.uid}`]: null, [`outcomes/${u.uid}`]: null, [`directory/${u.uid}`]: null, [`requests/${u.uid}`]: null, [`workspaces/${u.uid}`]: null, [`workspaceSettings/${u.uid}`]: null, [`workspaceDevices/${u.uid}`]: null, [`workspaceNotifications/${u.uid}`]: null }); store.set(amtKey(), {}); window.PZElite.clear(u.uid); toast({ title: 'Deleted', body: 'Your personal data was deleted. Contact PoiZen separately about your manually managed membership.', tone: 'win' }); }
   catch (e) { toast({ title: 'Could not delete', body: e.message, tone: 'loss' }); }
 }
 function rgHTML() {
@@ -3555,15 +3589,16 @@ async function meStartCool(days) {
   catch (e) { toast({ title: 'Could not start', body: e.message, tone: 'loss' }); }
 }
 function meSlipCard({ t, r }) {
+  const receipt=window.PZTradeCards.slip(t,r.state);
   const done = { won: 'Cashed', lost: 'Lost', dead: 'Busted', review: 'Check void rules' }[t.status === 'settled' ? t.result : r.state] || '';
   const liveN = r.legs.filter(({ g }) => g.state === 'live').length; const open = S.slipOpen[t.id] !== undefined ? S.slipOpen[t.id] : liveN > 0 || t.status !== 'settled';
-  const money2 = t.units ? `${(Number(t.x) || 0).toFixed(1)}× payout` : `${money(t.entry)} to win ${money(t.toWin)}`;
+  const money2 = t.units ? `Amounts private · ${(Number(t.x) || 0).toFixed(1)}× payout` : t.status==='settled' ? (receipt.returned===null ? 'Return pending review' : `${money(t.entry)} entry · ${money(receipt.returned)} graded return`) : `${money(t.entry)} to win ${money(t.toWin)}`;
   const was = t.lab ? `<span>The Lab said ${fmtP(t.lab.pAll)} all hit${t.lab.roi !== null && t.lab.roi !== undefined ? ` · ${t.lab.roi >= 0 ? '+' : '−'}${Math.abs(Math.round(t.lab.roi * 100))}% expected` : ''} when you saved it</span>` : '';
   const settled = t.status === 'settled'; const hits = settled ? Number(t.hits) || 0 : r.hits;
   const legsHTML = settled
     ? `<div class="melegs">${t.legs.map((l, i) => { const res = (t.legResults || [])[i]; const mk = E.MARKETS[l.market] || {}; return `<div class="mel ${res === 'hit' ? 'hit' : res === 'miss' ? 'miss' : ''}">${avatar(l.player)}<span><b>${esc(P(l.player).name)}</b> ${l.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(l.line)} ${esc(mk.short || l.market)}</span><em>${res === 'hit' ? 'Hit' : res === 'miss' ? 'Miss' : esc(res || '')}</em>${t.lab && t.lab.ps ? `<i>Lab ${fmtP(t.lab.ps[i])}</i>` : ''}</div>`; }).join('')}</div>`
     : `<div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div>${honestHTML(t, r)}`;
-  return `<details class="slip ${settled ? (t.result === 'won' ? 'won' : 'lost') : r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}><summary style="grid-template-columns:minmax(0,1fr) auto 20px"><div class="st"><b>${esc(t.title)}</b><span>${done ? done + ' · ' : ''}${hits}/${r.n} hit · ${money2}</span>${was}</div><div class="pay"><b>${hits}/${r.n}</b><span>hit</span></div>${CHEV}</summary>${legsHTML}</details>`;
+  return `<details class="slip ${settled ? (t.result === 'won' ? 'won' : 'lost') : r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}><summary style="grid-template-columns:minmax(0,1fr) auto 20px"><div class="st"><b>${esc(t.title)}</b><span>${done ? done + ' · ' : ''}${hits}/${r.n} hit · ${money2}</span>${was}</div><div class="pay"><b>${hits}/${r.n}</b><span>hit</span></div>${CHEV}</summary>${window.PZTradeCards.html(receipt)}${legsHTML}</details>`;
 }
 function viewMe() {
   const head = vh('My <span>Lounge</span>', 'Track your own slips live with the same honest numbers, your own Coach and your own gate.');
@@ -3593,23 +3628,23 @@ function viewMe() {
   const lab = done.filter(({ t }) => t.lab && t.lab.pAll); const expW = lab.reduce((s, { t }) => s + t.lab.pAll, 0); const actW = lab.filter(({ t }) => t.result === 'won').length;
   const leaks = M.leaks(picks);
   const tiles = `<div class="metiles"><div><span>Record</span><b>${won}-${done.length - won}</b><em>${open.length} open</em></div><div><span>Picks hit</span><b>${hitRate === null ? '–' : Math.round(hitRate * 100) + '%'}</b><em>${picks.length} graded</em></div><div><span>Profit</span><b class="${pl > 0 ? 'win' : pl < 0 ? 'loss' : ''}">${withAmt.length ? money(pl, true) : '–'}</b><em>${withAmt.length ? withAmt.length + ' slips with amounts' : 'Amounts stay private'}</em></div><div><span>Lab vs you</span><b>${lab.length ? `${actW} / ${expW.toFixed(1)}` : '–'}</b><em>${lab.length ? 'slips won / Lab expected' : 'Settle a slip to compare'}</em></div></div>`;
-  const coach = !can('coach') ? proLock('Your Coach') : picks.length >= 3 ? `<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b>${leaks.length ? `<p class="muted" style="margin:6px 0 8px">These stats are hitting clearly below what they were priced at, across 8+ graded picks. Your gate blocks them until they climb back.</p>${leaks.map((x) => `<span class="chip loss">${esc(mkLabel(x.market))}${x.dir === 'under' ? ' (less)' : ''} · ${x.hit}/${x.n}</span>`).join(' ')}` : '<p class="muted" style="margin:6px 0 0">No leaks yet — nothing under 40% with 3+ graded calls.</p>'}</div>` : '';
+  const coach = !can('coach') ? proLock('Your Coach') : picks.length >= 3 ? `<div class="card mecard"><b class="st-font" style="font-size:20px">Your Coach</b>${leaks.length ? `<p class="muted" style="margin:6px 0 8px">These stats are hitting clearly below what they were priced at, across 8+ graded picks. Your gate blocks them until they climb back.</p>${leaks.map((x) => `<span class="chip loss">${esc(mkLabel(x.market))}${x.dir === 'under' ? ' (less)' : ''} · ${x.hit}/${x.n}</span>`).join(' ')}` : '<p class="muted" style="margin:6px 0 0">No reliable leak signal yet. The Coach needs at least 8 graded picks per stat and compares results with their expected hit rates.</p>'}</div>` : '';
   const p = S.me.profile;
   const priv = `<div class="card mecard meprivacy"><b class="st-font" style="font-size:20px">${SVG.lock} Privacy</b><p class="muted" style="margin:6px 0 10px">Exact amounts: <b>${p.consent.amounts ? 'synced to your account' : 'this device only'}</b> · PoiZen can see your account: <b>${p.consent.owner ? 'yes' : 'no'}</b></p><div class="row"><button class="fbtn" type="button" data-me="edit">Change</button><button class="fbtn" type="button" data-me="export">Export my data</button>${isPro() ? '<button class="fbtn" type="button" data-me="csv">Ledger CSV</button>' : ''}<button class="fbtn danger" type="button" data-me="delete">Delete everything</button><button class="fbtn" type="button" data-me="signout">Sign out</button></div></div>`;
   const tierChip = meTier() !== 'free' ? `<span class="chip win">${M.PLAN_NAMES[meTier()]}</span>` : '<span class="chip">Free</span> <button class="linkbtn" type="button" data-me="plans">See plans</button>';
   return head + previewBar() + err + `<div class="mehello">Signed in as <b>${esc(p.name)}</b> ${tierChip}</div>` + tiles +
-    `<h3 class="sec">Build a slip</h3>` + (meCooloff() ? `<div class="card mecard mecool"><b class="st-font" style="font-size:22px">Cool-off on</b><p class="muted">Building slips is paused until <b>${esc(new Date(meCooloff()).toLocaleString([], { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</b>. It can't be shortened. Your open slips still track live.</p><p class="muted">${helpLine(false)}</p></div>` : `<div class="card mecard"><div id="pzbM"></div></div>`) +
+    `<h3 class="sec">Build a slip</h3>` + (!can('moreSlips') ? `<div class="tier-limit">Free · ${open.length}/1 active personal slip${open.length >= 1 ? ' · tracking stays on; Pro unlocks more active slips.' : ' · build your first slip below.'} <button class="linkbtn" type="button" data-me="plans">Compare plans</button></div>` : '') + (meCooloff() ? `<div class="card mecard mecool"><b class="st-font" style="font-size:22px">Cool-off on</b><p class="muted">Building slips is paused until <b>${esc(new Date(meCooloff()).toLocaleString([], { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))}</b>. It can't be shortened. Your open slips still track live.</p><p class="muted">${helpLine(false)}</p></div>` : `<div class="card mecard"><div id="pzbM"></div></div>`) +
     (open.length ? `<h3 class="sec">Open</h3><div class="slips">${open.map(meSlipCard).join('')}</div>` : '') +
-    (done.length ? `<h3 class="sec">Settled</h3><div class="slips">${done.slice(0, can('history') ? 200 : 10).map(meSlipCard).join('')}</div>${!can('history') && done.length > 10 ? `<p class="mefine">${done.length - 10} older slips are kept — Pro shows your full history. Your data export always includes everything.</p>` : ''}` : '') +
+    (done.length ? `<h3 class="sec">Settled</h3><div class="slips">${done.slice(0, can('history') ? done.length : 10).map(meSlipCard).join('')}</div>${!can('history') && done.length > 10 ? `<p class="mefine">${done.length - 10} older slips are kept — Pro shows your full history. Your data export always includes everything.</p>` : ''}` : '') +
     `<div class="grid2" style="margin-top:16px">${coach}${can('gateEdit') ? gateRulesCard() : proLock('Your own gate rules')}</div>` + deskHTML() + planCard() + `<div class="grid2" style="margin-top:16px">${priv}</div>` + rgHTML();
 }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-me]'); if (!b) return; const k = b.dataset.me;
   if (k === 'signin') meSignIn();
-  else if (k === 'signout') { firebase.auth().signOut().then(() => meAttach(null)); }
+  else if (k === 'signout') { window.PZAlerts.removeDevice(S.me.user?.uid,firebase.database()).catch(()=>{}).finally(()=>firebase.auth().signOut().then(() => meAttach(null))); }
   else if (k === 'edit') { S.me.editing = true; S.me.draft = null; render(); }
   else if (k === 'cancel') { S.me.editing = false; S.me.err = ''; S.me.draft = null; render(); }
-  else if (k === 'export') meExport();
+  else if (k === 'export') meExport().catch(e=>toast({title:'Export could not finish',body:e.message+' — reconnect and try again; no incomplete backup was downloaded.',tone:'loss'}));
   else if (k === 'csv') { if (can('csv')) meCSV(); }
   else if (k === 'plans') { const el = document.querySelector('.meplan'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
   else if (k === 'request') { S.me.requesting = b.dataset.tier; render(); setTimeout(() => { const el = document.getElementById('reqNote'); if (el) el.focus(); }, 30); }
@@ -3803,11 +3838,12 @@ const SCEN = {
   weather: ['Wind or rain', 'Passing game takes the hit', { pass: 0.9, rec: 0.92, rush: 1.03, td: 0.95 }],
   limited: ['Limited snaps', 'Every leg plays at 85%', { pass: 0.85, rec: 0.85, rush: 0.85, td: 0.85 }],
 };
-const scenGroup = (m) => (/pass/.test(m) ? 'pass' : /rec|receptions/.test(m) ? 'rec' : /rush/.test(m) ? 'rush' : /td/.test(m) ? 'td' : 'other');
+const scenGroup = (m) => (/td/.test(m) ? 'td' : /pass/.test(m) ? 'pass' : /rush/.test(m) ? 'rush' : /rec|receptions/.test(m) ? 'rec' : 'other');
 /* shift the leg's projected mean by the scenario factor and move the Lab chance by the same amount the model moves */
-function scenarioP(leg, key) {
-  const pre = legPre(leg); if (!key || !pre.pr || pre.source === 'gimme') return pre.p;
-  const f = SCEN[key][2][scenGroup(leg.market)] || 1; if (f === 1) return pre.p;
+function scenarioP(leg, key) { return scenarioChance(leg, key && SCEN[key] ? SCEN[key][2] : {}); }
+function scenarioChance(leg, factors) {
+  const pre = legPre(leg); if (!pre.pr || pre.source === 'gimme') return pre.p;
+  const f = factors[scenGroup(leg.market)] || 1; if (f === 1) return pre.p;
   const pr = pre.pr; const line = Number(leg.line); const side = (q) => (leg.dir === 'under' ? 1 - q : q);
   const delta = side(M.pOver(pr.kind, line, pr.mu * f, pr.sd * Math.sqrt(f))) - side(M.pOver(pr.kind, line, pr.mu, pr.sd));
   return Math.max(0.03, Math.min(0.97, pre.p + delta));
@@ -4076,6 +4112,7 @@ function ptile(leg, g) {
 /* ---------------- Pick6 ---------------- */
 /* the honest read on a slip, shown to everyone: what the numbers said, and why it was played anyway */
 function honestHTML(t, r) {
+  if (!can('honest')) return '<div class="tier-limit">Pro explains the model read, expected payout and offered price. <button class="linkbtn" type="button" data-tab="me">See Pro</button></div>';
   const v = slipLive(t, r, true); if (!v) return '';
   const n = r.n; const be = t.payouts ? null : M.breakEven(t.entry, t.toWin, n); const avg = Math.pow(v.ps.reduce((a, p) => a * p, 1), 1 / n);
   const no = v.evNet < 0; const g = t.gate || null;
@@ -4092,7 +4129,7 @@ function ticketCard({ t, r }, i = 0) {
   const liveN = r.legs.filter(({ g }) => g.state === 'live').length;
   const key = 'p6:' + t.id; const open = S.slipOpen[key] !== undefined ? S.slipOpen[key] : liveN > 0 || (i === 0 && !['dead', 'lost'].includes(r.state));
   const stateChip = { open: '', live: '<span class="chip live">Live</span>', dead: '<span class="chip loss">Busted</span>', won: '<span class="chip win">Cashed</span>', partial: '<span class="chip gold">Partial payout</span>', lost: '<span class="chip loss">Lost</span>', review: '<span class="chip">Check void rules</span>' }[r.state] || '';
-  const pay = r.payout !== null ? `<div class="cnum cw"><span>Paid</span><b class="${r.payout > 0 ? 'win' : 'loss'}">${money(r.payout)}</b></div>` : `<div class="cnum cw"><span>To win</span><b class="teal ${r.state === 'dead' ? 'gone' : ''}">${money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential)}${t.payouts ? '' : '+'}</b></div>`;
+  const pay = r.state==='review' ? '<div class="cnum cw"><span>Return pending review</span><b>—</b></div>' : r.payout !== null ? `<div class="cnum cw"><span>Paid</span><b class="${r.payout > 0 ? 'win' : 'loss'}">${money(r.payout)}</b></div>` : `<div class="cnum cw"><span>To win</span><b class="teal ${r.state === 'dead' ? 'gone' : ''}">${money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential)}${t.payouts ? '' : '+'}</b></div>`;
   const sv = r.payout === null && r.state !== 'dead' && confirmed(t) ? slipLive(t, r) : null;
   const firstPre = r.legs.map(({ leg }) => eventFor(leg.player)).filter((e) => e && e.state === 'pre').sort((a, b) => a.date.localeCompare(b.date))[0];
   const sub = `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${esc(kickLabel(firstPre.date))}` : ''}`;
@@ -4105,6 +4142,7 @@ function ticketCard({ t, r }, i = 0) {
       ${sv ? `<div class="cnum cp"><span>Cash chance</span><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b></div>` : '<div class="cnum cp"></div>'}${CHEV}
     </summary>
     <div class="p6-body">
+      ${window.PZTradeCards.html(window.PZTradeCards.publicSlip(t,r))}
       <div class="tiles">${r.legs.map(({ leg, g }) => ptile(leg, g)).join('')}</div>
       <div class="t-foot">${t.shareUrl ? `<a class="tail" href="${esc(t.shareUrl)}" target="_blank" rel="noopener">Tail on DraftKings</a>` : '<span></span>'}
         ${t.payouts ? `<details class="more"><summary>Payout table</summary><div class="facts" style="margin-top:8px">${Object.entries(t.payouts).sort((a, b) => b[0] - a[0]).map(([k, v]) => `<span class="chip">${k} correct · ${Number(v)}x · ${money(r.entry * v)}</span>`).join('')}</div></details>` : ''}</div>
@@ -4139,7 +4177,7 @@ function viewPick6() {
   const emptyMsg = f === 'live' ? '<div class="empty"><b>No slips live right now</b>A slip shows up here the moment one of its games kicks off.</div>' : f === 'settled' ? '<div class="empty"><b>No settled slips yet this week</b>Slips land here once every leg is graded or the slip busts.</div>' : '<div class="empty"><b>No slips this week yet</b></div>';
   return head + (mine.length ? p6Meter(mine) : '') + weekBar() +
     `<div class="filters">${fb('live-first', `All slips (${mine.length})`)}${fb('live', 'Live now')}${fb('settled', 'Settled')}</div>` +
-    (list.length ? `<div class="p6list">${list.map((x, i) => ticketCard(x, i)).join('')}</div>` : emptyMsg) +
+    (list.length ? `<div class="p6list">${(can('markets') ? list : list.slice(0,1)).map((x, i) => ticketCard(x, i)).join('')}</div>${!can('markets') ? proLock('Every published slip and full analysis') : ''}` : emptyMsg) +
     (pending.length ? `<details class="more" style="margin-top:22px"><summary>${pending.length} slip${pending.length === 1 ? '' : 's'} not confirmed on DraftKings</summary><div class="p6list" style="margin-top:12px">${pending.map((x) => ticketCard(x, 1)).join('')}</div></details>` : '');
 }
 
@@ -4262,13 +4300,16 @@ const VENUES = {
 };
 const BOOK = {};
 function bookAge(b) { return b && b.data ? Math.round((Date.now() - b.data.fetchedAt) / 1000) : null; }
-async function loadBooks() {
+async function loadBooks(extraPositions = []) {
   const base = S.plans && S.plans.server; if (!base || document.hidden) return;
-  const ts = [...new Set(openContracts().map((c) => c.kalshi).filter(Boolean))]; if (!ts.length) return; let changed = false;
+  let own = Array.isArray(extraPositions) ? extraPositions : [];
+  if (meTier() === 'elite' && S.me.user) { try { own = window.PZElite.data(S.me.user.uid).positions; } catch {} }
+  const ts = [...new Set([...openContracts().map(c => c.kalshi), ...own.filter(p => ['live','partial'].includes(window.PZT.positionState(p).stage)).map(p => p.ticker)].filter(Boolean))]; if (!ts.length) return; let changed = false;
+  let headers = {}; if (own.length && S.me.user) { try { headers = { Authorization: 'Bearer ' + await S.me.user.getIdToken() }; } catch { return; } }
   await Promise.all(ts.map(async (t) => { const b = (BOOK[t] = BOOK[t] || {}); if (b.busy || (b.at && Date.now() - b.at < 8000)) return; b.busy = true;
-    try { const r = await fetchJSON(String(base).replace(/\/+$/, '') + '/kalshi/' + encodeURIComponent(t)); if (r.error) throw new Error(r.error); b.data = r; b.err = ''; changed = true; }
+    try { const r = await fetchJSON(String(base).replace(/\/+$/, '') + '/kalshi/' + encodeURIComponent(t), headers); if (r.error) throw new Error(r.error); b.data = r; b.err = ''; changed = true; }
     catch (e) { b.err = e.message; changed = true; } b.at = Date.now(); b.busy = false; }));
-  if (changed && ['live', 'scalp'].includes(S.tab)) render();
+  if (changed && ['live', 'scalp', 'me'].includes(S.tab)) render();
 }
 setInterval(loadBooks, 10000);
 /* the live-book block on a contract: quotes with age, exit-at-size for the held quantity, top of the book */
@@ -4295,12 +4336,12 @@ function bookHTML(c, x) {
 function contractCard(c) {
   const x = c.status && c.status !== 'open' ? null : contractEval(c);
   const qty = Number(c.qty) || 0, avg = Number(c.avg) || 0, cost = (qty * avg) / 100;
-  if (!x) { const paid = c.status === 'won' ? qty : c.status === 'sold' ? (qty * (Number(c.exit) || 0)) / 100 : 0;
-    return `<div class="ct closed"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} at ${avg}¢</span></div><span class="chip ${paid > cost ? 'win' : 'loss'}">${c.status === 'sold' ? 'Sold ' + (Number(c.exit) || 0) + '¢' : c.status === 'won' ? 'Won' : 'Lost'} · ${money(paid - cost, true)}</span></div></div>`; }
+  const receipt=window.PZTradeCards.contract(c);
+  if (!x) return `<div class="ct closed"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} at ${avg}¢</span></div></div>${window.PZTradeCards.html(receipt)}${c.closedAt?`<p class="mefine">Recorded ${esc(new Date(c.closedAt).toLocaleString())}</p>`:''}</div>`;
   const BK = bookHTML(c, x); const typed = Number(S.bids[c.id]); const bookBid = BK.bid && BK.bid.e.filled === qty ? BK.bid.cents : null; const bid = typed > 0 ? typed : bookBid || 0; const v = M.contractCall(qty, avg, x.p, bid);
   const where = x.ev ? `${esc(x.ev.name)} · ${esc(x.ev.state === 'pre' ? kickLabel(x.ev.date) : x.ev.detail || '')}` : '';
   const call = v.call ? `<div class="oc ${v.call.take ? 'take' : v.call.ratio >= 0.9 ? 'close' : 'hold'}"><b>${esc(v.call.take ? 'Sell' : v.call.ratio >= 0.9 ? 'Close call — sell if you want the sure thing' : 'Hold')}</b><span>Selling now: ${money(v.proceeds)} (${money(v.pnlIfSold, true)} on your ${money(cost)}) · holding is worth ${money(v.hold)} at ${fmtP(x.p)}</span></div>` : x.p === null ? `<div class="oc"><span>Selling at ${bid > 0 ? (Number.isInteger(bid) ? bid : bid.toFixed(1)) + '¢' : 'your price'} returns ${bid > 0 ? money(v.proceeds) + ' (' + money(v.pnlIfSold, true) + ')' : '–'}. There's no live model for this one.</span></div>` : `<div class="oc"><span>Fair price right now is ${Math.round(v.fairCents)}¢. Type the sell price you see and get the call.</span></div>`;
-  return `<div class="ct" id="ct-${esc(c.id)}"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${c.side === 'no' ? 'NO · ' : ''}${qty} contract${qty === 1 ? '' : 's'} at ${avg}¢${where ? ' · ' + where : ''}</span></div>${x.player ? avatar(x.player) : ''}</div>
+  return `<div class="ct" id="ct-${esc(c.id)}">${window.PZTradeCards.html(receipt)}<div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${c.side === 'no' ? 'NO · ' : ''}${qty} contract${qty === 1 ? '' : 's'} at ${avg}¢${where ? ' · ' + where : ''}</span></div>${x.player ? avatar(x.player) : ''}</div>
     <div class="nums"><div><div class="k">Chance now</div><div class="v" style="color:${x.p === null ? 'var(--fg2)' : pColor(x.p)}">${fmtP(x.p)}</div></div><div><div class="k">Worth holding</div><div class="v">${v.hold === null ? '–' : money(v.hold)}</div></div><div><div class="k">Paid</div><div class="v">${money(cost)}</div></div></div>
     <div class="offer"><label>Sell price you see (¢) <input data-bid="${esc(c.id)}" id="bid-${esc(c.id)}" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="${bookBid ? bookBid.toFixed(1) : '¢'}" value="${typed > 0 ? typed : ''}"></label>${call}</div>
     ${BK.html}<div class="src">${esc(x.src)}${typed > 0 ? ' · using the price you typed' : bookBid ? ' · using the Kalshi book' : ''}${c.fee !== undefined && c.fee !== null ? '' : ' · fees not included'}</div></div>`;
@@ -4455,7 +4496,7 @@ function slipTracker({ t, r }) {
   const firstPre = r.legs.map(({ leg }) => eventFor(leg.player)).filter((e) => e && e.state === 'pre').sort((a, b) => a.date.localeCompare(b.date))[0];
   const done = { won: 'Cashed', partial: 'Partial payout', lost: 'Lost', dead: 'Busted', review: 'Check void rules' }[r.state];
   const line2 = done ? `${done} · ${r.hits}/${r.n} hit` : `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${kickLabel(firstPre.date)}` : ''}`;
-  const pay = t.units ? (Number(t.toWin) || 0).toFixed(1) + '×' : r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
+  const pay = r.state==='review' ? 'Pending review' : t.units ? (Number(t.toWin) || 0).toFixed(1) + '×' : r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
   const sv = r.payout === null && r.state !== 'dead' ? slipLive(t, r) : null;
   const odds = sv ? `<div class="odds" title="Chance this slip pays out, from live pace and pre-game projections"><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b><span>${liveN || r.hits ? 'live' : 'pre-game'}</span></div>` : `<div class="odds"><b class="dim">${r.state === 'review' ? 'Void?' : '–'}</b><span>${r.state === 'review' ? 'check rules' : 'settled'}</span></div>`;
   const H = r.payout !== null || r.state === 'dead' ? null : slipHealth(t, r);
@@ -4463,7 +4504,7 @@ function slipTracker({ t, r }) {
   return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>
     <summary><div class="faces">${facesHTML(r, 3, false)}</div><div class="st"><b>${esc(t.title)}</b><span>${esc(line2)}</span>${aliveMeter(r)}</div>
       <div class="hwrap" title="${H ? 'Slip health: ' + esc(H.label) : esc(done || '')}">${H ? healthRing(H) : `<span class="hdone ${r.payout > 0 ? 'win' : 'loss'}">${r.payout > 0 ? SVG.check : SVG.x}</span>`}</div>
-      <div class="cnum en"><b>${money(r.entry)}</b><span>entry</span></div>${odds}<div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'paid' : 'to win'}</span></div>${CHEV}</summary>
+      <div class="cnum en"><b>${money(r.entry)}</b><span>entry</span></div>${odds}<div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'paid' : 'to win'}</span></div>${CHEV}</summary>${window.PZTradeCards.html(window.PZTradeCards.publicSlip(t,r))}
     ${cascade}<div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div>${honestHTML(t, r)}</details>`;
 }
 function tdWatch() {
@@ -4717,6 +4758,7 @@ function whatIfPanel(items) {
 const wiKey = (x) => x.player + '|' + x.market + '|' + Number(x.line) + '|' + (x.dir || 'over');
 function viewResearch() {
   const items = researchItems().filter((x) => sportOf(x.player) === 'nfl');
+  if (!can('research')) return vh('The <span>Lab</span>', 'A preview of how the Lounge connects a line, its supporting data and its offered payout.') + proLock('Full player research, line checks and what-if tools') + (items.length ? '<h3 class="sec">Featured research preview</h3>' + researchCard(items[0]) : '') ;
   const opts = Object.entries(E.MARKETS).filter(([, m]) => m.sport === 'nfl').map(([k, m]) => `<option value="${k}">${esc(m.label)}</option>`).join('');
   const bar = `<form class="checkbar" id="checkForm" autocomplete="off"><label class="f"><span>Player</span><input class="inp" id="ckName" placeholder="Any NFL player — e.g. Jahmyr Gibbs" aria-label="Player"></label><div class="f2"><label class="f"><span>Stat</span><select class="inp" id="ckMarket" aria-label="Stat">${opts}</select></label><label class="f"><span>Line</span><input class="inp" id="ckLine" type="number" step="0.5" placeholder="0.0" aria-label="Line"></label></div><button class="fbtn go" type="submit" aria-pressed="true" id="ckGo">Run check</button><div id="ckMsg" class="dim" style="font-size:12px;font-weight:700"></div></form>`;
   const slips = S.G.pick6.filter(({ t }) => confirmed(t) && t.legs.every((l) => sportOf(l.player) === 'nfl'));
@@ -4728,6 +4770,7 @@ function viewResearch() {
 }
 async function runCheck(e) {
   e.preventDefault();
+  if (!can('research')) { setTab('me'); toast({title:'Full line checks are part of Pro',tone:''}); return; }
   const name = $('#ckName').value.trim(), market = $('#ckMarket').value, line = Number($('#ckLine').value), msg = $('#ckMsg');
   if (!name || !isFinite(line) || $('#ckLine').value === '') { msg.textContent = 'Enter a player and a line.'; return; }
   msg.textContent = 'Looking up ' + name + '…';
@@ -4846,7 +4889,7 @@ function histRow(e) {
   const o = outcome(e); const v = pnl(e); const picks = e.picks ? Object.values(e.picks) : []; const known = hasStake(e);
   const dots = picks.length ? `<div class="dots">${picks.map((p) => `<i class="${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}"></i>`).join('')}</div>` : typeof e.prob === 'number' ? `<span class="chip">Bought at ${fmtP(e.prob)}</span>` : '';
   const chip = { win: '<span class="res win">Won</span>', loss: '<span class="res loss">Lost</span>', sold: '<span class="res gold">Sold early</span>', push: '<span class="res">Push</span>' }[o];
-  const sub = [e.game || '', e.legs ? `${e.hits ?? '?'}/${e.legs} correct` : e.contracts ? `${e.contracts} contracts · closed at ${Math.round(Number(e.close) * 100)}¢` : '', e.auto ? 'graded live, awaiting DraftKings' : ''].filter(Boolean).join(' · ');
+  const sub = [e.game || '', e.legs ? `${e.hits ?? '?'}/${e.legs} correct` : e.contracts ? `${e.contracts} contracts · closed at ${Math.round(Number(e.close) * 100)}¢` : '', e.auto ? 'Graded result · awaiting venue confirmation' : 'Recorded result · '+(e.fees!==undefined&&e.fees!==null?'recorded fees':'fee basis may be unknown')].filter(Boolean).join(' · ');
   const body = picks.length ? `<div class="picks">${picks.map((p) => { const kn = p.player && S.slate.players && S.slate.players[p.player]; return `<div class="mtile ${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}">${kn ? avatar(p.player) : `<div class="av" style="display:grid;place-items:center;font:900 13px var(--stadium);color:var(--fg2);background:var(--panel3)">${esc(initials(p.name))}</div>`}<div style="min-width:0;display:flex;align-items:center;gap:6px"><div style="min-width:0"><b>${esc(p.name || p.player)}</b><span>${p.line !== null && p.line !== undefined ? (p.dir === 'under' ? 'LESS ' : 'MORE ') + E.fmt(p.line) + ' ' : ''}${esc(mkLabel(p.market))}${p.mult ? ' · ' + esc(p.mult) : ''}</span></div><span class="v">${p.value !== undefined && p.value !== null ? E.fmt(p.value) : ''}</span></div></div>`; }).join('')}</div>` : '';
   const srcTxt = (S.history && S.history.sources && S.history.sources[e.src]) || e.source || '';
   const d = new Date(e.date + 'T12:00:00');
@@ -4954,9 +4997,9 @@ function render() {
   const dk = S.slate.dkLink; const dkEl = $('#dkJoin'); if (dk) { dkEl.href = dk; dkEl.hidden = false; } else dkEl.hidden = true;
   const views = { me: viewMe, pickem: viewPickem, live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger };
   const openD = [...document.querySelectorAll('main details[open]:not([data-slip])')].map((d) => d.querySelector('summary') && d.querySelector('summary').textContent);
-  const ae = document.activeElement; const focusId = ae && ae.id; let caret = null; try { caret = ae && ae.selectionStart; } catch {}
+  const ae = document.activeElement; const focusId = ae && ae.id; let caret = null; try { caret = ae ? {start:ae.selectionStart,end:ae.selectionEnd} : null; } catch {}
   const keep = {}; ['ckName', 'ckLine', 'ckMarket', 'wiMult', 'pkName'].forEach((id) => { const el = document.getElementById(id); if (el) keep[id] = el.value; });
-  let body = (views[S.tab] || viewLive)();
+  let body = ['ftd','scalp'].includes(S.tab) && !can('markets') ? vh(S.tab === 'ftd' ? 'First <span>Touchdown</span>' : '2+ TD <span>Scalp</span>', 'Pro includes the full published plan, player breakdown and scenario tools.') + proLock('Full market breakdowns') : (views[S.tab] || viewLive)();
   if (S.tab !== 'live') { const strip = liveStrip(); if (strip) { const i = body.indexOf('</section>'); body = i > -1 ? body.slice(0, i + 10) + strip + body.slice(i + 10) : strip + body; } }
   const researchNav = window.PZMobile.researchNav(S.tab, TABS);
   if (researchNav) { const end = body.indexOf('</section>'); body = end >= 0 ? body.slice(0, end + 10) + researchNav + body.slice(end + 10) : researchNav + body; }
@@ -4965,7 +5008,8 @@ function render() {
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('main details').forEach((d) => { const s = d.querySelector('summary'); if (s && openD.includes(s.textContent)) d.open = true; });
   { const bEl = document.getElementById('pzbM'); if (bEl) { S.me.builder = S.me.builder || PZB.state(); PZB.mountInto(bEl, S.me.builder, memberBuilderCtx()); } }
-  if (focusId && document.getElementById(focusId)) { const el = document.getElementById(focusId); el.focus(); try { if (caret !== null) el.setSelectionRange(caret, caret); } catch {} }
+  { const workspace = document.getElementById('eliteWorkspace'); if (workspace && S.me.user) window.PZElite.mount(workspace, eliteContext()); }
+  if (focusId && document.getElementById(focusId)) { const el = document.getElementById(focusId); el.focus({preventScroll:true}); try { if (caret !== null) el.setSelectionRange(caret.start, caret.end); } catch {} }
   tickCountdowns(); renderSweat();
   if (S.tab === 'ftd') calcUpdate();
 }
@@ -4991,9 +5035,9 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('#vibeMenu')) { const m = $('#vibeMenu'); if (m && !m.hidden) m.hidden = true; }
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; render(); return; }
   const ex = e.target.closest('[data-export]'); if (ex) { exportLedger(ex.dataset.export); return; }
-  const sc2 = e.target.closest('[data-scen]'); if (sc2) { const [id, k] = sc2.dataset.scen.split(':'); S.scen = S.scen || {}; S.scen[id] = k; render(); return; }
+  const sc2 = e.target.closest('[data-scen]'); if (sc2) { if (!can('research')) { setTab('me'); return; } const [id, k] = sc2.dataset.scen.split(':'); S.scen = S.scen || {}; S.scen[id] = k; render(); return; }
   const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; renderSweat(); return; }
-  const wi = e.target.closest('[data-wi]'); if (wi) { const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
+  const wi = e.target.closest('[data-wi]'); if (wi) { if (!can('research')) { setTab('me'); return; } const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
   if (e.target.closest('[data-wiclear]')) { S.whatIf.clear(); render(); return; }
   const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview || null; applyTeam(preferredTeam()); applyPlayoffs(); render(); return; }
   if (e.target.closest('[data-histall]')) { S.histAll = !S.histAll; render(); return; }

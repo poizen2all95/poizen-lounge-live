@@ -923,9 +923,12 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite' };
   const FOUNDING_CAP = 50;
   const FEATURES = {
-    board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
-    ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
-    honest: { tier: 'free', label: 'The honest read on every slip', status: 'live' },
+    board: { tier: 'free', label: "Scores, game context, public results, community Pick'em and a featured slip preview", status: 'live' },
+    ownSlips: { tier: 'free', label: 'Build and track one active personal slip; keep your last 10 settled slips visible', status: 'live' },
+    moreSlips: { tier: 'pro', label: 'Track multiple active slips with no Free-plan cap', status: 'live' },
+    research: { tier: 'pro', label: 'Full Lab: player research, line checks, fair-payout comparison and what-if building', status: 'live' },
+    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns', status: 'live' },
+    honest: { tier: 'pro', label: 'Expected payout and model reasoning for each slip, alongside the price you are offered', status: 'live' },
     limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
     exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
     themes: { tier: 'free', label: 'Midnight, Daylight and Vegas themes — always free', status: 'live' },
@@ -936,10 +939,11 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     history: { tier: 'pro', label: 'Your full settled history (Free keeps the last 10)', status: 'live' },
     csv: { tier: 'pro', label: 'Ledger export to CSV', status: 'live' },
     playoffs: { tier: 'elite', label: 'Playoffs atmosphere theme, Midnight and Daylight', status: 'live' },
-    positions: { tier: 'elite', label: 'Position desk: each position from plan to settled, with partial exits, fees and corrections kept', status: 'building' },
+    positions: { tier: 'elite', label: 'Private synced position journal: plans, fills, partial exits, fees, settlement and auditable corrections', status: 'live' },
     books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
-    exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
-    exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
+    exposure: { tier: 'elite', label: 'Combined open exposure by player, team and game across your recorded positions and personal slips', status: 'live' },
+    studio: { tier: 'elite', label: 'Strategy Studio: save personal scenarios and rules across your devices; compare their impact across your open slips', status: 'live' },
+    exitPlans: { tier: 'elite', label: 'Target, stop and expiry alerts with a private inbox and optional device notifications', status: 'server' },
   };
   const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
   function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
@@ -1147,7 +1151,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
       else if (d.bsave !== undefined) {
         const pr = problems(st); if (pr.length) { st.msg = pr[0]; rerender(); return; }
         st.saving = true; rerender();
-        try { const { slip, players } = toSlip(st); await ctx.onSave(slip, players, read(st, ctx)); Object.assign(st, state({ sport: st.sport })); st.msg = 'Saved.'; }
+        try { const { slip, players } = toSlip(st); const result = await ctx.onSave(slip, players, read(st, ctx)); if(result && result.preserveDraft){st.msg='Previous save confirmed. Your newer edits are retained.';}else{Object.assign(st, state({ sport: st.sport })); st.msg = 'Saved.';} }
         catch (er) { st.msg = 'Could not save: ' + er.message; }
         st.saving = false; rerender();
       }
@@ -1178,9 +1182,9 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   function mountInto(el, st, ctx) {
     style();
     const draw = (focusId) => {
-      const ae = document.activeElement; const id = focusId || (ae && el.contains(ae) ? ae.id : null); let caret = null; try { caret = ae && ae.selectionStart; } catch {}
+      const ae = document.activeElement; const id = focusId || (ae && el.contains(ae) ? ae.id : null); let caret = null; try { caret = ae ? {start:ae.selectionStart,end:ae.selectionEnd} : null; } catch {}
       el.innerHTML = html(st, ctx);
-      if (id) { const f = document.getElementById(id); if (f) { f.focus(); try { if (caret !== null && !focusId) f.setSelectionRange(caret, caret); } catch {} } }
+      if (id) { const f = document.getElementById(id); if (f) { f.focus({preventScroll:true}); try { if (caret !== null && !focusId) f.setSelectionRange(caret.start, caret.end); } catch {} } }
     };
     if (!el.__pzb) { bind(el, st, ctx, draw); el.__pzb = true; }
     draw(); return draw;
@@ -1189,6 +1193,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   window.PZB = { state, html, mountInto, toSlip, problems, read, parse, marketFromText, search, addLeg };
 })();
 </script>
+<script src="membership.js"></script>
 <script>
 'use strict';
 const E = window.PZE, M = window.PZM;
@@ -1519,7 +1524,7 @@ function vContracts() {
     <button class="btn teal" id="cAdd" type="button">Add to the board</button>
     <p class="dim" style="font-size:12px;margin:0">Each contract pays $1 if it hits. The board puts a live chance on it and, when you type the sell price you see, says sell or hold.</p></div>`;
   const row = (c) => { const qty = Number(c.qty), avg = Number(c.avg), cost = (qty * avg) / 100; const open = !c.status || c.status === 'open';
-    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(c.title)}</b><span>${esc(c.venue)} · ${c.side === 'no' ? 'NO · ' : ''}${qty} at ${avg}¢ · cost ${money(cost)}${c.kalshi ? ' · book ' + esc(c.kalshi) : ''}${open ? '' : ` · ${c.status === 'sold' ? 'sold at ' + c.exit + '¢' : c.status}`}</span></div>${open ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><input id="cx-${esc(c.id)}" data-keep type="number" min="1" max="99" step="1" placeholder="¢" style="width:64px"><button class="btn sm teal" data-csell="${esc(c.id)}" type="button">Sold</button><button class="btn sm" data-cwon="${esc(c.id)}" type="button">Won</button><button class="btn sm warn" data-clost="${esc(c.id)}" type="button">Lost</button><button class="btn sm" data-cdel="${esc(c.id)}" type="button" aria-label="Remove">×</button></div>` : `<span class="chip ${c.status === 'lost' ? 'loss' : 'win'}">Recorded</span>`}</div>`; };
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(c.title)}</b><span>${esc(c.venue)} · ${c.side === 'no' ? 'NO · ' : ''}${qty} at ${avg}¢ · cost ${money(cost)}${c.kalshi ? ' · book ' + esc(c.kalshi) : ''}${open ? '' : ` · ${c.status === 'sold' ? 'sold at ' + c.exit + '¢' : c.status}`}</span></div>${open ? `<div class="row" style="gap:6px;flex-wrap:wrap"><input id="cx-${esc(c.id)}" data-keep type="number" min="1" max="99" step="1" placeholder="¢" style="width:64px"><button class="btn sm teal" data-csell="${esc(c.id)}" type="button">Sold</button><button class="btn sm" data-cwon="${esc(c.id)}" type="button">Won</button><button class="btn sm warn" data-clost="${esc(c.id)}" type="button">Lost</button><button class="btn sm" data-cdel="${esc(c.id)}" type="button" aria-label="Remove">×</button></div>` : `<span class="chip ${c.status === 'lost' ? 'loss' : 'win'}">Recorded</span>`}</div>`; };
   return banner('contracts', 'Event <span>contracts</span>', 'DK Predictions and Robinhood positions. Add what you hold; the board tracks the live chance and gives a sell-or-hold call against the price you see. Closing one records it in your Ledger.') +
     `<div class="grid2">${form}<div class="card"><b class="st" style="font-size:22px">Positions</b><div style="margin-top:10px">${list.length ? list.slice().reverse().map(row).join('') : '<div class="empty">No contracts yet.</div>'}</div></div></div>`;
 }
@@ -1544,22 +1549,22 @@ async function loadMembers() {
 }
 const TIER_NAMES = { pro: 'Pro', elite: 'Elite' };
 const MONTH = 31 * 864e5;
-const foundingTaken = (tiers) => Object.values(tiers || {}).filter((t) => t && t.rate === 'founding' && (!t.until || t.until > Date.now())).length;
+const foundingTaken = (tiers) => Object.values(tiers || {}).filter((t) => t && ['pro', 'elite'].includes(t.tier) && t.rate === 'founding' && t.until > Date.now()).length;
 async function syncFounding() { try { const taken = foundingTaken(A.tiers); await db.ref('board/plans/founding/taken').set(taken); A.plans = A.plans || {}; A.plans.founding = { ...(A.plans.founding || {}), taken }; } catch {} }
 function plansCard() {
-  const P = A.plans || {}; const cap = Number((P.founding || {}).cap) || 50; const taken = foundingTaken(A.tiers);
+  const P = A.plans || {}; const cap = Number((P.founding || {}).cap ?? 50); const taken = foundingTaken(A.tiers);
   const DEF = { pro: { price: '$79 / month', founding: '$29 / month' }, elite: { price: '$249 / month', founding: '$149 / month' } };
-  const row = (t, id) => { const c = { ...DEF[t], ...Object.fromEntries(Object.entries(P[t] || {}).filter(([, v]) => v)) }; return `<div class="row" style="align-items:flex-end"><b class="st" style="font-size:18px;width:64px">${TIER_NAMES[t]}</b><label class="f" style="width:150px">Regular price<input id="pl${id}Price" data-keep value="${esc(c.price || '')}" placeholder="$… / month"></label><label class="f" style="width:170px">Founding price (first ${cap})<input id="pl${id}Found" data-keep value="${esc(c.founding || '')}" placeholder="$… / month"></label><label class="f" style="flex:1;min-width:220px">Payment link (optional)<input id="pl${id}Link" data-keep value="${esc(c.link || '')}" placeholder="https://cash.app/… or a Stripe link"></label></div>`; };
+  const row = (t, id) => { const c = { ...DEF[t], ...Object.fromEntries(Object.entries(P[t] || {}).filter(([, v]) => v)) }; return `<div class="row" style="align-items:flex-end"><b class="st" style="font-size:18px;width:64px">${TIER_NAMES[t]}</b><label class="f" style="width:150px">Regular price<input id="pl${id}Price" data-keep value="${esc(c.price || '')}" placeholder="$… / month"></label><label class="f" style="width:170px">Founding price (first ${cap})<input id="pl${id}Found" data-keep value="${esc(c.founding || '')}" placeholder="$… / month"></label><label class="f" style="flex:1;min-width:220px">Payment link (optional)<input id="pl${id}Link" data-keep value="${esc(c.link || '')}" placeholder="https://cash.app/…"></label></div>`; };
   return `<div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Plans &amp; prices</b><span class="dim" style="font-size:12px">Founding spots used: <b>${taken}</b> of ${cap}</span></div>
     <p class="dim" style="font-size:12px;margin:0">Two paid plans: Pro and Elite. While founding spots are left, members see the founding price and keep it as long as you renew them. Members request a plan, pay you, and you approve below — access is locked to the Google email they requested with and runs a month at a time.</p>
     ${row('pro', 'Pro')}${row('elite', 'El')}
     <div class="row"><label class="f" style="flex:1;min-width:260px">How members pay you (shown when they request)<input id="plPay" data-keep maxlength="200" value="${esc(P.pay || '')}" placeholder="e.g. Cash App $YourTag — put your email in the note"></label><label class="f" style="width:130px">Founding spots<input id="plCap" data-keep type="number" min="0" max="500" value="${cap}"></label></div>
-    <div class="row"><label class="f" style="flex:1">Poizen server URL (Cloudflare Worker — live order books, Stripe, Discord)<input id="plServer" data-keep value="${esc(P.server || '')}" placeholder="https://poizen-lounge-server.you.workers.dev"></label><button class="btn teal" id="plSave" type="button">Save plans</button></div></div>`;
+    <div class="row"><label class="f" style="flex:1">Poizen server URL (Cloudflare Worker — live order books, alerts, Discord)<input id="plServer" data-keep value="${esc(P.server || '')}" placeholder="https://poizen-lounge-server.you.workers.dev"></label><label class="f" style="flex:1">Notification public VAPID key<input id="plVapid" data-keep value="${esc(P.vapidKey || '')}" placeholder="Firebase Cloud Messaging public key"></label><button class="btn teal" id="plSave" type="button">Save plans</button></div></div>`;
 }
 function requestsCard() {
   const R = Object.entries(A.requests || {}).sort((x, y) => (y[1].at || 0) - (x[1].at || 0)); const pend = R.filter(([, r]) => r.status === 'pending'); const done = R.filter(([, r]) => r.status !== 'pending').slice(0, 8);
-  const cap = Number(((A.plans || {}).founding || {}).cap) || 50; const left = cap - foundingTaken(A.tiers);
-  const line = ([uid, r], live) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(r.name || 'Member')} · ${esc(TIER_NAMES[r.tier] || r.tier)} <span class="chip ${r.rate === 'founding' ? 'gold' : ''}" style="display:inline-flex">${r.rate === 'founding' ? 'Founding' : 'Regular'}${r.price ? ' ' + esc(r.price) : ''}</span></b><span>${esc(r.email || '')} · ${esc(new Date(r.at || 0).toLocaleString())}${r.note ? ' · “' + esc(r.note) + '”' : ''}${live ? '' : ' · ' + esc(r.status)}</span></div>${live ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><button class="btn sm teal" data-approve="${esc(uid)}" type="button">Paid — turn on 1 month</button><button class="btn sm warn" data-decline="${esc(uid)}" type="button">Decline</button></div>` : '<span></span>'}</div>`;
+  const cap = Number(((A.plans || {}).founding || {}).cap ?? 50); const left = cap - foundingTaken(A.tiers);
+  const line = ([uid, r], live) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(r.name || 'Member')} · ${esc(TIER_NAMES[r.tier] || r.tier)} <span class="chip ${r.rate === 'founding' ? 'gold' : ''}" style="display:inline-flex">${r.rate === 'founding' ? 'Founding' : 'Regular'}${r.price ? ' ' + esc(r.price) : ''}</span></b><span>${esc(r.email || '')} · ${esc(new Date(r.at || 0).toLocaleString())}${r.note ? ' · “' + esc(r.note) + '”' : ''}${live ? '' : ' · ' + esc(r.status)}</span></div>${live ? `<div class="row" style="gap:6px;flex-wrap:wrap"><button class="btn sm teal" data-approve="${esc(uid)}" type="button">Paid — turn on 1 month</button><button class="btn sm warn" data-decline="${esc(uid)}" type="button">Decline</button></div>` : '<span></span>'}</div>`;
   return `<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Requests</b><span class="dim" style="font-size:12px">${pend.length} waiting · ${Math.max(0, left)} founding spots left</span></div>
     <p class="dim" style="font-size:12px;margin:4px 0 8px">Approve only after the money is in your account. Approving turns the plan on for that Google account until the date shown on their plan; renew from the member list each month.</p>
     ${pend.map((x) => line(x, true)).join('') || '<div class="empty">No requests waiting.</div>'}${done.length ? `<details style="margin-top:8px"><summary class="dim">Recent decisions</summary>${done.map((x) => line(x, false)).join('')}</details>` : ''}</div>`;
@@ -1575,15 +1580,15 @@ function vMembers() {
   const pc = (x) => (x === null || x === undefined ? '–' : Math.round(x * 100) + '%');
   const calib = `<table><thead><tr><th>Lab said</th><th style="text-align:right">Picks</th><th style="text-align:right">Lab avg</th><th style="text-align:right">Actually hit</th></tr></thead><tbody>${B.map((b) => `<tr><td>${Math.round(b.lo * 100)}–${Math.min(100, Math.round(b.hi * 100))}%</td><td style="text-align:right">${b.n}</td><td style="text-align:right">${pc(b.exp)}</td><td style="text-align:right"><b class="${b.act === null ? '' : Math.abs(b.act - b.exp) <= 0.08 ? 'win' : 'loss'}">${pc(b.act)}</b></td></tr>`).join('')}</tbody></table>`;
   const rows = mem.sort((x, y) => (y[1].seen || 0) - (x[1].seen || 0)).map(([uid, m]) => { const mo = Object.values((A.memOut || {})[uid] || {}); const w = mo.filter((o) => o.result === 'won').length;
-    const tr = (A.tiers || {})[uid]; const live = tr && (!tr.until || tr.until > Date.now()); const tierTxt = tr ? `${TIER_NAMES[tr.tier] || tr.tier}${tr.rate === 'founding' ? ' · founding' : ''}${tr.until ? (live ? ' · through ' : ' · lapsed ') + new Date(tr.until).toLocaleDateString() : ''}` : 'Free';
-    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)} <span class="chip ${tr ? 'win' : ''}" style="display:inline-flex">${esc(tierTxt)}</span></b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}${tr && tr.email ? ' · ' + esc(tr.email) : ''}${(A.requests || {})[uid] && A.requests[uid].status === 'pending' ? ' · requested ' + esc(TIER_NAMES[A.requests[uid].tier] || '') : ''}</span></div><div class="row" style="gap:6px;flex-wrap:nowrap">${tr ? `<button class="btn sm teal" data-renew="${esc(uid)}" type="button">Renew 1 month</button>` : ''}${['pro', 'elite'].filter((t) => !tr || tr.tier !== t).map((t) => `<button class="btn sm" data-tierset="${esc(uid)}|${t}" type="button">Give ${TIER_NAMES[t]}</button>`).join('')}${tr ? `<button class="btn sm warn" data-tierset="${esc(uid)}|" type="button">Remove ${TIER_NAMES[tr.tier] || 'plan'}</button>` : ''}${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div></div>`; }).join('');
+    const storedTier = (A.tiers || {})[uid]; const tr = storedTier && ['pro', 'elite'].includes(storedTier.tier) ? storedTier : null; const live = tr && (!tr.until || tr.until > Date.now()); const tierTxt = tr ? `${TIER_NAMES[tr.tier] || tr.tier}${tr.accessType === 'trial' ? ' · '+tr.trialDays+'-day trial' : ''}${tr.rate === 'founding' ? ' · founding' : ''}${tr.until ? (live ? ' · through ' : ' · lapsed ') + new Date(tr.until).toLocaleDateString() : ''}` : 'Free';
+    return `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(m.name)} <span class="chip ${tr ? 'win' : ''}" style="display:inline-flex">${esc(tierTxt)}</span></b><span>Joined ${esc(new Date(m.joined).toLocaleDateString())} · ${m.slips || 0} slips · ${w}-${mo.length - w} settled · amounts ${m.amounts ? 'synced' : 'private'}${tr && tr.email ? ' · ' + esc(tr.email) : ''}${(A.requests || {})[uid] && A.requests[uid].status === 'pending' ? ' · requested ' + esc(TIER_NAMES[A.requests[uid].tier] || '') : ''}</span></div><div class="row" style="gap:6px;flex-wrap:wrap">${tr && tr.accessType !== 'trial' ? `<button class="btn sm teal" data-renew="${esc(uid)}" type="button">Renew 1 month</button>` : ''}${['pro', 'elite'].filter((t) => !tr || tr.tier !== t || tr.accessType === 'trial').map((t) => `<button class="btn sm" data-tierset="${esc(uid)}|${t}" type="button">Give ${TIER_NAMES[t]}</button>`).join('')}${tr ? `<button class="btn sm warn" data-tierset="${esc(uid)}|" type="button">Remove ${TIER_NAMES[tr.tier] || 'plan'}</button>` : ''}${!live ? ['pro','elite'].map(t=>`<button class="btn sm" data-trial="${esc(uid)}|${t}" type="button">${TIER_NAMES[t]} trial</button>`).join('') : ''}${m.owner ? `<button class="btn sm" data-memview="${esc(uid)}" type="button">Open account</button>` : '<span class="chip">Not shared</span>'}</div></div>`; }).join('');
   let detail = '';
   if (A.memView) { const v = A.memView; const sl = Object.values(v.data.slips || {}).sort((x, y) => (y.createdAt || 0) - (x.createdAt || 0));
     detail = `<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">${esc((v.data.profile || {}).name || 'Member')}</b><button class="btn sm" data-memclose type="button">Close</button></div>${sl.map((x) => `<div class="lr" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${esc(x.title)}</b><span>${(x.legs || []).length} legs · ${x.x}× · Lab ${x.lab ? pc(x.lab.pAll) : '–'} all hit${x.entry ? ` · ${money(x.entry)} to win ${money(x.toWin)}` : ' · amounts private'}</span></div><span class="chip ${x.result === 'won' ? 'win' : x.result === 'lost' ? 'loss' : ''}">${esc(x.status === 'settled' ? x.result : 'open')}</span></div>`).join('') || '<div class="empty">No slips yet.</div>'}</div>`; }
   return banner('members', 'Lounge <span>members</span>', 'Everyone with a My Lounge account. Outcomes are collected from all members; full accounts open only for members who turned on sharing with you. Dollar amounts appear only when a member syncs them.') +
     (A.memErr ? `<div class="card" style="border-color:var(--loss);margin-bottom:16px">${esc(A.memErr)}</div>` : '') +
     `<div class="tiles"><div class="tile t"><div class="k">Members</div><div class="v">${mem.length}</div><div class="s">${mem.filter(([, m]) => m.owner).length} share their account</div></div><div class="tile g"><div class="k">Settled slips</div><div class="v">${outs.length}</div><div class="s">${outs.filter((o) => o.result === 'won').length} cashed</div></div><div class="tile"><div class="k">Picks hit</div><div class="v">${legs.length ? pc(hit / legs.length) : '–'}</div><div class="s">${legs.length} graded picks</div></div><div class="tile"><div class="k">Lab vs reality</div><div class="v">${withLab.length ? `${actW} / ${expW.toFixed(1)}` : '–'}</div><div class="s">slips won / Lab expected</div></div></div>` +
-    requestsCard() + plansCard() + `<div class="grid2" style="margin-top:16px"><div class="card"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Members</b><button class="btn sm" data-memreload type="button">Refresh</button></div><div style="margin-top:10px">${rows || '<div class="empty">No members yet.</div>'}</div></div><div class="card"><b class="st" style="font-size:22px">Is the Lab honest?</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Every member pick, grouped by what the Lab said before kickoff, against how often it actually hit. Green means within 8 points.</p>${calib}</div></div>${detail}`;
+    `<div class="card" style="margin-top:16px"><b class="st" style="font-size:22px">Trial testers</b><p class="dim">Grant Pro or Elite from each member row below. Both default to 7 days; use 3 days for a shorter pilot. No payment, automatic charge or limit of two testers. Have testers sign in and complete their profile first so the correct Google account appears here. Active paid plans are protected.</p><label class="f">Trial duration<select id="testerTrialDays" data-keep><option value="7">7 days — recommended</option><option value="3">3 days — short pilot</option></select></label><p class="dim">For pre-stream feedback: ask each tester to check mobile scaling, placing/tracking a slip, trade cards, settled results and Elite tools within 24–48 hours.</p></div>` + requestsCard() + plansCard() + `<div class="grid2" style="margin-top:16px"><div class="card"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Members</b><button class="btn sm" data-memreload type="button">Refresh</button></div><div style="margin-top:10px">${rows || '<div class="empty">No members yet.</div>'}</div></div><div class="card"><b class="st" style="font-size:22px">Is the Lab honest?</b><p class="dim" style="font-size:12px;margin:6px 0 10px">Every member pick, grouped by what the Lab said before kickoff, against how often it actually hit. Green means within 8 points.</p>${calib}</div></div>${detail}`;
 }
 
 /* stream */
@@ -1738,6 +1743,32 @@ function doImport(replace) {
 }
 function armed(btn, label, fn) { if (btn.dataset.armed) { delete btn.dataset.armed; fn(); return; } btn.dataset.armed = 1; const old = btn.textContent; btn.textContent = label; setTimeout(() => { if (btn.isConnected && btn.dataset.armed) { delete btn.dataset.armed; btn.textContent = old; } }, 3000); }
 
+const membershipBusy = new Set();
+let membershipSequence = 0;
+async function manualMembership(button, uid, kind, details = {}) {
+  if (membershipBusy.has(uid)) return;
+  membershipBusy.add(uid); button.disabled = true;
+  try {
+    const now = Date.now();
+    // Keep a failed operation's ID on its button so a network retry cannot add another month.
+    const id = kind === 'approve' ? 'request_' + details.requestAt : (button.dataset.membershipOp || (button.dataset.membershipOp = 'manual_' + now + '_' + (++membershipSequence)));
+    const member = (A.mem || {})[uid] || {};
+    if (['grant','trial'].includes(kind) && !details.email) {
+      const request = (await db.ref('requests/' + uid).get()).val();
+      details.email = ((A.tiers || {})[uid] || {}).email || (request || {}).email || member.email || window.prompt('Google email for this member (must match their signed-in account):', '') || '';
+    }
+    const op = { uid, kind, id, now, actor: (auth.currentUser || {}).uid || '', email: member.email || '', ...details };
+    const configuredCap = Number(((A.plans || {}).founding || {}).cap);
+    const cap = Number.isFinite(configuredCap) && configuredCap >= 0 ? configuredCap : 50;
+    const result = await PZMembership.execute(db, op, cap);
+    A.tiers = result.tiers;
+    if (kind === 'approve' && !result.warning && A.requests[uid] && Number(A.requests[uid].at) === Number(details.requestAt)) A.requests[uid].status = 'approved';
+    await syncFounding();
+    toast(result.warning || (kind === 'remove' ? 'Plan removed — action logged' : `${TIER_NAMES[result.grant.tier]} saved through ${new Date(result.grant.until).toLocaleDateString()} — action logged`), result.warning ? 'warn' : undefined, 8000);
+    render();
+  } catch (er) { toast('Could not finish membership action: ' + er.message, 'bad', 10000); }
+  finally { membershipBusy.delete(uid); button.disabled = false; }
+}
 document.addEventListener('click', async (e) => {
   const t = e.target.closest('button'); if (!t) return;
   if (t.dataset.sec) { A.sec = t.dataset.sec; history.replaceState(null, '', '#' + A.sec); render(); window.scrollTo({ top: 0 }); return; }
@@ -1775,25 +1806,28 @@ document.addEventListener('click', async (e) => {
   }
   if (t.dataset.memview) { try { const v = (await db.ref('users/' + t.dataset.memview).get()).val(); A.memView = { uid: t.dataset.memview, data: v || {} }; } catch (er) { toast('Could not open: ' + er.message, 'bad'); } render(); return; }
   if (t.dataset.memclose !== undefined) { A.memView = null; render(); return; }
-  if (t.dataset.tierset) { const [uid, tier] = t.dataset.tierset.split('|'); try { const g = tier ? { tier, since: Date.now(), source: 'manual', until: Date.now() + MONTH, rate: 'standard' } : null; await db.ref('tiers/' + uid).set(g); A.tiers = A.tiers || {}; if (g) A.tiers[uid] = g; else delete A.tiers[uid]; await syncFounding(); render(); toast(tier ? (TIER_NAMES[tier] || tier) + ' given' : 'Plan removed'); } catch (er) { toast('Could not change the plan: ' + er.message, 'bad', 6000); } return; }
+  if(t.dataset.trial){const [uid,tier]=t.dataset.trial.split('|');const days=Number((document.getElementById('testerTrialDays')||{}).value)||7;return manualMembership(t,uid,'trial',{tier,days});}
+  if (t.dataset.tierset) { const [uid, tier] = t.dataset.tierset.split('|'); return manualMembership(t, uid, tier ? 'grant' : 'remove', { tier, rate: 'standard' }); }
   if (t.id === 'plSave') { const v = (id) => ($('#' + id) ? $('#' + id).value.trim() : '');
     const cfg = (id) => ({ price: v('pl' + id + 'Price').slice(0, 40), founding: v('pl' + id + 'Found').slice(0, 40), link: v('pl' + id + 'Link') });
     const plans = { pro: cfg('Pro'), elite: cfg('El') };
     if (Object.values(plans).some((c) => c.link && !/^https:\/\//.test(c.link))) { toast('Payment links must start with https://', 'bad'); return; }
     const server = v('plServer').replace(/\/+$/, ''); if (server && !/^https:\/\/[a-z0-9.-]+(\.workers\.dev|\.[a-z]{2,})$/i.test(server)) { toast('Server URL should look like https://poizen-lounge-server.you.workers.dev', 'bad'); return; }
     const cap = Math.max(0, Math.min(500, Math.round(Number(v('plCap')) || 0)));
-    Object.assign(plans, { pay: v('plPay').slice(0, 200), server, founding: { cap, taken: foundingTaken(A.tiers) } });
+    const vapidKey=v('plVapid').trim();if(vapidKey&&!/^[A-Za-z0-9_-]{80,100}$/.test(vapidKey)){toast('Use the Firebase public VAPID key, not a private key','bad');return;}
+    Object.assign(plans, { vapidKey, pay: v('plPay').slice(0, 200), server, founding: { cap, taken: foundingTaken(A.tiers) } });
     try { await db.ref('board/plans').set(plans); A.plans = plans; toast('Plans saved — members see them now'); render(); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
-  if (t.dataset.approve) { const uid = t.dataset.approve; const r = (A.requests || {})[uid]; if (!r) return;
-    const cap = Number(((A.plans || {}).founding || {}).cap) || 50; const cur = (A.tiers || {})[uid];
-    const keepFounding = cur && cur.rate === 'founding'; const rate = keepFounding || (r.rate === 'founding' && foundingTaken(A.tiers) < cap) ? 'founding' : 'standard';
-    const from = cur && cur.until && cur.until > Date.now() ? cur.until : Date.now();
-    const g = { tier: r.tier, since: (cur && cur.since) || Date.now(), source: 'manual', email: String(r.email || '').toLowerCase(), rate, price: (rate === 'founding' ? r.price : ((A.plans || {})[r.tier] || {}).price) || r.price || '', until: from + MONTH };
-    try { await db.ref().update({ [`tiers/${uid}`]: g, [`requests/${uid}/status`]: 'approved', [`requests/${uid}/decidedAt`]: Date.now() }); A.tiers = A.tiers || {}; A.tiers[uid] = g; r.status = 'approved'; await syncFounding();
-      toast(`${TIER_NAMES[g.tier]} on for ${g.email} through ${new Date(g.until).toLocaleDateString()}${r.rate === 'founding' && rate !== 'founding' ? ' — founding spots were full, so regular rate' : ''}`); render(); } catch (er) { toast('Could not approve: ' + er.message, 'bad'); } return; }
-  if (t.dataset.decline) { const uid = t.dataset.decline; try { await db.ref('requests/' + uid).update({ status: 'declined', decidedAt: Date.now() }); A.requests[uid].status = 'declined'; toast('Declined'); render(); } catch (er) { toast('Could not decline: ' + er.message, 'bad'); } return; }
-  if (t.dataset.renew) { const uid = t.dataset.renew; const cur = (A.tiers || {})[uid]; if (!cur) return; const until = Math.max(cur.until || 0, Date.now()) + MONTH;
-    try { await db.ref('tiers/' + uid + '/until').set(until); cur.until = until; await syncFounding(); toast('Renewed through ' + new Date(until).toLocaleDateString()); render(); } catch (er) { toast('Could not renew: ' + er.message, 'bad'); } return; }
+  if (t.dataset.approve) { const uid = t.dataset.approve;
+    if (membershipBusy.has(uid)) return;
+    try {
+      const r = (await db.ref('requests/' + uid).get()).val();
+      if (!r || !Number.isFinite(Number(r.at)) || !r.at) throw Error('Request has no valid timestamp; ask the member to submit again');
+      if (r.status !== 'pending' && r.status !== 'approved') throw Error('This request is no longer pending');
+      return manualMembership(t, uid, 'approve', { tier: r.tier, email: r.email, requestAt: r.at, requestStatus: r.status, rate: r.rate, price: r.price || '' });
+    } catch (er) { toast('Could not read request: ' + er.message, 'bad'); } return;
+  }
+  if (t.dataset.decline) { const uid = t.dataset.decline; if (membershipBusy.has(uid)) return; try { await db.ref('requests/' + uid).update({ status: 'declined', decidedAt: Date.now() }); A.requests[uid].status = 'declined'; toast('Declined'); render(); } catch (er) { toast('Could not decline: ' + er.message, 'bad'); } return; }
+  if (t.dataset.renew) return manualMembership(t, t.dataset.renew, 'renew');
   if (t.dataset.memreload !== undefined) { A.mem = null; render(); return; }
   if (t.dataset.csell) return closeContract(t.dataset.csell, 'sold');
   if (t.dataset.cwon) return closeContract(t.dataset.cwon, 'won');
