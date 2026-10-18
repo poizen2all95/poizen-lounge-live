@@ -1,0 +1,27 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const M = require('../membership.js');
+const now = Date.UTC(2026,0,31,12);
+const op = { id:'request_123', kind:'approve', uid:'u', tier:'pro', email:' USER@Example.COM ', requestAt:123, rate:'founding', price:'$10', now, actor:'owner' };
+test('calendar month clamps month end and preserves UTC time', () => assert.equal(M.addMonth(now), Date.UTC(2026,1,28,12)));
+test('approval replay never extends and binds normalized email', () => { const a=M.reduce({},op,1); const b=M.reduce(a,op,1); assert.deepEqual(b,a); assert.equal(a.u.email,'user@example.com'); assert.equal(a.u.until,M.addMonth(now)); });
+test('renew uses authoritative expiry and operation replay is safe', () => { const a=M.reduce({},op,1); const r={...op,id:'renew_1',kind:'renew'}; const b=M.reduce(a,r,1); assert.equal(b.u.until,M.addMonth(a.u.until)); assert.deepEqual(M.reduce(b,r,1),b); assert.equal(b.u.actions.renew_1.actor,'owner'); });
+test('invalid plans/email and founding capacity refuse grants', () => { assert.throws(()=>M.reduce({}, {...op,tier:'bogus'},1)); assert.throws(()=>M.reduce({}, {...op,email:''},1)); assert.throws(()=>M.reduce({other:{tier:'elite',rate:'founding',until:now+100}},op,1),/full/); });
+test('removal retains audit and request idempotency', () => { const a=M.reduce({},op,1); const b=M.reduce(a,{...op,id:'remove_1',kind:'remove'},1); assert.equal(b.u.tier,null); assert.deepEqual(M.reduce(b,op,1),b); });
+test('failed status update is reported after grant and retry does not extend', async () => { let tiers={}; let fail=true; const db={ref(path){return path==='tiers'?{transaction:async fn=>{tiers=fn(tiers);return {committed:true,snapshot:{val:()=>tiers}}}}:{transaction:async fn=>{if(fail)throw Error('offline'); return {committed:true,snapshot:{val:()=>fn({at:123,status:'pending'})}}}};}}; const a=await M.execute(db,op,1); assert.match(a.warning,/offline/); fail=false; const b=await M.execute(db,op,1); assert.equal(b.grant.until,a.grant.until); });
+test('Firebase null pruning preserves valid inactive tombstone and replay audit', () => {
+  const initial=M.reduce({},op,1);
+  const removed=M.reduce(initial,{...op,id:'remove_rtdb',kind:'remove'},1);
+  const prune=value=>Array.isArray(value)?value.map(prune):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).filter(([,v])=>v!==null).map(([k,v])=>[k,prune(v)])):value;
+  const stored=prune(removed);
+  assert.equal(stored.u.active,false);
+  assert.equal(stored.u.source,'manual');
+  assert.equal(stored.u.since,now);
+  assert.equal(initial.u.active,true);
+  assert.deepEqual(M.reduce(stored,op,1),stored);
+  assert.deepEqual(M.reduce(stored,{...op,id:'remove_rtdb',kind:'remove'},1),stored);
+  const empty=M.reduce({}, {...op,id:'remove_empty',kind:'remove'},1);
+  assert.equal(empty.u.since,now);
+  assert.equal(empty.u.source,'manual');
+  assert.equal(empty.u.active,false);
+});

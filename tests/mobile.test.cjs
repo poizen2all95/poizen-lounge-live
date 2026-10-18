@@ -102,3 +102,6 @@ test('all inline scripts parse', () => {
     if (!/application\/ld\+json/.test(match[1])) new vm.Script(match[2]);
   }
 });
+test('zero founding capacity closes founding pricing instead of restoring a default',()=>{
+ const ctx={S:{plans:{founding:{cap:0,taken:0}}},M,PRICE_DEFAULT:{pro:{price:'$79',founding:'$29'}}};vm.createContext(ctx);vm.runInContext(html.slice(html.indexOf('function foundingLeft()'),html.indexOf('const PRICE_DEFAULT')),ctx);assert.equal(vm.runInContext('foundingLeft().cap',ctx),0);
+});
