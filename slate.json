@@ -796,7 +796,28 @@
     "rule": "Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.",
     "shifts": [
       {
-        "label": "Shift 1",
+        "label": "Shift 1 · London 6:30 AM",
+        "targets": [
+          {
+            "player": "wmarks",
+            "stake": 4.97,
+            "odds": "+946.3",
+            "placed": true,
+            "venue": "DraftKings Predictions",
+            "note": "Bought $4.97 at 9%, pays $52.00. Sell offer $2.60 (Oct 17)."
+          },
+          {
+            "player": "tuten",
+            "stake": 9.94,
+            "odds": "+1248.1",
+            "placed": true,
+            "venue": "DraftKings Predictions",
+            "note": "Bought $9.94 at 7%, pays $134.00. Sell offer $8.04 (Oct 17)."
+          }
+        ]
+      },
+      {
+        "label": "Shift 2",
         "targets": [
           {
             "player": "henry",
@@ -811,7 +832,7 @@
         ]
       },
       {
-        "label": "Shift 2",
+        "label": "Shift 3",
         "targets": [
           {
             "player": "allen",
@@ -826,7 +847,7 @@
         ]
       },
       {
-        "label": "Shift 3 · SNF",
+        "label": "Shift 4 · SNF",
         "targets": [
           {
             "player": "watson",
@@ -836,7 +857,7 @@
         ]
       },
       {
-        "label": "Shift 4 · MNF",
+        "label": "Shift 5 · MNF",
         "targets": [
           {
             "player": "cmc",
