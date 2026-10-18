@@ -1,8 +1,8 @@
 {
   "version": 1,
   "title": "NFL Week 6",
-  "updated": "2026-10-18T06:28:45.614026Z",
-  "note": "Pick6 tickets confirmed from DraftKings My Picks (Sun 10/18). First-TD and scalp are game plans until placed.",
+  "updated": "2026-10-18T17:05:44.703Z",
+  "note": "DraftKings open/settled receipts and seven live NFL Pick6 sets verified 2026-10-18T17:05:44.703Z. HOU 34–31 JAX final; seven contracts still awaiting venue settlement. First-TD and scalp plans remain unconfirmed.",
   "players": {
     "henry": {
       "name": "Derrick Henry",
@@ -379,6 +379,41 @@
       "pos": "C",
       "number": "32",
       "espnId": "3136195"
+    },
+    "stroud": {
+      "name": "C.J. Stroud",
+      "team": "HOU",
+      "sport": "nfl",
+      "pos": "QB",
+      "espnId": "4432577"
+    },
+    "bthomas": {
+      "name": "Brian Thomas Jr.",
+      "team": "JAX",
+      "sport": "nfl",
+      "pos": "WR",
+      "espnId": "4432773"
+    },
+    "jcameron": {
+      "name": "Josh Cameron",
+      "team": "JAX",
+      "sport": "nfl",
+      "pos": "WR",
+      "espnId": "4879194"
+    },
+    "crod": {
+      "name": "Chris Rodriguez Jr.",
+      "team": "JAX",
+      "sport": "nfl",
+      "pos": "RB",
+      "espnId": "4362619"
+    },
+    "noel": {
+      "name": "Jaylin Noel",
+      "team": "HOU",
+      "sport": "nfl",
+      "pos": "WR",
+      "espnId": "4586312"
     }
   },
   "pick6": [
@@ -409,7 +444,8 @@
           "mult": "0.8x"
         }
       ],
-      "window": "Sun 10/18"
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nfl-8-lamb",
@@ -468,7 +504,8 @@
           "mult": "1.3x"
         }
       ],
-      "window": "Sun 10/18"
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nfl-8-dak",
@@ -528,7 +565,8 @@
           "gimme": true
         }
       ],
-      "window": "Sun 10/18"
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nfl-6-50",
@@ -574,7 +612,9 @@
           "line": 259.5,
           "mult": "1.3x"
         }
-      ]
+      ],
+      "badge": "40% NFL Winnings Boost",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nfl-4-14",
@@ -604,7 +644,9 @@
           "market": "rush_yds",
           "line": 68.5
         }
-      ]
+      ],
+      "badge": "Harrison final: 34 / 21.5 yards · hit",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nfl-8-coker",
@@ -660,12 +702,14 @@
           "line": 119.5,
           "mult": "1.7x"
         }
-      ]
+      ],
+      "badge": "Strange final: 44 / 69.5 yards · 7 correct pays $203+; 6 pays $39+",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nfl-4-patd",
       "title": "4-Pick Passing TDs",
-      "badge": "$5 Bonus Picks",
+      "badge": "$5 Bonus Picks · Lawrence final: 4 / 1.5 pass TDs · hit",
       "status": "confirmed",
       "entry": 5,
       "toWin": 39,
@@ -694,7 +738,8 @@
           "line": 1.5,
           "mult": "0.8x"
         }
-      ]
+      ],
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "nba-8",
@@ -972,32 +1017,234 @@
   ],
   "contracts": [
     {
-      "id": "c-wmarks-2td",
+      "id": "dkp-41035111",
       "venue": "DraftKings Predictions",
+      "positionId": "41035111",
       "kind": "two_td",
-      "player": "wmarks",
-      "title": "Woody Marks 2+ TDs",
+      "player": "warren",
+      "title": "Jaylen Warren 2+ TDs",
       "qty": 52,
-      "avg": 9.56,
+      "avg": 9.557692307692307,
       "cost": 4.97,
       "status": "open",
-      "at": "2026-10-18T06:28:45.614026Z",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "PIT @ TB",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-41029991",
+      "venue": "DraftKings Predictions",
+      "positionId": "41029991",
+      "kind": "two_td",
+      "player": "henry",
+      "title": "Derrick Henry 2+ TDs",
+      "qty": 106,
+      "avg": 23.433962264150942,
+      "cost": 24.84,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "BAL @ CLE",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-41029072",
+      "venue": "DraftKings Predictions",
+      "positionId": "41029072",
+      "kind": "two_td",
+      "player": "bijan",
+      "title": "Bijan Robinson 2+ TDs",
+      "qty": 71,
+      "avg": 35,
+      "cost": 24.85,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "CHI @ ATL",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-40821583",
+      "venue": "DraftKings Predictions",
+      "positionId": "40821583",
+      "kind": "prop",
+      "player": "crod",
+      "title": "Chris Rodriguez Jr. 15+ rushing attempts · awaiting venue settlement",
+      "qty": 5,
+      "avg": 37,
+      "cost": 1.85,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
       "game": "HOU @ JAX",
-      "note": "Bought $4.97 at 9%. Pays $52.00. Sell offer $2.60 on Oct 17."
+      "market": "rush_att",
+      "line": 14.5,
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
+    },
+    {
+      "id": "dkp-40821582",
+      "venue": "DraftKings Predictions",
+      "positionId": "40821582",
+      "kind": "prop",
+      "player": "crod",
+      "title": "Chris Rodriguez Jr. 80+ rushing yards · awaiting venue settlement",
+      "qty": 8,
+      "avg": 30.875000000000004,
+      "cost": 2.47,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "market": "rush_yds",
+      "line": 79.5,
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
+    },
+    {
+      "id": "dkp-40821566",
+      "venue": "DraftKings Predictions",
+      "positionId": "40821566",
+      "kind": "other",
+      "player": "crod",
+      "title": "Chris Rodriguez Jr. 15+ attempts / 80+ yards combo · awaiting venue settlement",
+      "qty": 39,
+      "avg": 10.205128205128206,
+      "cost": 3.98,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
+    },
+    {
+      "id": "dkp-40629893",
+      "venue": "DraftKings Predictions",
+      "positionId": "40629893",
+      "kind": "two_td",
+      "player": "stroud",
+      "title": "C.J. Stroud 2+ TDs · awaiting venue settlement",
+      "qty": 94,
+      "avg": 1.0638297872340425,
+      "cost": 1,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
+    },
+    {
+      "id": "dkp-40629892",
+      "venue": "DraftKings Predictions",
+      "positionId": "40629892",
+      "kind": "two_td",
+      "player": "bthomas",
+      "title": "Brian Thomas Jr. 2+ TDs · awaiting venue settlement",
+      "qty": 71,
+      "avg": 1.056338028169014,
+      "cost": 0.75,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
+    },
+    {
+      "id": "dkp-40629890",
+      "venue": "DraftKings Predictions",
+      "positionId": "40629890",
+      "kind": "two_td",
+      "player": "jcameron",
+      "title": "Josh Cameron 2+ TDs · awaiting venue settlement",
+      "qty": 94,
+      "avg": 1.0638297872340425,
+      "cost": 1,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
+    },
+    {
+      "id": "c-wmarks-2td",
+      "venue": "DraftKings Predictions",
+      "positionId": "40613264",
+      "kind": "two_td",
+      "player": "wmarks",
+      "title": "Woody Marks 2+ TDs · awaiting venue settlement",
+      "qty": 52,
+      "avg": 9.557692307692307,
+      "cost": 4.97,
+      "status": "open",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Game final 34–31; DraftKings still lists this position under Open. No settlement inferred."
     },
     {
       "id": "c-tuten-2td",
       "venue": "DraftKings Predictions",
+      "positionId": "40594823",
       "kind": "two_td",
       "player": "tuten",
       "title": "Bhayshul Tuten 2+ TDs",
       "qty": 134,
-      "avg": 7.42,
+      "avg": 7.4179104477611935,
       "cost": 9.94,
-      "status": "open",
-      "at": "2026-10-18T06:28:45.614026Z",
+      "status": "sold",
+      "at": "2026-10-18T17:05:44.703Z",
       "game": "HOU @ JAX",
-      "note": "Bought $9.94 at 7%. Pays $134.00. Sell offer $8.04 on Oct 17."
+      "closedAt": "2026-10-18",
+      "payout": 22.46,
+      "exit": 16.761194029850746,
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-40629891",
+      "venue": "DraftKings Predictions",
+      "positionId": "40629891",
+      "kind": "two_td",
+      "player": "noel",
+      "title": "Jaylin Noel 2+ TDs",
+      "qty": 71,
+      "avg": 1.056338028169014,
+      "cost": 0.75,
+      "status": "sold",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "closedAt": "2026-10-18",
+      "payout": 1.97,
+      "exit": 2.7746478873239435,
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-40991981",
+      "venue": "DraftKings Predictions",
+      "positionId": "40991981",
+      "kind": "other",
+      "title": "HOU @ JAX overtime — Yes",
+      "qty": 31,
+      "avg": 41,
+      "cost": 12.71,
+      "status": "lost",
+      "at": "2026-10-18T17:05:44.703Z",
+      "game": "HOU @ JAX",
+      "closedAt": "2026-10-18",
+      "payout": 0,
+      "source": "DraftKings My Trades receipt, browser extension, 2026-10-18T17:05:44.703Z",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
     }
-  ]
+  ],
+  "injuryReview": {
+    "checkedAt": "2026-10-18T17:05:44.703Z",
+    "sourceUpdatedAt": "2026-10-18T17:02:30Z",
+    "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries",
+    "notes": [
+      "David Montgomery: Out; inactive (Oct 18 report).",
+      "Marvin Harrison Jr.: Active for London game (Oct 18 report).",
+      "Jalen Coker and CeeDee Lamb: Active; latest practice notes report full participation.",
+      "Warren, Henry and Robinson listed Active. Live injury tab continues to refresh ESPN."
+    ]
+  }
 }

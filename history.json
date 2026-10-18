@@ -1,70 +1,121 @@
 {
-  "updated": "2026-10-18T06:28:45.614026Z",
+  "updated": "2026-10-18T17:05:44.703Z",
   "note": "Imported history. Every row says where it came from. stake null = the amount risked was not visible in the source, so the row counts toward hit rates but not toward profit and loss.",
   "sources": {
     "dk-pick6": "DraftKings Pick6 → My Picks → Recent, owner screenshot taken Oct 16 2026. The page header says 14 pick sets; 7 were visible in the screenshot.",
     "dk-predictions": "DraftKings Predictions → My Trades → Settled, owner screenshot taken Oct 16 2026 (Oct 5–15 visible; older trades cut off). The percentage is the contract price DraftKings shows; stakes are not shown on that screen.",
     "robinhood": "Robinhood connector, realized P&L trade history, account ••••6668 (PoiZen Method), span all, read Oct 17 2026. Prediction-market rows have no symbol; payout = contracts × close price, stake = payout − realized gain.",
     "dk-pick6-1017": "DraftKings Pick6 → Upcoming and Recent, owner screenshots Oct 17 2026.",
-    "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades."
+    "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades.",
+    "dk-browser-1018": "DraftKings Predictions My Trades receipts and Pick6 My Picks read through the owner-authorized Edge extension on 2026-10-18T17:05:44.703Z. Open positions are not graded from game score alone."
   },
   "entries": [
+    {
+      "id": "dkp-40991981",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1018",
+      "game": "HOU @ JAX",
+      "title": "HOU @ JAX overtime — Yes",
+      "stake": 12.71,
+      "payout": 0,
+      "result": "lost",
+      "positionId": "40991981",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-40629891",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1018",
+      "game": "HOU @ JAX",
+      "title": "Jaylin Noel 2+ TDs",
+      "stake": 0.75,
+      "payout": 1.97,
+      "result": "sold",
+      "positionId": "40629891",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
+    {
+      "id": "dkp-40594823",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1018",
+      "game": "HOU @ JAX",
+      "title": "Bhayshul Tuten 2+ TDs",
+      "stake": 9.94,
+      "payout": 22.46,
+      "result": "sold",
+      "positionId": "40594823",
+      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
+    },
     {
       "id": "dkp-1017-01",
       "date": "2026-10-17",
       "book": "DraftKings Predictions",
       "type": "prediction",
-      "src": "dk-predictions",
+      "src": "dk-browser-1018",
       "game": "Florida State @ Miami",
       "title": "Florida State to win",
       "market": "win",
       "prob": 0.09,
-      "stake": null,
+      "stake": 2.49,
       "payout": 4.61,
       "result": "sold",
-      "note": "Paid $4.61; Florida State lost 35–43"
+      "note": "Paid $4.61; Florida State lost 35–43",
+      "positionId": "40280278",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dkp-1017-02",
       "date": "2026-10-17",
       "book": "DraftKings Predictions",
       "type": "prediction",
-      "src": "dk-predictions",
+      "src": "dk-browser-1018",
       "game": "Notre Dame @ BYU",
       "title": "BYU to win",
       "market": "win",
       "prob": 0.23,
-      "stake": null,
+      "stake": 2.47,
       "payout": 4.8,
-      "result": "won"
+      "result": "sold",
+      "positionId": "40280277",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dkp-1017-03",
       "date": "2026-10-17",
       "book": "DraftKings Predictions",
       "type": "prediction",
-      "src": "dk-predictions",
+      "src": "dk-browser-1018",
       "game": "Kentucky @ Oklahoma",
       "title": "Kentucky to win",
       "market": "win",
       "prob": 0.32,
-      "stake": null,
+      "stake": 2.38,
       "payout": 7,
-      "result": "won"
+      "result": "won",
+      "positionId": "40280275",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dkp-1017-04",
       "date": "2026-10-17",
       "book": "DraftKings Predictions",
       "type": "prediction",
-      "src": "dk-predictions",
+      "src": "dk-browser-1018",
       "game": "Oklahoma State @ Houston",
       "title": "Oklahoma State to win",
       "market": "win",
       "prob": 0.38,
-      "stake": null,
+      "stake": 2.4,
       "payout": 0,
-      "result": "lost"
+      "result": "lost",
+      "positionId": "40280274",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "rh-1016-2037",
@@ -81,10 +132,10 @@
     },
     {
       "id": "dk6-1016-a",
-      "date": "2026-10-16",
+      "date": "2026-10-17",
       "book": "DraftKings Pick6",
       "type": "pick6",
-      "src": "dk-pick6",
+      "src": "dk-browser-1018",
       "title": "ALCS 4-Pick · TB @ CLE · Caminero gimme",
       "stake": 5,
       "payout": 52.44,
@@ -123,14 +174,16 @@
           "result": "hit",
           "mult": "0.8x"
         }
-      ]
+      ],
+      "lineupId": "Z229Gmw",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dk6-1016-b",
-      "date": "2026-10-16",
+      "date": "2026-10-17",
       "book": "DraftKings Pick6",
       "type": "pick6",
-      "src": "dk-pick6",
+      "src": "dk-browser-1018",
       "title": "ALCS 6-Pick Bases · TB @ CLE",
       "stake": 5,
       "payout": 0,
@@ -185,14 +238,16 @@
           "result": "miss",
           "mult": "2.1x"
         }
-      ]
+      ],
+      "lineupId": "Krr55BZ",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dk6-1016-c",
-      "date": "2026-10-16",
+      "date": "2026-10-17",
       "book": "DraftKings Pick6",
       "type": "pick6",
-      "src": "dk-pick6",
+      "src": "dk-browser-1018",
       "title": "ALCS 6-Pick · TB @ CLE · Ramírez gimme",
       "stake": 3,
       "payout": 0,
@@ -246,7 +301,9 @@
           "dir": "over",
           "result": "miss"
         }
-      ]
+      ],
+      "lineupId": "5BB89p7",
+      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dkp-1015-01",
@@ -1821,7 +1878,7 @@
           "mult": "0.9x"
         },
         {
-          "name": "Dylan Mensah",
+          "name": "Darian Mensah",
           "market": "pass_yds",
           "line": 256.5,
           "dir": "over",
@@ -1853,7 +1910,7 @@
           "mult": "0.9x"
         },
         {
-          "name": "C. Hernandez",
+          "name": "Carlos Hernandez",
           "market": "unknown",
           "line": 99.5,
           "dir": "over",
