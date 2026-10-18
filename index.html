@@ -3137,8 +3137,9 @@ async function poll() {
   const wasOk = S.feed.ok;
   if (errs.length && !okCount) { S.feed.fails++; S.feed.ok = false; S.feed.err = errs[0]; if (wasOk !== false) S.alertLog.unshift({ tone: 'warn', title: 'Stats feed dropped', body: 'Retrying with backoff — ' + errs[0], at: Date.now() }); }
   else { if (wasOk === false) S.alertLog.unshift({ tone: 'win', title: 'Stats feed back', body: 'Live again', at: Date.now() }); S.feed.fails = errs.length ? S.feed.fails : 0; S.feed.ok = errs.length ? 'partial' : true; S.feed.last = Date.now(); S.feed.err = errs[0] || ''; }
-  afterData(); loadVenues(); loadWeather();
-  const base = anyLive ? 15000 : soon ? 30000 : 90000;
+  afterData(); loadVenues(); loadWeather(); loadInjuries();
+  /* game day = any game today that hasn't finished: stats every 15 s all day, not just once a game is live */
+  const base = anyLive || isGameDay() ? 15000 : soon ? 30000 : 90000;
   const wait = S.feed.ok === false ? Math.min(120000, 15000 * Math.pow(2, S.feed.fails - 1)) : base;
   S.feed.next = Date.now() + wait;
   pollTimer = setTimeout(poll, wait);
@@ -4564,8 +4565,10 @@ function viewGames() {
 }
 
 /* ---------------- injuries ---------------- */
+function isGameDay() { const today = new Date().toDateString(); return Object.values(S.events || {}).some((ev) => ev && ev.state !== 'post' && new Date(ev.date).toDateString() === today); }
+/* injury report: every 2 minutes on game day (inactives drop ~90 min before kickoff), every 10 minutes otherwise */
 async function loadInjuries(force) {
-  if (S.injLoading || (S.injuries && !force && Date.now() - S.injuries.at < 10 * 60 * 1000)) return;
+  if (S.injLoading || (S.injuries && !force && Date.now() - S.injuries.at < (isGameDay() ? 2 : 10) * 60 * 1000)) return;
   S.injLoading = true; if (S.tab === 'injuries') render();
   try { const j = await getJSON(E.ESPN.injuries()); S.injuries = { at: Date.now(), teams: j.injuries || [], err: '' }; }
   catch (e) { S.injuries = { at: Date.now(), teams: (S.injuries && S.injuries.teams) || [], err: e.message }; }
