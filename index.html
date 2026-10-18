@@ -1732,6 +1732,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 <dialog class="mobile-more" id="mobileMore" aria-labelledby="mobileMoreTitle"><div class="mobile-more-head"><h2 id="mobileMoreTitle">Explore the Lounge</h2><button type="button" data-close-more aria-label="Close navigation">✕</button></div><div class="mobile-more-grid"></div><p class="mobile-more-note">Research a line, follow the public board, or track your own slips in My Lounge.</p></dialog>
 <script src="mobile.js"></script>
 <script src="tiers.js"></script>
+<script src="trade-cards.js"></script>
 <script src="member-save.js"></script>
 <script src="workspace.js"></script>
 <script src="alerts.js"></script>
@@ -3393,8 +3394,8 @@ function planCard() {
   const col = (tier) => {
     const feats = M.planFeatures(tier); const mine = !!u && t === tier; const P = planPrice(tier);
     const price = tier === 'free' ? '<span class="pl-price">$0</span>' : P.now ? `<span class="pl-price">${esc(P.now)}</span>${P.founding ? `<small class="pl-found">Founding rate · ${P.left} of ${P.cap} spots left · yours for as long as you stay</small>${P.std ? `<small class="dim">Regular ${esc(P.std)}</small>` : ''}` : ''}` : '<span class="pl-price dim">Price posted soon</span>';
-    const paid = mine && g && g.until && !isOwner() ? `<small class="dim">Paid through ${untilTxt(g.until)}${g.rate === 'founding' ? ' · founding rate' : ''}</small>` : '';
-    const cta = tier === 'free' ? '' : mine ? `<span class="chip win">Your plan</span>${paid}`
+    const paid = mine && g && g.until && !isOwner() ? `<small class="dim">${g.accessType==='trial'?'Trial ends':'Paid through'} ${untilTxt(g.until)}${g.rate === 'founding' ? ' · founding rate' : ''}</small>` : '';
+    const cta = tier === 'free' ? '' : mine ? `<span class="chip win">${g && g.accessType==='trial'?'Your trial':'Your plan'}</span>${paid}`
       : M.tierRank(t) > M.tierRank(tier) ? '<span class="chip">Included in yours</span>'
       : !u ? '<button class="mebtn" type="button" data-me="signin">Sign in with Google to request</button>'
       : rq && rq.tier === tier && rq.status === 'pending' ? `<span class="chip gold">Requested ${esc(new Date(rq.at || Date.now()).toLocaleDateString())}</span><small class="dim">PoiZen turns it on once your payment is in.</small>`
@@ -3403,7 +3404,8 @@ function planCard() {
     const prev = tier === 'free' ? '' : `<p class="mefine">Everything in ${M.PLAN_NAMES[M.PLAN_ORDER[M.PLAN_ORDER.indexOf(tier) - 1]]}, plus:</p>`;
     return `<div class="${mine ? 'hot' : ''} pl-${tier}"><b>${M.PLAN_NAMES[tier]}</b>${price}<p class="pl-value"><strong>${value[0]}</strong><br>${value[1]}</p>${prev}<ul>${feats.map((f) => `<li>${esc(f.label)}${STATUS_TAG[f.status] || ''}</li>`).join('')}</ul>${cta}</div>`;
   };
-  return `<div class="card mecard meplan"><b class="st-font" style="font-size:20px">Plans</b><div class="plans">${M.PLAN_ORDER.map(col).join('')}</div>${requestForm()}<p class="mefine">How it works: request a plan, pay PoiZen, and he turns it on for the Google account you signed in with — it only works on that account. Access runs a month at a time. “Next release” items aren't live yet and aren't part of the price until they are. Analysis tools only — no plan guarantees wins. 21+.</p></div>`;
+  const trialNotice=g&&g.accessType==='trial'?`<p class="tier-limit">${g.until>Date.now()?'Your '+esc(M.PLAN_NAMES[g.tier])+' trial ends '+esc(untilTxt(g.until)):'Your trial has ended'}. No automatic charge. Your saved data is retained; arrange paid access with PoiZen when you are ready.</p>`:'';
+  return `<div class="card mecard meplan">${trialNotice}<b class="st-font" style="font-size:20px">Plans</b><div class="plans">${M.PLAN_ORDER.map(col).join('')}</div>${requestForm()}<p class="mefine">How it works: request a plan, pay PoiZen, and he turns it on for the Google account you signed in with — it only works on that account. Paid access runs a month at a time. PoiZen can also grant a 7-day Pro or Elite trial, or a 3-day pilot. Trials end automatically with no charge; paid access starts only after you arrange it with PoiZen. “Next release” items aren't live yet and aren't part of the price until they are. Analysis tools only — no plan guarantees wins. 21+.</p></div>`;
 }
 function requestForm() {
   const tier = S.me.requesting; const u = S.me.user; if (!tier || !u) return '';
@@ -3550,7 +3552,7 @@ function meSettle() {
     const legResults = r.legs.map(({ g }) => g.state); const at = Date.now(); const u = S.me.user.uid;
     const out = { at: t.createdAt || at, settledAt: at, n: r.n, x: t.x || null, result, hits: r.hits, sport: sportOf(t.legs[0].player), legs: t.legs.map((l, i) => ({ market: l.market, line: Number(l.line), dir: l.dir || 'over', mult: l.mult || '', result: legResults[i], p: t.lab && t.lab.ps ? t.lab.ps[i] ?? null : null })), lab: t.lab || null };
     const up = { [`users/${u}/slips/${t.sid}/status`]: 'settled', [`users/${u}/slips/${t.sid}/result`]: result, [`users/${u}/slips/${t.sid}/hits`]: r.hits, [`users/${u}/slips/${t.sid}/legResults`]: legResults, [`users/${u}/slips/${t.sid}/settledAt`]: at, [`outcomes/${u}/${t.sid}`]: out };
-    if (S.me.profile.consent.amounts && t.entry > 0 && !t.units) up[`users/${u}/slips/${t.sid}/payout`] = result === 'won' ? Number(t.toWin) : 0;
+    if (result !== 'review' && S.me.profile.consent.amounts && t.entry > 0 && !t.units) up[`users/${u}/slips/${t.sid}/payout`] = result === 'won' ? Number(t.toWin) : 0;
     firebase.database().ref().update(up).catch((e) => { S.me.settling[t.sid] = false; console.warn('settle failed', e.message); });
   });
 }
@@ -3586,15 +3588,16 @@ async function meStartCool(days) {
   catch (e) { toast({ title: 'Could not start', body: e.message, tone: 'loss' }); }
 }
 function meSlipCard({ t, r }) {
+  const receipt=window.PZTradeCards.slip(t,r.state);
   const done = { won: 'Cashed', lost: 'Lost', dead: 'Busted', review: 'Check void rules' }[t.status === 'settled' ? t.result : r.state] || '';
   const liveN = r.legs.filter(({ g }) => g.state === 'live').length; const open = S.slipOpen[t.id] !== undefined ? S.slipOpen[t.id] : liveN > 0 || t.status !== 'settled';
-  const money2 = t.units ? `${(Number(t.x) || 0).toFixed(1)}× payout` : `${money(t.entry)} to win ${money(t.toWin)}`;
+  const money2 = t.units ? `Amounts private · ${(Number(t.x) || 0).toFixed(1)}× payout` : t.status==='settled' ? (receipt.returned===null ? 'Return pending review' : `${money(t.entry)} entry · ${money(receipt.returned)} graded return`) : `${money(t.entry)} to win ${money(t.toWin)}`;
   const was = t.lab ? `<span>The Lab said ${fmtP(t.lab.pAll)} all hit${t.lab.roi !== null && t.lab.roi !== undefined ? ` · ${t.lab.roi >= 0 ? '+' : '−'}${Math.abs(Math.round(t.lab.roi * 100))}% expected` : ''} when you saved it</span>` : '';
   const settled = t.status === 'settled'; const hits = settled ? Number(t.hits) || 0 : r.hits;
   const legsHTML = settled
     ? `<div class="melegs">${t.legs.map((l, i) => { const res = (t.legResults || [])[i]; const mk = E.MARKETS[l.market] || {}; return `<div class="mel ${res === 'hit' ? 'hit' : res === 'miss' ? 'miss' : ''}">${avatar(l.player)}<span><b>${esc(P(l.player).name)}</b> ${l.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(l.line)} ${esc(mk.short || l.market)}</span><em>${res === 'hit' ? 'Hit' : res === 'miss' ? 'Miss' : esc(res || '')}</em>${t.lab && t.lab.ps ? `<i>Lab ${fmtP(t.lab.ps[i])}</i>` : ''}</div>`; }).join('')}</div>`
     : `<div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div>${honestHTML(t, r)}`;
-  return `<details class="slip ${settled ? (t.result === 'won' ? 'won' : 'lost') : r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}><summary style="grid-template-columns:minmax(0,1fr) auto 20px"><div class="st"><b>${esc(t.title)}</b><span>${done ? done + ' · ' : ''}${hits}/${r.n} hit · ${money2}</span>${was}</div><div class="pay"><b>${hits}/${r.n}</b><span>hit</span></div>${CHEV}</summary>${legsHTML}</details>`;
+  return `<details class="slip ${settled ? (t.result === 'won' ? 'won' : 'lost') : r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}><summary style="grid-template-columns:minmax(0,1fr) auto 20px"><div class="st"><b>${esc(t.title)}</b><span>${done ? done + ' · ' : ''}${hits}/${r.n} hit · ${money2}</span>${was}</div><div class="pay"><b>${hits}/${r.n}</b><span>hit</span></div>${CHEV}</summary>${window.PZTradeCards.html(receipt)}${legsHTML}</details>`;
 }
 function viewMe() {
   const head = vh('My <span>Lounge</span>', 'Track your own slips live with the same honest numbers, your own Coach and your own gate.');
@@ -4125,7 +4128,7 @@ function ticketCard({ t, r }, i = 0) {
   const liveN = r.legs.filter(({ g }) => g.state === 'live').length;
   const key = 'p6:' + t.id; const open = S.slipOpen[key] !== undefined ? S.slipOpen[key] : liveN > 0 || (i === 0 && !['dead', 'lost'].includes(r.state));
   const stateChip = { open: '', live: '<span class="chip live">Live</span>', dead: '<span class="chip loss">Busted</span>', won: '<span class="chip win">Cashed</span>', partial: '<span class="chip gold">Partial payout</span>', lost: '<span class="chip loss">Lost</span>', review: '<span class="chip">Check void rules</span>' }[r.state] || '';
-  const pay = r.payout !== null ? `<div class="cnum cw"><span>Paid</span><b class="${r.payout > 0 ? 'win' : 'loss'}">${money(r.payout)}</b></div>` : `<div class="cnum cw"><span>To win</span><b class="teal ${r.state === 'dead' ? 'gone' : ''}">${money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential)}${t.payouts ? '' : '+'}</b></div>`;
+  const pay = r.state==='review' ? '<div class="cnum cw"><span>Return pending review</span><b>—</b></div>' : r.payout !== null ? `<div class="cnum cw"><span>Paid</span><b class="${r.payout > 0 ? 'win' : 'loss'}">${money(r.payout)}</b></div>` : `<div class="cnum cw"><span>To win</span><b class="teal ${r.state === 'dead' ? 'gone' : ''}">${money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential)}${t.payouts ? '' : '+'}</b></div>`;
   const sv = r.payout === null && r.state !== 'dead' && confirmed(t) ? slipLive(t, r) : null;
   const firstPre = r.legs.map(({ leg }) => eventFor(leg.player)).filter((e) => e && e.state === 'pre').sort((a, b) => a.date.localeCompare(b.date))[0];
   const sub = `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${esc(kickLabel(firstPre.date))}` : ''}`;
@@ -4138,6 +4141,7 @@ function ticketCard({ t, r }, i = 0) {
       ${sv ? `<div class="cnum cp"><span>Cash chance</span><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b></div>` : '<div class="cnum cp"></div>'}${CHEV}
     </summary>
     <div class="p6-body">
+      ${window.PZTradeCards.html(window.PZTradeCards.publicSlip(t,r))}
       <div class="tiles">${r.legs.map(({ leg, g }) => ptile(leg, g)).join('')}</div>
       <div class="t-foot">${t.shareUrl ? `<a class="tail" href="${esc(t.shareUrl)}" target="_blank" rel="noopener">Tail on DraftKings</a>` : '<span></span>'}
         ${t.payouts ? `<details class="more"><summary>Payout table</summary><div class="facts" style="margin-top:8px">${Object.entries(t.payouts).sort((a, b) => b[0] - a[0]).map(([k, v]) => `<span class="chip">${k} correct · ${Number(v)}x · ${money(r.entry * v)}</span>`).join('')}</div></details>` : ''}</div>
@@ -4331,12 +4335,12 @@ function bookHTML(c, x) {
 function contractCard(c) {
   const x = c.status && c.status !== 'open' ? null : contractEval(c);
   const qty = Number(c.qty) || 0, avg = Number(c.avg) || 0, cost = (qty * avg) / 100;
-  if (!x) { const paid = c.status === 'won' ? qty : c.status === 'sold' ? (qty * (Number(c.exit) || 0)) / 100 : 0;
-    return `<div class="ct closed"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} at ${avg}¢</span></div><span class="chip ${paid > cost ? 'win' : 'loss'}">${c.status === 'sold' ? 'Sold ' + (Number(c.exit) || 0) + '¢' : c.status === 'won' ? 'Won' : 'Lost'} · ${money(paid - cost, true)}</span></div></div>`; }
+  const receipt=window.PZTradeCards.contract(c);
+  if (!x) return `<div class="ct closed"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} at ${avg}¢</span></div></div>${window.PZTradeCards.html(receipt)}${c.closedAt?`<p class="mefine">Recorded ${esc(new Date(c.closedAt).toLocaleString())}</p>`:''}</div>`;
   const BK = bookHTML(c, x); const typed = Number(S.bids[c.id]); const bookBid = BK.bid && BK.bid.e.filled === qty ? BK.bid.cents : null; const bid = typed > 0 ? typed : bookBid || 0; const v = M.contractCall(qty, avg, x.p, bid);
   const where = x.ev ? `${esc(x.ev.name)} · ${esc(x.ev.state === 'pre' ? kickLabel(x.ev.date) : x.ev.detail || '')}` : '';
   const call = v.call ? `<div class="oc ${v.call.take ? 'take' : v.call.ratio >= 0.9 ? 'close' : 'hold'}"><b>${esc(v.call.take ? 'Sell' : v.call.ratio >= 0.9 ? 'Close call — sell if you want the sure thing' : 'Hold')}</b><span>Selling now: ${money(v.proceeds)} (${money(v.pnlIfSold, true)} on your ${money(cost)}) · holding is worth ${money(v.hold)} at ${fmtP(x.p)}</span></div>` : x.p === null ? `<div class="oc"><span>Selling at ${bid > 0 ? (Number.isInteger(bid) ? bid : bid.toFixed(1)) + '¢' : 'your price'} returns ${bid > 0 ? money(v.proceeds) + ' (' + money(v.pnlIfSold, true) + ')' : '–'}. There's no live model for this one.</span></div>` : `<div class="oc"><span>Fair price right now is ${Math.round(v.fairCents)}¢. Type the sell price you see and get the call.</span></div>`;
-  return `<div class="ct" id="ct-${esc(c.id)}"><div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${c.side === 'no' ? 'NO · ' : ''}${qty} contract${qty === 1 ? '' : 's'} at ${avg}¢${where ? ' · ' + where : ''}</span></div>${x.player ? avatar(x.player) : ''}</div>
+  return `<div class="ct" id="ct-${esc(c.id)}">${window.PZTradeCards.html(receipt)}<div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${c.side === 'no' ? 'NO · ' : ''}${qty} contract${qty === 1 ? '' : 's'} at ${avg}¢${where ? ' · ' + where : ''}</span></div>${x.player ? avatar(x.player) : ''}</div>
     <div class="nums"><div><div class="k">Chance now</div><div class="v" style="color:${x.p === null ? 'var(--fg2)' : pColor(x.p)}">${fmtP(x.p)}</div></div><div><div class="k">Worth holding</div><div class="v">${v.hold === null ? '–' : money(v.hold)}</div></div><div><div class="k">Paid</div><div class="v">${money(cost)}</div></div></div>
     <div class="offer"><label>Sell price you see (¢) <input data-bid="${esc(c.id)}" id="bid-${esc(c.id)}" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="${bookBid ? bookBid.toFixed(1) : '¢'}" value="${typed > 0 ? typed : ''}"></label>${call}</div>
     ${BK.html}<div class="src">${esc(x.src)}${typed > 0 ? ' · using the price you typed' : bookBid ? ' · using the Kalshi book' : ''}${c.fee !== undefined && c.fee !== null ? '' : ' · fees not included'}</div></div>`;
@@ -4491,7 +4495,7 @@ function slipTracker({ t, r }) {
   const firstPre = r.legs.map(({ leg }) => eventFor(leg.player)).filter((e) => e && e.state === 'pre').sort((a, b) => a.date.localeCompare(b.date))[0];
   const done = { won: 'Cashed', partial: 'Partial payout', lost: 'Lost', dead: 'Busted', review: 'Check void rules' }[r.state];
   const line2 = done ? `${done} · ${r.hits}/${r.n} hit` : `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${kickLabel(firstPre.date)}` : ''}`;
-  const pay = t.units ? (Number(t.toWin) || 0).toFixed(1) + '×' : r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
+  const pay = r.state==='review' ? 'Pending review' : t.units ? (Number(t.toWin) || 0).toFixed(1) + '×' : r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
   const sv = r.payout === null && r.state !== 'dead' ? slipLive(t, r) : null;
   const odds = sv ? `<div class="odds" title="Chance this slip pays out, from live pace and pre-game projections"><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b><span>${liveN || r.hits ? 'live' : 'pre-game'}</span></div>` : `<div class="odds"><b class="dim">${r.state === 'review' ? 'Void?' : '–'}</b><span>${r.state === 'review' ? 'check rules' : 'settled'}</span></div>`;
   const H = r.payout !== null || r.state === 'dead' ? null : slipHealth(t, r);
@@ -4499,7 +4503,7 @@ function slipTracker({ t, r }) {
   return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>
     <summary><div class="faces">${facesHTML(r, 3, false)}</div><div class="st"><b>${esc(t.title)}</b><span>${esc(line2)}</span>${aliveMeter(r)}</div>
       <div class="hwrap" title="${H ? 'Slip health: ' + esc(H.label) : esc(done || '')}">${H ? healthRing(H) : `<span class="hdone ${r.payout > 0 ? 'win' : 'loss'}">${r.payout > 0 ? SVG.check : SVG.x}</span>`}</div>
-      <div class="cnum en"><b>${money(r.entry)}</b><span>entry</span></div>${odds}<div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'paid' : 'to win'}</span></div>${CHEV}</summary>
+      <div class="cnum en"><b>${money(r.entry)}</b><span>entry</span></div>${odds}<div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'paid' : 'to win'}</span></div>${CHEV}</summary>${window.PZTradeCards.html(window.PZTradeCards.publicSlip(t,r))}
     ${cascade}<div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div>${honestHTML(t, r)}</details>`;
 }
 function tdWatch() {
@@ -4882,7 +4886,7 @@ function histRow(e) {
   const o = outcome(e); const v = pnl(e); const picks = e.picks ? Object.values(e.picks) : []; const known = hasStake(e);
   const dots = picks.length ? `<div class="dots">${picks.map((p) => `<i class="${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}"></i>`).join('')}</div>` : typeof e.prob === 'number' ? `<span class="chip">Bought at ${fmtP(e.prob)}</span>` : '';
   const chip = { win: '<span class="res win">Won</span>', loss: '<span class="res loss">Lost</span>', sold: '<span class="res gold">Sold early</span>', push: '<span class="res">Push</span>' }[o];
-  const sub = [e.game || '', e.legs ? `${e.hits ?? '?'}/${e.legs} correct` : e.contracts ? `${e.contracts} contracts · closed at ${Math.round(Number(e.close) * 100)}¢` : '', e.auto ? 'graded live, awaiting DraftKings' : ''].filter(Boolean).join(' · ');
+  const sub = [e.game || '', e.legs ? `${e.hits ?? '?'}/${e.legs} correct` : e.contracts ? `${e.contracts} contracts · closed at ${Math.round(Number(e.close) * 100)}¢` : '', e.auto ? 'Graded result · awaiting venue confirmation' : 'Recorded result · '+(e.fees!==undefined&&e.fees!==null?'recorded fees':'fee basis may be unknown')].filter(Boolean).join(' · ');
   const body = picks.length ? `<div class="picks">${picks.map((p) => { const kn = p.player && S.slate.players && S.slate.players[p.player]; return `<div class="mtile ${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}">${kn ? avatar(p.player) : `<div class="av" style="display:grid;place-items:center;font:900 13px var(--stadium);color:var(--fg2);background:var(--panel3)">${esc(initials(p.name))}</div>`}<div style="min-width:0;display:flex;align-items:center;gap:6px"><div style="min-width:0"><b>${esc(p.name || p.player)}</b><span>${p.line !== null && p.line !== undefined ? (p.dir === 'under' ? 'LESS ' : 'MORE ') + E.fmt(p.line) + ' ' : ''}${esc(mkLabel(p.market))}${p.mult ? ' · ' + esc(p.mult) : ''}</span></div><span class="v">${p.value !== undefined && p.value !== null ? E.fmt(p.value) : ''}</span></div></div>`; }).join('')}</div>` : '';
   const srcTxt = (S.history && S.history.sources && S.history.sources[e.src]) || e.source || '';
   const d = new Date(e.date + 'T12:00:00');

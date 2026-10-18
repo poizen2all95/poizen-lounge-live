@@ -7,7 +7,12 @@
     if(!op.uid||!op.id||/[.#$\[\]/]/.test(op.id)||!Number.isFinite(op.now))throw Error('Invalid membership operation');
     if(cur.actions&&cur.actions[op.id])return tiers;
     if(op.kind==='approve'&&op.requestStatus==='approved')throw Error('This request was already approved. Use Renew for another paid month.');
-    if(!['approve','grant','renew','remove'].includes(op.kind))throw Error('Invalid action');
+    if(!['approve','grant','renew','remove','trial'].includes(op.kind))throw Error('Invalid action');
+    const trial=op.kind==='trial';
+    if(trial&&![3,7].includes(op.days))throw Error('Choose a trial of 3 or 7 days.');
+    const live=['pro','elite'].includes(cur.tier)&&cur.active!==false&&(!cur.until||cur.until>op.now);
+    if(trial&&live)throw Error(cur.accessType==='trial'?'This trial is already active. Remove it first to replace it.':'An active paid membership cannot be replaced by a trial.');
+    if(op.kind==='renew'&&cur.accessType==='trial')throw Error('Activate a paid plan to convert this trial; monthly renewal is for paid access.');
     let grant;
     if(op.kind==='remove')grant={...cur,tier:null,active:false,source:'manual',since:cur.since||op.now,until:op.now};
     else {
@@ -16,15 +21,16 @@
       if(!['pro','elite'].includes(tier))throw Error('Choose a valid paid plan');
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw Error('Member needs a valid Google email before access can be granted');
       if(cur.email&&String(cur.email).trim().toLowerCase()!==email)throw Error('Member email differs from existing grant; review the account before granting');
-      const rate=cur.rate==='founding'&&cur.tier? 'founding':op.kind==='renew'?cur.rate:op.rate||'standard';
+      const rate=trial?'standard':cur.accessType!=='trial'&&cur.rate==='founding'&&cur.tier? 'founding':op.kind==='renew'?cur.rate:op.rate||'standard';
       if(!['founding','standard'].includes(rate))throw Error('Invalid rate');
       if(rate==='founding'&&!(cur.rate==='founding'&&cur.tier)){
         const taken=Object.values(tiers).filter(g=>g&&['pro','elite'].includes(g.tier)&&g.rate==='founding'&&Number(g.until)>op.now).length;
         if(taken>=cap)throw Error('Founding spots are full. Request still pending: agree the regular price explicitly with the member before changing their request.');
       }
-      grant={...cur,tier,email,active:true,source:'manual',rate,price:rate===cur.rate&&cur.price?cur.price:op.price||'',since:cur.since||op.now,until:addMonth(Math.max(Number(cur.until)||0,op.now))};
+      grant={...cur,tier,email,active:true,source:'manual',rate,price:trial?'$0':cur.accessType!=='trial'&&rate===cur.rate&&cur.price?cur.price:op.price||'',since:cur.since||op.now,accessType:trial?'trial':'paid',until:trial?op.now+op.days*86400000:addMonth(cur.accessType==='trial'?op.now:Math.max(Number(cur.until)||0,op.now))};
     }
-    grant.actions={...(cur.actions||{}),[op.id]:{kind:op.kind,at:op.now,actor:op.actor||'',previousTier:cur.tier||null,previousUntil:cur.until||0,tier:grant.tier,until:grant.until,email:grant.email||'',rate:grant.rate||'',price:grant.price||'',...(op.requestAt?{requestAt:op.requestAt}:{})}};
+    if(trial){grant.trialDays=op.days;grant.trialStartedAt=op.now;}else if(op.kind!=='remove'){delete grant.trialDays;delete grant.trialStartedAt;}
+    grant.actions={...(cur.actions||{}),[op.id]:{kind:op.kind,at:op.now,actor:op.actor||'',previousTier:cur.tier||null,previousUntil:cur.until||0,tier:grant.tier,until:grant.until,email:grant.email||'',rate:grant.rate||'',price:grant.price||'',accessType:grant.accessType||'paid',...(trial?{trialDays:op.days}:{}),...(op.requestAt?{requestAt:op.requestAt}:{})}};
     return {...tiers,[op.uid]:grant};
   }
   async function execute(db,op,cap){
