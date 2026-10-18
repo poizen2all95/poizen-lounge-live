@@ -1,7 +1,7 @@
 {
   "version": 1,
   "title": "NFL Week 6",
-  "updated": "2026-10-17T00:32:50.316Z",
+  "updated": "2026-10-18T06:28:45.614026Z",
   "note": "Pick6 tickets confirmed from DraftKings My Picks (Sun 10/18). First-TD and scalp are game plans until placed.",
   "players": {
     "henry": {
@@ -211,6 +211,174 @@
       "pos": "SS",
       "number": "4",
       "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/677587/headshot/67/current"
+    },
+    "boston": {
+      "name": "Denzel Boston",
+      "sport": "nfl",
+      "team": "CLE",
+      "pos": "WR",
+      "number": "12",
+      "espnId": "4832800"
+    },
+    "mhj": {
+      "name": "Marvin Harrison Jr.",
+      "sport": "nfl",
+      "team": "HOU",
+      "pos": "WR",
+      "number": "18",
+      "espnId": "4432708"
+    },
+    "kwilliams": {
+      "name": "Kyren Williams",
+      "sport": "nfl",
+      "team": "LAR",
+      "pos": "RB",
+      "number": "23",
+      "espnId": "4430737"
+    },
+    "coker": {
+      "name": "Jalen Coker",
+      "sport": "nfl",
+      "team": "CAR",
+      "pos": "WR",
+      "number": "18",
+      "espnId": "4695883"
+    },
+    "cousins": {
+      "name": "Kirk Cousins",
+      "sport": "nfl",
+      "team": "LV",
+      "pos": "QB",
+      "number": "8",
+      "espnId": "14880"
+    },
+    "golden": {
+      "name": "Matthew Golden",
+      "sport": "nfl",
+      "team": "GB",
+      "pos": "WR",
+      "number": "0",
+      "espnId": "4701936"
+    },
+    "likely": {
+      "name": "Isaiah Likely",
+      "sport": "nfl",
+      "team": "NYG",
+      "pos": "TE",
+      "number": "9",
+      "espnId": "4361050"
+    },
+    "london": {
+      "name": "Drake London",
+      "sport": "nfl",
+      "team": "ATL",
+      "pos": "WR",
+      "number": "5",
+      "espnId": "4426502"
+    },
+    "maye": {
+      "name": "Drake Maye",
+      "sport": "nfl",
+      "team": "NE",
+      "pos": "QB",
+      "number": "10",
+      "espnId": "4431452"
+    },
+    "strange": {
+      "name": "Brenton Strange",
+      "sport": "nfl",
+      "team": "JAX",
+      "pos": "TE",
+      "number": "85",
+      "espnId": "4430539"
+    },
+    "lawrence": {
+      "name": "Trevor Lawrence",
+      "sport": "nfl",
+      "team": "JAX",
+      "pos": "QB",
+      "number": "16",
+      "espnId": "4360310"
+    },
+    "wmarks": {
+      "name": "Woody Marks",
+      "sport": "nfl",
+      "team": "HOU",
+      "pos": "RB",
+      "number": "4",
+      "espnId": "4429059"
+    },
+    "tuten": {
+      "name": "Bhayshul Tuten",
+      "sport": "nfl",
+      "team": "JAX",
+      "pos": "RB",
+      "number": "33",
+      "espnId": "4882093"
+    },
+    "bridges": {
+      "name": "Mikal Bridges",
+      "sport": "nba",
+      "team": "NY",
+      "pos": "G",
+      "number": "25",
+      "espnId": "3147657"
+    },
+    "jbrown": {
+      "name": "Jaylen Brown",
+      "sport": "nba",
+      "team": "PHI",
+      "pos": "G",
+      "number": "7",
+      "espnId": "3917376"
+    },
+    "cade": {
+      "name": "Cade Cunningham",
+      "sport": "nba",
+      "team": "DET",
+      "pos": "G",
+      "number": "2",
+      "espnId": "4432166"
+    },
+    "sga": {
+      "name": "Shai Gilgeous-Alexander",
+      "sport": "nba",
+      "team": "OKC",
+      "pos": "G",
+      "number": "2",
+      "espnId": "4278073"
+    },
+    "lebron": {
+      "name": "LeBron James",
+      "sport": "nba",
+      "team": "PHI",
+      "pos": "F",
+      "number": "23",
+      "espnId": "1966"
+    },
+    "tatum": {
+      "name": "Jayson Tatum",
+      "sport": "nba",
+      "team": "BOS",
+      "pos": "F",
+      "number": "0",
+      "espnId": "4065648"
+    },
+    "athompson": {
+      "name": "Ausar Thompson",
+      "sport": "nba",
+      "team": "DET",
+      "pos": "G",
+      "number": "9",
+      "espnId": "4684742"
+    },
+    "kat": {
+      "name": "Karl-Anthony Towns",
+      "sport": "nba",
+      "team": "NY",
+      "pos": "C",
+      "number": "32",
+      "espnId": "3136195"
     }
   },
   "pick6": [
@@ -363,87 +531,221 @@
       "window": "Sun 10/18"
     },
     {
-      "id": "mlb-4",
-      "title": "ALCS Game 4 — 4-Pick",
-      "badge": "MLB · $5 Bonus + Caminero Gimme",
+      "id": "nfl-6-50",
+      "title": "6-Pick $50 Swing",
       "status": "confirmed",
-      "entry": 5,
-      "toWin": 33,
+      "entry": 50,
+      "toWin": 4500,
+      "window": "Sun 10/18",
       "legs": [
         {
-          "player": "caminero",
-          "market": "hrr",
-          "line": 0.5,
-          "mult": "Gimme",
-          "gimme": true
+          "player": "allen",
+          "market": "pass_yds",
+          "line": 269.5,
+          "mult": "1.4x"
         },
         {
-          "player": "ydiaz",
-          "market": "hrr",
-          "line": 1.5,
-          "mult": "1.0x"
+          "player": "boston",
+          "market": "rec_yds",
+          "line": 59.5,
+          "mult": "1.1x"
         },
         {
-          "player": "kwan",
-          "market": "hrr",
-          "line": 1.5,
-          "mult": "1.0x"
-        },
-        {
-          "player": "rocchio",
-          "market": "hrr",
-          "line": 0.5,
-          "mult": "0.8x"
-        }
-      ],
-      "window": "Fri 10/16 · ALCS G4"
-    },
-    {
-      "id": "mlb-6",
-      "title": "ALCS Game 4 — 6-Pick",
-      "badge": "MLB · J. Ramírez Promo",
-      "status": "confirmed",
-      "entry": 3,
-      "toWin": 40,
-      "legs": [
-        {
-          "player": "jram",
-          "market": "hrr",
-          "line": 0.5,
-          "mult": "0.5x Promo"
-        },
-        {
-          "player": "halpin",
-          "market": "hrr",
-          "line": 1.5,
+          "player": "stafford",
+          "market": "pass_rush_yds",
+          "line": 309.5,
           "mult": "1.3x"
         },
         {
-          "player": "nlowe",
-          "market": "hrr",
-          "line": 1.5,
+          "player": "taylor",
+          "market": "rush_yds",
+          "line": 99.5,
+          "mult": "1.1x"
+        },
+        {
+          "player": "watson",
+          "market": "anytime_td",
+          "line": 0.5,
           "mult": "1.2x"
         },
         {
-          "player": "simpson",
-          "market": "hrr",
+          "player": "young",
+          "market": "pass_yds",
+          "line": 259.5,
+          "mult": "1.3x"
+        }
+      ]
+    },
+    {
+      "id": "nfl-4-14",
+      "title": "4-Pick Yards",
+      "status": "confirmed",
+      "entry": 14,
+      "toWin": 140,
+      "window": "Sun 10/18",
+      "legs": [
+        {
+          "player": "mhj",
+          "market": "rec_yds",
+          "line": 21.5
+        },
+        {
+          "player": "nacua",
+          "market": "rec_yds",
+          "line": 94.5
+        },
+        {
+          "player": "walker",
+          "market": "rush_yds",
+          "line": 90.5
+        },
+        {
+          "player": "kwilliams",
+          "market": "rush_yds",
+          "line": 68.5
+        }
+      ]
+    },
+    {
+      "id": "nfl-8-coker",
+      "title": "8-Pick Longshot",
+      "status": "confirmed",
+      "entry": 10,
+      "toWin": 8100,
+      "window": "Sun 10/18",
+      "legs": [
+        {
+          "player": "coker",
+          "market": "rec_yds",
+          "line": 79.5,
+          "mult": "1.5x"
+        },
+        {
+          "player": "cousins",
+          "market": "pass_yds",
+          "line": 250.5
+        },
+        {
+          "player": "golden",
+          "market": "rec_yds",
+          "line": 89.5,
+          "mult": "1.5x"
+        },
+        {
+          "player": "likely",
+          "market": "receptions",
+          "line": 6.5,
+          "mult": "1.4x"
+        },
+        {
+          "player": "london",
+          "market": "rec_yds",
+          "line": 89.5
+        },
+        {
+          "player": "maye",
+          "market": "pass_yds",
+          "line": 239.5,
+          "mult": "0.9x"
+        },
+        {
+          "player": "strange",
+          "market": "rec_yds",
+          "line": 69.5,
+          "mult": "2.2x"
+        },
+        {
+          "player": "walker",
+          "market": "rush_yds",
+          "line": 119.5,
+          "mult": "1.7x"
+        }
+      ]
+    },
+    {
+      "id": "nfl-4-patd",
+      "title": "4-Pick Passing TDs",
+      "badge": "$5 Bonus Picks",
+      "status": "confirmed",
+      "entry": 5,
+      "toWin": 39,
+      "window": "Sun 10/18",
+      "legs": [
+        {
+          "player": "allen",
+          "market": "pass_td",
+          "line": 1.5,
+          "mult": "0.9x"
+        },
+        {
+          "player": "lawrence",
+          "market": "pass_td",
+          "line": 1.5,
+          "mult": "1.1x"
+        },
+        {
+          "player": "mahomes",
+          "market": "pass_td",
+          "line": 1.5
+        },
+        {
+          "player": "maye",
+          "market": "pass_td",
           "line": 1.5,
           "mult": "0.8x"
-        },
-        {
-          "player": "palacios",
-          "market": "hrr",
-          "line": 0.5,
-          "mult": "0.8x"
-        },
-        {
-          "player": "rocchio",
-          "market": "hrr",
-          "line": 0.5,
-          "mult": "0.8x"
         }
-      ],
-      "window": "Fri 10/16 · ALCS G4"
+      ]
+    },
+    {
+      "id": "nba-8",
+      "title": "NBA 8-Pick Points",
+      "status": "confirmed",
+      "entry": 5,
+      "toWin": 360,
+      "window": "Tue 10/20",
+      "legs": [
+        {
+          "player": "bridges",
+          "market": "pts",
+          "line": 13.5
+        },
+        {
+          "player": "jbrown",
+          "market": "pts",
+          "line": 20.5
+        },
+        {
+          "player": "cade",
+          "market": "pts",
+          "line": 24.5
+        },
+        {
+          "player": "sga",
+          "market": "pts",
+          "line": 29.5
+        },
+        {
+          "player": "lebron",
+          "market": "pts",
+          "line": 16.5
+        },
+        {
+          "player": "tatum",
+          "market": "pts",
+          "line": 26.5
+        },
+        {
+          "player": "athompson",
+          "market": "pts",
+          "line": 9.5,
+          "mult": "0.9x"
+        },
+        {
+          "player": "kat",
+          "market": "pts",
+          "line": 17.5
+        }
+      ]
     }
   ],
   "firstTD": {
@@ -494,7 +796,28 @@
     "rule": "Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.",
     "shifts": [
       {
-        "label": "Shift 1",
+        "label": "Shift 1 · London 6:30 AM",
+        "targets": [
+          {
+            "player": "wmarks",
+            "stake": 4.97,
+            "odds": "+946.3",
+            "placed": true,
+            "venue": "DraftKings Predictions",
+            "note": "Bought $4.97 at 9%, pays $52.00. Sell offer $2.60 (Oct 17)."
+          },
+          {
+            "player": "tuten",
+            "stake": 9.94,
+            "odds": "+1248.1",
+            "placed": true,
+            "venue": "DraftKings Predictions",
+            "note": "Bought $9.94 at 7%, pays $134.00. Sell offer $8.04 (Oct 17)."
+          }
+        ]
+      },
+      {
+        "label": "Shift 2",
         "targets": [
           {
             "player": "henry",
@@ -509,7 +832,7 @@
         ]
       },
       {
-        "label": "Shift 2",
+        "label": "Shift 3",
         "targets": [
           {
             "player": "allen",
@@ -524,7 +847,7 @@
         ]
       },
       {
-        "label": "Shift 3 · SNF",
+        "label": "Shift 4 · SNF",
         "targets": [
           {
             "player": "watson",
@@ -534,7 +857,7 @@
         ]
       },
       {
-        "label": "Shift 4 · MNF",
+        "label": "Shift 5 · MNF",
         "targets": [
           {
             "player": "cmc",
@@ -645,6 +968,36 @@
       "player": "allen",
       "market": "pass_yds",
       "line": 259.5
+    }
+  ],
+  "contracts": [
+    {
+      "id": "c-wmarks-2td",
+      "venue": "DraftKings Predictions",
+      "kind": "two_td",
+      "player": "wmarks",
+      "title": "Woody Marks 2+ TDs",
+      "qty": 52,
+      "avg": 9.56,
+      "cost": 4.97,
+      "status": "open",
+      "at": "2026-10-18T06:28:45.614026Z",
+      "game": "HOU @ JAX",
+      "note": "Bought $4.97 at 9%. Pays $52.00. Sell offer $2.60 on Oct 17."
+    },
+    {
+      "id": "c-tuten-2td",
+      "venue": "DraftKings Predictions",
+      "kind": "two_td",
+      "player": "tuten",
+      "title": "Bhayshul Tuten 2+ TDs",
+      "qty": 134,
+      "avg": 7.42,
+      "cost": 9.94,
+      "status": "open",
+      "at": "2026-10-18T06:28:45.614026Z",
+      "game": "HOU @ JAX",
+      "note": "Bought $9.94 at 7%. Pays $134.00. Sell offer $8.04 on Oct 17."
     }
   ]
 }
