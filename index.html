@@ -3820,7 +3820,7 @@ function alertPrefsHTML() {
 /* full-screen sweat mode: second monitor, tablet, or an OBS scene */
 S.sweat = params.has('sweat');
 S.sweatFilter = 'alive';
-S.sweatGame = '';
+S.sweatGame = null;
 function sweatRows(filter = S.sweatFilter) {
   // Receipt settlements belong in history; an unsettled busted ticket stays available here.
   const rows = S.G.pick6.filter(({t}) => confirmed(t) && !t.settlement);
@@ -3850,6 +3850,10 @@ function sweatPlayers(rows) {
 function sweatHTML() {
   const rows=sweatRows(), allPlayers=sweatPlayers(rows);
   const games=[...new Set(allPlayers.map(p=>{const e=eventFor(p.key);return e ? e.name : P(p.key).sport || 'Other';}))].sort();
+  if(S.sweatGame===null){
+    const next=allPlayers.map(p=>({p,e:eventFor(p.key),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&x.at>Date.now()-6*3600e3).sort((a,b)=>a.at-b.at);
+    S.sweatGame=next.length?next[0].e.name:'';
+  }
   if(S.sweatGame && !games.includes(S.sweatGame)) S.sweatGame='';
   const players=allPlayers.filter(p=>!S.sweatGame || (eventFor(p.key)?.name || P(p.key).sport || 'Other')===S.sweatGame);
   const max=rows.reduce((sum,{r})=>sum+(Number(r.potential)||0),0);
@@ -3861,7 +3865,7 @@ function sweatHTML() {
       const market=E.MARKETS[leg.market]||{}, known=g.value!==null&&g.value!==undefined&&Number.isFinite(Number(g.value)),value=known?Number(g.value):null,under=leg.dir==='under';
       const progress=known?Math.min(100,Math.max(0,value/Math.max(Number(leg.line),1)*100)):g.state==='hit'?100:0;
       const state=g.state==='hit'?'hit':g.state==='miss'?'miss':g.state==='live'?'live':'pending';
-      const need=known&&!under?Math.max(0,Math.ceil((Number(leg.line)-value+0.001)*100)/100):null;
+      const need=known&&!under?Math.max(0,Math.floor(Number(leg.line))+1-value):null;
       return `<div class="sw-line ${state}"><div class="sw-line-title"><span>${esc(market.short||leg.market)} <b>${under?'LESS':'MORE'} ${E.fmt(leg.line)}</b></span><strong>${known?E.fmt(value):'—'}</strong></div><div class="sw-track" role="progressbar" aria-label="${esc(P(p.key).name+' '+(market.short||leg.market)+' '+(under?'under ':'over ')+leg.line)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(progress)}"><i style="width:${progress}%"></i></div><div class="sw-line-note"><span>${state==='hit'?'✓ HIT':state==='miss'?'× MISSED':state==='pending'?'Awaiting stats':under?'Stay below '+E.fmt(leg.line):need===0?'Line reached':E.fmt(need)+' to clear'}</span><span>${tickets.size}×</span></div></div>`;
     }).join('')}</div></article>`;
   }).join('') || `<div class="sw-empty"><h2>${S.sweatFilter==='live'?'No tickets live right now':S.sweatFilter==='dead'?'No busted tickets in this watch':'Nothing in this view'}</h2><p>Use Alive to see your current player cards, or Upcoming for the next games. Settled receipts stay in Pick6 history.</p></div>`}</div>
@@ -5108,8 +5112,8 @@ document.addEventListener('click', (e) => {
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; store.set('pz_p6_filter',S.p6Filter); render(); return; }
   const ex = e.target.closest('[data-export]'); if (ex) { exportLedger(ex.dataset.export); return; }
   const sc2 = e.target.closest('[data-scen]'); if (sc2) { if (!can('research')) { setTab('me'); return; } const [id, k] = sc2.dataset.scen.split(':'); S.scen = S.scen || {}; S.scen[id] = k; render(); return; }
-  const sf = e.target.closest('[data-sw-filter]'); if(sf){ S.sweatFilter=sf.dataset.swFilter; S.sweatGame=''; renderSweat(); return; }
-  const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; renderSweat(); return; }
+  const sf = e.target.closest('[data-sw-filter]'); if(sf){ S.sweatFilter=sf.dataset.swFilter; S.sweatGame=null; renderSweat(); return; }
+  const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; if(S.sweat){S.sweatFilter=sweatRows('live').length?'live':'alive';S.sweatGame=null;} renderSweat(); return; }
   const wi = e.target.closest('[data-wi]'); if (wi) { if (!can('research')) { setTab('me'); return; } const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
   if (e.target.closest('[data-wiclear]')) { S.whatIf.clear(); render(); return; }
   const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview || null; applyTeam(preferredTeam()); applyPlayoffs(); render(); return; }
