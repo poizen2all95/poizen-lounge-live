@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-20T22:20:22.651Z",
+  "updated": "2026-10-20T22:21:12.979Z",
   "note": "Imported history. Every row says where it came from. stake null = the amount risked was not visible in the source, so the row counts toward hit rates but not toward profit and loss.",
   "sources": {
     "dk-pick6": "DraftKings Pick6 → My Picks → Recent, owner screenshot taken Oct 16 2026. The page header says 14 pick sets; 7 were visible in the screenshot.",
@@ -8,7 +8,7 @@
     "dk-pick6-1017": "DraftKings Pick6 → Upcoming and Recent, owner screenshots Oct 17 2026.",
     "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades.",
     "dk-browser-1018": "DraftKings Predictions My Trades receipts and Pick6 My Picks read through the owner-authorized Edge extension on 2026-10-18T17:05:44.703Z. Open positions are not graded from game score alone.",
-    "dk-browser-1020": "Authorized DraftKings Edge receipt review 2026-10-20T22:20:22.651Z; 40 Predictions settlements captured Oct 19 and newest receipt rechecked Oct 20."
+    "dk-browser-1020": "Authorized DraftKings Edge receipt review 2026-10-20T22:21:12.979Z; 40 Predictions settlements captured Oct 19 and newest receipt rechecked Oct 20."
   },
   "entries": [
     {
