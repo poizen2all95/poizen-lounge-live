@@ -3868,7 +3868,7 @@ function sweatHTML() {
   const rows=sweatRows(), allPlayers=sweatPlayers(rows);
   const games=[...new Set(allPlayers.map(p=>{const e=eventFor(p.key);return e ? e.name : P(p.key).sport || 'Other';}))].sort();
   if(S.sweatGame===null){
-    const next=allPlayers.map(p=>({p,e:eventFor(p.key),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&(x.at>Date.now()||[...x.p.lines.values()].some(l=>l.g.state==='live'))).sort((a,b)=>a.at-b.at);
+    const next=allPlayers.map(p=>({p,e:eventFor(p.key),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&x.e.state!=='post'&&(x.at>Date.now()-6*3600e3||[...x.p.lines.values()].some(l=>l.g.state==='live'))).sort((a,b)=>a.at-b.at);
     S.sweatGame=next.length?next[0].e.name:'';
   }
   if(S.sweatGame && !games.includes(S.sweatGame)) S.sweatGame='';
