@@ -11,7 +11,7 @@
     injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
     search: (q) => `https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(q)}&type=player&limit=6`,
   };
-  function sportPath(s) { return s === 'mlb' ? 'baseball/mlb' : s === 'nba' ? 'basketball/nba' : 'football/nfl'; }
+  function sportPath(s) { return ({mlb:'baseball/mlb',nba:'basketball/nba',wnba:'basketball/wnba',nhl:'hockey/nhl',cfb:'football/college-football'})[s] || 'football/nfl'; }
 
   // ---------- names ----------
   function norm(name) {

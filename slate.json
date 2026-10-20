@@ -1,7 +1,7 @@
 {
   "version": 1,
   "title": "October 20 · Multi-Sport",
-  "updated": "2026-10-20T22:21:12.979Z",
+  "updated": "2026-10-20T22:44:54.952Z",
   "note": "Account refresh 2026-10-20T22:21:12.979Z: 10 open Predictions trades; 5 live and 20 upcoming Pick6 entries; 50 recent Pick6 venue receipts reconciled. 40 saved Predictions settlement receipts retained after checking the newest settled position. NBA rosters and injury data refreshed; NFL research retains its earlier timestamp. Web Predictions boosts are unverified.",
   "players": {
     "henry": {
@@ -146,15 +146,19 @@
       "team": "TB",
       "pos": "3B",
       "number": "13",
-      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/691406/headshot/67/current"
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/4905921.png",
+      "espnId": "4905921",
+      "teamId": "30"
     },
     "ydiaz": {
       "name": "Yandy Díaz",
       "sport": "mlb",
       "team": "TB",
-      "pos": "1B",
+      "pos": "DH",
       "number": "2",
-      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/650490/headshot/67/current"
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/33481.png",
+      "espnId": "33481",
+      "teamId": "30"
     },
     "kwan": {
       "name": "Steven Kwan",
@@ -192,9 +196,11 @@
       "name": "Chandler Simpson",
       "sport": "mlb",
       "team": "TB",
-      "pos": "OF",
+      "pos": "LF",
       "number": "14",
-      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/802415/headshot/67/current"
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/4679983.png",
+      "espnId": "4679983",
+      "teamId": "30"
     },
     "palacios": {
       "name": "Richie Palacios",
@@ -202,7 +208,9 @@
       "team": "TB",
       "pos": "2B",
       "number": "1",
-      "headshot": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/680700/headshot/67/current"
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/41359.png",
+      "espnId": "41359",
+      "teamId": "30"
     },
     "rocchio": {
       "name": "Brayan Rocchio",
@@ -282,7 +290,9 @@
       "team": "NE",
       "pos": "QB",
       "number": "10",
-      "espnId": "4431452"
+      "espnId": "4431452",
+      "teamId": "17",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4431452.png"
     },
     "strange": {
       "name": "Brenton Strange",
@@ -322,7 +332,9 @@
       "team": "NY",
       "pos": "G",
       "number": "25",
-      "espnId": "3147657"
+      "espnId": "3147657",
+      "teamId": "18",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3147657.png"
     },
     "jbrown": {
       "name": "Jaylen Brown",
@@ -330,7 +342,9 @@
       "team": "PHI",
       "pos": "G",
       "number": "7",
-      "espnId": "3917376"
+      "espnId": "3917376",
+      "teamId": "20",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3917376.png"
     },
     "cade": {
       "name": "Cade Cunningham",
@@ -338,7 +352,9 @@
       "team": "DET",
       "pos": "G",
       "number": "2",
-      "espnId": "4432166"
+      "espnId": "4432166",
+      "teamId": "8",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4432166.png"
     },
     "sga": {
       "name": "Shai Gilgeous-Alexander",
@@ -346,7 +362,9 @@
       "team": "OKC",
       "pos": "G",
       "number": "2",
-      "espnId": "4278073"
+      "espnId": "4278073",
+      "teamId": "25",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4278073.png"
     },
     "lebron": {
       "name": "LeBron James",
@@ -354,7 +372,9 @@
       "team": "PHI",
       "pos": "F",
       "number": "23",
-      "espnId": "1966"
+      "espnId": "1966",
+      "teamId": "20",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/1966.png"
     },
     "tatum": {
       "name": "Jayson Tatum",
@@ -362,7 +382,9 @@
       "team": "BOS",
       "pos": "F",
       "number": "0",
-      "espnId": "4065648"
+      "espnId": "4065648",
+      "teamId": "2",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4065648.png"
     },
     "athompson": {
       "name": "Ausar Thompson",
@@ -370,7 +392,9 @@
       "team": "DET",
       "pos": "G",
       "number": "9",
-      "espnId": "4684742"
+      "espnId": "4684742",
+      "teamId": "8",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4684742.png"
     },
     "kat": {
       "name": "Karl-Anthony Towns",
@@ -378,7 +402,9 @@
       "team": "NY",
       "pos": "C",
       "number": "32",
-      "espnId": "3136195"
+      "espnId": "3136195",
+      "teamId": "18",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3136195.png"
     },
     "stroud": {
       "name": "C.J. Stroud",
@@ -519,7 +545,9 @@
       "team": "DET",
       "pos": "C",
       "espnId": "4433621",
-      "number": "0"
+      "number": "0",
+      "teamId": "8",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4433621.png"
     },
     "receipt-joelembiid": {
       "name": "Joel Embiid",
@@ -527,7 +555,9 @@
       "team": "PHI",
       "pos": "C",
       "espnId": "3059318",
-      "number": "21"
+      "number": "21",
+      "teamId": "20",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3059318.png"
     },
     "receipt-deaaronfox": {
       "name": "De'Aaron Fox",
@@ -535,7 +565,9 @@
       "team": "SA",
       "pos": "G",
       "espnId": "4066259",
-      "number": "4"
+      "number": "4",
+      "teamId": "24",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4066259.png"
     },
     "receipt-tyresemaxey": {
       "name": "Tyrese Maxey",
@@ -543,7 +575,9 @@
       "team": "PHI",
       "pos": "G",
       "espnId": "4431678",
-      "number": "0"
+      "number": "0",
+      "teamId": "20",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4431678.png"
     },
     "receipt-victorwembanyama": {
       "name": "Victor Wembanyama",
@@ -551,7 +585,9 @@
       "team": "SA",
       "pos": "F",
       "espnId": "5104157",
-      "number": "1"
+      "number": "1",
+      "teamId": "24",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/5104157.png"
     },
     "receipt-jalenbrunson": {
       "name": "Jalen Brunson",
@@ -559,7 +595,9 @@
       "team": "NY",
       "pos": "G",
       "espnId": "3934672",
-      "number": "11"
+      "number": "11",
+      "teamId": "18",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3934672.png"
     },
     "receipt-chetholmgren": {
       "name": "Chet Holmgren",
@@ -567,7 +605,9 @@
       "team": "OKC",
       "pos": "C",
       "espnId": "4433255",
-      "number": "7"
+      "number": "7",
+      "teamId": "25",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4433255.png"
     },
     "receipt-paytonpritchard": {
       "name": "Payton Pritchard",
@@ -575,7 +615,9 @@
       "team": "BOS",
       "pos": "G",
       "espnId": "4066354",
-      "number": "11"
+      "number": "11",
+      "teamId": "2",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4066354.png"
     },
     "receipt-oganunoby": {
       "name": "OG Anunoby",
@@ -583,37 +625,59 @@
       "team": "NY",
       "pos": "F",
       "espnId": "3934719",
-      "number": "8"
+      "number": "8",
+      "teamId": "18",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3934719.png"
     },
     "receipt-jaredhollins": {
       "name": "Jared Hollins",
       "sport": "cfb",
-      "team": "",
-      "pos": "QB"
+      "team": "USA",
+      "pos": "QB",
+      "espnId": "5148858",
+      "teamId": "6",
+      "number": "7",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5148858.png"
     },
     "receipt-brendanjenkins": {
       "name": "Brendan Jenkins",
       "sport": "cfb",
-      "team": "",
-      "pos": "WR"
+      "team": "USA",
+      "pos": "WR",
+      "espnId": "5156183",
+      "teamId": "6",
+      "number": "12",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5156183.png"
     },
     "receipt-jjkohl": {
       "name": "JJ Kohl",
       "sport": "cfb",
-      "team": "",
-      "pos": "QB"
+      "team": "FIU",
+      "pos": "QB",
+      "espnId": "4870883",
+      "teamId": "2229",
+      "number": "17",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/4870883.png"
     },
     "receipt-camronlacy": {
       "name": "Cam'ron Lacy",
       "sport": "cfb",
-      "team": "",
-      "pos": "WR"
+      "team": "MTSU",
+      "pos": "WR",
+      "espnId": "5091830",
+      "teamId": "2393",
+      "number": "3",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5091830.png"
     },
     "receipt-jojostone": {
       "name": "Jojo Stone",
       "sport": "cfb",
-      "team": "",
-      "pos": "WR"
+      "team": "FIU",
+      "pos": "WR",
+      "espnId": "5218988",
+      "teamId": "2229",
+      "number": "0",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5218988.png"
     },
     "receipt-micahwoods": {
       "name": "Micah Woods",
@@ -624,8 +688,12 @@
     "receipt-anthonyeager": {
       "name": "Anthony Eager",
       "sport": "cfb",
-      "team": "",
-      "pos": "WR"
+      "team": "USA",
+      "pos": "WR",
+      "espnId": "5075529",
+      "teamId": "6",
+      "number": "1",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5075529.png"
     },
     "receipt-landynlocke": {
       "name": "Landyn Locke",
@@ -636,14 +704,22 @@
     "receipt-pjmartin": {
       "name": "PJ Martin",
       "sport": "cfb",
-      "team": "",
-      "pos": "RB"
+      "team": "USA",
+      "pos": "RB",
+      "espnId": "5124334",
+      "teamId": "6",
+      "number": "0",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5124334.png"
     },
     "receipt-judahprice": {
       "name": "Judah Price",
       "sport": "cfb",
-      "team": "",
-      "pos": "RB"
+      "team": "MRSH",
+      "pos": "RB",
+      "espnId": "5161776",
+      "teamId": "276",
+      "number": "10",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5161776.png"
     },
     "receipt-timburnsjr": {
       "name": "Tim Burns Jr.",
@@ -654,8 +730,12 @@
     "receipt-adriannorton": {
       "name": "Adrian Norton",
       "sport": "cfb",
-      "team": "",
-      "pos": "WR"
+      "team": "MRSH",
+      "pos": "WR",
+      "espnId": "5157331",
+      "teamId": "276",
+      "number": "2",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5157331.png"
     },
     "receipt-gradyoneill": {
       "name": "Grady O'Neill",
@@ -672,284 +752,472 @@
     "receipt-carlosdelriowilson": {
       "name": "Carlos Del Rio-Wilson",
       "sport": "cfb",
-      "team": "",
-      "pos": "QB"
+      "team": "MRSH",
+      "pos": "QB",
+      "espnId": "4432691",
+      "teamId": "276",
+      "number": "7",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/4432691.png"
     },
     "receipt-devontelyons": {
       "name": "Devonte Lyons",
       "sport": "cfb",
-      "team": "",
-      "pos": "RB"
+      "team": "FIU",
+      "pos": "RB",
+      "espnId": "5146722",
+      "teamId": "2229",
+      "number": "3",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/5146722.png"
     },
     "receipt-antoniomartin": {
       "name": "Antonio Martin",
       "sport": "cfb",
-      "team": "",
-      "pos": "RB"
+      "team": "MTSU",
+      "pos": "RB",
+      "espnId": "4685436",
+      "teamId": "2393",
+      "number": "8",
+      "headshot": "https://a.espncdn.com/i/headshots/college-football/players/full/4685436.png"
     },
     "receipt-adamfantilli": {
       "name": "Adam Fantilli",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "CBJ",
+      "pos": "C",
+      "espnId": "5136617",
+      "teamId": "29",
+      "number": "19",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5136617.png"
     },
     "receipt-jakeguentzel": {
       "name": "Jake Guentzel",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "TB",
+      "pos": "C",
+      "espnId": "3042083",
+      "teamId": "20",
+      "number": "59",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/3042083.png"
     },
     "receipt-brandonhagel": {
       "name": "Brandon Hagel",
       "sport": "nhl",
-      "team": "",
-      "pos": "LW"
+      "team": "TB",
+      "pos": "LW",
+      "espnId": "4065019",
+      "teamId": "20",
+      "number": "38",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/4065019.png"
     },
     "receipt-bohorvat": {
       "name": "Bo Horvat",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "NYI",
+      "pos": "C",
+      "espnId": "3042002",
+      "teamId": "12",
+      "number": "14",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/3042002.png"
     },
     "receipt-macklincelebrini": {
       "name": "Macklin Celebrini",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "SJ",
+      "pos": "C",
+      "espnId": "5206628",
+      "teamId": "18",
+      "number": "71",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5206628.png"
     },
     "receipt-jackhughes": {
       "name": "Jack Hughes",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "NJ",
+      "pos": "C",
+      "espnId": "4565222",
+      "teamId": "11",
+      "number": "86",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/4565222.png"
     },
     "receipt-nathanmackinnon": {
       "name": "Nathan MacKinnon",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "COL",
+      "pos": "C",
+      "espnId": "3041969",
+      "teamId": "17",
+      "number": "29",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/3041969.png"
     },
     "receipt-austonmatthews": {
       "name": "Auston Matthews",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "TOR",
+      "pos": "C",
+      "espnId": "4024123",
+      "teamId": "21",
+      "number": "34",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/4024123.png"
     },
     "receipt-mikaelgranlund": {
       "name": "Mikael Granlund",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "ANA",
+      "pos": "C",
+      "espnId": "5831",
+      "teamId": "25",
+      "number": "64",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5831.png"
     },
     "receipt-gavinmckenna": {
       "name": "Gavin McKenna",
       "sport": "nhl",
-      "team": "",
-      "pos": "LW"
+      "team": "TOR",
+      "pos": "LW",
+      "espnId": "5342529",
+      "teamId": "21",
+      "number": "92",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5342529.png"
     },
     "receipt-seanmonahan": {
       "name": "Sean Monahan",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "CBJ",
+      "pos": "C",
+      "espnId": "3041996",
+      "teamId": "29",
+      "number": "23",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/3041996.png"
     },
     "receipt-alexnewhook": {
       "name": "Alex Newhook",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "MTL",
+      "pos": "C",
+      "espnId": "4565237",
+      "teamId": "10",
+      "number": "15",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/4565237.png"
     },
     "receipt-nikitakucherov": {
       "name": "Nikita Kucherov",
       "sport": "nhl",
-      "team": "",
-      "pos": "RW"
+      "team": "TB",
+      "pos": "RW",
+      "espnId": "2563060",
+      "teamId": "20",
+      "number": "86",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/2563060.png"
     },
     "receipt-markstone": {
       "name": "Mark Stone",
       "sport": "nhl",
-      "team": "",
-      "pos": "RW"
+      "team": "VGK",
+      "pos": "RW",
+      "espnId": "5545",
+      "teamId": "37",
+      "number": "61",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5545.png"
     },
     "receipt-nicksuzuki": {
       "name": "Nick Suzuki",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "MTL",
+      "pos": "C",
+      "espnId": "4233594",
+      "teamId": "10",
+      "number": "14",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/4233594.png"
     },
     "receipt-martinnecas": {
       "name": "Martin Necas",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "COL",
+      "pos": "C",
+      "espnId": "4233586",
+      "teamId": "17",
+      "number": "88",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/4233586.png"
     },
     "receipt-kylepalmieri": {
       "name": "Kyle Palmieri",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "NYI",
+      "pos": "C",
+      "espnId": "5517",
+      "teamId": "12",
+      "number": "21",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5517.png"
     },
     "receipt-matthewschaefer": {
       "name": "Matthew Schaefer",
       "sport": "nhl",
-      "team": "",
-      "pos": "D"
+      "team": "NYI",
+      "pos": "D",
+      "espnId": "5291933",
+      "teamId": "12",
+      "number": "48",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5291933.png"
     },
     "receipt-beckettsennecke": {
       "name": "Beckett Sennecke",
       "sport": "nhl",
-      "team": "",
-      "pos": "RW"
+      "team": "ANA",
+      "pos": "RW",
+      "espnId": "5216858",
+      "teamId": "25",
+      "number": "45",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5216858.png"
     },
     "receipt-willsmith": {
       "name": "Will Smith",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "SJ",
+      "pos": "C",
+      "espnId": "5149155",
+      "teamId": "18",
+      "number": "2",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/5149155.png"
     },
     "receipt-dylanstrome": {
       "name": "Dylan Strome",
       "sport": "nhl",
-      "team": "",
-      "pos": "C"
+      "team": "WSH",
+      "pos": "C",
+      "espnId": "3899933",
+      "teamId": "23",
+      "number": "17",
+      "headshot": "https://a.espncdn.com/i/headshots/nhl/players/full/3899933.png"
     },
     "receipt-jordincanada": {
       "name": "Jordin Canada",
       "sport": "wnba",
-      "team": "",
-      "pos": "SG"
+      "team": "ATL",
+      "pos": "G",
+      "espnId": "3142250",
+      "teamId": "20",
+      "number": "3",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/3142250.png"
     },
     "receipt-allishagray": {
       "name": "Allisha Gray",
       "sport": "wnba",
-      "team": "",
-      "pos": "SG"
+      "team": "ATL",
+      "pos": "G",
+      "espnId": "3058901",
+      "teamId": "20",
+      "number": "15",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/3058901.png"
     },
     "receipt-angelreese": {
       "name": "Angel Reese",
       "sport": "wnba",
-      "team": "",
-      "pos": "PF"
+      "team": "ATL",
+      "pos": "F",
+      "espnId": "4433402",
+      "teamId": "20",
+      "number": "5",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/4433402.png"
     },
     "receipt-kiahstokes": {
       "name": "Kiah Stokes",
       "sport": "wnba",
-      "team": "",
-      "pos": "C"
+      "team": "GS",
+      "pos": "C",
+      "espnId": "2590093",
+      "teamId": "129689",
+      "number": "41",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/2590093.png"
     },
     "receipt-veronicaburton": {
       "name": "Veronica Burton",
       "sport": "wnba",
-      "team": "",
-      "pos": "SG"
+      "team": "GS",
+      "pos": "G",
+      "espnId": "4398935",
+      "teamId": "129689",
+      "number": "22",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/4398935.png"
     },
     "receipt-rhynehoward": {
       "name": "Rhyne Howard",
       "sport": "wnba",
-      "team": "",
-      "pos": "SG"
+      "team": "ATL",
+      "pos": "G",
+      "espnId": "4398674",
+      "teamId": "20",
+      "number": "10",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/4398674.png"
     },
     "receipt-gabbywilliams": {
       "name": "Gabby Williams",
       "sport": "wnba",
-      "team": "",
-      "pos": "PF"
+      "team": "GS",
+      "pos": "F",
+      "espnId": "3142328",
+      "teamId": "129689",
+      "number": "1",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/3142328.png"
     },
     "receipt-nazhillmon": {
       "name": "Naz Hillmon",
       "sport": "wnba",
-      "team": "",
-      "pos": "PF"
+      "team": "ATL",
+      "pos": "F",
+      "espnId": "4398915",
+      "teamId": "20",
+      "number": "00",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/4398915.png"
     },
     "receipt-ceciliazandalasini": {
       "name": "Cecilia Zandalasini",
       "sport": "wnba",
-      "team": "",
-      "pos": "PF"
+      "team": "GS",
+      "pos": "F",
+      "espnId": "4257500",
+      "teamId": "129689",
+      "number": "24",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/4257500.png"
     },
     "receipt-dandreswift": {
       "name": "D'Andre Swift",
       "sport": "nfl",
-      "team": "",
-      "pos": "RB"
+      "team": "CHI",
+      "pos": "RB",
+      "espnId": "4259545",
+      "teamId": "3",
+      "number": "4",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4259545.png"
     },
     "receipt-calebwilliams": {
       "name": "Caleb Williams",
       "sport": "nfl",
-      "team": "",
-      "pos": "QB"
+      "team": "CHI",
+      "pos": "QB",
+      "espnId": "4431611",
+      "teamId": "3",
+      "number": "18",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4431611.png"
     },
     "receipt-lutherburdeniii": {
       "name": "Luther Burden III",
       "sport": "nfl",
-      "team": "",
-      "pos": "WR"
+      "team": "CHI",
+      "pos": "WR",
+      "espnId": "4685278",
+      "teamId": "3",
+      "number": "10",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4685278.png"
     },
     "receipt-demariodouglas": {
       "name": "DeMario Douglas",
       "sport": "nfl",
-      "team": "",
-      "pos": "WR"
+      "team": "NE",
+      "pos": "WR",
+      "espnId": "4427095",
+      "teamId": "17",
+      "number": "3",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4427095.png"
     },
     "receipt-colstonloveland": {
       "name": "Colston Loveland",
       "sport": "nfl",
-      "team": "",
-      "pos": "TE"
+      "team": "CHI",
+      "pos": "TE",
+      "espnId": "4723086",
+      "teamId": "3",
+      "number": "84",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4723086.png"
     },
     "receipt-rhamondrestevenson": {
       "name": "Rhamondre Stevenson",
       "sport": "nfl",
-      "team": "",
-      "pos": "RB"
+      "team": "NE",
+      "pos": "RB",
+      "espnId": "4569173",
+      "teamId": "17",
+      "number": "38",
+      "headshot": "https://a.espncdn.com/i/headshots/nfl/players/full/4569173.png"
     },
     "receipt-jacksonchourio": {
       "name": "Jackson Chourio",
       "sport": "mlb",
-      "team": "",
-      "pos": "OF"
+      "team": "MIL",
+      "pos": "LF",
+      "espnId": "4917869",
+      "teamId": "8",
+      "number": "11",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/4917869.png"
     },
     "receipt-williamcontreras": {
       "name": "William Contreras",
       "sport": "mlb",
-      "team": "",
-      "pos": "C"
+      "team": "MIL",
+      "pos": "C",
+      "espnId": "39895",
+      "teamId": "8",
+      "number": "24",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/39895.png"
     },
     "receipt-drewrasmussen": {
       "name": "Drew Rasmussen",
       "sport": "mlb",
-      "team": "",
-      "pos": "SP"
+      "team": "TB",
+      "pos": "SP",
+      "espnId": "42584",
+      "teamId": "30",
+      "number": "57",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/42584.png"
     },
     "receipt-taylorwalls": {
       "name": "Taylor Walls",
       "sport": "mlb",
-      "team": "",
-      "pos": "SS"
+      "team": "TB",
+      "pos": "SS",
+      "espnId": "40576",
+      "teamId": "30",
+      "number": "6",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/40576.png"
     },
     "receipt-christianyelich": {
       "name": "Christian Yelich",
       "sport": "mlb",
-      "team": "",
-      "pos": "OF"
+      "team": "MIL",
+      "pos": "DH",
+      "espnId": "31283",
+      "teamId": "8",
+      "number": "22",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/31283.png"
     },
     "receipt-jakebauers": {
       "name": "Jake Bauers",
       "sport": "mlb",
-      "team": "",
-      "pos": "OF"
+      "team": "MIL",
+      "pos": "1B",
+      "espnId": "35013",
+      "teamId": "8",
+      "number": "9",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/35013.png"
     },
     "receipt-cooperpratt": {
       "name": "Cooper Pratt",
       "sport": "mlb",
-      "team": "",
-      "pos": "SS"
+      "team": "MIL",
+      "pos": "SS",
+      "espnId": "5149101",
+      "teamId": "8",
+      "number": "12",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/5149101.png"
     },
     "receipt-briceturang": {
       "name": "Brice Turang",
       "sport": "mlb",
-      "team": "",
-      "pos": "SS"
+      "team": "MIL",
+      "pos": "2B",
+      "espnId": "41179",
+      "teamId": "8",
+      "number": "2",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/41179.png"
     },
     "receipt-georgekittle": {
       "name": "George Kittle",
@@ -1008,14 +1276,22 @@
     "receipt-jonathanaranda": {
       "name": "Jonathan Aranda",
       "sport": "mlb",
-      "team": "",
-      "pos": ""
+      "team": "TB",
+      "pos": "1B",
+      "espnId": "40810",
+      "teamId": "30",
+      "number": "8",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/40810.png"
     },
     "receipt-dewannabonner": {
       "name": "DeWanna Bonner",
       "sport": "wnba",
-      "team": "",
-      "pos": "SG"
+      "team": "ATL",
+      "pos": "F",
+      "espnId": "869",
+      "teamId": "20",
+      "number": "24",
+      "headshot": "https://a.espncdn.com/i/headshots/wnba/players/full/869.png"
     },
     "receipt-pierrestrongjr": {
       "name": "Pierre Strong Jr.",
@@ -1038,8 +1314,12 @@
     "receipt-nickmartinez": {
       "name": "Nick Martinez",
       "sport": "mlb",
-      "team": "",
-      "pos": "RP"
+      "team": "TB",
+      "pos": "SP",
+      "espnId": "33372",
+      "teamId": "30",
+      "number": "28",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/33372.png"
     },
     "receipt-bonix": {
       "name": "Bo Nix",
@@ -1176,8 +1456,12 @@
     "receipt-robertgasser": {
       "name": "Robert Gasser",
       "sport": "mlb",
-      "team": "",
-      "pos": "SP"
+      "team": "MIL",
+      "pos": "SP",
+      "espnId": "4918251",
+      "teamId": "8",
+      "number": "54",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/4918251.png"
     },
     "receipt-shoheiohtani": {
       "name": "Shohei Ohtani",
@@ -1206,8 +1490,12 @@
     "receipt-andrewvaughn": {
       "name": "Andrew Vaughn",
       "sport": "mlb",
-      "team": "",
-      "pos": "OF"
+      "team": "MIL",
+      "pos": "1B",
+      "espnId": "42394",
+      "teamId": "8",
+      "number": "28",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/42394.png"
     },
     "receipt-tommyedman": {
       "name": "Tommy Edman",
@@ -1230,14 +1518,22 @@
     "receipt-luislara": {
       "name": "Luis Lara",
       "sport": "mlb",
-      "team": "",
-      "pos": "OF"
+      "team": "MIL",
+      "pos": "RF",
+      "espnId": "5138536",
+      "teamId": "8",
+      "number": "18",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/5138536.png"
     },
     "receipt-garrettmitchell": {
       "name": "Garrett Mitchell",
       "sport": "mlb",
-      "team": "",
-      "pos": "OF"
+      "team": "MIL",
+      "pos": "CF",
+      "espnId": "4313442",
+      "teamId": "8",
+      "number": "5",
+      "headshot": "https://a.espncdn.com/i/headshots/mlb/players/full/4313442.png"
     },
     "receipt-miguelrojas": {
       "name": "Miguel Rojas",
@@ -1308,49 +1604,65 @@
           "player": "receipt-jalenduren",
           "market": "pts",
           "line": 17.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "athompson",
           "market": "pts",
           "line": 10.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "receipt-joelembiid",
           "market": "pts",
           "line": 22.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-deaaronfox",
           "market": "pts",
           "line": 14.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "sga",
           "market": "pts",
           "line": 0.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "lebron",
           "market": "pts",
           "line": 15.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-tyresemaxey",
           "market": "pts",
           "line": 20.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-victorwembanyama",
           "market": "pts",
           "line": 25.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         }
       ],
       "window": "Today 3 Games",
@@ -1386,56 +1698,72 @@
           "player": "jbrown",
           "market": "pts",
           "line": 20.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-jalenbrunson",
           "market": "pts",
           "line": 29.5,
           "dir": "over",
-          "mult": "1.3x"
+          "mult": "1.3x",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "sga",
           "market": "pts",
           "line": 34.5,
           "dir": "over",
-          "mult": "1.5x"
+          "mult": "1.5x",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "receipt-chetholmgren",
           "market": "reb",
           "line": 8.5,
           "dir": "over",
-          "mult": "1.1x"
+          "mult": "1.1x",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "receipt-tyresemaxey",
           "market": "threes",
           "line": 2.5,
           "dir": "over",
-          "mult": "1.1x"
+          "mult": "1.1x",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-victorwembanyama",
           "market": "pra",
           "line": 44.5,
           "dir": "over",
-          "mult": "1.2x"
+          "mult": "1.2x",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "receipt-paytonpritchard",
           "market": "pra",
           "line": 29.5,
           "dir": "over",
-          "mult": "1.8x"
+          "mult": "1.8x",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "tatum",
           "market": "pts",
           "line": 29.5,
           "dir": "over",
-          "mult": "1.2x"
+          "mult": "1.2x",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         }
       ],
       "window": "Today 3 Games",
@@ -1471,51 +1799,67 @@
           "player": "jbrown",
           "market": "pts",
           "line": 20.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-jalenbrunson",
           "market": "pts",
           "line": 25.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "sga",
           "market": "pts",
           "line": 30.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "receipt-chetholmgren",
           "market": "reb",
           "line": 8.5,
           "dir": "over",
-          "mult": "1.1x"
+          "mult": "1.1x",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "receipt-tyresemaxey",
           "market": "threes",
           "line": 2.5,
           "dir": "over",
-          "mult": "1.1x"
+          "mult": "1.1x",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-victorwembanyama",
           "market": "pra",
           "line": 41.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "receipt-paytonpritchard",
           "market": "pra",
           "line": 24.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "tatum",
           "market": "pts",
           "line": 26.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         }
       ],
       "window": "Today 3 Games",
@@ -1552,49 +1896,65 @@
           "market": "pts",
           "line": 9.5,
           "dir": "over",
-          "mult": "0.9x"
+          "mult": "0.9x",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "bridges",
           "market": "pts",
           "line": 13.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "jbrown",
           "market": "pts",
           "line": 20.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "sga",
           "market": "pts",
           "line": 29.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "lebron",
           "market": "pts",
           "line": 16.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "kat",
           "market": "pts",
           "line": 17.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "cade",
           "market": "pts",
           "line": 24.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "tatum",
           "market": "pts",
           "line": 26.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         }
       ],
       "venueId": "YmmwYrq",
@@ -1631,49 +1991,65 @@
           "player": "receipt-oganunoby",
           "market": "pts",
           "line": 16.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "jbrown",
           "market": "pts",
           "line": 19.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-joelembiid",
           "market": "pts",
           "line": 21.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "sga",
           "market": "pts",
           "line": 29.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "kat",
           "market": "pts",
           "line": 18.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401909089"
         },
         {
           "player": "receipt-victorwembanyama",
           "market": "pts",
           "line": 25.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-21T01:30Z",
+          "eventId": "401909090"
         },
         {
           "player": "cade",
           "market": "pts",
           "line": 24.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         },
         {
           "player": "tatum",
           "market": "pts",
           "line": 27.5,
-          "dir": "over"
+          "dir": "over",
+          "startsAt": "2026-10-20T19:00Z",
+          "eventId": "401909088"
         }
       ],
       "window": "Today 3 Games",
@@ -1711,7 +2087,9 @@
           "line": 0.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-brendanjenkins",
@@ -1720,7 +2098,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-jjkohl",
@@ -1729,7 +2109,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401871055"
         },
         {
           "player": "receipt-camronlacy",
@@ -1738,7 +2120,9 @@
           "dir": "over",
           "mult": "1.4x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401871055"
         },
         {
           "player": "receipt-jojostone",
@@ -1747,7 +2131,9 @@
           "dir": "over",
           "mult": "1.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401871055"
         },
         {
           "player": "receipt-micahwoods",
@@ -1793,7 +2179,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-jaredhollins",
@@ -1801,7 +2189,9 @@
           "line": 239.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-brendanjenkins",
@@ -1810,7 +2200,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-landynlocke",
@@ -1826,7 +2218,9 @@
           "line": 79.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-judahprice",
@@ -1835,7 +2229,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         }
       ],
       "window": "Today 3 Games",
@@ -1881,7 +2277,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-brendanjenkins",
@@ -1890,7 +2288,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-adriannorton",
@@ -1899,7 +2299,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-gradyoneill",
@@ -1953,7 +2355,9 @@
           "dir": "over",
           "mult": "0.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-anthonyeager",
@@ -1962,7 +2366,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-jaredhollins",
@@ -1970,7 +2376,9 @@
           "line": 239.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-landynlocke",
@@ -1987,7 +2395,9 @@
           "dir": "over",
           "mult": "0.7x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-chrisreed",
@@ -2032,7 +2442,9 @@
           "line": 209.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-brendanjenkins",
@@ -2041,7 +2453,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         },
         {
           "player": "receipt-landynlocke",
@@ -2058,7 +2472,9 @@
           "dir": "over",
           "mult": "0.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401871055"
         },
         {
           "player": "receipt-antoniomartin",
@@ -2067,7 +2483,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401871055"
         },
         {
           "player": "receipt-judahprice",
@@ -2076,7 +2494,9 @@
           "dir": "over",
           "mult": "0.9x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:30Z",
+          "eventId": "401871092"
         }
       ],
       "window": "Today 3 Games",
@@ -2113,7 +2533,9 @@
           "dir": "over",
           "mult": "1.4x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892543"
         },
         {
           "player": "receipt-jakeguentzel",
@@ -2122,7 +2544,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-brandonhagel",
@@ -2131,7 +2555,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-bohorvat",
@@ -2140,7 +2566,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892541"
         }
       ],
       "window": "Today 11 Games",
@@ -2175,7 +2603,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         },
         {
           "player": "receipt-jackhughes",
@@ -2184,7 +2614,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892540"
         },
         {
           "player": "receipt-nathanmackinnon",
@@ -2193,7 +2625,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892540"
         },
         {
           "player": "receipt-austonmatthews",
@@ -2202,7 +2636,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892543"
         }
       ],
       "window": "Today 11 Games",
@@ -2238,7 +2674,9 @@
           "dir": "over",
           "mult": "2.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892541"
         },
         {
           "player": "receipt-gavinmckenna",
@@ -2247,7 +2685,9 @@
           "dir": "over",
           "mult": "2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892543"
         },
         {
           "player": "receipt-seanmonahan",
@@ -2256,7 +2696,9 @@
           "dir": "over",
           "mult": "2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892543"
         },
         {
           "player": "receipt-alexnewhook",
@@ -2265,7 +2707,9 @@
           "dir": "over",
           "mult": "2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         }
       ],
       "window": "Today 11 Games",
@@ -2300,7 +2744,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         },
         {
           "player": "receipt-nikitakucherov",
@@ -2309,7 +2755,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-markstone",
@@ -2318,7 +2766,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-nicksuzuki",
@@ -2327,7 +2777,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         }
       ],
       "window": "Today 11 Games",
@@ -2362,7 +2814,9 @@
           "dir": "over",
           "mult": "1.4x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892543"
         },
         {
           "player": "receipt-jackhughes",
@@ -2371,7 +2825,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892540"
         },
         {
           "player": "receipt-markstone",
@@ -2380,7 +2836,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-nicksuzuki",
@@ -2389,7 +2847,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         }
       ],
       "window": "Today 11 Games",
@@ -2424,7 +2884,9 @@
           "dir": "over",
           "mult": "1.5x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892540"
         },
         {
           "player": "receipt-kylepalmieri",
@@ -2433,7 +2895,9 @@
           "dir": "over",
           "mult": "1.6x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892541"
         },
         {
           "player": "receipt-matthewschaefer",
@@ -2442,7 +2906,9 @@
           "dir": "over",
           "mult": "1.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892541"
         },
         {
           "player": "receipt-beckettsennecke",
@@ -2451,7 +2917,9 @@
           "dir": "over",
           "mult": "1.5x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892541"
         },
         {
           "player": "receipt-willsmith",
@@ -2460,7 +2928,9 @@
           "dir": "over",
           "mult": "1.6x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         },
         {
           "player": "receipt-dylanstrome",
@@ -2469,7 +2939,9 @@
           "dir": "over",
           "mult": "1.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892542"
         }
       ],
       "window": "Today 11 Games",
@@ -2506,7 +2978,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892539"
         },
         {
           "player": "receipt-jakeguentzel",
@@ -2515,7 +2989,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-brandonhagel",
@@ -2524,7 +3000,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-bohorvat",
@@ -2533,7 +3011,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-20T23:00Z",
+          "eventId": "401892541"
         },
         {
           "player": "receipt-nikitakucherov",
@@ -2542,7 +3022,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         },
         {
           "player": "receipt-markstone",
@@ -2551,7 +3033,9 @@
           "dir": "over",
           "mult": "1.3x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-21T02:30Z",
+          "eventId": "401892549"
         }
       ],
       "window": "Today 11 Games",
@@ -2587,7 +3071,9 @@
           "line": 10.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-allishagray",
@@ -2595,7 +3081,9 @@
           "line": 16.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-angelreese",
@@ -2604,7 +3092,9 @@
           "dir": "over",
           "mult": "1.4x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-kiahstokes",
@@ -2612,7 +3102,9 @@
           "line": 4.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         }
       ],
       "window": "Wed 10/21 GSV @ ATL",
@@ -2646,7 +3138,9 @@
           "line": 9.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-jordincanada",
@@ -2654,7 +3148,9 @@
           "line": 10.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-allishagray",
@@ -2662,7 +3158,9 @@
           "line": 16.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-rhynehoward",
@@ -2670,7 +3168,9 @@
           "line": 15.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-angelreese",
@@ -2678,7 +3178,9 @@
           "line": 14.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-gabbywilliams",
@@ -2687,7 +3189,9 @@
           "dir": "over",
           "mult": "0.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         }
       ],
       "window": "Wed 10/21 GSV @ ATL",
@@ -2723,7 +3227,9 @@
           "line": 10.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-allishagray",
@@ -2731,7 +3237,9 @@
           "line": 16.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-nazhillmon",
@@ -2739,7 +3247,9 @@
           "line": 6.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-angelreese",
@@ -2747,7 +3257,9 @@
           "line": 14.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-kiahstokes",
@@ -2755,7 +3267,9 @@
           "line": 4.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         },
         {
           "player": "receipt-ceciliazandalasini",
@@ -2763,7 +3277,9 @@
           "line": 7.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-22T00:00Z",
+          "eventId": "401918307"
         }
       ],
       "window": "Wed 10/21 GSV @ ATL",
@@ -2799,7 +3315,9 @@
           "line": 29.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-dandreswift",
@@ -2807,7 +3325,9 @@
           "line": 61.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-calebwilliams",
@@ -2815,7 +3335,9 @@
           "line": 219.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         }
       ],
       "window": "Thu 10/22 NE @ CHI",
@@ -2848,7 +3370,9 @@
           "line": 55.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-demariodouglas",
@@ -2857,7 +3381,9 @@
           "dir": "over",
           "mult": "2.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-colstonloveland",
@@ -2865,7 +3391,9 @@
           "line": 43.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "maye",
@@ -2873,7 +3401,9 @@
           "line": 219.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-rhamondrestevenson",
@@ -2881,7 +3411,9 @@
           "line": 0.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-dandreswift",
@@ -2890,7 +3422,9 @@
           "dir": "over",
           "mult": "0.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         },
         {
           "player": "receipt-calebwilliams",
@@ -2899,7 +3433,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-23T00:15Z",
+          "eventId": "401873010"
         }
       ],
       "window": "Thu 10/22 NE @ CHI",
@@ -2937,7 +3473,9 @@
           "dir": "over",
           "mult": "0.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-jacksonchourio",
@@ -2945,7 +3483,9 @@
           "line": 1.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-williamcontreras",
@@ -2954,7 +3494,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "ydiaz",
@@ -2963,7 +3505,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         }
       ],
       "window": "Fri 10/23 TB @ MIL",
@@ -2998,7 +3542,9 @@
           "dir": "over",
           "mult": "0.8x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-jacksonchourio",
@@ -3006,7 +3552,9 @@
           "line": 1.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "ydiaz",
@@ -3015,7 +3563,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-drewrasmussen",
@@ -3023,7 +3573,9 @@
           "line": 5.5,
           "dir": "over",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-taylorwalls",
@@ -3032,7 +3584,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-christianyelich",
@@ -3041,7 +3595,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         }
       ],
       "window": "Fri 10/23 TB @ MIL",
@@ -3078,7 +3634,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "ydiaz",
@@ -3087,7 +3645,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-cooperpratt",
@@ -3096,7 +3656,9 @@
           "dir": "over",
           "mult": "1.2x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "simpson",
@@ -3105,7 +3667,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-briceturang",
@@ -3114,7 +3678,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         },
         {
           "player": "receipt-christianyelich",
@@ -3123,7 +3689,9 @@
           "dir": "over",
           "mult": "1.1x",
           "venueOnly": true,
-          "note": "Venue tracking: do not reuse stats from an earlier game."
+          "note": "Venue tracking: do not reuse stats from an earlier game.",
+          "startsAt": "2026-10-24T00:00Z",
+          "eventId": "401908042"
         }
       ],
       "window": "Fri 10/23 TB @ MIL",

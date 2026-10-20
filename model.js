@@ -324,9 +324,12 @@
   const PLAN_NAMES = { free: 'Free', pro: 'Pro', elite: 'Elite' };
   const FOUNDING_CAP = 50;
   const FEATURES = {
-    board: { tier: 'free', label: "PoiZen's live board, Games, Injuries, Lab, Pick'em and chat", status: 'live' },
-    ownSlips: { tier: 'free', label: 'Build and track your own slips live', status: 'live' },
-    honest: { tier: 'free', label: 'The honest read on every slip', status: 'live' },
+    board: { tier: 'free', label: "Scores, game context, public results, community Pick'em and a featured slip preview", status: 'live' },
+    ownSlips: { tier: 'free', label: 'Build and track one active personal slip; keep your last 10 settled slips visible', status: 'live' },
+    moreSlips: { tier: 'pro', label: 'Track multiple active slips with no Free-plan cap', status: 'live' },
+    research: { tier: 'pro', label: 'Full Lab: player research, line checks, fair-payout comparison and what-if building', status: 'live' },
+    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns', status: 'live' },
+    honest: { tier: 'pro', label: 'Expected payout and model reasoning for each slip, alongside the price you are offered', status: 'live' },
     limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
     exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
     themes: { tier: 'free', label: 'Midnight, Daylight and Vegas themes — always free', status: 'live' },
@@ -337,10 +340,11 @@
     history: { tier: 'pro', label: 'Your full settled history (Free keeps the last 10)', status: 'live' },
     csv: { tier: 'pro', label: 'Ledger export to CSV', status: 'live' },
     playoffs: { tier: 'elite', label: 'Playoffs atmosphere theme, Midnight and Daylight', status: 'live' },
-    positions: { tier: 'elite', label: 'Position desk: each position from plan to settled, with partial exits, fees and corrections kept', status: 'building' },
+    positions: { tier: 'elite', label: 'Private synced position journal: plans, fills, partial exits, fees, settlement and auditable corrections', status: 'live' },
     books: { tier: 'elite', label: 'Live Kalshi order book and sell-it-all-now estimate on your own positions', status: 'server' },
-    exposure: { tier: 'elite', label: 'Exposure across positions by game, team and player', status: 'building' },
-    exitPlans: { tier: 'elite', label: 'Exit plans with target, stop and expiry alerts', status: 'building' },
+    exposure: { tier: 'elite', label: 'Combined open exposure by player, team and game across your recorded positions and personal slips', status: 'live' },
+    studio: { tier: 'elite', label: 'Strategy Studio: save personal scenarios and rules across your devices; compare their impact across your open slips', status: 'live' },
+    exitPlans: { tier: 'elite', label: 'Target, stop and expiry alerts with a private inbox and optional device notifications', status: 'server' },
   };
   const tierRank = (t) => Math.max(0, PLAN_ORDER.indexOf(t));
   function canUse(tier, feature) { const f = FEATURES[feature]; return !!f && tierRank(tier) >= tierRank(f.tier); }
@@ -372,3 +376,4 @@
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
+
