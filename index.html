@@ -3851,13 +3851,15 @@ function sweatHTML() {
   const rows=sweatRows(), allPlayers=sweatPlayers(rows);
   const games=[...new Set(allPlayers.map(p=>{const e=eventFor(p.key);return e ? e.name : P(p.key).sport || 'Other';}))].sort();
   if(S.sweatGame===null){
-    const next=allPlayers.map(p=>({p,e:eventFor(p.key),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&x.at>Date.now()-6*3600e3).sort((a,b)=>a.at-b.at);
+    const next=allPlayers.map(p=>({p,e:eventFor(p.key),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&(x.at>Date.now()||[...x.p.lines.values()].some(l=>l.g.state==='live'))).sort((a,b)=>a.at-b.at);
     S.sweatGame=next.length?next[0].e.name:'';
   }
   if(S.sweatGame && !games.includes(S.sweatGame)) S.sweatGame='';
   const players=allPlayers.filter(p=>!S.sweatGame || (eventFor(p.key)?.name || P(p.key).sport || 'Other')===S.sweatGame);
-  const max=rows.reduce((sum,{r})=>sum+(Number(r.potential)||0),0);
-  return `<header class="sw-head"><div><div class="sw-k">POIZEN · SUPER SWEAT</div><h1>Every player. Every line.</h1></div><div class="sw-total"><b>${players.length}</b> players <span>${rows.length} tickets · ${money(max)} potential</span></div><button class="sw-x" type="button" data-sweat="off" aria-label="Close sweat mode">Close</button></header>
+  const visibleIds=new Set(players.flatMap(p=>[...p.tickets]));
+  const visibleRows=rows.filter(x=>visibleIds.has(x.t.id));
+  const max=visibleRows.reduce((sum,{r})=>sum+(Number(r.potential)||0),0);
+  return `<header class="sw-head"><div><div class="sw-k">POIZEN · SUPER SWEAT</div><h1>Every player. Every line.</h1></div><div class="sw-total"><b>${players.length}</b> players <span>${visibleRows.length} tickets · ${money(max)} potential</span></div><button class="sw-x" type="button" data-sweat="off" aria-label="Close sweat mode">Close</button></header>
   <div class="sw-controls"><nav aria-label="Sweat ticket filters">${[['alive','Alive'],['live','Live'],['dead','Dead'],['upcoming','Upcoming']].map(([key,label])=>`<button type="button" data-sw-filter="${key}" aria-pressed="${S.sweatFilter===key}">${label}<b>${sweatRows(key).length}</b></button>`).join('')}</nav><label>Game <select id="swGame"><option value="">All games</option>${games.map(g=>`<option value="${esc(g)}" ${S.sweatGame===g?'selected':''}>${esc(g)}</option>`).join('')}</select></label><span class="sw-sync">${S.feed.last?'Updated '+new Date(S.feed.last).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}):'Waiting for scores'}</span></div>
   <div class="sw-grid">${players.map(p=>{
     const lines=[...p.lines.values()],ev=eventFor(p.key),live=lines.some(x=>x.g.state==='live');
