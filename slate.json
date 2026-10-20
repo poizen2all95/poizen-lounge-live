@@ -1588,6 +1588,96 @@
       "sport": "nfl",
       "team": "",
       "pos": "QB"
+    },
+    "receipt-derrickwhite": {
+      "name": "Derrick White",
+      "sport": "nba",
+      "team": "BOS",
+      "pos": "G",
+      "espnId": "3078576",
+      "teamId": "2",
+      "number": "9",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3078576.png"
+    },
+    "receipt-duncanrobinson": {
+      "name": "Duncan Robinson",
+      "sport": "nba",
+      "team": "DET",
+      "pos": "F",
+      "espnId": "3157465",
+      "teamId": "8",
+      "number": "55",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3157465.png"
+    },
+    "receipt-andredrummond": {
+      "name": "Andre Drummond",
+      "sport": "nba",
+      "team": "NY",
+      "pos": "C",
+      "espnId": "6585",
+      "teamId": "18",
+      "number": "0",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/6585.png"
+    },
+    "receipt-joshhart": {
+      "name": "Josh Hart",
+      "sport": "nba",
+      "team": "NY",
+      "pos": "G",
+      "espnId": "3062679",
+      "teamId": "18",
+      "number": "3",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/3062679.png"
+    },
+    "receipt-dylanharper": {
+      "name": "Dylan Harper",
+      "sport": "nba",
+      "team": "SA",
+      "pos": "G",
+      "espnId": "5037871",
+      "teamId": "24",
+      "number": "2",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/5037871.png"
+    },
+    "receipt-devinvassell": {
+      "name": "Devin Vassell",
+      "sport": "nba",
+      "team": "SA",
+      "pos": "G",
+      "espnId": "4395630",
+      "teamId": "24",
+      "number": "24",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4395630.png"
+    },
+    "receipt-alexcaruso": {
+      "name": "Alex Caruso",
+      "sport": "nba",
+      "team": "OKC",
+      "pos": "G",
+      "espnId": "2991350",
+      "teamId": "25",
+      "number": "9",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/2991350.png"
+    },
+    "receipt-casonwallace": {
+      "name": "Cason Wallace",
+      "sport": "nba",
+      "team": "OKC",
+      "pos": "G",
+      "espnId": "4683692",
+      "teamId": "25",
+      "number": "22",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4683692.png"
+    },
+    "receipt-jalenwilliams": {
+      "name": "Jalen Williams",
+      "sport": "nba",
+      "team": "OKC",
+      "pos": "G",
+      "espnId": "4593803",
+      "teamId": "25",
+      "number": "8",
+      "headshot": "https://a.espncdn.com/i/headshots/nba/players/full/4593803.png"
     }
   },
   "pick6": [
