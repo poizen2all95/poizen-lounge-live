@@ -216,6 +216,7 @@
        state: scheduled | live | hit | miss | dnp | void */
   function gradeLeg(leg, game) {
     const line = Number(leg.line);
+    if (leg.venueOnly) return { state: 'scheduled', value: null, line, progress: 0, note: 'Awaiting venue settlement; automatic stats unavailable' };
     const dir = leg.dir === 'under' ? 'under' : 'over';
     const mk = MARKETS[leg.market];
     if (!mk) return { state: 'error', value: null, line, progress: 0, note: `Unknown market "${leg.market}"` };
@@ -251,7 +252,23 @@
   /* Pick6 entry: { entry, legs:[...], payouts:{ "8":221.9, "7":5.5 } | null, toWin }
      payouts are DraftKings multipliers on the entry by number correct (when known). */
   function gradePick6(slip, gameFor) {
-    const legs = slip.legs.map((l) => ({ leg: l, g: gradeLeg(l, gameFor(l)) }));
+    const receipt = slip.settlement;
+    if (receipt && receipt.source === 'venue' && Number.isFinite(receipt.payout) && receipt.payout >= 0 &&
+        Array.isArray(receipt.legResults) && receipt.legResults.length === slip.legs.length &&
+        receipt.legResults.every(s => ['hit', 'miss', 'void'].includes(s))) {
+      const legs = slip.legs.map((leg, i) => ({ leg, g: { state: receipt.legResults[i], value: null, note: 'Confirmed venue receipt' } }));
+      const hits = receipt.legResults.filter(s => s === 'hit').length;
+      const misses = receipt.legResults.filter(s => s === 'miss').length;
+      const dnps = receipt.legResults.filter(s => s === 'void').length;
+      return { legs, n: legs.length, hits, misses, dnps, open: 0, potential: receipt.payout,
+        payout: receipt.payout, state: receipt.payout > 0 ? (misses ? 'partial' : 'won') : 'lost', entry: Number(slip.entry) || 0 };
+    }
+    const legs = slip.legs.map((l, i) => {
+      const recorded = slip.venueProgress && slip.venueProgress.source === 'venue' && Array.isArray(slip.venueProgress.legResults) && slip.venueProgress.legResults[i];
+      return { leg: l, g: ['hit', 'miss', 'void'].includes(recorded)
+        ? { state: recorded, value: null, line: Number(l.line), progress: recorded === 'hit' ? 1 : 0, note: 'Confirmed venue progress; ticket not settled' }
+        : gradeLeg(l, gameFor(l)) };
+    });
     const n = legs.length;
     const hits = legs.filter((x) => x.g.state === 'hit').length;
     const misses = legs.filter((x) => x.g.state === 'miss').length;

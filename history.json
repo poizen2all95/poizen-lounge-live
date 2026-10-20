@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-18T17:05:44.703Z",
+  "updated": "2026-10-20T22:18:09.200Z",
   "note": "Imported history. Every row says where it came from. stake null = the amount risked was not visible in the source, so the row counts toward hit rates but not toward profit and loss.",
   "sources": {
     "dk-pick6": "DraftKings Pick6 → My Picks → Recent, owner screenshot taken Oct 16 2026. The page header says 14 pick sets; 7 were visible in the screenshot.",
@@ -7,51 +7,10 @@
     "robinhood": "Robinhood connector, realized P&L trade history, account ••••6668 (PoiZen Method), span all, read Oct 17 2026. Prediction-market rows have no symbol; payout = contracts × close price, stake = payout − realized gain.",
     "dk-pick6-1017": "DraftKings Pick6 → Upcoming and Recent, owner screenshots Oct 17 2026.",
     "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades.",
-    "dk-browser-1018": "DraftKings Predictions My Trades receipts and Pick6 My Picks read through the owner-authorized Edge extension on 2026-10-18T17:05:44.703Z. Open positions are not graded from game score alone."
+    "dk-browser-1018": "DraftKings Predictions My Trades receipts and Pick6 My Picks read through the owner-authorized Edge extension on 2026-10-18T17:05:44.703Z. Open positions are not graded from game score alone.",
+    "dk-browser-1020": "Authorized DraftKings Edge receipt review 2026-10-20T22:18:09.200Z; 40 Predictions settlements captured Oct 19 and newest receipt rechecked Oct 20."
   },
   "entries": [
-    {
-      "id": "dkp-40991981",
-      "date": "2026-10-18",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-browser-1018",
-      "game": "HOU @ JAX",
-      "title": "HOU @ JAX overtime — Yes",
-      "stake": 12.71,
-      "payout": 0,
-      "result": "lost",
-      "positionId": "40991981",
-      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
-    },
-    {
-      "id": "dkp-40629891",
-      "date": "2026-10-18",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-browser-1018",
-      "game": "HOU @ JAX",
-      "title": "Jaylin Noel 2+ TDs",
-      "stake": 0.75,
-      "payout": 1.97,
-      "result": "sold",
-      "positionId": "40629891",
-      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
-    },
-    {
-      "id": "dkp-40594823",
-      "date": "2026-10-18",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "src": "dk-browser-1018",
-      "game": "HOU @ JAX",
-      "title": "Bhayshul Tuten 2+ TDs",
-      "stake": 9.94,
-      "payout": 22.46,
-      "result": "sold",
-      "positionId": "40594823",
-      "note": "Verified from venue receipt. Buy/sale totals recorded; separate fee breakdown not confirmed."
-    },
     {
       "id": "dkp-1017-01",
       "date": "2026-10-17",
@@ -129,181 +88,6 @@
       "stake": 0.56,
       "payout": 2,
       "result": "won"
-    },
-    {
-      "id": "dk6-1016-a",
-      "date": "2026-10-17",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-browser-1018",
-      "title": "ALCS 4-Pick · TB @ CLE · Caminero gimme",
-      "stake": 5,
-      "payout": 52.44,
-      "legs": 4,
-      "hits": 4,
-      "result": "won",
-      "note": "Won 10.4x — $33.48 boosted to $52.44",
-      "picks": [
-        {
-          "name": "Junior Caminero",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "Gimme"
-        },
-        {
-          "name": "Yandy Díaz",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Steven Kwan",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Brayan Rocchio",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.8x"
-        }
-      ],
-      "lineupId": "Z229Gmw",
-      "verifiedAt": "2026-10-18T17:05:44.703Z"
-    },
-    {
-      "id": "dk6-1016-b",
-      "date": "2026-10-17",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-browser-1018",
-      "title": "ALCS 6-Pick Bases · TB @ CLE",
-      "stake": 5,
-      "payout": 0,
-      "legs": 6,
-      "hits": 2,
-      "picks": [
-        {
-          "name": "Junior Caminero",
-          "market": "total_bases",
-          "line": 1.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Nick Martinez",
-          "market": "pitcher_ks",
-          "line": 2.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Steven Kwan",
-          "market": "hits",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.7x"
-        },
-        {
-          "name": "José Ramírez",
-          "market": "total_bases",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Chandler Simpson",
-          "market": "total_bases",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Taylor Walls",
-          "market": "total_bases",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "2.1x"
-        }
-      ],
-      "lineupId": "Krr55BZ",
-      "verifiedAt": "2026-10-18T17:05:44.703Z"
-    },
-    {
-      "id": "dk6-1016-c",
-      "date": "2026-10-17",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-browser-1018",
-      "title": "ALCS 6-Pick · TB @ CLE · Ramírez gimme",
-      "stake": 3,
-      "payout": 0,
-      "legs": 6,
-      "hits": 2,
-      "picks": [
-        {
-          "name": "Richie Palacios",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.8x"
-        },
-        {
-          "name": "Brayan Rocchio",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.8x"
-        },
-        {
-          "name": "Patrick Halpin",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
-        },
-        {
-          "name": "Nathaniel Lowe",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        },
-        {
-          "name": "José Ramírez",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "Gimme"
-        },
-        {
-          "name": "Chandler Simpson",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ],
-      "lineupId": "5BB89p7",
-      "verifiedAt": "2026-10-18T17:05:44.703Z"
     },
     {
       "id": "dkp-1015-01",
@@ -488,318 +272,6 @@
       "result": "lost"
     },
     {
-      "id": "dk6-1015-a",
-      "date": "2026-10-15",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "6-Pick NFL · SEA @ DEN · Nix gimme",
-      "stake": 10,
-      "payout": 0,
-      "legs": 6,
-      "hits": 3,
-      "picks": [
-        {
-          "name": "Bo Nix",
-          "market": "pass_yds",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "Gimme"
-        },
-        {
-          "name": "Courtland Sutton",
-          "market": "rec_yds",
-          "line": 31.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Jaylen Waddle",
-          "market": "rec_yds",
-          "line": 49.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Sam Darnold",
-          "market": "pass_yds",
-          "line": 220.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Jaxon Smith-Njigba",
-          "market": "rec_yds",
-          "line": 92.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Emanuel Wilson",
-          "market": "rush_yds",
-          "line": 65.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1015-b",
-      "date": "2026-10-15",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "8-Pick NFL · SEA @ DEN · 30% boost",
-      "stake": 10,
-      "payout": 0,
-      "legs": 8,
-      "hits": 4,
-      "picks": [
-        {
-          "name": "RJ Harvey",
-          "market": "rush_rec_yds",
-          "line": 49.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Cooper Kupp",
-          "market": "rec_yds",
-          "line": 39.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.7x"
-        },
-        {
-          "name": "Bo Nix",
-          "market": "pass_yds",
-          "line": 198.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Jaxon Smith-Njigba",
-          "market": "rec_yds",
-          "line": 109.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Sam Darnold",
-          "market": "pass_td",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
-        },
-        {
-          "name": "J.K. Dobbins",
-          "market": "rush_yds",
-          "line": 59.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
-        },
-        {
-          "name": "Rashid Shaheed",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "3.1x"
-        },
-        {
-          "name": "Emanuel Wilson",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1015-c",
-      "date": "2026-10-15",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "5-Pick NFL · SEA @ DEN",
-      "stake": 5,
-      "payout": 0,
-      "legs": 5,
-      "hits": 1,
-      "picks": [
-        {
-          "name": "Cooper Kupp",
-          "market": "rec_yds",
-          "line": 39.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.7x"
-        },
-        {
-          "name": "J.K. Dobbins",
-          "market": "rush_yds",
-          "line": 69.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.8x"
-        },
-        {
-          "name": "Evan Engram",
-          "market": "rec_yds",
-          "line": 24.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Jaxon Smith-Njigba",
-          "market": "rec_yds",
-          "line": 139.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "2.2x"
-        },
-        {
-          "name": "Emanuel Wilson",
-          "market": "rush_yds",
-          "line": 89.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.7x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1015-d",
-      "date": "2026-10-15",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "7-Pick NFL · SEA @ DEN",
-      "stake": 5,
-      "payout": 0,
-      "legs": 7,
-      "hits": 3,
-      "picks": [
-        {
-          "name": "Sam Darnold",
-          "market": "pass_yds",
-          "line": 169.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "RJ Harvey",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "2.1x"
-        },
-        {
-          "name": "Jaxon Smith-Njigba",
-          "market": "rec_yds",
-          "line": 59.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "J.K. Dobbins",
-          "market": "rush_yds",
-          "line": 59.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
-        },
-        {
-          "name": "Bo Nix",
-          "market": "pass_yds",
-          "line": 149.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Jaylen Waddle",
-          "market": "rec_yds",
-          "line": 39.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.8x"
-        },
-        {
-          "name": "Emanuel Wilson",
-          "market": "rush_yds",
-          "line": 79.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1014-a",
-      "date": "2026-10-14",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "MLB 5-Pick · MIL @ LAD",
-      "stake": 5,
-      "payout": 0,
-      "legs": 5,
-      "hits": 2,
-      "picks": [
-        {
-          "name": "William Contreras",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.6x",
-          "result": "hit"
-        },
-        {
-          "name": "Shohei Ohtani",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.6x",
-          "result": "hit"
-        },
-        {
-          "name": "Tommy Edman",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.8x",
-          "result": "miss"
-        },
-        {
-          "name": "Kiké Hernández",
-          "market": "hrr",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "2.3x",
-          "result": "miss"
-        },
-        {
-          "name": "Will Smith",
-          "market": "hrr",
-          "line": 3.5,
-          "dir": "over",
-          "mult": "1.7x",
-          "result": "miss"
-        }
-      ]
-    },
-    {
       "id": "dk6-1014-b",
       "date": "2026-10-14",
       "book": "DraftKings Pick6",
@@ -962,223 +434,6 @@
       "stake": null,
       "payout": 0,
       "result": "lost"
-    },
-    {
-      "id": "dk6-1014-d",
-      "date": "2026-10-14",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "MLB 6-Pick · MIL @ LAD · 60% boost",
-      "stake": 25,
-      "payout": 0,
-      "legs": 6,
-      "hits": 2,
-      "picks": [
-        {
-          "name": "Robert Gasser",
-          "market": "pitcher_ks",
-          "line": 3.5,
-          "dir": "under",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Shohei Ohtani",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Mookie Betts",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Jackson Chourio",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Teoscar Hernández",
-          "market": "hrr",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Blake Snell",
-          "market": "pitcher_ks",
-          "line": 6.5,
-          "dir": "under",
-          "result": "miss",
-          "mult": "0.9x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1011-win",
-      "date": "2026-10-11",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "3-Pick NFL · 66% Purple Pulse boost",
-      "stake": 10,
-      "payout": 76.69,
-      "legs": 3,
-      "hits": 3,
-      "picks": [
-        {
-          "name": "Jalen Hurts",
-          "market": "pass_yds",
-          "line": 218.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Trevor Lawrence",
-          "market": "pass_yds",
-          "line": 249.5,
-          "dir": "over",
-          "mult": "0.7x",
-          "result": "hit"
-        },
-        {
-          "name": "Bhayshul Tuten",
-          "market": "rush_yds",
-          "line": 59.5,
-          "dir": "over",
-          "mult": "1.1x",
-          "result": "hit"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1011-b",
-      "date": "2026-10-11",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "5-Pick NFL TD stack",
-      "stake": 10,
-      "payout": 0,
-      "legs": 5,
-      "hits": 2,
-      "picks": [
-        {
-          "name": "Derrick Henry",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "0.9x",
-          "result": "hit"
-        },
-        {
-          "name": "Drake London",
-          "market": "receptions",
-          "line": 4.5,
-          "dir": "over",
-          "mult": "0.8x",
-          "result": "hit"
-        },
-        {
-          "name": "Zay Flowers",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.6x",
-          "result": "miss"
-        },
-        {
-          "name": "Michael Penix Jr.",
-          "market": "pass_td",
-          "line": 1.5,
-          "dir": "over",
-          "mult": "1.3x",
-          "result": "miss"
-        },
-        {
-          "name": "Bijan Robinson",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "0.8x",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-1011-c",
-      "date": "2026-10-11",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "7-Pick NFL",
-      "stake": 7,
-      "payout": 0,
-      "legs": 7,
-      "hits": 3,
-      "picks": [
-        {
-          "name": "Ja'Marr Chase",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.9x",
-          "result": "hit"
-        },
-        {
-          "name": "Drake Maye",
-          "market": "pass_yds",
-          "line": 244.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Garrett Wilson",
-          "market": "rec_yds",
-          "line": 94.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Ashton Jeanty",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.6x",
-          "result": "miss"
-        },
-        {
-          "name": "Cam Skattebo",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "2.5x",
-          "result": "miss"
-        },
-        {
-          "name": "C.J. Stroud",
-          "market": "pass_yds",
-          "line": 257.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Jonathan Taylor",
-          "market": "anytime_td",
-          "line": 0.5,
-          "dir": "over",
-          "mult": "1.2x",
-          "result": "miss"
-        }
-      ]
     },
     {
       "id": "dk6-1011-d",
@@ -1857,69 +1112,6 @@
       "result": "lost"
     },
     {
-      "id": "dk6-1015-cfb-b",
-      "date": "2026-10-15",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "src": "dk-pick6",
-      "title": "CFB 6-Pick · Thu 10/15 slate",
-      "stake": 5,
-      "payout": 0,
-      "legs": 6,
-      "hits": 4,
-      "result": "lost",
-      "picks": [
-        {
-          "name": "Bear Bachmeier",
-          "market": "pass_td",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Darian Mensah",
-          "market": "pass_yds",
-          "line": 256.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Drew Mestemaker",
-          "market": "pass_yds",
-          "line": 299.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Malachi Toney",
-          "market": "rec_yds",
-          "line": 99.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "CJ Carr",
-          "market": "pass_td",
-          "line": 1.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Carlos Hernandez",
-          "market": "unknown",
-          "line": 99.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ],
-      "note": "From DK Pick6 screenshot Oct 18: 4/6, To Win $0."
-    },
-    {
       "id": "dk6-1015-cfb-c",
       "date": "2026-10-15",
       "book": "DraftKings Pick6",
@@ -1978,6 +1170,4631 @@
         }
       ],
       "note": "From DK Pick6 screenshot Oct 18: 3/6. Entry amount was cut off in the screenshot — stake unknown."
+    },
+    {
+      "id": "dk6-8ggNNzr",
+      "venueId": "8ggNNzr",
+      "slipId": "dk6-8ggNNzr",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 3-Pick · 8ggNNzr",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 3,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Mike Evans",
+          "dir": "under",
+          "position": "WR",
+          "line": 70.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-8gg4Q8d",
+      "venueId": "8gg4Q8d",
+      "slipId": "dk6-8gg4Q8d",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 8-Pick · 8gg4Q8d",
+      "stake": 10,
+      "payout": 266.8,
+      "result": "won",
+      "legs": 8,
+      "hits": 7,
+      "picks": [
+        {
+          "name": "Jayden Daniels",
+          "dir": "over",
+          "position": "QB",
+          "line": 208.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Austin Ekeler",
+          "dir": "under",
+          "position": "RB",
+          "line": 20.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 68.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Christian McCaffrey",
+          "dir": "over",
+          "position": "RB",
+          "line": 106.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Chig Okonkwo",
+          "dir": "over",
+          "position": "TE",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 19.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 13.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Terry McLaurin",
+          "dir": "over",
+          "position": "WR",
+          "line": 48.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "void",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-DZZ882Z",
+      "venueId": "DZZ882Z",
+      "slipId": "dk6-DZZ882Z",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 3-Pick · DZZ882Z",
+      "stake": 3,
+      "payout": 0,
+      "result": "lost",
+      "legs": 3,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Austin Ekeler",
+          "dir": "under",
+          "position": "RB",
+          "line": 19.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "under",
+          "position": "QB",
+          "line": 249.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-VNNbBYd",
+      "venueId": "VNNbBYd",
+      "slipId": "dk6-VNNbBYd",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 3-Pick · VNNbBYd",
+      "stake": 3,
+      "payout": 19.8,
+      "result": "won",
+      "legs": 3,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 18.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 12.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-YmmVQnL",
+      "venueId": "YmmVQnL",
+      "slipId": "dk6-YmmVQnL",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 4-Pick · YmmVQnL",
+      "stake": 3,
+      "payout": 27.69,
+      "result": "won",
+      "legs": 4,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Jayden Daniels",
+          "dir": "over",
+          "position": "QB",
+          "line": 206.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 64.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 18.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 12.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-r88zrmD",
+      "venueId": "r88zrmD",
+      "slipId": "dk6-r88zrmD",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 6-Pick · r88zrmD",
+      "stake": 3,
+      "payout": 28.9,
+      "result": "won",
+      "legs": 6,
+      "hits": 5,
+      "picks": [
+        {
+          "name": "Jayden Daniels",
+          "dir": "over",
+          "position": "QB",
+          "line": 206.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 64.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Christian McCaffrey",
+          "dir": "over",
+          "position": "RB",
+          "line": 105.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 18.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 12.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Terry McLaurin",
+          "dir": "over",
+          "position": "WR",
+          "line": 46.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "void",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-DZZ88RR",
+      "venueId": "DZZ88RR",
+      "slipId": "dk6-DZZ88RR",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 8-Pick · DZZ88RR",
+      "stake": 3,
+      "payout": 87.36,
+      "result": "won",
+      "legs": 8,
+      "hits": 7,
+      "picks": [
+        {
+          "name": "Jayden Daniels",
+          "dir": "over",
+          "position": "QB",
+          "line": 206.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Austin Ekeler",
+          "dir": "under",
+          "position": "RB",
+          "line": 19.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 64.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Christian McCaffrey",
+          "dir": "over",
+          "position": "RB",
+          "line": 105.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Chig Okonkwo",
+          "dir": "over",
+          "position": "TE",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 18.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 12.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Terry McLaurin",
+          "dir": "over",
+          "position": "WR",
+          "line": 46.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "void",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-WNNKKM9",
+      "venueId": "WNNKKM9",
+      "slipId": "dk6-WNNKKM9",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 8-Pick · WNNKKM9",
+      "stake": 3,
+      "payout": 12.47,
+      "result": "won",
+      "legs": 8,
+      "hits": 7,
+      "picks": [
+        {
+          "name": "Jayden Daniels",
+          "dir": "over",
+          "position": "QB",
+          "line": 149.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Austin Ekeler",
+          "dir": "under",
+          "position": "RB",
+          "line": 19.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "George Kittle",
+          "dir": "over",
+          "position": "TE",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Christian McCaffrey",
+          "dir": "over",
+          "position": "RB",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Chig Okonkwo",
+          "dir": "over",
+          "position": "TE",
+          "line": 14.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.2x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rachaad White",
+          "dir": "over",
+          "position": "RB",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Terry McLaurin",
+          "dir": "over",
+          "position": "WR",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.2x",
+          "result": "void",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-r88zz98",
+      "venueId": "r88zz98",
+      "slipId": "dk6-r88zz98",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 WAS @ SF",
+      "title": "NFL 3-Pick · r88zz98",
+      "stake": 2,
+      "payout": 0,
+      "result": "lost",
+      "legs": 3,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Jayden Daniels",
+          "dir": "over",
+          "position": "QB",
+          "line": 207.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Kaelon Black",
+          "dir": "under",
+          "position": "RB",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Terry McLaurin",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "MostRecYds",
+          "mult": "2.8x",
+          "result": "void",
+          "market": "Most receiving yards"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-WNNKWy7",
+      "venueId": "WNNKWy7",
+      "slipId": "dk6-WNNKWy7",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 CLE @ TB",
+      "title": "MLB 6-Pick · WNNKWy7",
+      "stake": 2,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Junior Caminero",
+          "dir": "over",
+          "position": "",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Chase DeLauter",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Yandy Diaz",
+          "dir": "over",
+          "position": "",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Brayan Rocchio",
+          "dir": "over",
+          "position": "SS",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Jonathan Aranda",
+          "dir": "over",
+          "position": "",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Jose Ramirez",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "hrr"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-9BB4MQy",
+      "venueId": "9BB4MQy",
+      "slipId": "dk6-9BB4MQy",
+      "date": "2026-10-19",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Mon 10/19 ATL @ GSV",
+      "title": "WNBA 6-Pick · 9BB4MQy",
+      "stake": 2,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "DeWanna Bonner",
+          "dir": "over",
+          "position": "SG",
+          "line": 5.5,
+          "binary": false,
+          "venueMarket": "PTS",
+          "result": "hit",
+          "market": "pts"
+        },
+        {
+          "name": "Jordin Canada",
+          "dir": "over",
+          "position": "SG",
+          "line": 21.5,
+          "binary": false,
+          "venueMarket": "PRA",
+          "result": "hit",
+          "market": "pra"
+        },
+        {
+          "name": "Allisha Gray",
+          "dir": "over",
+          "position": "SG",
+          "line": 15.5,
+          "binary": false,
+          "venueMarket": "PTS",
+          "result": "hit",
+          "market": "pts"
+        },
+        {
+          "name": "Angel Reese",
+          "dir": "over",
+          "position": "PF",
+          "line": 14.5,
+          "binary": false,
+          "venueMarket": "PTS",
+          "result": "hit",
+          "market": "pts"
+        },
+        {
+          "name": "Kiah Stokes",
+          "dir": "over",
+          "position": "C",
+          "line": 13.5,
+          "binary": false,
+          "venueMarket": "PRA",
+          "result": "miss",
+          "market": "pra"
+        },
+        {
+          "name": "Gabby Williams",
+          "dir": "over",
+          "position": "PF",
+          "line": 18.5,
+          "binary": false,
+          "venueMarket": "PTS",
+          "result": "miss",
+          "market": "pts"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-LWWRyGp",
+      "venueId": "LWWRyGp",
+      "slipId": "nfl-6-50",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "6-Pick $50 Swing",
+      "stake": 50,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Bryce Young",
+          "dir": "over",
+          "position": "QB",
+          "line": 259.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "1.3x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Josh Allen",
+          "dir": "over",
+          "position": "QB",
+          "line": 269.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "1.4x",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Denzel Boston",
+          "dir": "over",
+          "position": "WR",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Matthew Stafford",
+          "dir": "over",
+          "position": "QB",
+          "line": 309.5,
+          "binary": false,
+          "venueMarket": "PaRuYds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "pass_rush_yds"
+        },
+        {
+          "name": "Jonathan Taylor",
+          "dir": "over",
+          "position": "RB",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-xqqmdj8",
+      "venueId": "xqqmdj8",
+      "slipId": "nfl-4-14",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "4-Pick Yards",
+      "stake": 14,
+      "payout": 0,
+      "result": "lost",
+      "legs": 4,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Marvin Harrison Jr.",
+          "dir": "over",
+          "position": "WR",
+          "line": 21.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Kenneth Walker III",
+          "dir": "over",
+          "position": "RB",
+          "line": 90.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Puka Nacua",
+          "dir": "over",
+          "position": "WR",
+          "line": 94.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Kyren Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 68.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "miss",
+          "market": "rush_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-488PpZj",
+      "venueId": "488PpZj",
+      "slipId": "nfl-3",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "3-Pick Anchor",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 3,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Bryce Young",
+          "dir": "over",
+          "position": "QB",
+          "line": 269.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "1.4x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Josh Allen",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Jaylen Warren",
+          "dir": "over",
+          "position": "RB",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-xqqMKjG",
+      "venueId": "xqqMKjG",
+      "slipId": "dk6-xqqMKjG",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "3-Pick receiving · xqqMKjG",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 3,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Tre Tucker",
+          "dir": "over",
+          "position": "WR",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Davante Adams",
+          "dir": "over",
+          "position": "WR",
+          "line": 48.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Quentin Johnston",
+          "dir": "over",
+          "position": "WR",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-Byyqj9R",
+      "venueId": "Byyqj9R",
+      "slipId": "nfl-8-coker",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "8-Pick Longshot",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Jalen Coker",
+          "dir": "over",
+          "position": "WR",
+          "line": 79.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.5x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Kirk Cousins",
+          "dir": "over",
+          "position": "QB",
+          "line": 250.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 89.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.5x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Kenneth Walker III",
+          "dir": "over",
+          "position": "RB",
+          "line": 119.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.7x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Isaiah Likely",
+          "dir": "over",
+          "position": "TE",
+          "line": 6.5,
+          "binary": false,
+          "venueMarket": "Rec",
+          "mult": "1.4x",
+          "result": "miss",
+          "market": "receptions"
+        },
+        {
+          "name": "Drake London",
+          "dir": "over",
+          "position": "WR",
+          "line": 89.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Drake Maye",
+          "dir": "over",
+          "position": "QB",
+          "line": 239.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Brenton Strange",
+          "dir": "over",
+          "position": "TE",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "2.2x",
+          "result": "miss",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-DZZry7W",
+      "venueId": "DZZry7W",
+      "slipId": "nfl-8-lamb",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "8-Pick Lamb Run",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Kenneth Walker III",
+          "dir": "over",
+          "position": "RB",
+          "line": 119.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.6x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Bryce Young",
+          "dir": "over",
+          "position": "QB",
+          "line": 269.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "1.4x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Josh Allen",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Derrick Henry",
+          "dir": "over",
+          "position": "RB",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Tetairoa McMillan",
+          "dir": "over",
+          "position": "WR",
+          "line": 89.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.6x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Bijan Robinson",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Jaylen Warren",
+          "dir": "over",
+          "position": "RB",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-MmmyKnM",
+      "venueId": "MmmyKnM",
+      "slipId": "nfl-8-dak",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "8-Pick Dak Gimme",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Kenneth Walker III",
+          "dir": "over",
+          "position": "RB",
+          "line": 119.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.6x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Bryce Young",
+          "dir": "over",
+          "position": "QB",
+          "line": 269.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "1.4x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Josh Allen",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Derrick Henry",
+          "dir": "over",
+          "position": "RB",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Tetairoa McMillan",
+          "dir": "over",
+          "position": "WR",
+          "line": 89.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.6x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Bijan Robinson",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Jaylen Warren",
+          "dir": "over",
+          "position": "RB",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-mppmr97",
+      "venueId": "mppmr97",
+      "slipId": "dk6-mppmr97",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "8-Pick NFL · venue mppmr97",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Josh Allen",
+          "dir": "under",
+          "position": "QB",
+          "line": 269.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Brock Bowers",
+          "dir": "over",
+          "position": "TE",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "James Cook III",
+          "dir": "over",
+          "position": "RB",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Puka Nacua",
+          "dir": "over",
+          "position": "WR",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Ashton Jeanty",
+          "dir": "over",
+          "position": "RB",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Trey McBride",
+          "dir": "over",
+          "position": "TE",
+          "line": 85.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Kyren Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-WNN8jRN",
+      "venueId": "WNN8jRN",
+      "slipId": "dk6-WNN8jRN",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "8-Pick rushing · WNN8jRN",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 6.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Patrick Mahomes",
+          "dir": "over",
+          "position": "QB",
+          "line": 12.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Mike Washington Jr.",
+          "dir": "over",
+          "position": "RB",
+          "line": 20.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Tyler Allgeier",
+          "dir": "over",
+          "position": "RB",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Tyler Goodson",
+          "dir": "over",
+          "position": "RB",
+          "line": 9.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Bam Knight",
+          "dir": "over",
+          "position": "RB",
+          "line": 82.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "MarShawn Lloyd",
+          "dir": "over",
+          "position": "RB",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.6x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 9.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "rush_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-VNNBGqD",
+      "venueId": "VNNBGqD",
+      "slipId": "dk6-VNNBGqD",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "NFL 8-Pick · VNNBGqD",
+      "stake": 6,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 5,
+      "picks": [
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 239.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 249.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Pierre Strong Jr.",
+          "dir": "over",
+          "position": "RB",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Tucker Kraft",
+          "dir": "over",
+          "position": "TE",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "MarShawn Lloyd",
+          "dir": "over",
+          "position": "RB",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "0.6x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-jWWLLVr",
+      "venueId": "jWWLLVr",
+      "slipId": "dk6-jWWLLVr",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "4-Pick DAL @ GB · jWWLLVr",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 4,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 5.5,
+          "binary": false,
+          "venueMarket": "Rec",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "receptions"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "under",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "1.3x",
+          "result": "hit",
+          "market": "pass_td"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-pYY24xD",
+      "venueId": "pYY24xD",
+      "slipId": "nfl-4-patd",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "4-Pick Passing TDs",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 4,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Josh Allen",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "pass_td"
+        },
+        {
+          "name": "Trevor Lawrence",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "pass_td"
+        },
+        {
+          "name": "Drake Maye",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "pass_td"
+        },
+        {
+          "name": "Patrick Mahomes",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "result": "miss",
+          "market": "pass_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-GPPxw7Y",
+      "venueId": "GPPxw7Y",
+      "slipId": "dk6-GPPxw7Y",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "7-Pick NFL · GPPxw7Y",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 7,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 209.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 219.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "James Cook III",
+          "dir": "over",
+          "position": "RB",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Kirk Cousins",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "16.2x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Matthew Stafford",
+          "dir": "under",
+          "position": "QB",
+          "line": 202.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-2LLZwR8",
+      "venueId": "2LLZwR8",
+      "slipId": "dk6-2LLZwR8",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "NFL 8-Pick · 2LLZwR8",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.4x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Tucker Kraft",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.5x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "MarShawn Lloyd",
+          "dir": "over",
+          "position": "RB",
+          "line": 58.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 277.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 74.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 84.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-zDDVpgy",
+      "venueId": "zDDVpgy",
+      "slipId": "dk6-zDDVpgy",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "NFL 8-Pick · zDDVpgy",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 67.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Pierre Strong Jr.",
+          "dir": "over",
+          "position": "RB",
+          "line": 31.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Tucker Kraft",
+          "dir": "over",
+          "position": "TE",
+          "line": 50.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "MarShawn Lloyd",
+          "dir": "over",
+          "position": "RB",
+          "line": 57.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 277.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 277.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 86.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-PxxmYz9",
+      "venueId": "PxxmYz9",
+      "slipId": "dk6-PxxmYz9",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "NFL 5-Pick · PxxmYz9",
+      "stake": 3,
+      "payout": 0,
+      "result": "lost",
+      "legs": 5,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "MostRecYds",
+          "mult": "2.4x",
+          "result": "hit",
+          "market": "Most receiving yards"
+        },
+        {
+          "name": "Tucker Kraft",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.5x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "George Pickens",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Pierre Strong Jr.",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.8x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "1stTD",
+          "mult": "2.3x",
+          "result": "miss",
+          "market": "First touchdown"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-ByyZ8Mq",
+      "venueId": "ByyZ8Mq",
+      "slipId": "dk6-ByyZ8Mq",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "NFL 8-Pick · ByyZ8Mq",
+      "stake": 3,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 67.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "George Pickens",
+          "dir": "over",
+          "position": "WR",
+          "line": 68.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Pierre Strong Jr.",
+          "dir": "over",
+          "position": "RB",
+          "line": 31.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Tucker Kraft",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.5x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "MostRecYds",
+          "mult": "1.5x",
+          "result": "miss",
+          "market": "Most receiving yards"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 277.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 86.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-WNNbWB8",
+      "venueId": "WNNbWB8",
+      "slipId": "dk6-WNNbWB8",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "NFL 8-Pick · WNNbWB8",
+      "stake": 3,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Matthew Golden",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.4x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Tucker Kraft",
+          "dir": "over",
+          "position": "TE",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.5x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "CeeDee Lamb",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "MarShawn Lloyd",
+          "dir": "over",
+          "position": "RB",
+          "line": 57.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 276.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Javonte Williams",
+          "dir": "over",
+          "position": "RB",
+          "line": 86.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec",
+          "result": "miss",
+          "market": "rush_rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-jWWLgbW",
+      "venueId": "jWWLgbW",
+      "slipId": "dk6-jWWLgbW",
+      "date": "2026-10-18",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/18 12 Games",
+      "title": "8-Pick NFL · venue jWWLgbW",
+      "stake": 2,
+      "payout": 3.29,
+      "result": "won",
+      "legs": 8,
+      "hits": 7,
+      "picks": [
+        {
+          "name": "Josh Allen",
+          "dir": "over",
+          "position": "QB",
+          "line": 249.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Brock Bowers",
+          "dir": "over",
+          "position": "TE",
+          "line": 41.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Ashton Jeanty",
+          "dir": "under",
+          "position": "RB",
+          "line": 56.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Jordan Love",
+          "dir": "over",
+          "position": "QB",
+          "line": 209.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Patrick Mahomes",
+          "dir": "over",
+          "position": "QB",
+          "line": 249.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Dak Prescott",
+          "dir": "over",
+          "position": "QB",
+          "line": 219.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Christian Watson",
+          "dir": "over",
+          "position": "WR",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Trey McBride",
+          "dir": "over",
+          "position": "TE",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-Z229Gmw",
+      "venueId": "Z229Gmw",
+      "slipId": "dk6-Z229Gmw",
+      "date": "2026-10-17",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sat 10/17 TB @ CLE",
+      "title": "MLB 4-Pick · Z229Gmw",
+      "stake": 5,
+      "payout": 52.44,
+      "result": "won",
+      "legs": 4,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Junior Caminero",
+          "dir": "over",
+          "position": "",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Yandy Diaz",
+          "dir": "over",
+          "position": "",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Steven Kwan",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Brayan Rocchio",
+          "dir": "over",
+          "position": "SS",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "hrr"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-Krr55BZ",
+      "venueId": "Krr55BZ",
+      "slipId": "dk6-Krr55BZ",
+      "date": "2026-10-17",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sat 10/17 TB @ CLE",
+      "title": "MLB 6-Pick · Krr55BZ",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Junior Caminero",
+          "dir": "over",
+          "position": "",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "Bases",
+          "mult": "1.2x",
+          "result": "hit",
+          "market": "total_bases"
+        },
+        {
+          "name": "Nick Martinez",
+          "dir": "over",
+          "position": "RP",
+          "line": 2.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "Steven Kwan",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H",
+          "mult": "1.7x",
+          "result": "miss",
+          "market": "hits"
+        },
+        {
+          "name": "Jose Ramirez",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "Bases",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "total_bases"
+        },
+        {
+          "name": "Chandler Simpson",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "Bases",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "total_bases"
+        },
+        {
+          "name": "Taylor Walls",
+          "dir": "over",
+          "position": "SS",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "Bases",
+          "mult": "2.1x",
+          "result": "miss",
+          "market": "total_bases"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-5BB89p7",
+      "venueId": "5BB89p7",
+      "slipId": "dk6-5BB89p7",
+      "date": "2026-10-17",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sat 10/17 TB @ CLE",
+      "title": "MLB 6-Pick · 5BB89p7",
+      "stake": 3,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Richie Palacios",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Brayan Rocchio",
+          "dir": "over",
+          "position": "SS",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Petey Halpin",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Nathaniel Lowe",
+          "dir": "over",
+          "position": "",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Jose Ramirez",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Chandler Simpson",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "miss",
+          "market": "hrr"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-7wM9zB7",
+      "venueId": "7wM9zB7",
+      "slipId": "dk6-7wM9zB7",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 SEA @ DEN",
+      "title": "NFL 6-Pick · 7wM9zB7",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Bo Nix",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Courtland Sutton",
+          "dir": "under",
+          "position": "WR",
+          "line": 31.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Jaylen Waddle",
+          "dir": "under",
+          "position": "WR",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Sam Darnold",
+          "dir": "under",
+          "position": "QB",
+          "line": 220.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "dir": "under",
+          "position": "WR",
+          "line": 92.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "dir": "over",
+          "position": "RB",
+          "line": 65.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "miss",
+          "market": "rush_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-PxxxjP5",
+      "venueId": "PxxxjP5",
+      "slipId": "dk6-PxxxjP5",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 SEA @ DEN",
+      "title": "NFL 8-Pick · PxxxjP5",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "RJ Harvey",
+          "dir": "over",
+          "position": "RB",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "Ru+Rec Yds",
+          "mult": "1.2x",
+          "result": "hit",
+          "market": "rush_rec_yds"
+        },
+        {
+          "name": "Cooper Kupp",
+          "dir": "over",
+          "position": "WR",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Bo Nix",
+          "dir": "under",
+          "position": "QB",
+          "line": 198.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "dir": "over",
+          "position": "WR",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.2x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Sam Darnold",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "J.K. Dobbins",
+          "dir": "over",
+          "position": "RB",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Rashid Shaheed",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "3.1x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-8gggggN",
+      "venueId": "8gggggN",
+      "slipId": "dk6-8gggggN",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 SEA @ DEN",
+      "title": "NFL 5-Pick · 8gggggN",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 5,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Cooper Kupp",
+          "dir": "over",
+          "position": "WR",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.7x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "J.K. Dobbins",
+          "dir": "over",
+          "position": "RB",
+          "line": 69.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.8x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Evan Engram",
+          "dir": "over",
+          "position": "TE",
+          "line": 24.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "dir": "over",
+          "position": "WR",
+          "line": 139.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "2.2x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "dir": "over",
+          "position": "RB",
+          "line": 89.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.7x",
+          "result": "miss",
+          "market": "rush_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-RNNNVDg",
+      "venueId": "RNNNVDg",
+      "slipId": "dk6-RNNNVDg",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 SEA @ DEN",
+      "title": "NFL 7-Pick · RNNNVDg",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 7,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Sam Darnold",
+          "dir": "over",
+          "position": "QB",
+          "line": 169.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "RJ Harvey",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "2.1x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Jaxon Smith-Njigba",
+          "dir": "over",
+          "position": "WR",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "J.K. Dobbins",
+          "dir": "over",
+          "position": "RB",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Bo Nix",
+          "dir": "over",
+          "position": "QB",
+          "line": 149.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.6x",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Jaylen Waddle",
+          "dir": "over",
+          "position": "WR",
+          "line": 39.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Emanuel Wilson",
+          "dir": "over",
+          "position": "RB",
+          "line": 79.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "rush_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-48855Pp",
+      "venueId": "48855Pp",
+      "slipId": "dk6-48855Pp",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 54 Games",
+      "title": "CFB 6-Pick · 48855Pp",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Bear Bachmeier",
+          "dir": "over",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "pass_td"
+        },
+        {
+          "name": "Darian Mensah",
+          "dir": "over",
+          "position": "QB",
+          "line": 256.5,
+          "binary": false,
+          "venueMarket": "PaYDs",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Drew Mestemaker",
+          "dir": "over",
+          "position": "QB",
+          "line": 299.5,
+          "binary": false,
+          "venueMarket": "PaYDs",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Malachi Toney",
+          "dir": "over",
+          "position": "WR",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "CJ Carr",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Carlos Hernandez",
+          "dir": "over",
+          "position": "WR",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "result": "miss",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-ByyMDPQ",
+      "venueId": "ByyMDPQ",
+      "slipId": "dk6-ByyMDPQ",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 54 Games",
+      "title": "CFB 6-Pick · ByyMDPQ",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Darian Mensah",
+          "dir": "over",
+          "position": "QB",
+          "line": 279.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Drew Mestemaker",
+          "dir": "over",
+          "position": "QB",
+          "line": 299.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Malachi Toney",
+          "dir": "over",
+          "position": "WR",
+          "line": 109.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "CJ Carr",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Ashton Daniels",
+          "dir": "under",
+          "position": "QB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Carlos Hernandez",
+          "dir": "over",
+          "position": "WR",
+          "line": 99.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "result": "miss",
+          "market": "rec_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-mppBmq4",
+      "venueId": "mppBmq4",
+      "slipId": "dk6-mppBmq4",
+      "date": "2026-10-15",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Thu 10/15 54 Games",
+      "title": "CFB 6-Pick · mppBmq4",
+      "stake": 5,
+      "payout": 4.93,
+      "result": "won",
+      "legs": 6,
+      "hits": 5,
+      "picks": [
+        {
+          "name": "Scottre Humphrey",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Darian Mensah",
+          "dir": "over",
+          "position": "QB",
+          "line": 286.5,
+          "binary": false,
+          "venueMarket": "PaYDs",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Braden Pegan",
+          "dir": "over",
+          "position": "WR",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Malachi Toney",
+          "dir": "over",
+          "position": "WR",
+          "line": 118.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Creed Whittemore",
+          "dir": "over",
+          "position": "WR",
+          "line": 30.5,
+          "binary": false,
+          "venueMarket": "YDS",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Wayshawn Parker",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-DZRbnb9",
+      "venueId": "DZRbnb9",
+      "slipId": "dk6-DZRbnb9",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Wed 10/14 MIL @ LAD",
+      "title": "MLB 6-Pick · DZRbnb9",
+      "stake": 25,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Robert Gasser",
+          "dir": "under",
+          "position": "SP",
+          "line": 3.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "Shohei Ohtani",
+          "dir": "under",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Mookie Betts",
+          "dir": "over",
+          "position": "SS",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Jackson Chourio",
+          "dir": "under",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Teoscar Hernandez",
+          "dir": "over",
+          "position": "OF",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Blake Snell",
+          "dir": "under",
+          "position": "SP",
+          "line": 6.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "0.9x",
+          "result": "miss",
+          "market": "pitcher_ks"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-8ggQmbb",
+      "venueId": "8ggQmbb",
+      "slipId": "dk6-8ggQmbb",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Wed 10/14 MIL @ LAD",
+      "title": "MLB 4-Pick · 8ggQmbb",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 4,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Jake Bauers",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "HR",
+          "mult": "4.9x",
+          "result": "hit",
+          "market": "home_runs"
+        },
+        {
+          "name": "Jackson Chourio",
+          "dir": "under",
+          "position": "OF",
+          "line": 3.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Blake Snell",
+          "dir": "over",
+          "position": "SP",
+          "line": 7.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "Robert Gasser",
+          "dir": "over",
+          "position": "SP",
+          "line": 4.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "1.8x",
+          "result": "miss",
+          "market": "pitcher_ks"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-dGGnxwL",
+      "venueId": "dGGnxwL",
+      "slipId": "dk6-dGGnxwL",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Wed 10/14 MIL @ LAD",
+      "title": "MLB 5-Pick · dGGnxwL",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 5,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Jake Bauers",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "HR",
+          "mult": "4.9x",
+          "result": "hit",
+          "market": "home_runs"
+        },
+        {
+          "name": "Jackson Chourio",
+          "dir": "under",
+          "position": "OF",
+          "line": 3.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Blake Snell",
+          "dir": "over",
+          "position": "SP",
+          "line": 7.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "Robert Gasser",
+          "dir": "over",
+          "position": "SP",
+          "line": 4.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "1.8x",
+          "result": "miss",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "Andrew Vaughn",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "HR",
+          "mult": "7.9x",
+          "result": "miss",
+          "market": "home_runs"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-VNNmx5B",
+      "venueId": "VNNmx5B",
+      "slipId": "dk6-VNNmx5B",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Wed 10/14 MIL @ LAD",
+      "title": "MLB 5-Pick · VNNmx5B",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 5,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "William Contreras",
+          "dir": "over",
+          "position": "C",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.6x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Shohei Ohtani",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.6x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Tommy Edman",
+          "dir": "over",
+          "position": "SS",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.8x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Kike Hernandez",
+          "dir": "over",
+          "position": "",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "2.3x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Will Smith",
+          "dir": "over",
+          "position": "C",
+          "line": 3.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.7x",
+          "result": "miss",
+          "market": "hrr"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-bQQmYgj",
+      "venueId": "bQQmYgj",
+      "slipId": "dk6-bQQmYgj",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Wed 10/14 MIL @ LAD",
+      "title": "MLB 6-Pick · bQQmYgj",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Freddie Freeman",
+          "dir": "under",
+          "position": "",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Luis Lara",
+          "dir": "under",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Andrew Vaughn",
+          "dir": "under",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "hrr"
+        },
+        {
+          "name": "Jake Bauers",
+          "dir": "under",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Garrett Mitchell",
+          "dir": "under",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Miguel Rojas",
+          "dir": "over",
+          "position": "SS",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "2.1x",
+          "result": "miss",
+          "market": "hrr"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-VNNm7nW",
+      "venueId": "VNNm7nW",
+      "slipId": "dk6-VNNm7nW",
+      "date": "2026-10-14",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Wed 10/14 MIL @ LAD",
+      "title": "MLB 6-Pick · VNNm7nW",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 6,
+      "hits": 1,
+      "picks": [
+        {
+          "name": "Blake Snell",
+          "dir": "over",
+          "position": "SP",
+          "line": 7.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "William Contreras",
+          "dir": "under",
+          "position": "C",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Robert Gasser",
+          "dir": "over",
+          "position": "SP",
+          "line": 3.5,
+          "binary": false,
+          "venueMarket": "SO",
+          "result": "miss",
+          "market": "pitcher_ks"
+        },
+        {
+          "name": "Will Smith",
+          "dir": "under",
+          "position": "C",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H",
+          "mult": "1.1x",
+          "result": "miss",
+          "market": "hits"
+        },
+        {
+          "name": "Brice Turang",
+          "dir": "under",
+          "position": "SS",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "H+R+RBI",
+          "result": "miss",
+          "market": "hrr"
+        },
+        {
+          "name": "Andrew Vaughn",
+          "dir": "over",
+          "position": "OF",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "HR",
+          "mult": "7.9x",
+          "result": "miss",
+          "market": "home_runs"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-Z2zqDRg",
+      "venueId": "Z2zqDRg",
+      "slipId": "dk6-Z2zqDRg",
+      "date": "2026-10-11",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/11 13 Games",
+      "title": "NFL 3-Pick · Z2zqDRg",
+      "stake": 10,
+      "payout": 76.69,
+      "result": "won",
+      "legs": 3,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Jalen Hurts",
+          "dir": "over",
+          "position": "QB",
+          "line": 218.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Trevor Lawrence",
+          "dir": "over",
+          "position": "QB",
+          "line": 249.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.7x",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Bhayshul Tuten",
+          "dir": "over",
+          "position": "RB",
+          "line": 59.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "mult": "1.1x",
+          "result": "hit",
+          "market": "rush_yds"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-wmZGKGW",
+      "venueId": "wmZGKGW",
+      "slipId": "dk6-wmZGKGW",
+      "date": "2026-10-11",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/11 13 Games",
+      "title": "NFL 5-Pick · wmZGKGW",
+      "stake": 10,
+      "payout": 0,
+      "result": "lost",
+      "legs": 5,
+      "hits": 2,
+      "picks": [
+        {
+          "name": "Derrick Henry",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "0.9x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Drake London",
+          "dir": "over",
+          "position": "WR",
+          "line": 4.5,
+          "binary": false,
+          "venueMarket": "Rec",
+          "mult": "0.8x",
+          "result": "hit",
+          "market": "receptions"
+        },
+        {
+          "name": "Zay Flowers",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "1.6x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Michael Penix Jr.",
+          "dir": "over",
+          "position": "QB",
+          "line": 1.5,
+          "binary": false,
+          "venueMarket": "PaTD",
+          "mult": "1.3x",
+          "result": "miss",
+          "market": "pass_td"
+        },
+        {
+          "name": "Bijan Robinson",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "0.8x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-r8Yjd5P",
+      "venueId": "r8Yjd5P",
+      "slipId": "dk6-r8Yjd5P",
+      "date": "2026-10-11",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/11 13 Games",
+      "title": "NFL 7-Pick · r8Yjd5P",
+      "stake": 7,
+      "payout": 0,
+      "result": "lost",
+      "legs": 7,
+      "hits": 3,
+      "picks": [
+        {
+          "name": "Ja'Marr Chase",
+          "dir": "over",
+          "position": "WR",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "1.9x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Drake Maye",
+          "dir": "over",
+          "position": "QB",
+          "line": 244.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Garrett Wilson",
+          "dir": "over",
+          "position": "WR",
+          "line": 94.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Ashton Jeanty",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "1.6x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Cam Skattebo",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "2.5x",
+          "result": "miss",
+          "market": "anytime_td"
+        },
+        {
+          "name": "C.J. Stroud",
+          "dir": "under",
+          "position": "QB",
+          "line": 257.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Jonathan Taylor",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": true,
+          "venueMarket": "RRTD",
+          "mult": "1.2x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dk6-WNnDyp4",
+      "venueId": "WNnDyp4",
+      "slipId": "dk6-WNnDyp4",
+      "date": "2026-10-11",
+      "book": "DraftKings Pick6",
+      "type": "pick6",
+      "src": "dk-browser-1020",
+      "game": "Sun 10/11 13 Games",
+      "title": "NFL 8-Pick · WNnDyp4",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "legs": 8,
+      "hits": 4,
+      "picks": [
+        {
+          "name": "Jahmyr Gibbs",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.6x",
+          "result": "hit",
+          "market": "anytime_td"
+        },
+        {
+          "name": "Drake London",
+          "dir": "over",
+          "position": "WR",
+          "line": 80.5,
+          "binary": false,
+          "venueMarket": "RecYds",
+          "result": "hit",
+          "market": "rec_yds"
+        },
+        {
+          "name": "Christian McCaffrey",
+          "dir": "over",
+          "position": "RB",
+          "line": 49.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "hit",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Michael Penix Jr.",
+          "dir": "over",
+          "position": "QB",
+          "line": 218.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "hit",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Jared Goff",
+          "dir": "over",
+          "position": "QB",
+          "line": 285.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Derrick Henry",
+          "dir": "under",
+          "position": "RB",
+          "line": 79.5,
+          "binary": false,
+          "venueMarket": "RuYds",
+          "result": "miss",
+          "market": "rush_yds"
+        },
+        {
+          "name": "Brock Purdy",
+          "dir": "over",
+          "position": "QB",
+          "line": 199.5,
+          "binary": false,
+          "venueMarket": "PaYds",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "pass_yds"
+        },
+        {
+          "name": "Bijan Robinson",
+          "dir": "over",
+          "position": "RB",
+          "line": 0.5,
+          "binary": false,
+          "venueMarket": "RRTD",
+          "mult": "0.7x",
+          "result": "miss",
+          "market": "anytime_td"
+        }
+      ],
+      "note": "Actual venue payout, including visible pardons and winnings boosts."
+    },
+    {
+      "id": "dkp-41862313",
+      "positionId": "41862313",
+      "date": "2026-10-19",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Bitcoin Price at 6:35PM ET on Oct. 19, 2026 (5 Minutes) Above $82,042.23 - Yes",
+      "stake": 0.86,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41858338",
+      "positionId": "41858338",
+      "date": "2026-10-19",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Bitcoin Price at 6:30PM ET on Oct. 19, 2026 (5 Minutes) Above $82,040.93 - No",
+      "stake": 0.96,
+      "payout": 3,
+      "result": "won",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41854653",
+      "positionId": "41854653",
+      "date": "2026-10-19",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Bitcoin Price at 6:25PM ET on Oct. 19, 2026 (5 Minutes) Above $82,135.34 - Yes",
+      "stake": 4.38,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41850606",
+      "positionId": "41850606",
+      "date": "2026-10-19",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Bitcoin Price at 6:15PM ET on Oct. 19, 2026 (5 Minutes) Above $82,063.32 - Yes",
+      "stake": 0.09,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41848944",
+      "positionId": "41848944",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2 Pick Combo: Central Cordoba To Win · Barracas Central To Win",
+      "stake": 0.97,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41728364",
+      "positionId": "41728364",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2 Pick Combo",
+      "stake": 4.94,
+      "payout": 22,
+      "result": "won",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644649",
+      "positionId": "41644649",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Kyle Juszczyk",
+      "stake": 1.89,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644648",
+      "positionId": "41644648",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Mike Evans: 2+ TDs Mike Evans 16%",
+      "stake": 1.89,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644647",
+      "positionId": "41644647",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Brandin Cooks: 2+ TDs Brandin Cooks 5%",
+      "stake": 1.97,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644646",
+      "positionId": "41644646",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Terry McLaurin: 2+ TDs Terry McLaurin 5%",
+      "stake": 1.97,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644645",
+      "positionId": "41644645",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Treylon Burks",
+      "stake": 1.95,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644644",
+      "positionId": "41644644",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Jayden Daniels: 2+ TDs Jayden Daniels 4%",
+      "stake": 1.99,
+      "payout": 0.84,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644643",
+      "positionId": "41644643",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs George Kittle: 2+ TDs George Kittle 11%",
+      "stake": 1.99,
+      "payout": 6.29,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41644642",
+      "positionId": "41644642",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Rachaad White: 2+ TDs Rachaad White 10%",
+      "stake": 1.93,
+      "payout": 0.16,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41643608",
+      "positionId": "41643608",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Antonio Williams",
+      "stake": 3.78,
+      "payout": 0.2,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41643607",
+      "positionId": "41643607",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Brandin Cooks",
+      "stake": 1.74,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41643606",
+      "positionId": "41643606",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Terry McLaurin",
+      "stake": 1.98,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41643605",
+      "positionId": "41643605",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Rachaad White",
+      "stake": 1.84,
+      "payout": 4,
+      "result": "won",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41643604",
+      "positionId": "41643604",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer Jacob Cowing",
+      "stake": 1.93,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41643603",
+      "positionId": "41643603",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Anytime TD Scorer George Kittle",
+      "stake": 1.96,
+      "payout": 4,
+      "result": "won",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41247780",
+      "positionId": "41247780",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Cody White: 2+ TDs Cody White 2%",
+      "stake": 4.99,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41172533",
+      "positionId": "41172533",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Kyren Williams: 2+ TDs Kyren Williams 24%",
+      "stake": 4.87,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41172532",
+      "positionId": "41172532",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Davante Adams: 2+ TDs Davante Adams 15%",
+      "stake": 5,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41172530",
+      "positionId": "41172530",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Josh Allen: 2+ TDs Josh Allen 20%",
+      "stake": 4.93,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41172529",
+      "positionId": "41172529",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Kenneth Walker III: 2+ TDs Kenneth Walker III 21%",
+      "stake": 4.94,
+      "payout": 11,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41172528",
+      "positionId": "41172528",
+      "date": "2026-10-19",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Javonte Williams: 2+ TDs Javonte Williams 25%",
+      "stake": 4.79,
+      "payout": 2.5,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41172527",
+      "positionId": "41172527",
+      "date": "2026-10-20",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Christian McCaffrey: 2+ TDs Christian McCaffrey 31.7%",
+      "stake": 6.74,
+      "payout": 10.8,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41035111",
+      "positionId": "41035111",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Jaylen Warren: 2+ TDs Jaylen Warren 9%",
+      "stake": 4.97,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41029991",
+      "positionId": "41029991",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Derrick Henry: 2+ TDs Derrick Henry 22%",
+      "stake": 24.84,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-41029072",
+      "positionId": "41029072",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Bijan Robinson: 2+ TDs Bijan Robinson 33%",
+      "stake": 24.85,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40991981",
+      "positionId": "40991981",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Overtime Yes",
+      "stake": 12.71,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40821583",
+      "positionId": "40821583",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Chris Rodriguez Jr. Rushing Attempts 15+",
+      "stake": 1.85,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40821582",
+      "positionId": "40821582",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "Chris Rodriguez Jr. Rushing Yards 80+",
+      "stake": 2.47,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40821566",
+      "positionId": "40821566",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2 Pick Combo: 15+ Chris Rodriguez Jr. Rushing Attempts · 80+ Chris Rodriguez Jr. Rushing Yards",
+      "stake": 3.98,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40629893",
+      "positionId": "40629893",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs C.J. Stroud: 2+ TDs C.J. Stroud 1%",
+      "stake": 1,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40629892",
+      "positionId": "40629892",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Brian Thomas Jr.: 2+ TDs Brian Thomas Jr. 1%",
+      "stake": 0.75,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40629891",
+      "positionId": "40629891",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Jaylin Noel: 2+ TDs Jaylin Noel 1%",
+      "stake": 0.75,
+      "payout": 1.97,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40629890",
+      "positionId": "40629890",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Josh Cameron: 2+ TDs Josh Cameron 1%",
+      "stake": 1,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40613264",
+      "positionId": "40613264",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Woody Marks: 2+ TDs Woody Marks 9%",
+      "stake": 4.97,
+      "payout": 0,
+      "result": "lost",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
+    },
+    {
+      "id": "dkp-40594823",
+      "positionId": "40594823",
+      "date": "2026-10-18",
+      "book": "DraftKings Predictions",
+      "type": "prediction",
+      "src": "dk-browser-1020",
+      "title": "2+ TDs Bhayshul Tuten: 2+ TDs Bhayshul Tuten 7%",
+      "stake": 9.94,
+      "payout": 22.46,
+      "result": "sold",
+      "note": "Venue receipt verified. Web My Trades omits profit boosts; boosted return and separate fees are not confirmed."
     }
   ]
 }
