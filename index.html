@@ -3862,7 +3862,7 @@ function sweatPlayers(rows) {
     const old=p.lines.get(key);
     if(old) old.tickets.add(t.id); else p.lines.set(key,{leg,g,tickets:new Set([t.id])});
   }));
-  return [...players.values()].sort((a,b)=> Number([...b.lines.values()].some(x=>x.g.state==='live'))-Number([...a.lines.values()].some(x=>x.g.state==='live')) || b.tickets.size-a.tickets.size || String(P(a.key).name).localeCompare(P(b.key).name));
+  return [...players.values()].sort((a,b)=> (S.sweatFilter==='dead'?(Number([...b.lines.values()].some(x=>x.g.state==='miss'))-Number([...a.lines.values()].some(x=>x.g.state==='miss'))):0) || Number([...b.lines.values()].some(x=>x.g.state==='live'))-Number([...a.lines.values()].some(x=>x.g.state==='live')) || b.tickets.size-a.tickets.size || String(P(a.key).name).localeCompare(P(b.key).name));
 }
 function sweatHTML() {
   const rows=sweatRows(), allPlayers=sweatPlayers(rows);
@@ -5131,7 +5131,7 @@ document.addEventListener('click', (e) => {
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; store.set('pz_p6_filter',S.p6Filter); render(); return; }
   const ex = e.target.closest('[data-export]'); if (ex) { exportLedger(ex.dataset.export); return; }
   const sc2 = e.target.closest('[data-scen]'); if (sc2) { if (!can('research')) { setTab('me'); return; } const [id, k] = sc2.dataset.scen.split(':'); S.scen = S.scen || {}; S.scen[id] = k; render(); return; }
-  const sf = e.target.closest('[data-sw-filter]'); if(sf){ S.sweatFilter=sf.dataset.swFilter; S.sweatGame=null; renderSweat(); return; }
+  const sf = e.target.closest('[data-sw-filter]'); if(sf){ S.sweatFilter=sf.dataset.swFilter; S.sweatGame=S.sweatFilter==='dead'?'':null; renderSweat(); return; }
   const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; if(S.sweat){S.sweatFilter=sweatRows('live').length?'live':'alive';S.sweatGame=null;} renderSweat(); return; }
   const wi = e.target.closest('[data-wi]'); if (wi) { if (!can('research')) { setTab('me'); return; } const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
   if (e.target.closest('[data-wiclear]')) { S.whatIf.clear(); render(); return; }
