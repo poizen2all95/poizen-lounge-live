@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-20T22:18:09.200Z",
+  "updated": "2026-10-20T22:20:22.651Z",
   "note": "Imported history. Every row says where it came from. stake null = the amount risked was not visible in the source, so the row counts toward hit rates but not toward profit and loss.",
   "sources": {
     "dk-pick6": "DraftKings Pick6 → My Picks → Recent, owner screenshot taken Oct 16 2026. The page header says 14 pick sets; 7 were visible in the screenshot.",
@@ -8,7 +8,7 @@
     "dk-pick6-1017": "DraftKings Pick6 → Upcoming and Recent, owner screenshots Oct 17 2026.",
     "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades.",
     "dk-browser-1018": "DraftKings Predictions My Trades receipts and Pick6 My Picks read through the owner-authorized Edge extension on 2026-10-18T17:05:44.703Z. Open positions are not graded from game score alone.",
-    "dk-browser-1020": "Authorized DraftKings Edge receipt review 2026-10-20T22:18:09.200Z; 40 Predictions settlements captured Oct 19 and newest receipt rechecked Oct 20."
+    "dk-browser-1020": "Authorized DraftKings Edge receipt review 2026-10-20T22:20:22.651Z; 40 Predictions settlements captured Oct 19 and newest receipt rechecked Oct 20."
   },
   "entries": [
     {
@@ -5331,7 +5331,7 @@
     {
       "id": "dkp-41848944",
       "positionId": "41848944",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5344,7 +5344,7 @@
     {
       "id": "dkp-41728364",
       "positionId": "41728364",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5357,7 +5357,7 @@
     {
       "id": "dkp-41644649",
       "positionId": "41644649",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5370,7 +5370,7 @@
     {
       "id": "dkp-41644648",
       "positionId": "41644648",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5383,7 +5383,7 @@
     {
       "id": "dkp-41644647",
       "positionId": "41644647",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5396,7 +5396,7 @@
     {
       "id": "dkp-41644646",
       "positionId": "41644646",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5409,7 +5409,7 @@
     {
       "id": "dkp-41644645",
       "positionId": "41644645",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5422,7 +5422,7 @@
     {
       "id": "dkp-41644644",
       "positionId": "41644644",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5435,7 +5435,7 @@
     {
       "id": "dkp-41644643",
       "positionId": "41644643",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5448,7 +5448,7 @@
     {
       "id": "dkp-41644642",
       "positionId": "41644642",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5461,7 +5461,7 @@
     {
       "id": "dkp-41643608",
       "positionId": "41643608",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5474,7 +5474,7 @@
     {
       "id": "dkp-41643607",
       "positionId": "41643607",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5487,7 +5487,7 @@
     {
       "id": "dkp-41643606",
       "positionId": "41643606",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5500,7 +5500,7 @@
     {
       "id": "dkp-41643605",
       "positionId": "41643605",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5513,7 +5513,7 @@
     {
       "id": "dkp-41643604",
       "positionId": "41643604",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5526,7 +5526,7 @@
     {
       "id": "dkp-41643603",
       "positionId": "41643603",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5604,7 +5604,7 @@
     {
       "id": "dkp-41172528",
       "positionId": "41172528",
-      "date": "2026-10-19",
+      "date": "2026-10-18",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
@@ -5617,7 +5617,7 @@
     {
       "id": "dkp-41172527",
       "positionId": "41172527",
-      "date": "2026-10-20",
+      "date": "2026-10-19",
       "book": "DraftKings Predictions",
       "type": "prediction",
       "src": "dk-browser-1020",
