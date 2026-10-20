@@ -1,8 +1,8 @@
 {
   "version": 1,
   "title": "NFL Week 6",
-  "updated": "2026-10-18T22:03:00Z",
-  "note": "Pick6 live checked 3:03 PM PT Oct 18: nine NFL sets; five show To Win $0. Predictions receipts last verified 10:05 AM PT; latest view requires sign-in, so no later settlement inferred. First-TD/scalp plans remain unconfirmed.",
+  "updated": "2026-10-20T05:18:45.544Z",
+  "note": "October 19 refresh: 13 NFL tickets from receipts verified Oct 18, plus existing NBA set. Final public statistics reviewed. DraftKings signed out: newer trades and settlement payouts require account verification. Predictions receipts remain dated Oct 18 10:05 AM PT.",
   "players": {
     "henry": {
       "name": "Derrick Henry",
@@ -449,13 +449,76 @@
       "team": "GB",
       "pos": "QB",
       "espnId": "4036378"
+    },
+    "allgeier": {
+      "name": "Tyler Allgeier",
+      "team": "ARI",
+      "pos": "RB",
+      "espnId": "4373626",
+      "sport": "nfl"
+    },
+    "knight": {
+      "name": "Bam Knight",
+      "team": "ARI",
+      "pos": "RB",
+      "espnId": "4427728",
+      "sport": "nfl"
+    },
+    "mwashington": {
+      "name": "Mike Washington Jr.",
+      "team": "LV",
+      "pos": "RB",
+      "espnId": "4686658",
+      "sport": "nfl"
+    },
+    "goodson": {
+      "name": "Tyler Goodson",
+      "team": "DAL",
+      "pos": "RB",
+      "espnId": "4429676",
+      "sport": "nfl"
+    },
+    "lloyd": {
+      "name": "MarShawn Lloyd",
+      "team": "GB",
+      "pos": "RB",
+      "espnId": "4429023",
+      "sport": "nfl"
+    },
+    "javonte": {
+      "name": "Javonte Williams",
+      "team": "DAL",
+      "pos": "RB",
+      "espnId": "4361579",
+      "sport": "nfl"
+    },
+    "adams": {
+      "name": "Davante Adams",
+      "team": "LAR",
+      "pos": "WR",
+      "espnId": "16800",
+      "sport": "nfl"
+    },
+    "johnston": {
+      "name": "Quentin Johnston",
+      "team": "LAC",
+      "pos": "WR",
+      "espnId": "4429025",
+      "sport": "nfl"
+    },
+    "tucker": {
+      "name": "Tre Tucker",
+      "team": "LV",
+      "pos": "WR",
+      "espnId": "4428718",
+      "sport": "nfl"
     }
   },
   "pick6": [
     {
       "id": "nfl-3",
       "title": "3-Pick Anchor",
-      "badge": "Venue shows To Win $0 · verified 3:03 PM PT",
+      "badge": "Final-stat review: 1/3 hit · venue payout needs verification",
       "status": "confirmed",
       "entry": 10,
       "toWin": 131,
@@ -481,12 +544,44 @@
       ],
       "window": "Sun 10/18",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "venuePotential": 0
+      "venuePotential": 0,
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 1,
+        "misses": 2,
+        "legs": [
+          {
+            "name": "Bryce Young",
+            "market": "pass_yds",
+            "line": 269.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 281
+          },
+          {
+            "name": "Jaylen Warren",
+            "market": "rush_rec_yds",
+            "line": 109.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 78
+          },
+          {
+            "name": "Josh Allen",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          }
+        ]
+      }
     },
     {
       "id": "nfl-8-lamb",
       "title": "8-Pick Lamb Run",
-      "badge": "Venue shows To Win $0 · verified 3:03 PM PT",
+      "badge": "Final-stat review: 2/8 hit · venue payout needs verification",
       "status": "confirmed",
       "entry": 10,
       "toWin": 2400,
@@ -542,12 +637,84 @@
       ],
       "window": "Sun 10/18",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "venuePotential": 0
+      "venuePotential": 0,
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 2,
+        "misses": 6,
+        "legs": [
+          {
+            "name": "Bryce Young",
+            "market": "pass_yds",
+            "line": 269.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 281
+          },
+          {
+            "name": "Tetairoa McMillan",
+            "market": "rec_yds",
+            "line": 89.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 86
+          },
+          {
+            "name": "Jaylen Warren",
+            "market": "rush_rec_yds",
+            "line": 109.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 78
+          },
+          {
+            "name": "Bijan Robinson",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Derrick Henry",
+            "market": "rush_rec_yds",
+            "line": 109.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 60
+          },
+          {
+            "name": "Josh Allen",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Kenneth Walker III",
+            "market": "rush_yds",
+            "line": 119.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 128
+          },
+          {
+            "name": "CeeDee Lamb",
+            "market": "rec_yds",
+            "line": 99.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 70
+          }
+        ]
+      }
     },
     {
       "id": "nfl-8-dak",
       "title": "8-Pick Dak Gimme",
-      "badge": "Venue shows To Win $0 · verified 3:03 PM PT",
+      "badge": "Final-stat review: 3/8 hit · venue payout needs verification",
       "status": "confirmed",
       "entry": 10,
       "toWin": 1260.53,
@@ -604,7 +771,79 @@
       ],
       "window": "Sun 10/18",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "venuePotential": 0
+      "venuePotential": 0,
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 3,
+        "misses": 5,
+        "legs": [
+          {
+            "name": "Bryce Young",
+            "market": "pass_yds",
+            "line": 269.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 281
+          },
+          {
+            "name": "Tetairoa McMillan",
+            "market": "rec_yds",
+            "line": 89.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 86
+          },
+          {
+            "name": "Jaylen Warren",
+            "market": "rush_rec_yds",
+            "line": 109.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 78
+          },
+          {
+            "name": "Bijan Robinson",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Derrick Henry",
+            "market": "rush_rec_yds",
+            "line": 109.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 60
+          },
+          {
+            "name": "Josh Allen",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Kenneth Walker III",
+            "market": "rush_yds",
+            "line": 119.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 128
+          },
+          {
+            "name": "Dak Prescott",
+            "market": "pass_yds",
+            "line": 0.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 258
+          }
+        ]
+      }
     },
     {
       "id": "nfl-6-50",
@@ -651,9 +890,65 @@
           "mult": "1.3x"
         }
       ],
-      "badge": "Venue shows To Win $0 · verified 3:03 PM PT",
+      "badge": "Final-stat review: 1/6 hit · venue payout needs verification",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "venuePotential": 0
+      "venuePotential": 0,
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 1,
+        "misses": 5,
+        "legs": [
+          {
+            "name": "Josh Allen",
+            "market": "pass_yds",
+            "line": 269.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 255
+          },
+          {
+            "name": "Denzel Boston",
+            "market": "rec_yds",
+            "line": 59.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 15
+          },
+          {
+            "name": "Matthew Stafford",
+            "market": "pass_rush_yds",
+            "line": 309.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 222
+          },
+          {
+            "name": "Jonathan Taylor",
+            "market": "rush_yds",
+            "line": 99.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 94
+          },
+          {
+            "name": "Christian Watson",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Bryce Young",
+            "market": "pass_yds",
+            "line": 259.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 281
+          }
+        ]
+      }
     },
     {
       "id": "nfl-4-14",
@@ -684,8 +979,48 @@
           "line": 68.5
         }
       ],
-      "badge": "Harrison final: 34 / 21.5 yards · hit",
-      "verifiedAt": "2026-10-18T17:05:44.703Z"
+      "badge": "Final-stat review: 2/4 hit · venue payout needs verification",
+      "verifiedAt": "2026-10-18T17:05:44.703Z",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 2,
+        "misses": 2,
+        "legs": [
+          {
+            "name": "Marvin Harrison Jr.",
+            "market": "rec_yds",
+            "line": 21.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 34
+          },
+          {
+            "name": "Puka Nacua",
+            "market": "rec_yds",
+            "line": 94.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 80
+          },
+          {
+            "name": "Kenneth Walker III",
+            "market": "rush_yds",
+            "line": 90.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 128
+          },
+          {
+            "name": "Kyren Williams",
+            "market": "rush_yds",
+            "line": 68.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 50
+          }
+        ]
+      }
     },
     {
       "id": "nfl-8-coker",
@@ -742,14 +1077,86 @@
           "mult": "1.7x"
         }
       ],
-      "badge": "Venue shows To Win $0 · verified 3:03 PM PT",
+      "badge": "Final-stat review: 4/8 hit · venue payout needs verification",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "venuePotential": 0
+      "venuePotential": 0,
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 4,
+        "misses": 4,
+        "legs": [
+          {
+            "name": "Jalen Coker",
+            "market": "rec_yds",
+            "line": 79.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 97
+          },
+          {
+            "name": "Kirk Cousins",
+            "market": "pass_yds",
+            "line": 250.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 313
+          },
+          {
+            "name": "Matthew Golden",
+            "market": "rec_yds",
+            "line": 89.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 104
+          },
+          {
+            "name": "Isaiah Likely",
+            "market": "receptions",
+            "line": 6.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 6
+          },
+          {
+            "name": "Drake London",
+            "market": "rec_yds",
+            "line": 89.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 62
+          },
+          {
+            "name": "Drake Maye",
+            "market": "pass_yds",
+            "line": 239.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 235
+          },
+          {
+            "name": "Brenton Strange",
+            "market": "rec_yds",
+            "line": 69.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 44
+          },
+          {
+            "name": "Kenneth Walker III",
+            "market": "rush_yds",
+            "line": 119.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 128
+          }
+        ]
+      }
     },
     {
       "id": "nfl-4-patd",
       "title": "4-Pick Passing TDs",
-      "badge": "$5 Bonus Picks · Lawrence final: 4 / 1.5 pass TDs · hit",
+      "badge": "Final-stat review: 3/4 hit · venue payout needs verification",
       "status": "confirmed",
       "entry": 5,
       "toWin": 39,
@@ -779,7 +1186,47 @@
           "mult": "0.8x"
         }
       ],
-      "verifiedAt": "2026-10-18T17:05:44.703Z"
+      "verifiedAt": "2026-10-18T17:05:44.703Z",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 3,
+        "misses": 1,
+        "legs": [
+          {
+            "name": "Josh Allen",
+            "market": "pass_td",
+            "line": 1.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 2
+          },
+          {
+            "name": "Trevor Lawrence",
+            "market": "pass_td",
+            "line": 1.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 4
+          },
+          {
+            "name": "Patrick Mahomes",
+            "market": "pass_td",
+            "line": 1.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Drake Maye",
+            "market": "pass_td",
+            "line": 1.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 3
+          }
+        ]
+      }
     },
     {
       "id": "nba-8",
@@ -837,7 +1284,7 @@
       "title": "8-Pick NFL · venue mppmr97",
       "entry": 10,
       "toWin": 262,
-      "badge": "50% Winnings Boost",
+      "badge": "Final-stat review: 4/8 hit · venue payout needs verification",
       "legs": [
         {
           "player": "allen",
@@ -896,14 +1343,86 @@
       "status": "confirmed",
       "window": "Sun 10/18",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "source": "DraftKings Pick6 live, browser extension; displayed potential is not a settled payout."
+      "source": "DraftKings Pick6 live, browser extension; displayed potential is not a settled payout.",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 4,
+        "misses": 4,
+        "legs": [
+          {
+            "name": "Josh Allen",
+            "market": "pass_yds",
+            "line": 269.5,
+            "dir": "under",
+            "state": "hit",
+            "value": 255
+          },
+          {
+            "name": "Brock Bowers",
+            "market": "rec_yds",
+            "line": 49.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 70
+          },
+          {
+            "name": "James Cook III",
+            "market": "rush_yds",
+            "line": 69.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 95
+          },
+          {
+            "name": "Ashton Jeanty",
+            "market": "rush_yds",
+            "line": 49.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 22
+          },
+          {
+            "name": "Trey McBride",
+            "market": "rec_yds",
+            "line": 85.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 53
+          },
+          {
+            "name": "Puka Nacua",
+            "market": "rec_yds",
+            "line": 59.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 80
+          },
+          {
+            "name": "Kyren Williams",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Christian Watson",
+            "market": "rec_yds",
+            "line": 69.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 64
+          }
+        ]
+      }
     },
     {
       "id": "dk6-jWWLgbW",
       "title": "8-Pick NFL · venue jWWLgbW",
       "entry": 2,
       "toWin": 18,
-      "badge": "Venue displayed $18+ to win at 3:03 PM PT",
+      "badge": "Final-stat review: 7/8 hit · venue payout needs verification",
       "legs": [
         {
           "player": "jeanty",
@@ -963,7 +1482,487 @@
       "status": "confirmed",
       "window": "Sun 10/18",
       "verifiedAt": "2026-10-18T22:03:00Z",
-      "source": "DraftKings Pick6 live, browser extension; displayed potential is not a settled payout."
+      "source": "DraftKings Pick6 live, browser extension; displayed potential is not a settled payout.",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 7,
+        "misses": 1,
+        "legs": [
+          {
+            "name": "Ashton Jeanty",
+            "market": "rush_yds",
+            "line": 56.5,
+            "dir": "under",
+            "state": "hit",
+            "value": 22
+          },
+          {
+            "name": "Josh Allen",
+            "market": "pass_yds",
+            "line": 249.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 255
+          },
+          {
+            "name": "Brock Bowers",
+            "market": "rec_yds",
+            "line": 41.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 70
+          },
+          {
+            "name": "Patrick Mahomes",
+            "market": "pass_yds",
+            "line": 249.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 272
+          },
+          {
+            "name": "Trey McBride",
+            "market": "rec_yds",
+            "line": 69.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 53
+          },
+          {
+            "name": "Jordan Love",
+            "market": "pass_yds",
+            "line": 209.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 276
+          },
+          {
+            "name": "Dak Prescott",
+            "market": "pass_yds",
+            "line": 219.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 258
+          },
+          {
+            "name": "Christian Watson",
+            "market": "rec_yds",
+            "line": 39.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 64
+          }
+        ]
+      }
+    },
+    {
+      "id": "dk6-WNN8jRN",
+      "title": "8-Pick rushing · WNN8jRN",
+      "entry": 10,
+      "toWin": 568,
+      "legs": [
+        {
+          "player": "allgeier",
+          "market": "rush_yds",
+          "line": 39.5,
+          "dir": "over",
+          "mult": "1.2x"
+        },
+        {
+          "player": "knight",
+          "market": "rush_yds",
+          "line": 82.5,
+          "dir": "over"
+        },
+        {
+          "player": "mahomes",
+          "market": "rush_yds",
+          "line": 12.5,
+          "dir": "over"
+        },
+        {
+          "player": "mwashington",
+          "market": "rush_yds",
+          "line": 20.5,
+          "dir": "over"
+        },
+        {
+          "player": "goodson",
+          "market": "rush_yds",
+          "line": 9.5,
+          "dir": "over",
+          "mult": "0.9x"
+        },
+        {
+          "player": "lloyd",
+          "market": "rush_yds",
+          "line": 24.5,
+          "dir": "over",
+          "mult": "0.6x"
+        },
+        {
+          "player": "love",
+          "market": "rush_yds",
+          "line": 6.5,
+          "dir": "over"
+        },
+        {
+          "player": "dak",
+          "market": "rush_yds",
+          "line": 9.5,
+          "dir": "over",
+          "mult": "0.9x"
+        }
+      ],
+      "status": "confirmed",
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T22:25:00Z",
+      "source": "DraftKings live ticket observed October 18; displayed To Win amount was provisional, not a settlement.",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 3,
+        "misses": 5,
+        "legs": [
+          {
+            "name": "Tyler Allgeier",
+            "market": "rush_yds",
+            "line": 39.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 38
+          },
+          {
+            "name": "Bam Knight",
+            "market": "rush_yds",
+            "line": 82.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 80
+          },
+          {
+            "name": "Patrick Mahomes",
+            "market": "rush_yds",
+            "line": 12.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 16
+          },
+          {
+            "name": "Mike Washington Jr.",
+            "market": "rush_yds",
+            "line": 20.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 43
+          },
+          {
+            "name": "Tyler Goodson",
+            "market": "rush_yds",
+            "line": 9.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "MarShawn Lloyd",
+            "market": "rush_yds",
+            "line": 24.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 10
+          },
+          {
+            "name": "Jordan Love",
+            "market": "rush_yds",
+            "line": 6.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 12
+          },
+          {
+            "name": "Dak Prescott",
+            "market": "rush_yds",
+            "line": 9.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 7
+          }
+        ]
+      },
+      "badge": "Final-stat review: 3/8 hit · venue payout needs verification"
+    },
+    {
+      "id": "dk6-GPPxw7Y",
+      "title": "7-Pick NFL · GPPxw7Y",
+      "entry": 5,
+      "toWin": 377,
+      "legs": [
+        {
+          "player": "stafford",
+          "market": "pass_yds",
+          "line": 202.5,
+          "dir": "under"
+        },
+        {
+          "player": "jcook",
+          "market": "rush_yds",
+          "line": 99.5,
+          "dir": "over",
+          "mult": "0.9x"
+        },
+        {
+          "player": "cousins",
+          "market": "anytime_td",
+          "line": 0.5,
+          "dir": "over",
+          "mult": "16.2x"
+        },
+        {
+          "player": "love",
+          "market": "pass_yds",
+          "line": 209.5,
+          "dir": "over",
+          "mult": "0.6x"
+        },
+        {
+          "player": "dak",
+          "market": "pass_yds",
+          "line": 219.5,
+          "dir": "over",
+          "mult": "0.6x"
+        },
+        {
+          "player": "watson",
+          "market": "rec_yds",
+          "line": 39.5,
+          "dir": "over",
+          "mult": "0.6x"
+        },
+        {
+          "player": "javonte",
+          "market": "rush_yds",
+          "line": 39.5,
+          "dir": "over",
+          "mult": "0.6x"
+        }
+      ],
+      "status": "confirmed",
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T22:25:00Z",
+      "source": "DraftKings live ticket observed October 18; displayed To Win amount was provisional, not a settlement.",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 4,
+        "misses": 3,
+        "legs": [
+          {
+            "name": "Matthew Stafford",
+            "market": "pass_yds",
+            "line": 202.5,
+            "dir": "under",
+            "state": "miss",
+            "value": 222
+          },
+          {
+            "name": "James Cook III",
+            "market": "rush_yds",
+            "line": 99.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 95
+          },
+          {
+            "name": "Kirk Cousins",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          },
+          {
+            "name": "Jordan Love",
+            "market": "pass_yds",
+            "line": 209.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 276
+          },
+          {
+            "name": "Dak Prescott",
+            "market": "pass_yds",
+            "line": 219.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 258
+          },
+          {
+            "name": "Christian Watson",
+            "market": "rec_yds",
+            "line": 39.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 64
+          },
+          {
+            "name": "Javonte Williams",
+            "market": "rush_yds",
+            "line": 39.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 41
+          }
+        ]
+      },
+      "badge": "Final-stat review: 4/7 hit · venue payout needs verification"
+    },
+    {
+      "id": "dk6-xqqMKjG",
+      "title": "3-Pick receiving · xqqMKjG",
+      "entry": 10,
+      "toWin": 50,
+      "legs": [
+        {
+          "player": "adams",
+          "market": "rec_yds",
+          "line": 48.5,
+          "dir": "over"
+        },
+        {
+          "player": "johnston",
+          "market": "rec_yds",
+          "line": 69.5,
+          "dir": "over",
+          "mult": "0.8x"
+        },
+        {
+          "player": "tucker",
+          "market": "rec_yds",
+          "line": 39.5,
+          "dir": "over",
+          "mult": "0.7x"
+        }
+      ],
+      "status": "confirmed",
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T22:25:00Z",
+      "source": "DraftKings live ticket observed October 18; displayed To Win amount was provisional, not a settlement.",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 1,
+        "misses": 2,
+        "legs": [
+          {
+            "name": "Davante Adams",
+            "market": "rec_yds",
+            "line": 48.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 39
+          },
+          {
+            "name": "Quentin Johnston",
+            "market": "rec_yds",
+            "line": 69.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 57
+          },
+          {
+            "name": "Tre Tucker",
+            "market": "rec_yds",
+            "line": 39.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 97
+          }
+        ]
+      },
+      "badge": "Final-stat review: 1/3 hit · venue payout needs verification"
+    },
+    {
+      "id": "dk6-jWWLLVr",
+      "title": "4-Pick DAL @ GB · jWWLLVr",
+      "entry": 5,
+      "toWin": 40,
+      "legs": [
+        {
+          "player": "lamb",
+          "market": "receptions",
+          "line": 5.5,
+          "dir": "over",
+          "mult": "0.7x"
+        },
+        {
+          "player": "love",
+          "market": "pass_td",
+          "line": 1.5,
+          "dir": "under",
+          "mult": "1.3x"
+        },
+        {
+          "player": "dak",
+          "market": "pass_td",
+          "line": 1.5,
+          "dir": "over",
+          "mult": "0.8x"
+        },
+        {
+          "player": "watson",
+          "market": "anytime_td",
+          "line": 0.5,
+          "dir": "over",
+          "mult": "1.1x"
+        }
+      ],
+      "status": "confirmed",
+      "window": "Sun 10/18",
+      "verifiedAt": "2026-10-18T22:25:00Z",
+      "source": "DraftKings live ticket observed October 18; displayed To Win amount was provisional, not a settlement.",
+      "statReview": {
+        "at": "2026-10-20T05:18:45.544Z",
+        "source": "ESPN final game summaries; not venue settlement",
+        "hits": 2,
+        "misses": 2,
+        "legs": [
+          {
+            "name": "CeeDee Lamb",
+            "market": "receptions",
+            "line": 5.5,
+            "dir": "over",
+            "state": "hit",
+            "value": 9
+          },
+          {
+            "name": "Jordan Love",
+            "market": "pass_td",
+            "line": 1.5,
+            "dir": "under",
+            "state": "hit",
+            "value": 1
+          },
+          {
+            "name": "Dak Prescott",
+            "market": "pass_td",
+            "line": 1.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 1
+          },
+          {
+            "name": "Christian Watson",
+            "market": "anytime_td",
+            "line": 0.5,
+            "dir": "over",
+            "state": "miss",
+            "value": 0
+          }
+        ]
+      },
+      "badge": "Final-stat review: 2/4 hit · venue payout needs verification"
     }
   ],
   "firstTD": {
