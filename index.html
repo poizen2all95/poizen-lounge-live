@@ -3176,12 +3176,27 @@ const poKey = (ev) => { const h = ev && (ev.comps || []).find((t) => t.ha === 'h
 function venueArt(ev, eager) { if (document.documentElement.dataset.season === 'playoffs') { const sl = poKey(ev); if (!sl && venuePhoto(ev)) return `<img class="vimg poimg" src="${esc(venuePhoto(ev))}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">`;
     return sl ? `<img class="vimg poimg" src="playoffs-art/${sl}.jpg" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.outerHTML='<i class=&quot;vimg poart&quot;></i>'">` : '<i class="vimg poart" aria-hidden="true"></i>'; } const src = venuePhoto(ev); return src ? `<img class="vimg" src="${esc(src)}" alt="" ${eager ? '' : 'loading="lazy"'} onerror="this.remove()">` : ''; }
 
+function ticketScoreboards(now=Date.now()) {
+  const requests=new Map(),formatter=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'});
+  activeTickets().filter(t=>!t.settlement).forEach(t=>(t.legs||[]).forEach(l=>{
+    const start=Date.parse(l.startsAt||t.startsAt||'');
+    if(!t.sport||!Number.isFinite(start)||start<now-24*3600e3||start>now+7*86400e3)return;
+    const parts=Object.fromEntries(formatter.formatToParts(new Date(start)).map(p=>[p.type,p.value])),date=parts.year+parts.month+parts.day;
+    requests.set(t.sport+':'+date,[t.sport,date]);
+  }));
+  return [...requests.values()];
+}
 let pollTimer = null;
 async function poll() {
   clearTimeout(pollTimer);
   let anyLive = false, soon = false, okCount = 0; const errs = [];
   for (const sport of slateSports()) {
     try { ingestScoreboard(sport, await getJSON(E.ESPN.scoreboard(sport))); okCount++; } catch (e) { errs.push(sport.toUpperCase() + ' scoreboard: ' + e.message); }
+  }
+  // Include receipt dates when ESPN's default slate still points at yesterday.
+  for(const [sport,date] of ticketScoreboards()) {
+    try { ingestScoreboard(sport,await getJSON(E.ESPN.scoreboard(sport)+'&dates='+date));okCount++; }
+    catch(e){errs.push(sport.toUpperCase()+' '+date+' scoreboard: '+e.message);}
   }
   const wanted = new Set();
   for (const sport of slateSports()) for (const team of slateTeams(sport)) { const id = S.teamEvent[sport + ':' + team]; if (id) wanted.add(id); }
