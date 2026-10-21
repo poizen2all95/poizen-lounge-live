@@ -1712,6 +1712,12 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 
 @media(min-width:721px){#sweat{overflow:hidden}.sw2-head,.sw2-toolbar,.sw2-context,.sw-foot{flex:none}.sw2-workspace{flex:1;min-height:0;overflow:hidden}.sw2-list{max-height:none;height:100%;overflow:auto}.sw2-detail{max-height:100%;position:relative;top:auto}.sw2-workspace+.sw-foot{margin-top:12px;padding-bottom:0}}
 .gcard .minis{grid-template-columns:1fr}.gcard .mtile b{white-space:normal;overflow:visible;text-overflow:clip;font-size:13px}.gcard .mtile .v{font-size:25px}.gcard .mtile .sw2-jersey{display:inline;font-size:12px}
+/* polish: tiles never clip their numbers, slip names wrap instead of cutting off, the rail clears the chat button */
+@media (max-width:1100px) and (min-width:721px){.kpis2 .kp.wide{grid-column:span 6}}
+@media (max-width:1100px) and (min-width:721px){details.p6>summary{grid-template-columns:repeat(4,minmax(0,1fr)) 20px;grid-template-areas:"t t t t x" "e w c p x";row-gap:10px;column-gap:8px}details.p6>summary .faces{display:none}details.p6>summary .p6-t{grid-area:t}details.p6>summary .ce{grid-area:e}details.p6>summary .cw{grid-area:w}details.p6>summary .cc{grid-area:c}details.p6>summary .cp{grid-area:p}details.p6>summary>svg{grid-area:x}}
+.kp b{font-size:clamp(22px,2.4vw,30px)}
+.slip .st b{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.05}
+.rail{max-height:calc(100vh - 250px);overflow-y:auto;scrollbar-width:thin}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="tiers.css">
@@ -2412,6 +2418,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
   function health(legs) {
     if (!legs.length) return { score: null, label: '', danger: [], clusters: [] };
     if (legs.some((l) => l.state === 'miss')) return { score: 0, label: 'Busted', danger: [], clusters: [] };
+    if (legs.every((l) => l.p === null || l.p === undefined)) return { score: null, label: 'No read yet', danger: [], clusters: [] };
     const ps = legs.map((l) => clamp(l.p === null || l.p === undefined ? 0.5 : l.p, 0.001, 1));
     const score = Math.round(100 * Math.exp(ps.reduce((a, p) => a + Math.log(p), 0) / ps.length));
     const danger = legs.map((l, i) => ({ ...l, i })).filter((l) => l.state !== 'hit' && (l.p ?? 0.5) < 0.4);
@@ -4671,7 +4678,7 @@ function slipTracker({ t, r }) {
   const line2 = done ? `${done} · ${r.hits}/${r.n} hit` : `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${kickLabel(firstPre.date)}` : ''}`;
   const pay = r.state==='review' ? 'Pending review' : t.units ? (Number(t.toWin) || 0).toFixed(1) + '×' : r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
   const sv = r.payout === null && r.state !== 'dead' ? slipLive(t, r) : null;
-  const odds = sv ? `<div class="odds" title="Chance this slip pays out, from live pace and pre-game projections"><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b><span>${liveN || r.hits ? 'live' : 'pre-game'}</span></div>` : `<div class="odds"><b class="dim">${r.state === 'review' ? 'Void?' : '–'}</b><span>${r.state === 'review' ? 'check rules' : 'settled'}</span></div>`;
+  const odds = sv ? `<div class="odds" title="Chance this slip pays out, from live pace and pre-game projections"><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b><span>${liveN || r.hits ? 'live' : 'pre-game'}</span></div>` : `<div class="odds"><b class="dim">${r.state === 'review' ? 'Void?' : '–'}</b><span>${r.state === 'review' ? 'check rules' : r.payout !== null ? 'settled' : r.state === 'dead' ? 'busted' : 'no read yet'}</span></div>`;
   const H = r.payout !== null || r.state === 'dead' ? null : slipHealth(t, r);
   const cascade = H && H.clusters.length ? `<div class="cascade">${H.clusters.map((c) => `${c.idx.length} legs in danger in ${esc(c.game)} — one bad game script sinks both`).join(' · ')}</div>` : '';
   return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>

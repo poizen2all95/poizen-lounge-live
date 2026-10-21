@@ -208,6 +208,7 @@
   function health(legs) {
     if (!legs.length) return { score: null, label: '', danger: [], clusters: [] };
     if (legs.some((l) => l.state === 'miss')) return { score: 0, label: 'Busted', danger: [], clusters: [] };
+    if (legs.every((l) => l.p === null || l.p === undefined)) return { score: null, label: 'No read yet', danger: [], clusters: [] };
     const ps = legs.map((l) => clamp(l.p === null || l.p === undefined ? 0.5 : l.p, 0.001, 1));
     const score = Math.round(100 * Math.exp(ps.reduce((a, p) => a + Math.log(p), 0) / ps.length));
     const danger = legs.map((l, i) => ({ ...l, i })).filter((l) => l.state !== 'hit' && (l.p ?? 0.5) < 0.4);
