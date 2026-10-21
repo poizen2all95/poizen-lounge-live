@@ -226,6 +226,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard${sport === 'cfb' ? '?groups=80&limit=1000' : '?limit=100'}`,
     summary: (sport, id) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/summary?event=${id}`,
     gamelog: (id) => `https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/${id}/gamelog`,
+    nbaGamelog: (id, season) => `https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${id}/gamelog?season=${season}`,
     injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
     search: (q) => `https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(q)}&type=player&limit=6`,
   };
@@ -599,6 +600,18 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const seen = {};
     return rows.filter((r) => (seen[r.eventId] ? false : (seen[r.eventId] = true))).sort((a, b) => a.week - b.week);
   }
+  /* NBA game log → one row per regular-season game. The exact season-type match keeps out "Play In Regular Season". */
+  const NBA_REGULAR = /^[0-9]{4}-[0-9]{2} Regular Season$/;
+  function nbaGamelogRows(j) {
+    const names = (j && j.names) || []; const ev = (j && j.events) || {};
+    const st = ((j && j.seasonTypes) || []).find((s) => NBA_REGULAR.test(s.displayName || ''));
+    const at = (k) => names.indexOf(k);
+    const seen = {};
+    return ((st && st.categories) || []).filter((c) => c.type === 'event').flatMap((c) => c.events || []).filter((e) => e.eventId && !seen[e.eventId] && (seen[e.eventId] = true)).map((e) => {
+      const s = e.stats || []; const g = ev[e.eventId] || {};
+      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]) };
+    }).sort((a, b) => a.date.localeCompare(b.date));
+  }
   function rowStats(r) {
     const s = emptyStats();
     s.passYds = num(r.passingYards); s.passTD = num(r.passingTouchdowns); s.ints = num(r.interceptions);
@@ -622,7 +635,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     return { vals, n, avg, median, hits, l3avg, max: sorted[n - 1] || 0, min: sorted[0] || 0 };
   }
 
-  const api = { ESPN, norm, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, researchLine, rowStats, fmt };
+  const api = { ESPN, norm, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, nbaGamelogRows, researchLine, rowStats, fmt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZE = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -948,6 +961,52 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
     return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
   }
+  /* ---------- Line Finder: last-season hit rates by line ----------
+     step = how far one − tap on DraftKings Pick6 moves a MORE line. LESS cannot be moved. */
+  const LF_STATS = {
+    pts: { label: 'Points', short: 'pts', step: 3, f: (r) => r.pts },
+    reb: { label: 'Rebounds', short: 'reb', step: 1, f: (r) => r.reb },
+    ast: { label: 'Assists', short: 'ast', step: 1, f: (r) => r.ast },
+    tpm: { label: '3-Pointers Made', short: '3PM', step: 1, f: (r) => r.tpm },
+    pra: { label: 'Pts + Rebs + Asts', short: 'PRA', step: 2, f: (r) => r.pts + r.reb + r.ast },
+  };
+  const LF_MIN_MINUTES = 15, LF_MIN_GAMES = 20, LF_BOOST_OK = 0.55;
+  /* games with 15+ minutes; the latest season unless it has under 20 such games and the older one has more */
+  function lfSample(latest, older) {
+    const keep = (rows) => (rows || []).filter((r) => r.min >= LF_MIN_MINUTES);
+    const a = keep(latest), b = keep(older);
+    return a.length >= LF_MIN_GAMES || b.length <= a.length ? { rows: a, fallback: false } : { rows: b, fallback: true };
+  }
+  const lfHit = (v, line, dir) => (dir === 'under' ? v < line : v > line);
+  /* rows oldest → newest */
+  function lfRate(rows, stat, line, dir) {
+    const vals = rows.map(LF_STATS[stat].f); const l10 = vals.slice(-10);
+    const hits = vals.filter((v) => lfHit(v, line, dir)).length;
+    return { line, hits, n: vals.length, rate: vals.length ? hits / vals.length : 0, l10: l10.filter((v) => lfHit(v, line, dir)).length, l10n: l10.length };
+  }
+  /* half-point lines around the board line (or his median when no line is entered), reaching one − tap below it */
+  function lfLines(stat, rows, center) {
+    const st = LF_STATS[stat]; const vals = rows.map(st.f).sort((x, y) => x - y);
+    const mid = isFinite(center) && center > 0 ? center : vals.length ? Math.floor(vals[Math.floor(vals.length / 2)]) + 0.5 : 0.5;
+    const below = Math.max(3, st.step + 1), above = st.step > 1 ? 4 : 3;
+    const out = [];
+    for (let l = mid - below; l <= mid + above + 1e-9; l += 1) if (l > 0) out.push(Math.round(l * 2) / 2);
+    return out;
+  }
+  function lfLadder(rows, stat, lines, dir) { return lines.map((l) => lfRate(rows, stat, l, dir)); }
+  /* the lowest line one − tap reaches: MORE drops a step (never below 0.5), LESS stays at the board line */
+  function lfSafest(stat, board, dir) {
+    if (dir === 'under') return board;
+    return Math.max(0.5, Math.round((board - LF_STATS[stat].step) * 2) / 2);
+  }
+  /* a plain 1.0x leg is a coin flip (~0.50); hit rate × boost above 0.55 is worth taking */
+  function lfBoost(rate, mult) { const m = Number(mult) || 0; const value = rate * m; return { value, worth: m > 0 && value > LF_BOOST_OK }; }
+  /* legs: [{ rate, team }] — up to 8; hit rates multiplied as if independent, with a warning for shared teams */
+  function lfSlip(legs) {
+    const L = (legs || []).slice(0, 8); const count = {};
+    L.forEach((l) => { if (l.team) count[l.team] = (count[l.team] || 0) + 1; });
+    return { p: L.length ? L.reduce((a, l) => a * l.rate, 1) : 0, n: L.length, sharedTeams: Object.keys(count).filter((t) => count[t] > 1) };
+  }
   /* ---------- plans: the one definition of every tier ----------
      status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release */
   const PLAN_ORDER = ['free', 'pro', 'elite'];
@@ -958,7 +1017,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     ownSlips: { tier: 'free', label: 'Build and track one active personal slip; keep your last 10 settled slips visible', status: 'live' },
     moreSlips: { tier: 'pro', label: 'Track multiple active slips with no Free-plan cap', status: 'live' },
     research: { tier: 'pro', label: 'Full Lab: player research, line checks, fair-payout comparison and what-if building', status: 'live' },
-    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns', status: 'live' },
+    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns, plus the NBA Line Finder for every player on the slate', status: 'live' },
     honest: { tier: 'pro', label: 'Expected payout and model reasoning for each slip, alongside the price you are offered', status: 'live' },
     limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
     exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
@@ -1002,7 +1061,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, FOUNDING_CAP, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, FOUNDING_CAP, multPrior, trustOf, honest, honestLive, breakEven, LF_STATS, lfSample, lfRate, lfLines, lfLadder, lfSafest, lfBoost, lfSlip };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -1591,7 +1650,7 @@ function plansCard() {
   return `<div class="card" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"><div class="row" style="justify-content:space-between"><b class="st" style="font-size:22px">Plans &amp; prices</b><span class="dim" style="font-size:12px">Founding spots used: <b>${taken}</b> of ${cap}</span></div>
     <p class="dim" style="font-size:12px;margin:0">Two paid plans: Pro and Elite. While founding spots are left, members see the founding price and keep it as long as you renew them. Members request a plan, pay you, and you approve below — access is locked to the Google email they requested with and runs a month at a time.</p>
     ${row('pro', 'Pro')}${row('elite', 'El')}
-    <div class="row"><label class="f" style="flex:1;min-width:260px">How members pay you (shown when they request)<input id="plPay" data-keep maxlength="200" value="${esc(P.pay || '')}" placeholder="e.g. Cash App $YourTag — put your email in the note"></label><label class="f" style="width:130px">Founding spots<input id="plCap" data-keep type="number" min="0" max="500" value="${cap}"></label></div>
+    <div class="row"><label class="f" style="flex:1;min-width:260px">How members pay you (shown on the plans page)<input id="plPay" data-keep maxlength="200" value="${esc(P.pay || '')}" placeholder="e.g. Cash App $YourTag — put your email in the note"></label><label class="f" style="flex:1;min-width:200px">Access turns on within<input id="plAct" data-keep maxlength="80" value="${esc(P.activation || '')}" placeholder="e.g. a few hours of payment"></label><label class="f" style="width:130px">Founding spots<input id="plCap" data-keep type="number" min="0" max="500" value="${cap}"></label></div>
     <div class="row"><label class="f" style="flex:1">Poizen server URL (Cloudflare Worker — live order books, alerts, Discord)<input id="plServer" data-keep value="${esc(P.server || '')}" placeholder="https://poizen-lounge-server.you.workers.dev"></label><label class="f" style="flex:1">Notification public VAPID key<input id="plVapid" data-keep value="${esc(P.vapidKey || '')}" placeholder="Firebase Cloud Messaging public key"></label><button class="btn teal" id="plSave" type="button">Save plans</button></div></div>`;
 }
 function requestsCard() {
@@ -1847,7 +1906,7 @@ document.addEventListener('click', async (e) => {
     const server = v('plServer').replace(/\/+$/, ''); if (server && !/^https:\/\/[a-z0-9.-]+(\.workers\.dev|\.[a-z]{2,})$/i.test(server)) { toast('Server URL should look like https://poizen-lounge-server.you.workers.dev', 'bad'); return; }
     const cap = Math.max(0, Math.min(500, Math.round(Number(v('plCap')) || 0)));
     const vapidKey=v('plVapid').trim();if(vapidKey&&!/^[A-Za-z0-9_-]{80,100}$/.test(vapidKey)){toast('Use the Firebase public VAPID key, not a private key','bad');return;}
-    Object.assign(plans, { vapidKey, pay: v('plPay').slice(0, 200), server, founding: { cap, taken: foundingTaken(A.tiers) } });
+    Object.assign(plans, { vapidKey, pay: v('plPay').slice(0, 200), activation: v('plAct').slice(0, 80), server, founding: { cap, taken: foundingTaken(A.tiers) } });
     try { await db.ref('board/plans').set(plans); A.plans = plans; toast('Plans saved — members see them now'); render(); } catch (er) { toast('Could not save: ' + er.message, 'bad'); } return; }
   if (t.dataset.approve) { const uid = t.dataset.approve;
     if (membershipBusy.has(uid)) return;
