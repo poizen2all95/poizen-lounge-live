@@ -1686,6 +1686,15 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 .sw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;align-items:start}.sw-player{min-width:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);overflow:hidden}.sw-player.is-live{border-color:color-mix(in srgb,var(--live) 55%,var(--line))}.sw-player-head{display:flex;align-items:center;gap:10px;padding:14px 14px 8px}.sw-player-head .av{flex:none;width:48px;height:48px;position:relative;border-radius:12px;background:var(--tg);overflow:hidden}.sw-player-head .av img{height:53px;max-width:none;position:absolute;left:50%;transform:translateX(-50%)}.sw-player h2{font:900 20px/1.05 var(--stadium);margin:0 0 4px}.sw-player-head span{font-size:10px;color:var(--fg2)}.sw-status{margin-left:auto;font-size:9px;font-weight:900;font-style:normal;color:var(--fg3)}.is-live .sw-status{color:var(--live)}.sw-event{padding:0 14px 10px;font-size:10px;color:var(--fg3);min-height:22px}.sw-lines{padding:0 14px 12px;display:grid;gap:12px}.sw-line-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--fg2)}.sw-line-title b{color:var(--fg);margin-left:5px}.sw-line-title strong{font:900 30px/1 var(--stadium);color:var(--fg)}.sw-track{height:8px;margin:5px 0;border-radius:8px;background:var(--line);overflow:hidden}.sw-track i{display:block;height:100%;border-radius:8px;background:var(--acc);transition:width .5s}.sw-line.hit .sw-track i{background:var(--win)}.sw-line.miss .sw-track i{background:var(--loss)}.sw-line-note{display:flex;justify-content:space-between;font-size:10px;color:var(--fg3)}.sw-line.hit .sw-line-note{color:var(--win)}.sw-line.miss .sw-line-note{color:var(--loss)}.sw-foot{font-size:10px;color:var(--fg3)}.sw-empty{grid-column:1/-1;padding:48px 20px;text-align:center;color:var(--fg2)}
 @media(min-width:1800px){.sw-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
 @media(max-width:600px){.sw-head{gap:10px}.sw-total{display:none}.sw-head h1{font-size:23px}.sw-head .sw-x{margin-left:auto}.sw-controls{gap:10px}.sw-controls nav{width:100%}.sw-controls button{padding:10px 9px;flex:1}.sw-controls button b{margin-left:5px}.sw-sync{font-size:9px}.sw-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.sw-player-head{padding:10px 8px 6px;gap:6px;flex-wrap:wrap}.sw-player-head .av{width:36px;height:38px}.sw-player h2{font-size:16px}.sw-player-head>div:not(.av){flex:1;min-width:70px}.sw-status{display:none}.sw-event{padding:0 8px 8px;font-size:9px}.sw-lines{padding:0 8px 10px;gap:10px}.sw-line-title{font-size:10px;flex-wrap:wrap}.sw-line-title b{margin-left:2px}.sw-line-title strong{font-size:24px}.sw-foot{line-height:1.5}}
+
+.sw-sport-tabs{display:flex;gap:6px;flex-wrap:wrap}.sw-sport-tabs button{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg2);font-size:11px;font-weight:800;padding:8px 12px}.sw-sport-tabs [aria-pressed="true"]{background:var(--acc);color:var(--bg)}.sw-sport-tabs b{margin-left:5px;opacity:.7}
+.sw-game-rail{display:flex;gap:10px;overflow-x:auto;padding:0 0 6px;scrollbar-width:thin;flex:none}.sw-game{flex:none;min-width:190px;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px 15px;text-align:left;color:var(--fg)}.sw-game span{display:block;color:var(--fg3);font-size:10px;margin-bottom:6px}.sw-game b{font:900 21px var(--stadium)}.sw-game i{font:inherit;color:var(--fg3);padding:0 8px}.sw-game.is-live span{color:var(--live)}.sw-game[aria-pressed="true"]{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}.sw-missing{font-size:11px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;color:var(--fg2)}.sw-missing p{margin:7px 0 0}.sw-stale{color:var(--loss);margin-left:6px}.sw-head{position:relative}.sw-grid{grid-template-columns:repeat(auto-fill,minmax(245px,1fr))}.sw-player-head{min-height:76px}.sw-event{min-height:32px}.sw-lines{gap:14px}
+@media(min-width:1800px){.sw-grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}}
+@media(max-width:600px){.sw-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sw-game{min-width:170px}.sw-player-head{min-height:68px}.sw-event{min-height:35px}.sw-game b{font-size:19px}.sw-head h1{font-size:26px}}
+
+.sw-source-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.sw-source-controls button{padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg2);font-size:11px;font-weight:800}.sw-source-controls button[aria-pressed="true"]{border-color:var(--acc);color:var(--fg);box-shadow:inset 0 0 0 1px var(--acc)}.sw-source-controls small{font-size:10px;color:var(--fg3);margin-left:auto}.sw-source-list{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}.sw-source{font-size:9px!important;line-height:1.3;padding:3px 5px;border-radius:5px;background:var(--panel2);color:var(--fg2)!important;font-weight:800;white-space:nowrap;border:1px solid var(--line)}.sw-source.prediction{border-color:var(--gold)}.sw-source.pick6{border-color:var(--teal)}.sw-source.pickem{border-color:var(--violet)}.sw-line-note{align-items:center;gap:8px;flex-wrap:wrap}.sw-line-note .sw-source-list{margin:0}.sw-line-note .sw-source{font-size:8px!important}.sw-risk{padding:0 14px 10px;font-size:10px;font-weight:800;color:var(--fg2)}.sw-player-head{align-items:start}.sw-player-head .sw-status{padding-top:7px}.sw-track i{transition:width .5s,background-color .5s}
+@media(max-width:600px){.sw-risk{padding:0 8px 8px;font-size:9px}.sw-source-controls small{width:100%;margin:2px 0}.sw-source{font-size:8px!important}}
+.sw-ticket-details{margin:0 12px 12px;font-size:10px;color:var(--fg2)}.sw-ticket-details summary{cursor:pointer;font-weight:800;padding:5px 0}.sw-ticket-details>div{padding:8px 0;border-top:1px solid var(--line);display:grid;gap:4px}.sw-ticket-details span{line-height:1.4}.sw-ticket-details small{color:var(--fg3)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="tiers.css">
@@ -1772,7 +1781,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
   'use strict';
 
   const ESPN = {
-    scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard`,
+    scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard${sport === 'cfb' ? '?groups=80&limit=1000' : '?limit=100'}`,
     summary: (sport, id) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/summary?event=${id}`,
     gamelog: (id) => `https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/${id}/gamelog`,
     injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
@@ -1838,6 +1847,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
       pK: 0, pOuts: 0, pER: 0, pH: 0,
       // nba
       pts: 0, reb: 0, ast: 0, threes: 0, stl: 0, blk: 0, tov: 0, min: 0,
+      goals: 0, hockeyAssists: 0, shots: 0, saves: 0, blockedShots: 0,
     };
   }
 
@@ -1868,7 +1878,10 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
               s.pK += num(v.strikeouts); s.pER += num(v.earnedRuns); s.pH += num(v.hits);
               s.pOuts += ipToOuts(v['fullInnings.partInnings']);
             }
-          } else if (sport === 'nba') {
+          } else if (sport === 'nhl') {
+            // ESPN repeats athletes in skaters and position groups. Each field is a snapshot, not an increment.
+            for(const [field,key] of Object.entries({goals:'goals',hockeyAssists:'assists',shots:'shotsTotal',saves:'saves',blockedShots:'blockedShots'})) if(v[key]!==undefined) s[field]=num(v[key]);
+          } else if (sport === 'nba' || sport === 'wnba') {
             s.pts += num(v.points); s.reb += num(v.rebounds); s.ast += num(v.assists);
             s.threes += num(String(v['threePointFieldGoalsMade-threePointFieldGoalsAttempted'] || '0-0').split('-')[0]);
             s.stl += num(v.steals); s.blk += num(v.blocks); s.tov += num(v.turnovers); s.min += num(v.minutes);
@@ -1919,7 +1932,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
     const comp = summary && summary.header && summary.header.competitions && summary.header.competitions[0];
     const score = {};
     for (const c of (comp && comp.competitors) || []) score[c.team && c.team.abbreviation] = num(c.score);
-    return { sport, status, box, plays, firstTD, score };
+    return { id: String((summary.header && summary.header.id) || (comp && comp.id) || ''), sport, status, box, plays, firstTD, score };
   }
 
   // ---------- markets ----------
@@ -1947,6 +1960,12 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
     pitcher_ks: { sport: 'mlb', label: 'Pitcher Strikeouts', short: 'Ks', f: (s) => s.pK },
     pitcher_outs: { sport: 'mlb', label: 'Pitching Outs', short: 'Outs', f: (s) => s.pOuts },
     // NBA
+    Goals: { sport: 'nhl', label: 'Goals', short: 'Goals', f: s=>s.goals },
+    goals: { sport: 'nhl', label: 'Goals', short: 'Goals', f: s=>s.goals },
+    hockey_assists: { sport: 'nhl', label: 'Assists', short: 'Ast', f:s=>s.hockeyAssists },
+    hockey_points: { sport: 'nhl', label: 'Points', short: 'Pts', f:s=>s.goals+s.hockeyAssists },
+    shots_on_goal: { sport: 'nhl', label: 'Shots on goal', short: 'SOG', f:s=>s.shots },
+    goalie_saves: { sport: 'nhl', label: 'Saves', short: 'Saves', f:s=>s.saves },
     pts: { sport: 'nba', label: 'Points', short: 'Pts', f: (s) => s.pts },
     reb: { sport: 'nba', label: 'Rebounds', short: 'Reb', f: (s) => s.reb },
     ast: { sport: 'nba', label: 'Assists', short: 'Ast', f: (s) => s.ast },
@@ -1983,13 +2002,16 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
        state: scheduled | live | hit | miss | dnp | void */
   function gradeLeg(leg, game) {
     const line = Number(leg.line);
-    if (leg.venueOnly) return { state: 'scheduled', value: null, line, progress: 0, note: 'Awaiting venue settlement; automatic stats unavailable' };
+    const exactGame = !!(game && leg.eventId && String(leg.eventId)===String(game.id));
+    const sportMatch=game&&MARKETS[leg.market]&&(MARKETS[leg.market].sport===game.sport||(MARKETS[leg.market].sport==='nfl'&&game.sport==='cfb')||(MARKETS[leg.market].sport==='nba'&&game.sport==='wnba'));
+    if (leg.venueOnly && !(exactGame && sportMatch)) return { state: 'scheduled', value: null, line, progress: 0, note: 'Awaiting venue settlement; automatic stats unavailable' };
     const dir = leg.dir === 'under' ? 'under' : 'over';
     const mk = MARKETS[leg.market];
     if (!mk) return { state: 'error', value: null, line, progress: 0, note: `Unknown market "${leg.market}"` };
     if (!game || game.status.state === 'pre') return { state: 'scheduled', value: 0, line, progress: 0, note: '' };
     if (game.status.postponed) return { state: 'void', value: null, line, progress: 0, note: 'Game postponed — check DraftKings void rules' };
     const p = findPlayer(game, leg);
+    if(leg.venueOnly && !p) return {state:game.status.state==='in'?'live':'scheduled',value:null,line,progress:0,note:'Player stats not reported; awaiting verified update'};
     const value = p ? mk.f(p.stats) : 0;
     const final = game.status.state === 'post';
     const progress = line > 0 ? Math.min(1, value / line) : (value > 0 ? 1 : 0);
@@ -3036,6 +3058,14 @@ function ingestScoreboard(sport, sb) {
 }
 function eventFor(key) { const p = P(key); return S.events[S.teamEvent[(p.sport || 'nfl') + ':' + p.team]] || null; }
 function gameFor(key) { const ev = eventFor(key); if (!ev || ev.state === 'pre') return null; return S.games[ev.id] || null; }
+function eventForLeg(leg) {
+  if(leg.eventId) return S.events[String(leg.eventId)] || null;
+  const ev=eventFor(leg.player);
+  if(leg.venueOnly) return null;
+  if(leg.startsAt && ev && Math.abs(Date.parse(leg.startsAt)-Date.parse(ev.date))>12*3600e3) return null;
+  return ev;
+}
+function gameForLeg(leg){const ev=eventForLeg(leg);return ev&&ev.state!=='pre'?S.games[ev.id]||null:null;}
 function opponentOf(key) { const ev = eventFor(key); const p = P(key); if (!ev) return null; return ev.comps.find((t) => t.abbr !== p.team) || null; }
 function oppLabel(key) { const ev = eventFor(key); const p = P(key); const o = opponentOf(key); if (!o) return ''; const me = ev.comps.find((t) => t.abbr === p.team); return (me && me.ha === 'home' ? 'vs ' : '@ ') + o.abbr; }
 
@@ -3155,6 +3185,7 @@ async function poll() {
   }
   const wanted = new Set();
   for (const sport of slateSports()) for (const team of slateTeams(sport)) { const id = S.teamEvent[sport + ':' + team]; if (id) wanted.add(id); }
+  activeTickets().filter(t=>!t.settlement).forEach(t=>t.legs.forEach(l=>{if(l.eventId&&S.events[l.eventId])wanted.add(String(l.eventId));}));
   const now = Date.now();
   await Promise.all([...wanted].map(async (id) => {
     const ev = S.events[id]; if (!ev) return;
@@ -3162,7 +3193,7 @@ async function poll() {
     if (ev.state === 'pre') { if (ms < 30 * 60 * 1000) soon = true; return; }
     if (ev.state === 'post' && S.finalDone[id]) return;
     if (ev.state === 'in') anyLive = true;
-    try { const sum = await getJSON(E.ESPN.summary(ev.sport, id)); S.wpd[id] = wpFrom(sum); S.games[id] = E.parseGame(sum, ev.sport); S.games[id].raw = { situation: sum.situation || null, drives: null, lastPlay: (sum.situation && sum.situation.lastPlay) || null }; if (ev.state === 'post' && S.games[id].status.state === 'post') S.finalDone[id] = true; okCount++; }
+    try { const sum = await getJSON(E.ESPN.summary(ev.sport, id)); S.wpd[id] = wpFrom(sum); S.games[id] = E.parseGame(sum, ev.sport); S.games[id].fetchedAt=Date.now(); S.games[id].raw = { situation: sum.situation || null, drives: null, lastPlay: (sum.situation && sum.situation.lastPlay) || null }; if (ev.state === 'post' && S.games[id].status.state === 'post') S.finalDone[id] = true; okCount++; }
     catch (e) { errs.push(ev.name + ': ' + e.message); }
   }));
   /* contract games: live win probability while playing, the line and ESPN's predictor before (refreshed every 10 min) */
@@ -3195,13 +3226,13 @@ function feedStatus() {
   t.innerHTML = `${live ? 'LIVE' : 'Synced'} <span class="lbl">· ESPN</span> · ${ago < 3 ? 'now' : ago + 's'}`;
   el.title = S.feed.err || 'Stats refresh every 15 seconds while your games are live';
 }
-function relevantEvent(ev) { return ev.comps.some((t) => slateTeams(ev.sport).has(t.abbr)); }
+function relevantEvent(ev) { return ev.comps.some((t) => slateTeams(ev.sport).has(t.abbr)) || activeTickets().filter(t=>!t.settlement).some(t=>t.legs.some(l=>String(l.eventId)===String(ev.id))); }
 
 /* ---------------- grading ---------------- */
 const legRef = (l) => ({ ...l, name: P(l.player).name, espnId: P(l.player).espnId, team: P(l.player).team });
 function gradeAll() {
   const sl = S.slate;
-  const pick6 = (sl.pick6 || []).map((t) => ({ t, r: E.gradePick6({ ...t, legs: t.legs.map(legRef) }, (l) => gameFor(l.player)) }));
+  const pick6 = (sl.pick6 || []).map((t) => ({ t, r: E.gradePick6({ ...t, legs: t.legs.map(legRef) }, (l) => gameForLeg(l)) }));
   const ftd = ((sl.firstTD && sl.firstTD.bets) || []).map((b) => ({ b, r: E.gradeFirstTD({ ...b, name: P(b.player).name }, gameFor(b.player)) }));
   const shifts = ((sl.scalp && sl.scalp.shifts) || []).map((sh) => ({ sh, targets: sh.targets.map((t) => ({ t, r: E.gradeScalp(legRef(t), gameFor(t.player)) })) }));
   return { pick6, ftd, shifts };
@@ -3821,6 +3852,18 @@ function alertPrefsHTML() {
 S.sweat = params.has('sweat');
 S.sweatFilter = 'alive';
 S.sweatGame = null;
+S.sweatSport = '';
+S.sweatSourceFilter = '';
+S.sweatHigh = false;
+function sweatSource(t){return t.sweatSource||'pick6';}
+function sweatStake(t){const v=sweatSource(t)==='prediction'?t.cost:t.entry;return v===null||v===undefined||v===''?null:Number.isFinite(Number(v))?Number(v):null;}
+function sweatProgressColor(leg,g){if(g.state==='hit')return 'var(--win)';if(g.state==='miss')return 'var(--loss)';if(g.value===null||g.value===undefined||g.state==='scheduled')return 'var(--fg3)';const p=Math.max(0,Math.min(1,Number(g.value)/Math.max(Number(leg.line),1)));return 'hsl('+Math.round(leg.dir==='under'?140-p*135:8+p*132)+' 80% 43%)';}
+function sweatBadges(sources){const labels={prediction:'Prediction',pick6:'Pick6 slip',pickem:'Pick’em'};return Object.entries(sources).filter(([,ids])=>ids.size).map(([type,ids])=>`<span class="sw-source ${type}">${labels[type]} <b>${ids.size}</b></span>`).join('');}
+function sweatPickemRows(){
+  if(typeof PK==='undefined'||typeof myUid!=='function'||typeof pickemLegs!=='function')return[];
+  const mine=PK.players[myUid()]?.picks||{};
+  return pickemLegs().filter(x=>mine[x.id]&&eventForLeg(x.leg)?.state!=='post').map(x=>{const leg={...x.leg,dir:mine[x.id]},g=E.gradeLeg(legRef(leg),gameForLeg(leg));return{t:{id:'pickem:'+x.id,title:'Your community Pick’em',sweatSource:'pickem',status:'confirmed',entry:null},r:{state:g.state==='miss'?'dead':'open',payout:null,potential:0,legs:[{leg,g}]}};});
+}
 function sweatPredictionRows() {
   const normalize=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
   const players=Object.entries(S.slate?.players||{});
@@ -3830,22 +3873,22 @@ function sweatPredictionRows() {
       const match=part.trim().match(/^(\d+)\+\s+(.+?)\s+(Points|Rebounds|Assists|Three Pointers Made|Home Runs)$/i);
       if(!match)return;
       const player=players.find(([key,p])=>normalize(p.name)===normalize(match[2]));if(!player)return;
-      const market={points:'pts',rebounds:'reb',assists:'ast','three pointers made':'threes','home runs':'hr'}[match[3].toLowerCase()];
-      const ev=eventFor(player[0]),leg={player:player[0],market,line:Number(match[1])-.5,dir:'over',inclusive:Number(match[1]),startsAt:ev?.date};
+      const market={points:'pts',rebounds:'reb',assists:'ast','three pointers made':'threes','home runs':'home_runs'}[match[3].toLowerCase()];
+      const ev=eventFor(player[0]),leg={player:player[0],market,line:Number(match[1])-.5,dir:'over',inclusive:Number(match[1]),eventId:ev?.id,startsAt:ev?.date};
       const g=E.gradeLeg(legRef(leg),gameFor(leg.player));legs.push({leg,g});
     });
     const state=legs.some(x=>x.g.state==='miss')?'dead':legs.some(x=>x.g.state==='live')?'live':'open';
-    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title},r:{state,payout:null,potential:c.potentialReturn||0,legs}};
+    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs}};
   }).filter(x=>x.r.legs.length);
 }
 function sweatRows(filter = S.sweatFilter) {
   // Receipt settlements belong in history; an unsettled busted ticket stays available here.
-  const rows = S.G.pick6.filter(({t}) => confirmed(t) && !t.settlement).concat(sweatPredictionRows());
+  const rows = S.G.pick6.filter(({t}) => confirmed(t) && !t.settlement).concat(sweatPredictionRows(),sweatPickemRows()).filter(({t})=>(!S.sweatSourceFilter||sweatSource(t)===S.sweatSourceFilter)&&(!S.sweatHigh||(sweatStake(t)!==null&&sweatStake(t)>=10)));
   return rows.filter(({r}) => {
     const dead = ['dead','lost'].includes(r.state) || r.payout === 0;
     if (filter === 'dead') return dead;
     if (dead || r.payout !== null) return false;
-    const live = r.legs.some(({g}) => g.state === 'live');
+    const live = r.legs.some(({leg,g}) => eventForLeg(leg)?.state==='in' || g.state === 'live');
     if (filter === 'live') return live;
     if (filter === 'upcoming') return !live && r.legs.some(({g}) => !['hit','miss','dnp','void'].includes(g.state));
     return true;
@@ -3855,38 +3898,50 @@ function sweatPlayers(rows) {
   const players = new Map();
   rows.forEach(({t,r}) => r.legs.forEach(({leg,g}) => {
     if (!leg.player) return;
+    if(S.sweatFilter==='live'&&eventForLeg(leg)?.state!=='in'&&g.state!=='live')return;
     let p = players.get(leg.player);
-    if (!p) players.set(leg.player,p={key:leg.player,tickets:new Set(),lines:new Map()});
-    p.tickets.add(t.id);
-    const key = [leg.market,leg.dir,leg.line].join(':');
+    if (!p) players.set(leg.player,p={key:leg.player,tickets:new Set(),lines:new Map(),sources:{prediction:new Set(),pick6:new Set(),pickem:new Set()},stakes:new Map()});
+    p.tickets.add(t.id);p.sources[sweatSource(t)].add(t.id);p.stakes.set(t.id,sweatStake(t));
+    const key = [leg.eventId||'',leg.market,leg.dir,leg.line].join(':');
     const old=p.lines.get(key);
-    if(old) old.tickets.add(t.id); else p.lines.set(key,{leg,g,tickets:new Set([t.id])});
+    if(old){old.tickets.add(t.id);old.sources[sweatSource(t)].add(t.id);}else {const sources={prediction:new Set(),pick6:new Set(),pickem:new Set()};sources[sweatSource(t)].add(t.id);p.lines.set(key,{leg,g,tickets:new Set([t.id]),sources});}
   }));
-  return [...players.values()].sort((a,b)=> (S.sweatFilter==='dead'?(Number([...b.lines.values()].some(x=>x.g.state==='miss'))-Number([...a.lines.values()].some(x=>x.g.state==='miss'))):0) || Number([...b.lines.values()].some(x=>x.g.state==='live'))-Number([...a.lines.values()].some(x=>x.g.state==='live')) || b.tickets.size-a.tickets.size || String(P(a.key).name).localeCompare(P(b.key).name));
+  return [...players.values()].sort((a,b)=> (S.sweatHigh?([...b.stakes.values()].reduce((n,v)=>n+(v||0),0)-[...a.stakes.values()].reduce((n,v)=>n+(v||0),0)):0) || (S.sweatFilter==='dead'?(Number([...b.lines.values()].some(x=>x.g.state==='miss'))-Number([...a.lines.values()].some(x=>x.g.state==='miss'))):0) || Number([...b.lines.values()].some(x=>x.g.state==='live'))-Number([...a.lines.values()].some(x=>x.g.state==='live')) || b.tickets.size-a.tickets.size || String(P(a.key).name).localeCompare(P(b.key).name));
 }
 function sweatHTML() {
-  const rows=sweatRows(), allPlayers=sweatPlayers(rows);
-  const games=[...new Set(allPlayers.map(p=>{const e=eventFor(p.key);return e ? e.name : P(p.key).sport || 'Other';}))].sort();
+  const rows=sweatRows(), all=sweatPlayers(rows);
+  const sports=[...new Set(all.map(p=>P(p.key).sport||'nfl'))].sort();
+  if(S.sweatSport&&!sports.includes(S.sweatSport))S.sweatSport='';
+  const allPlayers=all.filter(p=>!S.sweatSport||P(p.key).sport===S.sweatSport);
+  const playerEvent=p=>eventForLeg([...p.lines.values()][0].leg);
+  const watchGames=[...new Map(allPlayers.map(p=>playerEvent(p)).filter(Boolean).map(e=>[e.id,e])).values()].sort((a,b)=>(a.state==='in'?-1:1)-(b.state==='in'?-1:1)||a.date.localeCompare(b.date));
+  const unknown=[...new Set(S.G.pick6.filter(x=>!x.t.settlement).flatMap(x=>x.r.legs).filter(x=>!x.leg.eventId&&!P(x.leg.player).team).map(x=>x.leg.player))].map(key=>({key}));
+  const games=[...new Set(allPlayers.map(p=>{const e=playerEvent(p);return e ? e.name : P(p.key).sport || 'Other';}))].sort();
   if(S.sweatGame===null){
-    const next=allPlayers.map(p=>({p,e:eventFor(p.key),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&x.e.state!=='post'&&(x.at>Date.now()-6*3600e3||[...x.p.lines.values()].some(l=>l.g.state==='live'))).sort((a,b)=>a.at-b.at);
-    S.sweatGame=next.length?next[0].e.name:'';
+    const next=allPlayers.map(p=>({p,e:playerEvent(p),at:Math.min(...[...p.lines.values()].map(x=>Date.parse(x.leg.startsAt)||Infinity))})).filter(x=>x.e&&x.e.state!=='post'&&(x.at>Date.now()-6*3600e3||[...x.p.lines.values()].some(l=>l.g.state==='live'))).sort((a,b)=>a.at-b.at);
+    S.sweatGame=S.sweatFilter==='live'?'':next.length?next[0].e.name:'';
   }
   if(S.sweatGame && !games.includes(S.sweatGame)) S.sweatGame='';
-  const players=allPlayers.filter(p=>!S.sweatGame || (eventFor(p.key)?.name || P(p.key).sport || 'Other')===S.sweatGame);
+  const players=allPlayers.filter(p=>!S.sweatGame || (playerEvent(p)?.name || P(p.key).sport || 'Other')===S.sweatGame);
   const visibleIds=new Set(players.flatMap(p=>[...p.tickets]));
   const visibleRows=rows.filter(x=>visibleIds.has(x.t.id));
   const max=visibleRows.reduce((sum,{r})=>sum+(['dead','lost'].includes(r.state)?0:(Number(r.potential)||0)),0);
-  return `<header class="sw-head"><div><div class="sw-k">POIZEN · SUPER SWEAT</div><h1>Every player. Every line.</h1></div><div class="sw-total"><b>${players.length}</b> players <span>${visibleRows.length} tickets · ${money(max)} potential</span></div><button class="sw-x" type="button" data-sweat="off" aria-label="Close sweat mode">Close</button></header>
+  return `<header class="sw-head"><div><div class="sw-k">POIZEN · SUPER SWEAT</div><h1>Live watch</h1></div><div class="sw-total"><b>${players.length}</b> players <span>${visibleRows.length} tickets · ${money(max)} potential</span></div><button class="sw-x" type="button" data-sweat="off" aria-label="Close sweat mode">Close</button></header>
   <div class="sw-controls"><nav aria-label="Sweat ticket filters">${[['alive','Alive'],['live','Live'],['dead','Dead'],['upcoming','Upcoming']].map(([key,label])=>`<button type="button" data-sw-filter="${key}" aria-pressed="${S.sweatFilter===key}">${label}<b>${sweatRows(key).length}</b></button>`).join('')}</nav><label>Game <select id="swGame"><option value="">All games</option>${games.map(g=>`<option value="${esc(g)}" ${S.sweatGame===g?'selected':''}>${esc(g)}</option>`).join('')}</select></label><span class="sw-sync">${S.feed.last?'Updated '+new Date(S.feed.last).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}):'Waiting for scores'}</span></div>
+  <div class="sw-source-controls" role="group" aria-label="Filter by ticket source">${[['','All types'],['prediction','Prediction trades / stacks'],['pick6','Pick6 slips'],['pickem','My Pick’em']].map(([key,label])=>`<button type="button" data-sw-source="${key}" aria-pressed="${S.sweatSourceFilter===key}">${label}</button>`).join('')}<button type="button" data-sw-high aria-pressed="${S.sweatHigh}">High stakes · $10+</button><small>Recorded entry risk · Pick’em is points only</small></div>
+  <div class="sw-sport-tabs" role="group" aria-label="Filter Sweat by sport"><button type="button" data-sw-sport="" aria-pressed="${!S.sweatSport}">All sports</button>${sports.map(sp=>`<button type="button" data-sw-sport="${sp}" aria-pressed="${S.sweatSport===sp}">${sp.toUpperCase()} <b>${all.filter(p=>P(p.key).sport===sp).length}</b></button>`).join('')}</div>
+  <div class="sw-game-rail" aria-label="Games in this watch">${watchGames.map(ev=>{const away=ev.comps?.find(c=>c.ha==='away'),home=ev.comps?.find(c=>c.ha==='home');return `<button type="button" data-sw-game="${esc(ev.name)}" aria-pressed="${S.sweatGame===ev.name}" class="sw-game ${ev.state==='in'?'is-live':''}"><span>${ev.sport.toUpperCase()} · ${esc(ev.detail||'')}</span><b>${esc(away?.abbr||ev.name)} ${esc(away?.score??'—')} <i>—</i> ${esc(home?.score??'—')} ${esc(home?.abbr||'')}</b></button>`;}).join('')}</div>
+  ${unknown.length?`<details class="sw-missing"><summary>${unknown.length} players need a game match — excluded from live stats</summary><p>${unknown.map(p=>esc(P(p.key).name)).join(' · ')}</p></details>`:''}
   <div class="sw-grid">${players.map(p=>{
-    const lines=[...p.lines.values()],ev=eventFor(p.key),live=lines.some(x=>x.g.state==='live');
-    return `<article class="sw-player ${live?'is-live':''}"><div class="sw-player-head">${avatar(p.key)}<div><h2>${esc(P(p.key).name)}</h2><span>${esc(P(p.key).team||'')} · ${p.tickets.size} ticket${p.tickets.size===1?'':'s'}</span></div><i class="sw-status">${live?'LIVE':lines.every(x=>['hit','miss','void','dnp'].includes(x.g.state))?'FINAL':'NEXT'}</i></div><div class="sw-event">${esc(ev ? ev.name+' · '+ev.detail : 'Awaiting verified game stats')}</div><div class="sw-lines">${lines.map(({leg,g,tickets})=>{
+    const lines=[...p.lines.values()],ev=playerEvent(p),live=ev?.state==='in'||lines.some(x=>x.g.state==='live');
+    const risk=[...p.stakes.values()].filter(v=>v!==null).reduce((a,v)=>a+v,0);
+    return `<article class="sw-player ${live?'is-live':''}"><div class="sw-player-head">${avatar(p.key)}<div><h2>${esc(P(p.key).name)}</h2><span>${esc(P(p.key).team||'')} · ${p.tickets.size} positions</span><div class="sw-source-list">${sweatBadges(p.sources)}</div></div><i class="sw-status">${live?'LIVE':lines.every(x=>['hit','miss','void','dnp'].includes(x.g.state))?'FINAL':'NEXT'}</i></div><div class="sw-event">${esc(ev ? ev.name+' · '+ev.detail : 'Game not linked — needs player match')} ${ev&&S.games[ev.id]?.fetchedAt&&Date.now()-S.games[ev.id].fetchedAt>60000?'<b class="sw-stale">Stats delayed</b>':''}</div><div class="sw-risk">${risk>0?money(risk)+' recorded entry risk':p.sources.pickem.size===p.tickets.size?'Community points · no cash stake':'Stake not recorded'}</div><div class="sw-lines">${lines.map(({leg,g,tickets,sources})=>{
       const market=E.MARKETS[leg.market]||{}, known=g.value!==null&&g.value!==undefined&&Number.isFinite(Number(g.value)),value=known?Number(g.value):null,under=leg.dir==='under';
       const progress=known?Math.min(100,Math.max(0,value/Math.max(Number(leg.line),1)*100)):g.state==='hit'?100:0;
       const state=g.state==='hit'?'hit':g.state==='miss'?'miss':g.state==='live'?'live':'pending';
       const need=known&&!under?Math.max(0,Math.floor(Number(leg.line))+1-value):null;
-      return `<div class="sw-line ${state}"><div class="sw-line-title"><span>${esc(market.short||leg.market)} <b>${leg.inclusive?'≥':under?'LESS':'MORE'} ${E.fmt(leg.inclusive||leg.line)}</b></span><strong>${known?E.fmt(value):'—'}</strong></div><div class="sw-track" role="progressbar" aria-label="${esc(P(p.key).name+' '+(market.short||leg.market)+' '+(under?'under ':'over ')+leg.line)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(progress)}"><i style="width:${progress}%"></i></div><div class="sw-line-note"><span>${state==='hit'?'✓ HIT':state==='miss'?'× MISSED':state==='pending'?'Awaiting stats':under?'Stay below '+E.fmt(leg.line):need===0?'Line reached':E.fmt(need)+' to clear'}</span><span>${tickets.size}×</span></div></div>`;
-    }).join('')}</div></article>`;
+      return `<div class="sw-line ${state}"><div class="sw-line-title"><span>${esc(market.short||leg.market)} <b>${leg.inclusive?'≥':under?'LESS':'MORE'} ${E.fmt(leg.inclusive||leg.line)}</b></span><strong>${known&&g.state!=='scheduled'?E.fmt(value):'—'}</strong></div><div class="sw-track" role="progressbar" aria-label="${esc(P(p.key).name+' '+(market.short||leg.market)+' '+(under?'under ':'over ')+leg.line)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(progress)}"><i style="width:${progress}%;background:${sweatProgressColor(leg,g)}"></i></div><div class="sw-line-note"><span>${state==='hit'?'✓ HIT':state==='miss'?'× MISSED':state==='pending'?(g.note||'Awaiting stats'):!known?'Waiting for player stats':under?'Stay below '+E.fmt(leg.line):need===0?'Line reached':E.fmt(need)+' to clear'}</span><span class="sw-source-list">${sweatBadges(sources)}</span></div></div>`;
+    }).join('')}</div><details class="sw-ticket-details"><summary>Positions &amp; tickets</summary>${rows.filter(x=>p.tickets.has(x.t.id)).map(({t})=>`<div><b>${sweatSource(t)==='prediction'?(/combo/i.test(t.title)?'Prediction stack':'Prediction trade'):sweatSource(t)==='pickem'?'Community Pick’em':'Pick6 slip'}</b><span>${esc(t.title||t.id)}</span><small>${sweatStake(t)===null?'Stake not recorded':money(sweatStake(t))+' entry'}</small></div>`).join('')}</details></article>`;
   }).join('') || `<div class="sw-empty"><h2>${S.sweatFilter==='live'?'No tickets live right now':S.sweatFilter==='dead'?'No busted tickets in this watch':'Nothing in this view'}</h2><p>Use Alive to see your current player cards, or Upcoming for the next games. Settled receipts stay in Pick6 history.</p></div>`}</div>
   <footer class="sw-foot">Each player appears once · all unique lines shown · missing stats stay blank · potential return is not guaranteed · Predictions: matched player props only; team outcomes remain on the Contracts cards</footer>`;
 }
@@ -4540,13 +4595,14 @@ function liveEvents() { return Object.values(S.events).filter((e) => e.state ===
 function gameFrac(ev) {
   if (!ev) return 0; if (ev.state === 'post') return 1; if (ev.state !== 'in') return 0;
   const per = Number(ev.period) || 1;
-  if (ev.sport === 'nfl') {
+  if (ev.sport === 'nfl' || ev.sport==='cfb') {
     if (/half/i.test(ev.detail || '')) return 0.5;
     const [m, sec] = String(ev.clock || '15:00').split(':').map(Number);
     const left = Math.min(15, (m || 0) + (sec || 0) / 60);
     return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 15 + (15 - left)) / 60));
   }
   if (ev.sport === 'nba') { if (/half/i.test(ev.detail || '')) return 0.5; const [m, sec] = String(ev.clock || '12:00').split(':').map(Number); const left = Math.min(12, (m || 0) + (sec || 0) / 60); return Math.max(0, Math.min(1, ((Math.min(per, 4) - 1) * 12 + (12 - left)) / 48)); }
+  if(ev.sport==='nhl'){const [m,sec]=String(ev.clock||'20:00').split(':').map(Number);return Math.max(0,Math.min(1,((Math.min(per,3)-1)*20+20-(m||0)-(sec||0)/60)/60));}
   const half = /bot|mid|end/i.test(ev.detail || '') ? 0.5 : 0;
   return Math.max(0, Math.min(1, (per - 1 + half + 0.25) / 9));
 }
@@ -5131,8 +5187,12 @@ document.addEventListener('click', (e) => {
   const f = e.target.closest('[data-p6]'); if (f) { S.p6Filter = f.dataset.p6; store.set('pz_p6_filter',S.p6Filter); render(); return; }
   const ex = e.target.closest('[data-export]'); if (ex) { exportLedger(ex.dataset.export); return; }
   const sc2 = e.target.closest('[data-scen]'); if (sc2) { if (!can('research')) { setTab('me'); return; } const [id, k] = sc2.dataset.scen.split(':'); S.scen = S.scen || {}; S.scen[id] = k; render(); return; }
-  const sf = e.target.closest('[data-sw-filter]'); if(sf){ S.sweatFilter=sf.dataset.swFilter; S.sweatGame=S.sweatFilter==='dead'?'':null; renderSweat(); return; }
-  const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; if(S.sweat){S.sweatFilter=sweatRows('live').length?'live':'alive';S.sweatGame=null;} renderSweat(); return; }
+  const sourceFilter=e.target.closest('[data-sw-source]');if(sourceFilter){S.sweatSourceFilter=sourceFilter.dataset.swSource;S.sweatGame='';renderSweat();return;}
+  if(e.target.closest('[data-sw-high]')){S.sweatHigh=!S.sweatHigh;if(S.sweatHigh)S.sweatFilter='live';S.sweatGame='';renderSweat();return;}
+  const sportFilter=e.target.closest('[data-sw-sport]');if(sportFilter){S.sweatSport=sportFilter.dataset.swSport;S.sweatGame='';renderSweat();return;}
+  const gameFilter=e.target.closest('[data-sw-game]');if(gameFilter){S.sweatGame=S.sweatGame===gameFilter.dataset.swGame?'':gameFilter.dataset.swGame;renderSweat();return;}
+  const sf = e.target.closest('[data-sw-filter]'); if(sf){ S.sweatFilter=sf.dataset.swFilter; S.sweatGame=['dead','live'].includes(S.sweatFilter)?'':null;S.sweatSport=''; renderSweat(); return; }
+  const sw = e.target.closest('[data-sweat]'); if (sw) { S.sweat = sw.dataset.sweat === 'on'; if(S.sweat){S.sweatFilter=sweatRows('live').length?'live':'alive';S.sweatGame=null;S.sweatSport='';} renderSweat(); return; }
   const wi = e.target.closest('[data-wi]'); if (wi) { if (!can('research')) { setTab('me'); return; } const k = wi.dataset.wi; if (S.whatIf.has(k)) S.whatIf.delete(k); else S.whatIf.add(k); render(); return; }
   if (e.target.closest('[data-wiclear]')) { S.whatIf.clear(); render(); return; }
   const pv = e.target.closest('[data-preview]'); if (pv && isOwner()) { S.previewTier = pv.dataset.preview || null; applyTeam(preferredTeam()); applyPlayoffs(); render(); return; }

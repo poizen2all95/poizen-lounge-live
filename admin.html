@@ -223,7 +223,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   'use strict';
 
   const ESPN = {
-    scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard`,
+    scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard${sport === 'cfb' ? '?groups=80&limit=1000' : '?limit=100'}`,
     summary: (sport, id) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/summary?event=${id}`,
     gamelog: (id) => `https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/${id}/gamelog`,
     injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
@@ -289,6 +289,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
       pK: 0, pOuts: 0, pER: 0, pH: 0,
       // nba
       pts: 0, reb: 0, ast: 0, threes: 0, stl: 0, blk: 0, tov: 0, min: 0,
+      goals: 0, hockeyAssists: 0, shots: 0, saves: 0, blockedShots: 0,
     };
   }
 
@@ -319,7 +320,10 @@ details.gatebox>summary::-webkit-details-marker{display:none}
               s.pK += num(v.strikeouts); s.pER += num(v.earnedRuns); s.pH += num(v.hits);
               s.pOuts += ipToOuts(v['fullInnings.partInnings']);
             }
-          } else if (sport === 'nba') {
+          } else if (sport === 'nhl') {
+            // ESPN repeats athletes in skaters and position groups. Each field is a snapshot, not an increment.
+            for(const [field,key] of Object.entries({goals:'goals',hockeyAssists:'assists',shots:'shotsTotal',saves:'saves',blockedShots:'blockedShots'})) if(v[key]!==undefined) s[field]=num(v[key]);
+          } else if (sport === 'nba' || sport === 'wnba') {
             s.pts += num(v.points); s.reb += num(v.rebounds); s.ast += num(v.assists);
             s.threes += num(String(v['threePointFieldGoalsMade-threePointFieldGoalsAttempted'] || '0-0').split('-')[0]);
             s.stl += num(v.steals); s.blk += num(v.blocks); s.tov += num(v.turnovers); s.min += num(v.minutes);
@@ -370,7 +374,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const comp = summary && summary.header && summary.header.competitions && summary.header.competitions[0];
     const score = {};
     for (const c of (comp && comp.competitors) || []) score[c.team && c.team.abbreviation] = num(c.score);
-    return { sport, status, box, plays, firstTD, score };
+    return { id: String((summary.header && summary.header.id) || (comp && comp.id) || ''), sport, status, box, plays, firstTD, score };
   }
 
   // ---------- markets ----------
@@ -398,6 +402,12 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     pitcher_ks: { sport: 'mlb', label: 'Pitcher Strikeouts', short: 'Ks', f: (s) => s.pK },
     pitcher_outs: { sport: 'mlb', label: 'Pitching Outs', short: 'Outs', f: (s) => s.pOuts },
     // NBA
+    Goals: { sport: 'nhl', label: 'Goals', short: 'Goals', f: s=>s.goals },
+    goals: { sport: 'nhl', label: 'Goals', short: 'Goals', f: s=>s.goals },
+    hockey_assists: { sport: 'nhl', label: 'Assists', short: 'Ast', f:s=>s.hockeyAssists },
+    hockey_points: { sport: 'nhl', label: 'Points', short: 'Pts', f:s=>s.goals+s.hockeyAssists },
+    shots_on_goal: { sport: 'nhl', label: 'Shots on goal', short: 'SOG', f:s=>s.shots },
+    goalie_saves: { sport: 'nhl', label: 'Saves', short: 'Saves', f:s=>s.saves },
     pts: { sport: 'nba', label: 'Points', short: 'Pts', f: (s) => s.pts },
     reb: { sport: 'nba', label: 'Rebounds', short: 'Reb', f: (s) => s.reb },
     ast: { sport: 'nba', label: 'Assists', short: 'Ast', f: (s) => s.ast },
@@ -434,13 +444,16 @@ details.gatebox>summary::-webkit-details-marker{display:none}
        state: scheduled | live | hit | miss | dnp | void */
   function gradeLeg(leg, game) {
     const line = Number(leg.line);
-    if (leg.venueOnly) return { state: 'scheduled', value: null, line, progress: 0, note: 'Awaiting venue settlement; automatic stats unavailable' };
+    const exactGame = !!(game && leg.eventId && String(leg.eventId)===String(game.id));
+    const sportMatch=game&&MARKETS[leg.market]&&(MARKETS[leg.market].sport===game.sport||(MARKETS[leg.market].sport==='nfl'&&game.sport==='cfb')||(MARKETS[leg.market].sport==='nba'&&game.sport==='wnba'));
+    if (leg.venueOnly && !(exactGame && sportMatch)) return { state: 'scheduled', value: null, line, progress: 0, note: 'Awaiting venue settlement; automatic stats unavailable' };
     const dir = leg.dir === 'under' ? 'under' : 'over';
     const mk = MARKETS[leg.market];
     if (!mk) return { state: 'error', value: null, line, progress: 0, note: `Unknown market "${leg.market}"` };
     if (!game || game.status.state === 'pre') return { state: 'scheduled', value: 0, line, progress: 0, note: '' };
     if (game.status.postponed) return { state: 'void', value: null, line, progress: 0, note: 'Game postponed — check DraftKings void rules' };
     const p = findPlayer(game, leg);
+    if(leg.venueOnly && !p) return {state:game.status.state==='in'?'live':'scheduled',value:null,line,progress:0,note:'Player stats not reported; awaiting verified update'};
     const value = p ? mk.f(p.stats) : 0;
     const final = game.status.state === 'post';
     const progress = line > 0 ? Math.min(1, value / line) : (value > 0 ? 1 : 0);
