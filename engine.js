@@ -87,7 +87,7 @@
         for (const a of cat.athletes || []) {
           const id = String(a.athlete && a.athlete.id);
           const name = a.athlete && a.athlete.displayName;
-          if (!players[id]) players[id] = { id, name, team, stats: emptyStats(), cats: [] };
+          if (!players[id]) players[id] = { id, name, team, jersey:a.athlete?.jersey, stats: emptyStats(), cats: [] };
           const p = players[id];
           p.cats.push(kind);
           byName[norm(name)] = id;
