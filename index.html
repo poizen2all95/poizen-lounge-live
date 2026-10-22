@@ -1847,8 +1847,25 @@ main{width:100%;max-width:1560px;margin-inline:auto}
 .st-btn em{font-style:normal;color:var(--fg3)}
 .st-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--fg3)}
 .st-dot.live{background:var(--live);box-shadow:0 0 8px var(--live)}
-.st-drop{width:min(760px,94vw);margin-top:6px;padding:10px;border:1px solid var(--line2);border-radius:16px;background:var(--bg);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.st-drop{width:min(760px,94vw);margin-top:6px;padding:10px 10px 58px;border:0;border-top:1px solid var(--line2);border-radius:16px 16px 0 0;background:linear-gradient(to bottom,var(--bg) calc(100% - 120px),color-mix(in srgb,var(--bg) 70%,transparent) calc(100% - 56px),transparent 100%);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 70px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 70px),transparent);box-shadow:none}
 .st-drop .lhcar{width:100%;margin:0}
+.lhc-slide{display:flex;flex-direction:column}
+.lhcar .lhc-slide .lhero2{height:auto;flex:none}
+.lh-players{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:0 16px;padding:10px 4px 0;max-height:250px;overflow:auto;scrollbar-width:thin}
+.lp{display:grid;grid-template-columns:40px minmax(0,1fr);grid-template-areas:"av t" "l l";gap:4px 10px;align-items:center;padding:9px 2px;border-top:1px solid color-mix(in srgb,var(--fg) 10%,transparent)}
+.lp .av{grid-area:av;position:relative;width:40px;height:40px;border-radius:12px;overflow:hidden;background:var(--tg)}
+.lp .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.lp .av-initials{position:absolute;inset:0;display:grid;place-items:center;font:900 13px/1 var(--stadium);color:#fff}
+.lp-t{grid-area:t;min-width:0}.lp-t b{display:block;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lp-t small{display:block;margin-top:2px;font-size:11px;color:var(--fg3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lp-l{grid-area:l;display:flex;flex-direction:column;gap:6px}
+.lp-leg{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:baseline;font-size:12px;color:var(--fg2)}
+.lp-leg b{font:900 17px/1 var(--stadium);color:var(--fg)}
+.lp-leg i{grid-column:1/-1;display:block;height:4px;border-radius:3px;background:color-mix(in srgb,var(--fg) 12%,transparent);overflow:hidden;position:relative}
+.lp-leg i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w,0);background:var(--gold);border-radius:3px}
+.lp-leg.live b{color:var(--gold)}
+.lp-leg:is(.hit,.won) i::after{background:var(--win)}.lp-leg:is(.hit,.won) b{color:var(--win)}
+.lp-leg:is(.miss,.lost) i::after{background:var(--loss)}.lp-leg:is(.miss,.lost) b{color:var(--loss)}
+.lp-more{grid-column:1/-1;padding:10px;border:0;background:transparent;color:var(--gold);font:800 12px/1 var(--stadium);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
 .foot-set{display:inline-flex;align-items:center;gap:8px;align-self:center;padding:8px 14px;border:1px solid var(--line2);border-radius:12px;background:var(--panel);color:var(--fg2);font:800 12px/1 var(--stadium);letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
 .foot-set svg{width:16px;height:16px}
 .foot-set:hover,.foot-set[aria-current="page"]{color:var(--fg);border-color:var(--gold)}
@@ -1933,7 +1950,7 @@ html[data-glass="on"] body{background-repeat:no-repeat;background-attachment:fix
   radial-gradient(900px 560px at 96% 4%,color-mix(in srgb,var(--teal) 22%,transparent),transparent 70%),
   radial-gradient(900px 560px at 4% 108%,color-mix(in srgb,var(--teal) 13%,transparent),transparent 70%),
   radial-gradient(900px 560px at 98% 106%,color-mix(in srgb,var(--gold) 13%,transparent),transparent 70%)}
-html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.st-drop,.set-card){background:var(--gl-bg);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--gl-line);border-radius:14px;box-shadow:inset 0 1px 0 var(--gl-hi),0 18px 48px -18px rgba(0,0,0,.45)}
+html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.set-card){background:var(--gl-bg);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--gl-line);border-radius:14px;box-shadow:inset 0 1px 0 var(--gl-hi),0 18px 48px -18px rgba(0,0,0,.45)}
 html[data-glass="on"] .gcard{overflow:hidden}
 html[data-glass="on"] :is(.ph,.dash .ph){background:color-mix(in srgb,var(--bg) 40%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--gl-sep)}
 /* flat rows instead of boxes inside boxes */
@@ -1956,7 +1973,6 @@ html[data-glass="on"] .rec{background:transparent;border:0;border-left:1px solid
 html[data-glass="on"] .record-group>.rec:first-child{border-left:0}
 html[data-glass="on"] .lhcar .lhero2,html[data-glass="on"] .lhero2{border-radius:14px}
 html[data-glass="on"] .st-btn{background:var(--gl-bg);border-color:var(--gl-line)}
-html[data-glass="on"] .st-drop{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
 html[data-glass="on"] .set-row{border-top-color:var(--gl-sep)}
 /* lower board: compact game cards that fill the width, flat footer, soft fade where the dashboard columns scroll */
 html[data-glass="on"] main .grid2{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
@@ -2015,7 +2031,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 .gb-row:hover .gb-go{color:var(--gold)}
 @media(max-width:1280px){.gb-row{grid-template-columns:54px minmax(110px,1fr) minmax(80px,auto) minmax(110px,1fr) minmax(110px,150px) 18px;grid-template-areas:"lg away mid home st go" ". pk pk pk pk pk"}.gb-lg{grid-area:lg}.gb-tm.away{grid-area:away}.gb-mid{grid-area:mid}.gb-tm.home{grid-area:home}.gb-st{grid-area:st}.gb-pk{grid-area:pk;flex-direction:row;flex-wrap:wrap;gap:4px 14px}.gb-go{grid-area:go}.gb-info{display:none}}
 @media(max-width:700px){.gb-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"away mid home" "st pk pk";padding:12px 10px 12px 14px}.gb-lg,.gb-go,.gb-tm em{display:none}.gb-tm b{font-size:20px}.gb-tm img{width:28px;height:28px}.gb-st{align-items:flex-start}}
-@media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.st-drop,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
+@media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
 </style>
 <script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
 <link rel="stylesheet" href="mobile.css">
@@ -5251,6 +5267,21 @@ function heroEvents(evs) {
   const picked = [...live.filter(has), ...pre.filter(has)];
   return (picked.length ? picked : [...live, ...pre]).slice(0, 8);
 }
+/* the players on your tickets in this game, with the line and where each one stands right now */
+function heroPlayers(ev) {
+  const list = eventPicks(ev); if (!list.length) return '';
+  const cards = list.slice(0, 8).map((o) => {
+    const p = P(o.key);
+    const legs = o.legs.slice(0, 2).map(({ leg, g }) => {
+      const mk = mkOf(leg.market), line = Number(leg.line) || 0, val = g.state === 'scheduled' ? null : Number(g.value);
+      const pct = val === null || !line ? 0 : Math.max(0, Math.min(100, Math.round((val / line) * 100)));
+      return `<div class="lp-leg ${g.state}"><span>${leg.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(leg.line)} ${esc(mk.short || '')}</span><b>${val === null || !Number.isFinite(val) ? '–' : E.fmt(val)}</b><i style="--w:${pct}%"></i></div>`;
+    }).join('');
+    return `<div class="lp">${avatar(o.key)}<div class="lp-t"><b>${esc(p.name)}</b><small>${esc(p.team || '')}${p.pos ? ' · ' + esc(p.pos) : ''}${o.n > 1 ? ` · ${o.n} slips` : ''}</small></div><div class="lp-l">${legs}</div></div>`;
+  }).join('');
+  const more = list.length > 8 ? `<button type="button" class="lp-more" data-sweat="on">+${list.length - 8} more players · full screen</button>` : '';
+  return `<div class="lh-players" aria-label="Your players in this game">${cards}${more}</div>`;
+}
 function heroSlide(ev, i, n, on) {
   const key = featuredIn(ev); const p = key ? P(key) : null; const src = key ? headshot(key, 700) : '';
   const [c1, c2] = p ? teamColors(p.sport || 'nfl', p.team) : ['#1f2937', '#334155'];
@@ -5263,7 +5294,7 @@ function heroSlide(ev, i, n, on) {
   return `<div class="lhc-slide${on ? ' on' : ''}" data-ev="${esc(ev.id)}" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${n}"${on ? '' : ' aria-hidden="true"'}><section class="lhero2" style="--c1:${c1};--c2:${c2}">${venueArt(ev, i === 0)}<div class="lh-shade"></div>
     ${p && p.number ? `<div class="lh-jn">${esc(p.number)}</div>` : ''}${p ? `<img class="lh-tl" src="${esc(logo(p.sport || 'nfl', p.team))}" alt="" onerror="this.remove()">` : ''}${src ? `<img class="lh-hs" src="${esc(src)}" alt="" onerror="this.remove()">` : ''}
     <div class="lh-txt">${tag}<h2>Live <span>Sweat</span></h2>${state}<button class="btn-sweat" type="button" data-sweat="on">${SVG.live}Sweat mode<span class="wide-only"> · full screen</span></button></div>
-    ${p ? `<div class="lh-who"><b>${esc(p.name)}</b><span>${esc(p.team)} · ${esc(p.pos || '')}${p.number ? ' · #' + esc(p.number) : ''}</span>${ev.venue ? `<em>${esc(ev.venue)}</em>` : ''}</div>` : ''}</section></div>`;
+    ${p ? `<div class="lh-who"><b>${esc(p.name)}</b><span>${esc(p.team)} · ${esc(p.pos || '')}${p.number ? ' · #' + esc(p.number) : ''}</span>${ev.venue ? `<em>${esc(ev.venue)}</em>` : ''}</div>` : ''}</section>${heroPlayers(ev)}</div>`;
 }
 function liveCarousel(live, next, hero, evs) {
   const list = heroEvents(evs);
