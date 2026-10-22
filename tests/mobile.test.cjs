@@ -54,6 +54,12 @@ test('ticker wraps seamlessly, pauses, and clamps long background gaps', () => {
   assert.equal(nextOffset(0, 30000, 200, false), 2);
   assert.equal(nextOffset(12, 100, 0, false), 12);
 });
+test('ticker speed multiplies movement and defaults to normal', () => {
+  const { nextOffset } = require(path.join(root, 'mobile.js'));
+  assert.equal(nextOffset(0, 100, 1000, false), 2);
+  assert.equal(nextOffset(0, 100, 1000, false, 0.5), 1);
+  assert.equal(nextOffset(0, 100, 1000, false, 2), 4);
+});
 test('ticker keeps fractional movement between browser scroll events', () => {
   const callbacks = [];
   class Element {
@@ -81,6 +87,30 @@ test('ticker keeps fractional movement between browser scroll events', () => {
   doc.hidden=true;
   callbacks.splice(0).forEach(fn=>fn(now+100));
   assert.equal(record.scrollLeft,before);
+});
+test('ticker loops even when the record is narrower than a wide screen', () => {
+  const callbacks = [];
+  class Element {
+    constructor(width) { this.children = []; this.events = {}; this.clientWidth = 100; this._scroll = 0; this.hidden = false; this.width = width; }
+    addEventListener(name, fn) { this.events[name] = fn; }
+    setAttribute() {}
+    getBoundingClientRect() { return { width: this.width }; }
+    cloneNode() { return new Element(this.width); }
+    appendChild(el) { this.children.push(el); }
+    replaceChildren(el) { this.children = [el]; }
+    get firstElementChild() { return this.children[0]; }
+    contains() { return false; }
+    set scrollLeft(value) { this._scroll = Math.round(value); }
+    get scrollLeft() { return this._scroll; }
+  }
+  const record = new Element(30), pause = new Element(0), more = new Element(0);
+  const doc = { hidden: false, activeElement: null, getElementById: id => ({record, recordPause:pause, mobileMore:more})[id], addEventListener() {}, createElement: () => new Element(30) };
+  const window = { document:doc, matchMedia:() => ({matches:false,addEventListener(){}}), requestAnimationFrame: fn => callbacks.push(fn), addEventListener() {} };
+  vm.runInNewContext(fs.readFileSync(path.join(root,'mobile.js'),'utf8'), {window,performance:{now:()=>0}});
+  window.PZMobile.setRecord('<div>Record</div>');
+  callbacks.splice(0).forEach(fn => fn(16));
+  assert.equal(record.children.length - 1, 3, 'a 30px strip needs 3 copies to fill 100px plus one loop');
+  assert.equal(pause.hidden, false, 'pause control is available whenever the strip moves');
 });
 test('mobile theme sheet focuses its first control and traps forward/reverse Tab', () => {
   const events={};

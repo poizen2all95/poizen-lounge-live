@@ -10,9 +10,9 @@
   ];
   const RESEARCH = ['research', 'games', 'injuries', 'ftd', 'scalp'];
   function groupFor(id) { return RESEARCH.includes(id) ? 'research' : PRIMARY.some(x => x.id === id) ? id : 'more'; }
-  function nextOffset(offset, elapsed, cycle, paused) {
+  function nextOffset(offset, elapsed, cycle, paused, speed = 1) {
     if (paused || cycle <= 0) return offset;
-    return (offset + Math.max(0, Math.min(100, elapsed)) * 0.02) % cycle;
+    return (offset + Math.max(0, Math.min(100, elapsed)) * 0.02 * speed) % cycle;
   }
   const api = { PRIMARY, RESEARCH, groupFor, nextOffset };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
@@ -25,7 +25,7 @@
   const pause = doc.getElementById('recordPause');
   let opener;
   let tickerHTML = null, cycle = 0, previous = 0, offset = 0, lastWrite = 0, userPaused = false;
-  let resumeAt = 0, hovering = false, touching = false;
+  let resumeAt = 0, hovering = false, touching = false, speed = 1;
   const hold = () => { resumeAt = performance.now() + 3500; };
   function closeMore(restore = true) {
     if (!more.open) return;
@@ -44,19 +44,23 @@
     const first = record.firstElementChild;
     if (!first) return;
     const width = first.getBoundingClientRect().width;
-    const overflow = width > record.clientWidth;
-    const clone = record.children[1];
-    if (overflow && !reduced.matches && !clone) {
+    /* Always run as a loop (like a stock ticker): enough copies that the strip never runs dry, even on a wide screen. */
+    const loop = width > 0 && !reduced.matches;
+    const step = width + 8;
+    const copies = loop ? Math.max(1, Math.ceil(record.clientWidth / step)) : 0;
+    while (record.children.length - 1 < copies) {
       const copy = first.cloneNode(true);
       copy.setAttribute('aria-hidden', 'true'); copy.inert = true;
       record.appendChild(copy);
-    } else if ((!overflow || reduced.matches) && clone) clone.remove();
-    cycle = overflow && !reduced.matches ? width + 8 : 0;
+    }
+    while (record.children.length - 1 > copies) record.children[record.children.length - 1].remove();
+    cycle = loop ? step : 0;
     pause.hidden = !cycle;
     record.scrollLeft = cycle ? offset % cycle : offset;
     lastWrite = record.scrollLeft;
     if (!cycle) offset = record.scrollLeft;
   }
+  api.setSpeed = (m) => { speed = Number(m) > 0 ? Number(m) : 1; };
   api.setRecord = (html) => {
     if (html === tickerHTML) return;
     tickerHTML = html;
@@ -121,7 +125,7 @@
     const keyboardFocus = record.contains(doc.activeElement) && record.matches(':focus-visible');
     const stopped = doc.hidden || reduced.matches || userPaused || hovering || touching || now < resumeAt || keyboardFocus;
     if (cycle && !stopped) {
-      offset = nextOffset(offset, previous ? now - previous : 0, cycle, false);
+      offset = nextOffset(offset, previous ? now - previous : 0, cycle, false, speed);
       record.scrollLeft = offset;
       lastWrite = record.scrollLeft;
     }
