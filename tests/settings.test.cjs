@@ -3,9 +3,9 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const S = require(path.join(__dirname, '..', 'settings.js'));
 
-test('defaults leave the new features off and the board as it was', () => {
+test('defaults: Live Sweat tucked behind the banner, banner and necklace stay visible', () => {
   assert.deepEqual(S.normalize(undefined), S.DEFAULTS);
-  assert.equal(S.DEFAULTS.sweatTucked, false);
+  assert.equal(S.DEFAULTS.sweatTucked, true);
   assert.equal(S.DEFAULTS.bannerHide, false);
   assert.equal(S.DEFAULTS.necklaceHide, false);
   assert.equal(S.DEFAULTS.glass, true);

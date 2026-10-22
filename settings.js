@@ -1,7 +1,7 @@
 /* Poizen Lounge settings: defaults, validation and the small decisions the page makes from them. */
 (function (root) {
   'use strict';
-  const DEFAULTS = { sweatTucked: false, bannerHide: false, necklaceHide: false, glass: true, heroAuto: true, heroSecs: 7, tickerSpeed: 'normal', tickerTotals: true };
+  const DEFAULTS = { sweatTucked: true, bannerHide: false, necklaceHide: false, glass: true, heroAuto: true, heroSecs: 7, tickerSpeed: 'normal', tickerTotals: true };
   const SPEEDS = { slow: 0.5, normal: 1, fast: 2 };
   const SECS = [4, 7, 10, 15];
   function normalize(raw) {

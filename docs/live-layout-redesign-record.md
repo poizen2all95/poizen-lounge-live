@@ -111,3 +111,9 @@ Stop: close the server (Ctrl+C).
 Restart or recover: reload the page. A user whose settings go odd can clear the `pz_settings` key (or tap Restore defaults).
 Rollback: `main` is untouched. To undo after a merge, `git revert -m 1 <merge commit>` or redeploy the previous `main` commit `6634f3d`.
 A pre-change backup of the whole repo is on the sandbox disk only (`/home/claude/backups`), not in GitHub.
+
+## Update 2026-10-22 (after merge to main)
+- Default changed: Live Sweat is tucked behind the banner and opens as an overlay covering the top of the dashboard, so the dashboard starts right under the header (as in the owner's reference screenshot). Header stays: necklace centred, ticker as full-width row 2.
+- The overlay is open on page load; an outside click, Esc or the tab closes it; the tab reopens it. Settings > Live Sweat > "Tuck behind the banner" turns it off to get the in-page carousel back.
+- Overlay background made solid (translucent glass let the dashboard show through).
+- Tests: 66 of 66 pass. Visual check: Midnight, Vegas, Daylight at 1920x1080 with mocked games.

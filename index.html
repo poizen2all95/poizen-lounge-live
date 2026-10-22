@@ -1956,7 +1956,7 @@ html[data-glass="on"] .rec{background:transparent;border:0;border-left:1px solid
 html[data-glass="on"] .record-group>.rec:first-child{border-left:0}
 html[data-glass="on"] .lhcar .lhero2,html[data-glass="on"] .lhero2{border-radius:14px}
 html[data-glass="on"] .st-btn{background:var(--gl-bg);border-color:var(--gl-line)}
-html[data-glass="on"] .st-drop{background:color-mix(in srgb,var(--bg) 62%,transparent);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5)}
+html[data-glass="on"] .st-drop{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}
 html[data-glass="on"] .set-row{border-top-color:var(--gl-sep)}
 /* lower board: compact game cards that fill the width, flat footer, soft fade where the dashboard columns scroll */
 html[data-glass="on"] main .grid2{grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
@@ -3203,7 +3203,7 @@ S.custom = store.get('pz_custom_checks', []);
 S.p6Filter = store.get('pz_p6_filter', 'active');
 if (!['active','live','settled','all'].includes(S.p6Filter)) S.p6Filter='active';
 S.set = window.PZSettings.normalize(store.get('pz_settings', {}));
-S.sweatOpen = false;
+S.sweatOpen = !!S.set.sweatTucked;
 
 /* ---------------- vibe ---------------- */
 const VIBES = { midnight: ['Midnight', 'linear-gradient(135deg,#11161A 45%,#D9B36A)'], vegas: ['Vegas', 'linear-gradient(135deg,#F2C14E,#E0284A)'], daylight: ['Daylight', 'linear-gradient(135deg,#F3F4F6 45%,#00A386)'] };
@@ -5020,7 +5020,7 @@ function contractsPanel() {
 }
 
 /* ---------------- Settings ---------------- */
-function putSet(patch) { S.set = window.PZSettings.normalize({ ...S.set, ...patch }); store.set('pz_settings', S.set); applySettings(); render(); }
+function putSet(patch) { if (patch.sweatTucked === true) S.sweatOpen = true; S.set = window.PZSettings.normalize({ ...S.set, ...patch }); store.set('pz_settings', S.set); applySettings(); render(); }
 function applySettings() {
   document.body.classList.toggle('nk-away', !!S.set.necklaceHide);
   document.documentElement.dataset.glass = S.set.glass ? 'on' : 'off';
