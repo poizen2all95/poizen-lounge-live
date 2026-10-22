@@ -2088,6 +2088,8 @@ body.sw-resizing,body.sw-resizing *{cursor:col-resize!important;user-select:none
     blk: { sport: 'nba', label: 'Blocks', short: 'Blk', f: (s) => s.blk },
     stocks: { sport: 'nba', label: 'Steals + Blocks', short: 'Stl+Blk', f: (s) => s.stl + s.blk },
     tov: { sport: 'nba', label: 'Turnovers', short: 'TO', f: (s) => s.tov },
+    double_double: { sport:'nba', label:'Double double', short:'DDbl', f:s=>Number([s.pts,s.reb,s.ast,s.stl,s.blk].filter(v=>v>=10).length>=2) },
+    triple_double: { sport:'nba', label:'Triple double', short:'TDbl', f:s=>Number([s.pts,s.reb,s.ast,s.stl,s.blk].filter(v=>v>=10).length>=3) },
   };
 
   function findPlayer(game, ref) {
@@ -2276,7 +2278,7 @@ body.sw-resizing,body.sw-resizing *{cursor:col-resize!important;user-select:none
     const seen = {};
     return ((st && st.categories) || []).filter((c) => c.type === 'event').flatMap((c) => c.events || []).filter((e) => e.eventId && !seen[e.eventId] && (seen[e.eventId] = true)).map((e) => {
       const s = e.stats || []; const g = ev[e.eventId] || {};
-      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]) };
+      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]), stl: num(s[at('steals')]), blk: num(s[at('blocks')]), tov: num(s[at('turnovers')]) };
     }).sort((a, b) => a.date.localeCompare(b.date));
   }
   function rowStats(r) {
@@ -2285,10 +2287,13 @@ body.sw-resizing,body.sw-resizing *{cursor:col-resize!important;user-select:none
     s.completions = num(r.completions); s.passAtt = num(r.passingAttempts);
     s.rushYds = num(r.rushingYards); s.rushTD = num(r.rushingTouchdowns); s.rushAtt = num(r.rushingAttempts);
     s.rec = num(r.receptions); s.recYds = num(r.receivingYards); s.recTD = num(r.receivingTouchdowns); s.targets = num(r.receivingTargets);
+    for (const k of ['pts','reb','ast','stl','blk','tov','min']) if (r[k] !== undefined) s[k] = num(r[k]);
+    if (r.tpm !== undefined) s.threes = num(r.tpm);
     return s;
   }
   function researchLine(rows, market, line, dir) {
     const mk = MARKETS[market];
+    if (!mk) return { vals: [], n: 0, avg: null, median: null, hits: 0, l3avg: null, unsupported: true };
     const vals = rows.map((r) => ({ week: r.week, opp: r.opp, v: mk.f(rowStats(r)) }));
     const n = vals.length;
     const sum = vals.reduce((a, x) => a + x.v, 0);
@@ -2329,7 +2334,7 @@ body.sw-resizing,body.sw-resizing *{cursor:col-resize!important;user-select:none
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
   // markets that are counts (discrete, small) vs yardage (continuous)
-  const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs']);
+  const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs', 'double_double', 'triple_double']);
   const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs', 'reb', 'ast', 'threes', 'stl', 'blk', 'stocks', 'tov', 'ra']);
   const kindOf = (market) => (TD_MARKETS.has(market) ? 'td' : COUNT_MARKETS.has(market) ? 'count' : 'yards');
 
@@ -3136,7 +3141,7 @@ const PO_PLAYERS = new Set([]);
 function headshot(key, w = 350) {
   const p = P(key);
   if (document.documentElement.dataset.season === 'playoffs' && PO_PLAYERS.has(String(key))) return `playoffs-art/players/${key}.png`;
-  if (p.headshot && ['cfb','nhl','wnba'].includes(p.sport)) return p.headshot;
+  if (p.headshot) return p.headshot;
   if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`;
   if (p.headshot) { const m = String(p.headshot).match(/mlbstatic\.com\/.*people\/(\d+)\/headshot/); return m ? `https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_${w},q_auto:best/v1/people/${m[1]}/headshot/silo/current.png` : p.headshot; }
   const g = gameFor(key); const pl = g && E.findPlayer(g, { name: p.name, team: p.team });
@@ -3146,7 +3151,7 @@ function headshot(key, w = 350) {
 const initials = (n) => String(n || '?').replace(/\s+(Jr\.?|Sr\.?|II|III|IV)$/i, '').split(' ').map((x) => x[0]).slice(0, 2).join('');
 const lastName = (n) => String(n || '').replace(/\s+(Jr\.?|Sr\.?|II|III|IV|V)$/i, '').split(' ').slice(-1)[0];
 const logo = (sport, abbr) => `https://a.espncdn.com/i/teamlogos/${sport || 'nfl'}/500/${String(abbr).toLowerCase()}.png`;
-function avatar(key, cls = 'av') { const p = P(key); const src = headshot(key, 200); return `<div class="${cls}" style="--tg:${tg(p.sport || 'nfl', p.team)}">${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`; }
+function avatar(key, cls = 'av') { const p = P(key); const src = headshot(key, 200); return `<div class="${cls}" style="--tg:${tg(p.sport || 'nfl', p.team)}" aria-label="${esc(p.name)}">${esc(initials(p.name))}${src ? `<img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`; }
 
 /* ---------------- time ---------------- */
 const kickLabel = (iso) => new Date(iso).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' });
@@ -3206,7 +3211,7 @@ function slatePlayersInUse() {
   Object.values(S.me.slips || {}).forEach((x) => { if (x && x.status === 'open') (x.legs || []).forEach((l) => keys.add(l.player)); });
   return keys;
 }
-function slateSports() { const s = new Set(); slatePlayersInUse().forEach((k) => s.add(sportOf(k))); openContracts().forEach((c) => { if (c.kind === 'win' && ['nfl', 'mlb', 'nba'].includes(c.sport)) s.add(c.sport); }); if (!s.size) s.add('nfl'); s.add('nfl'); return [...s]; }
+function slateSports() { const s = new Set(); slatePlayersInUse().forEach((k) => s.add(sportOf(k))); openContracts().forEach((c) => { if (c.kind === 'win' && ['nfl', 'mlb', 'nba'].includes(c.sport)) s.add(c.sport); }); if (!s.size) s.add('nfl'); s.add('nfl'); return [...s].filter(s=>['nfl','nba','wnba','nhl','mlb','cfb'].includes(s)); }
 function slateTeams(sport) { const s = new Set(); slatePlayersInUse().forEach((k) => { if (sportOf(k) === sport) s.add(P(k).team); }); return s; }
 
 function ingestScoreboard(sport, sb) {
@@ -3234,7 +3239,13 @@ function gameFor(key) { const ev = eventFor(key); if (!ev || ev.state === 'pre')
 function eventForLeg(leg) {
   if(leg.eventId) return S.events[String(leg.eventId)] || null;
   const ev=eventFor(leg.player);
-  if(leg.venueOnly) return null;
+  if(leg.venueOnly) {
+    const t=activeTickets().find(t=>!t.settlement&&t.receiptEvidence?.stage==='upcoming'&&t.legs.includes(leg));
+    const verified=Date.parse(t?.verifiedAt||'');const p=P(leg.player);
+    const candidates=Object.values(S.events).filter(e=>e.sport===p.sport&&e.comps.some(c=>p.teamId?String(c.id)===String(p.teamId):p.team&&c.abbr===p.team)&&Date.parse(e.date)>=verified&&Date.parse(e.date)<=verified+7*86400e3);
+    if(!E.MARKETS[leg.market]||!Number.isFinite(verified)||candidates.length!==1)return null;
+    const match=candidates[0];leg.eventId=String(match.id);leg.startsAt=match.date;return match;
+  }
   if(leg.startsAt && ev && Math.abs(Date.parse(leg.startsAt)-Date.parse(ev.date))>12*3600e3) return null;
   return ev;
 }
@@ -3420,7 +3431,7 @@ function relevantEvent(ev) { return ev.comps.some((t) => slateTeams(ev.sport).ha
 const legRef = (l) => ({ ...l, name: P(l.player).name, espnId: P(l.player).espnId, team: P(l.player).team });
 function gradeAll() {
   const sl = S.slate;
-  const pick6 = (sl.pick6 || []).map((t) => ({ t, r: E.gradePick6({ ...t, legs: t.legs.map(legRef) }, (l) => gameForLeg(l)) }));
+  const pick6 = (sl.pick6 || []).map((t) => ({ t, r: E.gradePick6({ ...t, legs: t.legs.map(l=>{eventForLeg(l);return legRef(l);}) }, (l) => gameForLeg(l)) }));
   const ftd = ((sl.firstTD && sl.firstTD.bets) || []).map((b) => ({ b, r: E.gradeFirstTD({ ...b, name: P(b.player).name }, gameFor(b.player)) }));
   const shifts = ((sl.scalp && sl.scalp.shifts) || []).map((sh) => ({ sh, targets: sh.targets.map((t) => ({ t, r: E.gradeScalp(legRef(t), gameFor(t.player)) })) }));
   return { pick6, ftd, shifts };
@@ -3454,11 +3465,36 @@ function snapshot(G) {
 
 /* ---------------- model glue: projections, live odds ---------------- */
 async function loadLogs() {
-  const ids = [...new Set([...slatePlayersInUse()].map((k) => P(k)).filter((p) => p.espnId && (p.sport || 'nfl') === 'nfl').map((p) => p.espnId))].filter((id) => !S.research[id] || S.research[id].err);
-  if (!ids.length) return;
-  ids.forEach((id) => { S.research[id] = { loading: true }; });
-  await Promise.all(ids.map(async (id) => { try { S.research[id] = { rows: E.gamelogRows(await getJSON(E.ESPN.gamelog(id))) }; } catch (e) { S.research[id] = { err: e.message }; } }));
-  S.projMemo = {}; render();
+  const players = [...new Map([...slatePlayersInUse()].map(k=>P(k)).filter(p=>p.espnId&&['nfl','cfb','nba'].includes(p.sport||'nfl')).map(p=>[p.espnId,p])).values()].filter(p=>!S.research[p.espnId]||S.research[p.espnId].err);
+  if (!players.length) return;
+  players.forEach(p=>{S.research[p.espnId]={loading:true};});
+  await Promise.allSettled(players.map(async p=>{try{
+    const sport=p.sport||'nfl';
+    const url=sport==='nba'?E.ESPN.nbaGamelog(p.espnId,new Date().getMonth()>=8?new Date().getFullYear()+1:new Date().getFullYear()):sport==='cfb'?E.ESPN.gamelog(p.espnId).replace('/football/nfl/','/football/college-football/'):E.ESPN.gamelog(p.espnId);
+    const rows=(sport==='nba'?E.nbaGamelogRows:E.gamelogRows)(await getJSON(url));
+    S.research[p.espnId]={rows};
+  }catch(e){S.research[p.espnId]={err:e.message};}}));
+  S.projMemo={};render();
+}
+// Resolve new receipt players by exact normalized name AND league. Cache successes only.
+const identityBusy=new Set();
+async function resolveReceiptPlayers(){
+ const league={nfl:'nfl',nba:'nba',cfb:'college-football',nhl:'nhl',mlb:'mlb',wnba:'wnba',ufc:'ufc'};
+ const cache=store.get('pz_player_identity_v1',{});
+ const entries=[...slatePlayersInUse()].map(k=>[k,P(k)]).filter(([k,p])=>!p.espnId&&!identityBusy.has(k));
+ if(!entries.length)return;
+ await Promise.allSettled(entries.map(async([k,p])=>{identityBusy.add(k);try{
+  const ck=p.sport+':'+E.norm(p.name);let found=cache[ck];
+  if(!found||Date.now()-found.at>86400000){
+   const j=await getJSON(E.ESPN.search(p.name));
+   const candidates=(j.items||[]).filter(a=>E.norm(a.displayName)===E.norm(p.name)&&(p.sport==='soccer'?a.sport==='soccer':p.sport==='ufc'?a.sport==='mma':a.league===league[p.sport])&&(!p.pos||!a.position?.abbreviation||p.pos===a.position.abbreviation));
+   const unique=[...new Map(candidates.map(a=>[String(a.id),a])).values()];if(unique.length!==1)return;
+   const a=unique[0],t=(a.teamRelationships||[]).find(t=>t.core?.abbreviation)?.core;
+   found={at:Date.now(),espnId:String(a.id),...(a.headshot?.href?{headshot:a.headshot.href}:{}),...(a.jersey!==undefined?{jersey:a.jersey}:{}),...(t?{team:t.abbreviation,teamId:String(t.id)}:{}),...(a.position?.abbreviation?{pos:a.position.abbreviation}:{})};cache[ck]=found;
+  }
+  const {at,...identity}=found;Object.assign(p,identity);identityBusy.delete(k);
+ }catch{} }));
+ store.set('pz_player_identity_v1',cache);S.projMemo={};S.G=gradeAll();render();loadLogs();
 }
 function impliedFor(ev, abbr) {
   if (!ev || !ev.odds || !ev.odds.fav || !isFinite(Number(ev.odds.total)) || !isFinite(Number(ev.odds.spread))) return null;
@@ -3484,16 +3520,16 @@ function legCtx(key, market) {
 }
 /* pre-game read on a leg: { p, pr, rs, drivers, source } — memoized per data refresh */
 function legPre(leg) {
-  if (leg.venueOnly) return { p: null, pr: null, drivers: [], source: 'venue-only' };
+  if (!E.MARKETS[leg.market]) return { p: null, pr: null, drivers: [{ label: 'This market is not covered by the stats feed; venue settlement required', pct: 0 }], source: 'unsupported' };
   S.projMemo = S.projMemo || {};
   const k = leg.player + '|' + leg.market + '|' + leg.line + '|' + (leg.dir || 'over') + '|' + (leg.mult || '');
   if (S.projMemo[k]) return S.projMemo[k];
   const p = P(leg.player); const d = p.espnId && S.research[p.espnId];
   let out;
   if (leg.gimme || (M.kindOf(leg.market) === 'yards' && Number(leg.line) <= 1.5)) out = { p: 0.97, pr: null, drivers: [{ label: 'Gimme line', pct: 0 }], source: 'gimme' };
-  else if ((p.sport || 'nfl') === 'nfl' && d && d.rows && d.rows.length) {
+  else if (['nfl','cfb','nba'].includes(p.sport || 'nfl') && d && d.rows && d.rows.length) {
     const rs = E.researchLine(d.rows, leg.market, Number(leg.line), leg.dir);
-    const pr = M.project(leg.market, 'nfl', rs.vals, legCtx(leg.player, leg.market));
+    const pr = M.project(leg.market, p.sport || 'nfl', rs.vals, legCtx(leg.player, leg.market));
     const c = M.legChance(leg, pr, rs.hits, rs.n);
     out = { p: c.p, pr, rs, drivers: pr.drivers, source: 'log' };
   } else { const pr = M.priorProjection(leg.market, leg.line); out = { p: M.liveChance(leg, pr, 0, 0, 'scheduled'), pr, drivers: pr.drivers, source: 'prior' }; }
@@ -3503,9 +3539,9 @@ function legPre(leg) {
 }
 function legLive(leg, g) {
   if (g && ['hit', 'miss'].includes(g.state)) return g.state === 'hit' ? 1 : 0;
-  if (leg.venueOnly) return null;
+  if (!E.MARKETS[leg.market]) return null;
   const pre = legPre(leg);
-  if (!g || g.state === 'scheduled') return pre.p;
+  if (!g || g.state === 'scheduled' || g.value === null || g.value === undefined) return pre.p;
   if (pre.source === 'gimme' && g.state === 'live') return Math.max(pre.p, M.liveChance(leg, null, g.value || 0, gameFrac(eventFor(leg.player)), g.state) || 0);
   const fr = gameFrac(eventFor(leg.player));
   return M.honestLive(M.liveChance(leg, pre.pr, g.value || 0, fr, g.state), pre.prior, pre.w, fr);
@@ -3548,6 +3584,7 @@ function jump(tab, anchor) {
 const pickNav = (o) => (o ? { player: o.player, tab: o.tab, anchor: o.anchor } : {});
 function afterData() {
   S.projMemo = {};
+  resolveReceiptPlayers();
   const G = gradeAll(); const snap = snapshot(G);
   if (S.snap && S.alertPrimed) {
     let alerts = E.diffAlerts(S.snap, snap).map((a) => ({ ...a, ...pickNav(snap[a.key]) }));
@@ -4474,7 +4511,8 @@ const vh = (title, sub, chips = '', right = '', extra = '') => `<section class="
 /* player card — the leg on a stadium backdrop: his game's home venue, his own team's colors */
 function ptile(leg, g) {
   const p = P(leg.player), mk = mkOf(leg.market);
-  const ev = eventFor(leg.player); const src = headshot(leg.player, 500);
+  const pre = legPre(leg);
+  const ev = eventForLeg(leg); const src = headshot(leg.player, 500);
   const dir = leg.dir === 'under' ? 'LESS' : 'MORE'; const line = Number(leg.line);
   const badge = g.state === 'hit' ? SVG.check : g.state === 'miss' ? SVG.x : g.state === 'dnp' || g.state === 'void' ? '?' : '';
   const game = !ev ? esc(p.team) : `${esc(p.team)} ${esc(oppLabel(leg.player))} · ${ev.state === 'pre' ? esc(kickLabel(ev.date)) : esc(ev.detail || '')}`;
@@ -4488,13 +4526,13 @@ function ptile(leg, g) {
   const tcs0 = teamColors(p.sport || 'nfl', p.team) || []; const dull = (h) => { const m = /^#?([0-9a-f]{6})$/i.exec(h || ''); if (!m) return true; const n = parseInt(m[1], 16), r = n >> 16, g2 = (n >> 8) & 255, b2 = n & 255; return Math.max(r, g2, b2) < 70 || Math.max(r, g2, b2) - Math.min(r, g2, b2) < 30; };
   const tcs = dull(tcs0[0]) && !dull(tcs0[1]) ? [tcs0[1], tcs0[0]] : tcs0;
   return `<div class="pcard ${g.state}" style="--tg:${tg(p.sport || 'nfl', p.team)};--tc1:${tcs[0] || '#1d3557'};--tc2:${tcs[1] || '#457b9d'}" title="${esc(g.note || '')}">
-    <div class="pc-art">${venueArt(ev)}<div class="pc-tint"></div><div class="jn">${esc(p.number || '')}</div><div class="ini">${esc(initials(p.name))}</div>
+    <div class="pc-art">${venueArt(ev)}<div class="pc-tint"></div><div class="jn">${esc((p.number || p.jersey) || '')}</div><div class="ini">${esc(initials(p.name))}</div>
       ${src ? `<img class="hs" src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<div class="badge">${badge}</div>
-      <div class="pc-name"><b>${esc(p.name)}</b><span>${esc(p.team)}${p.pos ? ' · ' + esc(p.pos) : ''}${p.number ? ' · #' + esc(p.number) : ''}</span></div>
+      <div class="pc-name"><b>${esc(p.name)}</b><span>${esc(p.team)}${p.pos ? ' · ' + esc(p.pos) : ''}${(p.number || p.jersey) ? ' · #' + esc((p.number || p.jersey)) : ''}</span></div>
       ${p.pos ? `<span class="po-pos">${esc(p.pos)}</span>` : ''}<div class="po-name"><small>${esc(String(p.name).split(' ')[0])}</small><b>${esc(String(p.name).split(' ').slice(1).join(' ') || p.name)}</b><em><img src="${esc(logo(p.sport || 'nfl', p.team))}" alt="" onerror="this.remove()">${esc(p.team)} ${esc(oppLabel(leg.player) || '')}</em></div></div>
     <div class="pc-body"><div class="pc-game">${game}</div>
       <div class="pc-line"><b><i class="dir">${dir}</i> ${E.fmt(leg.line)}</b><span>${esc(mk.label || mk.short)}</span>${leg.mult ? `<i class="mult">${esc(leg.mult)}</i>` : ''}</div>
-      ${prog}${leg.note ? `<div class="pc-note">${esc(leg.note)}</div>` : ''}</div></div>`;
+      ${prog}<div class="pc-note">${pre.source==='log'?`Season sample avg ${E.fmt(pre.rs.avg)} · projects ${E.fmt(Math.round(pre.pr.mu*10)/10)} · ${pre.rs.hits}/${pre.rs.n} historical clears`:pre.source==='unsupported'?'Stats feed does not cover this market · venue settlement required':'Line-based estimate · player game log not available'}</div>${leg.note && !ev ? `<div class="pc-note">${esc(leg.note)}</div>` : ''}</div></div>`;
 }
 
 /* ---------------- Pick6 ---------------- */
@@ -4548,7 +4586,7 @@ function p6Meter(mine) {
   const hit = seg('hit'), miss = seg('miss'), n = legs.length || 1;
   return `<section class="p6meter" aria-label="Pick6 totals"><div class="pm-k"><b>${alive}/${mine.length}</b><span>slips alive</span></div>
     <div class="pm-bar"><div class="pm-track"><i class="h" style="width:${(hit / n) * 100}%"></i><i class="l" style="width:${(liveN / n) * 100}%"></i><i class="m" style="width:${(miss / n) * 100}%"></i></div><div class="pm-lg"><span><i class="h"></i>${hit} cashed</span><span><i class="l"></i>${liveN} live</span><span><i class="m"></i>${miss} missed</span><span>${legs.length - hit - liveN - miss} to play</span></div></div>
-    <div class="pm-k"><b class="teal">${money(m.inPlay)}</b><span>in play</span></div><div class="pm-k"><b class="gold">${money(exp)}</b><span>expected now</span></div><div class="pm-k"><b>${money(m.maxLeft)}</b><span>max payout left</span></div></section>`;
+    <div class="pm-k"><b class="teal">${money(m.inPlay)}</b><span>in play</span></div><div class="pm-k"><b class="gold">${mine.some(({t,r})=>r.payout===null&&r.state!=='dead'&&!slipLive(t,r))?'Partial':money(exp)}</b><span>expected now</span></div><div class="pm-k"><b>${money(m.maxLeft)}</b><span>max payout left</span></div></section>`;
 }
 function viewPick6() {
   const all = S.G.pick6; const mine = all.filter(({ t }) => confirmed(t));
@@ -4890,7 +4928,7 @@ function slipTracker({ t, r }) {
   const line2 = done ? `${done} · ${r.hits}/${r.n} hit` : `${r.hits} of ${r.n} cashed${liveN ? ` · ${liveN} live` : ''}${!liveN && firstPre ? ` · starts ${kickLabel(firstPre.date)}` : ''}`;
   const pay = r.state==='review' ? 'Pending review' : t.units ? (Number(t.toWin) || 0).toFixed(1) + '×' : r.payout !== null ? money(r.payout) : money(r.state === 'dead' ? (Number(t.toWin) || r.potential) : r.potential);
   const sv = r.payout === null && r.state !== 'dead' ? slipLive(t, r) : null;
-  const odds = sv ? `<div class="odds" title="Chance this slip pays out, from live pace and pre-game projections"><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b><span>${liveN || r.hits ? 'live' : 'pre-game'}</span></div>` : `<div class="odds"><b class="dim">${r.state === 'review' ? 'Void?' : '–'}</b><span>${r.state === 'review' ? 'check rules' : r.payout !== null ? 'settled' : r.state === 'dead' ? 'busted' : 'no read yet'}</span></div>`;
+  const odds = sv ? `<div class="odds" title="Chance this slip pays out, from live pace and pre-game projections"><b style="color:${pColor(sv.pCash)}">${fmtP(sv.pCash)}</b><span>${liveN || r.hits ? 'live' : 'pre-game'}</span></div>` : `<div class="odds"><b class="dim">${r.state === 'review' ? 'Void?' : '–'}</b><span>${r.state === 'review' ? 'check rules' : r.payout !== null ? 'settled' : r.state === 'dead' ? 'busted' : 'feed coverage gap'}</span></div>`;
   const H = r.payout !== null || r.state === 'dead' ? null : slipHealth(t, r);
   const cascade = H && H.clusters.length ? `<div class="cascade">${H.clusters.map((c) => `${c.idx.length} legs in danger in ${esc(c.game)} — one bad game script sinks both`).join(' · ')}</div>` : '';
   return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>
@@ -5753,7 +5791,7 @@ const Chat = {
   watchBoard(); Chat.init(); watchPickem();
   if (FIREBASE) fbReady.then(() => { firebase.auth().onAuthStateChanged((u) => { const was = S.me.user && S.me.user.uid; const now = u && !u.isAnonymous ? u.uid : null; if (was !== now) meAttach(u); }); firebase.auth().getRedirectResult().catch((e) => { S.me.err = 'Sign-in failed: ' + e.message; }); }).catch(() => {});
   if (params.has('demo')) setTimeout(() => demoMoments().forEach((m) => Moments.push(m)), 1500);
-  loadInjuries().then(() => { S.projMemo = {}; render(); }); loadLogs();
+  loadInjuries().then(() => { S.projMemo = {}; render(); }); loadLogs(); resolveReceiptPlayers();
   if (S.tab === 'injuries' || S.tab === 'research') loadInjuries();
   if (S.tab === 'research') loadResearch();
   if (['ledger', 'pick6', 'ftd', 'scalp'].includes(S.tab)) loadArchive();

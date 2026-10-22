@@ -203,6 +203,8 @@
     blk: { sport: 'nba', label: 'Blocks', short: 'Blk', f: (s) => s.blk },
     stocks: { sport: 'nba', label: 'Steals + Blocks', short: 'Stl+Blk', f: (s) => s.stl + s.blk },
     tov: { sport: 'nba', label: 'Turnovers', short: 'TO', f: (s) => s.tov },
+    double_double: { sport:'nba', label:'Double double', short:'DDbl', f:s=>Number([s.pts,s.reb,s.ast,s.stl,s.blk].filter(v=>v>=10).length>=2) },
+    triple_double: { sport:'nba', label:'Triple double', short:'TDbl', f:s=>Number([s.pts,s.reb,s.ast,s.stl,s.blk].filter(v=>v>=10).length>=3) },
   };
 
   function findPlayer(game, ref) {
@@ -391,7 +393,7 @@
     const seen = {};
     return ((st && st.categories) || []).filter((c) => c.type === 'event').flatMap((c) => c.events || []).filter((e) => e.eventId && !seen[e.eventId] && (seen[e.eventId] = true)).map((e) => {
       const s = e.stats || []; const g = ev[e.eventId] || {};
-      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]) };
+      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]), stl: num(s[at('steals')]), blk: num(s[at('blocks')]), tov: num(s[at('turnovers')]) };
     }).sort((a, b) => a.date.localeCompare(b.date));
   }
   function rowStats(r) {
@@ -400,10 +402,13 @@
     s.completions = num(r.completions); s.passAtt = num(r.passingAttempts);
     s.rushYds = num(r.rushingYards); s.rushTD = num(r.rushingTouchdowns); s.rushAtt = num(r.rushingAttempts);
     s.rec = num(r.receptions); s.recYds = num(r.receivingYards); s.recTD = num(r.receivingTouchdowns); s.targets = num(r.receivingTargets);
+    for (const k of ['pts','reb','ast','stl','blk','tov','min']) if (r[k] !== undefined) s[k] = num(r[k]);
+    if (r.tpm !== undefined) s.threes = num(r.tpm);
     return s;
   }
   function researchLine(rows, market, line, dir) {
     const mk = MARKETS[market];
+    if (!mk) return { vals: [], n: 0, avg: null, median: null, hits: 0, l3avg: null, unsupported: true };
     const vals = rows.map((r) => ({ week: r.week, opp: r.opp, v: mk.f(rowStats(r)) }));
     const n = vals.length;
     const sum = vals.reduce((a, x) => a + x.v, 0);

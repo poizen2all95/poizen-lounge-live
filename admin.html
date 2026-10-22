@@ -421,6 +421,8 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     blk: { sport: 'nba', label: 'Blocks', short: 'Blk', f: (s) => s.blk },
     stocks: { sport: 'nba', label: 'Steals + Blocks', short: 'Stl+Blk', f: (s) => s.stl + s.blk },
     tov: { sport: 'nba', label: 'Turnovers', short: 'TO', f: (s) => s.tov },
+    double_double: { sport:'nba', label:'Double double', short:'DDbl', f:s=>Number([s.pts,s.reb,s.ast,s.stl,s.blk].filter(v=>v>=10).length>=2) },
+    triple_double: { sport:'nba', label:'Triple double', short:'TDbl', f:s=>Number([s.pts,s.reb,s.ast,s.stl,s.blk].filter(v=>v>=10).length>=3) },
   };
 
   function findPlayer(game, ref) {
@@ -609,7 +611,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     const seen = {};
     return ((st && st.categories) || []).filter((c) => c.type === 'event').flatMap((c) => c.events || []).filter((e) => e.eventId && !seen[e.eventId] && (seen[e.eventId] = true)).map((e) => {
       const s = e.stats || []; const g = ev[e.eventId] || {};
-      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]) };
+      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]), stl: num(s[at('steals')]), blk: num(s[at('blocks')]), tov: num(s[at('turnovers')]) };
     }).sort((a, b) => a.date.localeCompare(b.date));
   }
   function rowStats(r) {
@@ -618,10 +620,13 @@ details.gatebox>summary::-webkit-details-marker{display:none}
     s.completions = num(r.completions); s.passAtt = num(r.passingAttempts);
     s.rushYds = num(r.rushingYards); s.rushTD = num(r.rushingTouchdowns); s.rushAtt = num(r.rushingAttempts);
     s.rec = num(r.receptions); s.recYds = num(r.receivingYards); s.recTD = num(r.receivingTouchdowns); s.targets = num(r.receivingTargets);
+    for (const k of ['pts','reb','ast','stl','blk','tov','min']) if (r[k] !== undefined) s[k] = num(r[k]);
+    if (r.tpm !== undefined) s.threes = num(r.tpm);
     return s;
   }
   function researchLine(rows, market, line, dir) {
     const mk = MARKETS[market];
+    if (!mk) return { vals: [], n: 0, avg: null, median: null, hits: 0, l3avg: null, unsupported: true };
     const vals = rows.map((r) => ({ week: r.week, opp: r.opp, v: mk.f(rowStats(r)) }));
     const n = vals.length;
     const sum = vals.reduce((a, x) => a + x.v, 0);
@@ -662,7 +667,7 @@ details.gatebox>summary::-webkit-details-marker{display:none}
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
   // markets that are counts (discrete, small) vs yardage (continuous)
-  const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs']);
+  const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs', 'double_double', 'triple_double']);
   const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs', 'reb', 'ast', 'threes', 'stl', 'blk', 'stocks', 'tov', 'ra']);
   const kindOf = (market) => (TD_MARKETS.has(market) ? 'td' : COUNT_MARKETS.has(market) ? 'count' : 'yards');
 
@@ -1335,7 +1340,7 @@ const sportOf = (k) => P(k).sport || 'nfl';
 const confirmed = (t) => t.status !== 'unconfirmed';
 function teamColors(sport, abbr) { const m = (sport === 'mlb' ? MLBC : NFLC)[abbr]; return m ? ['#' + m[0], '#' + m[1]] : ['#1f2937', '#334155']; }
 const tg = (sport, abbr) => { const [a, b] = teamColors(sport, abbr); return `radial-gradient(circle at 50% 16%, ${b}cc 0%, ${a} 52%, #05070b 100%)`; };
-function headshot(k, w = 200) { const p = P(k); if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`; return p.headshot || ''; }
+function headshot(k, w = 200) { const p = P(k); if (p.headshot) return p.headshot; if (p.espnId) return `https://a.espncdn.com/combiner/i?img=/i/headshots/${p.sport || 'nfl'}/players/full/${p.espnId}.png&w=${w}&h=${Math.round(w * 0.727)}`; return p.headshot || ''; }
 const avatar = (k) => { const p = P(k); const s = headshot(k); return `<div class="av" style="--tg:${tg(p.sport || 'nfl', p.team)}">${s ? `<img src="${esc(s)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`; };
 
 function toast(msg, kind = 'ok', ms = 2800) { const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + kind; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), ms); }
@@ -1383,6 +1388,7 @@ const injFor = (abbr) => { const t = (A.injuries || []).find((x) => TEAMNAMES[x.
 const POSGROUP = { WR: 'rec', TE: 'rec', RB: 'run', FB: 'run', QB: 'qb' };
 const DEF = /^(CB|S|FS|SS|LB|ILB|OLB|MLB|DE|DT|NT|DL|EDGE|DB)$/;
 function legPre(leg) {
+  if (!E.MARKETS[leg.market]) return { p: null, drivers: [{label:'Stats feed does not cover this market; venue settlement required',pct:0}], source:'unsupported' };
   const key = leg.player + '|' + leg.market + '|' + leg.line + '|' + (leg.dir || 'over') + '|' + (leg.mult || ''); if (A.memo[key]) return A.memo[key];
   const p = P(leg.player); const rows = p.espnId && A.logs[p.espnId]; let out;
   if (leg.gimme || (M.kindOf(leg.market) === 'yards' && Number(leg.line) <= 1.5)) out = { p: 0.97, drivers: [{ label: 'Gimme line', pct: 0 }], source: 'gimme' };
@@ -1400,6 +1406,7 @@ function legPre(leg) {
 }
 function slipGrade(t) {
   const ps = t.legs.map((l) => legPre(l).p);
+  if (ps.some(p=>p===null||p===undefined)) return null;
   const corr = M.correlation(t.legs.map((l) => { const p = P(l.player); const ev = eventFor(l.player); const o = ev && ev.comps.find((x) => x.abbr !== p.team); return { name: lastName(p.name), market: l.market, dir: l.dir, team: p.team, opp: o && o.abbr, pos: p.pos }; }));
   const v = M.slipValue(ps, Number(t.entry), t.payouts, t.toWin, corr.factor); return v ? { ...v, corr, ps } : null;
 }

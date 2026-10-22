@@ -20,7 +20,7 @@
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
   // markets that are counts (discrete, small) vs yardage (continuous)
-  const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs']);
+  const TD_MARKETS = new Set(['anytime_td', 'pass_td', 'home_runs', 'double_double', 'triple_double']);
   const COUNT_MARKETS = new Set(['receptions', 'completions', 'pass_att', 'rush_att', 'interceptions', 'hits', 'runs', 'rbis', 'hrr', 'batter_ks', 'pitcher_ks', 'pitcher_outs', 'reb', 'ast', 'threes', 'stl', 'blk', 'stocks', 'tov', 'ra']);
   const kindOf = (market) => (TD_MARKETS.has(market) ? 'td' : COUNT_MARKETS.has(market) ? 'count' : 'yards');
 
