@@ -2036,6 +2036,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 <script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="tiers.css">
+<link rel="stylesheet" href="clubhouse.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -2084,6 +2085,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 <button class="top-handle" id="topHandle" type="button" aria-label="Show the banner" title="Show the banner" hidden></button>
 
 <div class="shell">
+  <nav class="rail" id="clubhouseRail" aria-label="Team Lounge sections" hidden></nav>
   <main id="main" tabindex="-1"><section class="seo-intro"><h2>Poizen Lounge</h2><p>PoiZen's live sports prediction-trading board. It tracks DraftKings Pick6 slips and DraftKings Predictions, Robinhood and Kalshi event contracts live, leg by leg, with the honest math on every slip.</p><ul><li>Live: every open slip and contract with its chance right now</li><li>Pick6, first touchdown and in-game scalps</li><li>Games with stadium, weather and TV, and the full NFL injury report</li><li>Lab, Ledger and a personal Coach for members</li></ul><p>Plans: Free, Pro and Elite. Loading the live board…</p></section></main>
 </div>
 <nav class="bottom" id="bottom" aria-label="Mobile navigation"></nav>
@@ -2096,6 +2098,8 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 <script src="workspace.js"></script>
 <script src="alerts.js"></script>
 <script src="elite-ui.js"></script>
+<script src="nfl-theme-assets.js"></script>
+<script src="clubhouse.js"></script>
 
 <div class="ticker" aria-hidden="true"><div class="tag"><img src="crest.png" alt="">Poizen Lounge</div><div class="scroll"><div class="track" id="ticker"></div></div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -3340,7 +3344,7 @@ function applyTeam(id) {
   if (id && !M.canUse(meTier(), 'teamThemes')) id = '';
   const root = document.documentElement; const [lg, ab] = String(id || '').split(':'); const t = lg && TEAMS[lg] && TEAMS[lg].find((x) => x[0] === ab);
   const props = ['--team-a', '--team-b', '--team-acc', '--team-on', '--team-logo', '--teal', '--teal2', '--gold', '--gold2', '--bg-glow1', '--bg-glow2', '--bg-glow3', '--hero'];
-  if (!t) { delete root.dataset.team; props.forEach((p) => root.style.removeProperty(p)); updateVibeBtn(); renderTeamGrid(); return; }
+  if (!t) { delete root.dataset.team; props.forEach((p) => root.style.removeProperty(p)); syncClubhouse(); updateVibeBtn(); renderTeamGrid(); return; }
   const light = root.dataset.vibe === 'daylight'; const [, , c1, c2] = t;
   const neutral = (h) => { const c = hexRgb(h); return Math.max(...c) - Math.min(...c) < 40; };
   const pop = neutral(c1) && !neutral(c2) ? c2 : c1; // the team's main color leads unless it is black/grey/white
@@ -3351,7 +3355,7 @@ function applyTeam(id) {
   const set = { '--team-a': '#' + c1, '--team-b': '#' + c2, '--team-acc': '#' + acc, '--team-on': lumOf(acc) > 0.3 ? '#06080b' : '#ffffff', '--team-logo': `url("${teamLogo(lg, ab)}")`, '--teal': '#' + acc, '--teal2': '#' + mixHex(acc, '000000', 0.25), '--gold': '#' + acc2, '--gold2': '#' + mixHex(acc2, 'FFFFFF', 0.3),
     '--bg-glow1': rgb(c1, light ? 0.16 : 0.3), '--bg-glow2': rgb(c2, light ? 0.12 : 0.18), '--bg-glow3': rgb(acc, 0.1), '--hero': `linear-gradient(120deg,${rgb(c1, 0.3)} 0%,${rgb(c2, 0.16)} 60%,transparent 100%)` };
   Object.entries(set).forEach(([k, v]) => root.style.setProperty(k, v));
-  updateVibeBtn(); renderTeamGrid();
+  syncClubhouse(); updateVibeBtn(); renderTeamGrid();
 }
 function updateVibeBtn() {
   const id = document.documentElement.dataset.team; const lg = id && id.split(':')[0], ab = id && id.split(':')[1]; const t = lg && TEAMS[lg].find((x) => x[0] === ab);
@@ -4727,6 +4731,52 @@ const DEMO = [
   { type: 'leader', word: 'New leader', sub: "Pick'em · 7 of 8 correct" },
 ];
 
+/* Editorial NFL clubhouse: same live data, quieter list-first presentation. */
+function clubhouseTheme(){return typeof window!=='undefined'&&window.PZClubhouse?window.PZClubhouse.team(document.documentElement.dataset.team,TEAMS,window.PZNFLAssets||{}):null;}
+function syncClubhouse(){
+ if(typeof window==='undefined'||!window.PZClubhouse)return;
+ const root=document.documentElement,t=clubhouseTheme();
+ if(!t){delete root.dataset.clubhouse;['--club-ink','--club-accent','--club-paper','--club-soft'].forEach(k=>root.style.removeProperty(k));return;}
+ root.dataset.clubhouse='nfl';const p=t.palette;
+ for(const [key,value]of Object.entries({'--club-ink':p.ink,'--club-accent':p.accent,'--club-paper':p.paper,'--club-soft':p.accentSoft}))root.style.setProperty(key,value);
+}
+function clubhouseAllRows(){return S.G.pick6.filter(({t})=>confirmed(t)&&!t.settlement).concat(sweatPredictionRows(),sweatPickemRows()).sort((a,b)=>byStart(a,b)||a.r.legs.length-b.r.legs.length);}
+function clubhouseLifecycle({t,r}){if(sweatDead(r))return'dead';if(r.payout!==null&&r.payout!==undefined||r.legs.length&&r.legs.every(x=>['hit','miss','void','dnp'].includes(x.g.state))&&!sweatOtherSelections(t,r).length)return'settling';return sweatIsLive(r)?'live':'upcoming';}
+function clubhouseVisibleRows(rows){const league=S.clubhouseLeague||'',status=S.clubhouseStatus||'open';return rows.filter(x=>(!league||x.t.sport===league||x.r.legs.some(y=>P(y.leg.player).sport===league))&&(status==='all'||(status==='open'?['live','upcoming'].includes(clubhouseLifecycle(x)):clubhouseLifecycle(x)===status)));}
+function clubhouseLegHTML({leg,g},tickets){
+ const p=P(leg.player),ev=eventForLeg(leg),m=mkOf(leg.market),known=sweatKnown(g),value=known?Number(g.value):null,target=leg.inclusive??Number(leg.line),dir=leg.dir==='under'?'Less':'More';
+ const note=g.state==='hit'?'Cleared':g.state==='miss'?'Missed':['void','dnp'].includes(g.state)?'Check venue rules':ev?.state==='in'?'Live':ev?.state==='post'?'Final · awaiting stats':ev?.state==='pre'?'Not started':'Game pending';
+ const progress=g.state==='hit'?100:known?Math.min(100,Math.max(0,value/Math.max(Number(leg.line),1)*100)):0,pre=legPre(leg),chance=legLive(leg,g);
+ const label=leg.inclusive?'At least':dir,when=ev?sweatWhen(ev):'Awaiting verified game',game=ev?.name||p.team||'Venue selection';
+ return `<article class="clubhouse-leg ${g.state}">${avatar(leg.player)}<div class="clubhouse-person"><b>${esc(p.name)}</b><span>#${esc(sweatJersey(leg.player,ev))} · ${esc(p.pos||'Player')} · ${esc(p.team||p.sport?.toUpperCase()||'')}</span>${tickets?`<small>${tickets} ${tickets===1?'ticket':'tickets'}</small>`:''}</div><div class="clubhouse-target"><b>${esc(label)} ${E.fmt(target)}</b><span>${esc(m.label||m.short||leg.venueMarket||leg.market)}</span><div class="sw-track" role="progressbar" aria-label="${esc(p.name+' '+label+' '+target+' '+(m.label||leg.market))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(progress)}"><i style="width:${progress}%;background:${sweatProgressColor(leg,g)}"></i></div>${pre.source==='log'?`<span>Avg ${E.fmt(Math.round(pre.rs.avg*10)/10)} · projects ${E.fmt(Math.round(pre.pr.mu*10)/10)}</span>`:''}</div><div class="clubhouse-state"><b class="${!known?'clubhouse-pending':g.state==='hit'?'win':g.state==='miss'?'loss':''}">${known?E.fmt(value):note}</b><span>${esc(game)} · ${esc(when)}</span><small>${chance!==null?fmtP(chance)+' estimated to hit':pre.source==='unsupported'?'Venue settlement required':'Stats feed pending'}</small>${ev?`<button class="linkbtn" type="button" data-open-game="${esc(ev.id)}">Game details</button>`:''}</div></article>`;
+}
+function clubhouseTicketHTML({t,r},index){
+ const key='club:'+t.id,open=S.slipOpen[key]!==undefined?S.slipOpen[key]:index===0,stake=sweatStake(t),type=sweatType(t),other=sweatOtherSelections(t,r),potential=Number(r.potential)||0;
+ const v=sweatSource(t)==='pick6'?slipLive(t,r):null;
+ return `<details class="clubhouse-ticket" data-slip="${esc(key)}" ${open?'open':''}><summary><div class="clubhouse-ticket-heading"><b>${esc(t.title||type)}</b><span>${type} · ${ticketLeagueBadges(t)} · ${r.legs.length+other.length} selections · ${sweatTicketState(r)}${v?' · '+fmtP(v.pCash)+' estimated cash chance':''}</span></div><div class="clubhouse-ticket-money"><span>Entry<b>${stake===null?'Points':money(stake)}</b></span><span>Potential<b>${sweatSource(t)==='pickem'?'Points':money(potential)}</b></span></div>${CHEV}</summary><div>${r.legs.map(x=>clubhouseLegHTML(x)).join('')}${other.map(s=>`<div class="clubhouse-unlinked"><b>${esc(s)}</b><br>Venue selection · live result not linked</div>`).join('')}${!r.legs.length&&!other.length?'<div class="clubhouse-unlinked">Tracked at the venue · player stats not linked.</div>':''}</div><details class="clubhouse-receipt"><summary>Receipt & evaluation</summary>${sweatSource(t)==='pick6'?window.PZTradeCards.html(window.PZTradeCards.publicSlip(t,r))+honestHTML(t,r):'<p>Prediction contracts and community points follow their venue rules.</p>'}${t.receiptUrl?`<a href="${esc(t.receiptUrl)}" target="_blank" rel="noopener">View venue receipt</a>`:''}</details></details>`;
+}
+function clubhousePlayerEntries(rows){
+ const all=new Map();for(const {t,r}of rows)for(const x of r.legs){const l=x.leg;if(S.clubhouseLeague&&P(l.player).sport!==S.clubhouseLeague)continue;if(S.clubhouseStatus==='live'&&!sweatLegLive(l,x.g))continue;if(S.clubhouseStatus==='upcoming'&&['hit','miss','void','dnp'].includes(x.g.state))continue;const key=[l.player,l.market,l.line,l.dir,l.eventId||'',l.startsAt||''].join('|'),a=all.get(key)||{...x,tickets:new Set()};a.tickets.add(t.id);all.set(key,a);}return [...all.values()];
+}
+function clubhousePlayersHTML(rows){return clubhousePlayerEntries(rows).map(x=>clubhouseLegHTML(x,x.tickets.size)).join('')||'<div class="empty">No player selections match these filters.</div>';}
+function clubhouseEvents(rows){return [...new Map(rows.flatMap(x=>sweatEvents(x.r)).map(e=>[e.id,e])).values()].filter(e=>e.state!=='post'&&(!S.clubhouseLeague||e.sport===S.clubhouseLeague)).sort((a,b)=>Number(b.state==='in')-Number(a.state==='in')||Date.parse(a.date)-Date.parse(b.date));}
+function clubhouseDeferRender(force=false){return !force&&S.clubhouseEditingUntil>Date.now()&&!!document.activeElement?.matches?.('#clubLeague,#clubStatus');}
+function clubhouseNextHTML(ev){
+ if(!ev)return `<section class="clubhouse-next"><div class="clubhouse-next-head"><h2>Game watch</h2></div><p>No verified upcoming game is linked yet.</p><button type="button" class="clubhouse-open" data-sweat="on">Open Sweat</button></section>`;
+ const away=ev.comps.find(x=>x.ha==='away')||ev.comps[0],home=ev.comps.find(x=>x.ha==='home')||ev.comps[1];
+ const side=t=>`<div><img src="${esc(t.logo||logo(ev.sport,t.abbr))}" alt="${esc(t.name||t.abbr)}" width="70" height="60"><b>${esc(t.abbr)}</b><small>${esc(t.name||'')}</small></div>`;
+ return `<section class="clubhouse-next"><div class="clubhouse-next-head"><h2>${ev.state==='in'?'Live game':'Next game'}</h2><span>${esc(ev.sport.toUpperCase())}</span></div><div class="clubhouse-matchup">${side(away)}<span>AT</span>${side(home)}</div><div class="clubhouse-game-meta">${esc(ev.venue||'Venue pending')}<b>${esc(sweatWhen(ev))}</b></div><button type="button" class="clubhouse-open" data-sweat="on">${SVG.live}Open Sweat</button><button type="button" class="clubhouse-open secondary" data-open-game="${esc(ev.id)}">Game info & player stats</button></section>`;
+}
+function viewClubhouseLive(){
+ const all=clubhouseAllRows(),theme=clubhouseTheme(),view=S.clubhouseView||'tickets',sports=[...new Set(all.flatMap(({t,r})=>[t.sport,...r.legs.map(x=>P(x.leg.player).sport)]).filter(Boolean))].sort();
+ if(S.clubhouseLeague&&!sports.includes(S.clubhouseLeague))S.clubhouseLeague='';
+ const rows=clubhouseVisibleRows(all),open=rows.filter(x=>['live','upcoming'].includes(clubhouseLifecycle(x))),heading=view==='players'?'Your players':({open:'Open tickets',live:'Live tickets',upcoming:'Upcoming tickets',dead:'Dead tickets',settling:'Awaiting settlement',all:'Tracked tickets'})[S.clubhouseStatus||'open'];
+ const next=clubhouseEvents(open)[0],risk=open.reduce((a,{t})=>a+(sweatStake(t)||0),0),live=open.filter(x=>sweatIsLive(x.r)).length;
+ const filters=`<div class="clubhouse-controls"><div class="clubhouse-tabs" role="group" aria-label="Live board layout">${[['tickets','Tickets'],['players','Players']].map(([v,label])=>`<button type="button" data-club-view="${v}" aria-pressed="${view===v}">${label}</button>`).join('')}</div><div class="clubhouse-filters"><label>League<select id="clubLeague"><option value="">All leagues</option>${sports.map(sp=>`<option value="${esc(sp)}" ${S.clubhouseLeague===sp?'selected':''}>${esc(sp.toUpperCase())}</option>`).join('')}</select></label><label>Status<select id="clubStatus">${[['open','All open tickets'],['live','Live now'],['upcoming','Upcoming'],['dead','Dead'],['settling','Awaiting settlement'],['all','All tracked tickets']].map(([v,label])=>`<option value="${v}" ${(S.clubhouseStatus||'open')===v?'selected':''}>${label}</option>`).join('')}</select></label></div></div>`;
+ return filters+`<div class="clubhouse-live-grid"><section class="clubhouse-list"><div class="clubhouse-list-head"><h2>${heading}</h2><span>${rows.length} tickets · ${money(risk)} tracked</span></div>${view==='players'?clubhousePlayersHTML(rows):rows.length?rows.map(clubhouseTicketHTML).join(''):'<div class="empty">No tickets match these filters.</div>'}</section><aside class="clubhouse-side">${clubhouseNextHTML(next)}<section class="clubhouse-numbers" aria-label="Open ticket totals"><div><b>${open.length}</b><span>Open tickets</span></div><div><b>${money(risk)}</b><span>Tracked entry</span></div><div><b>${live}</b><span>Live now</span></div></section>${theme?.stadium?.photo?`<figure class="clubhouse-home-photo"><img src="${esc(theme.stadium.photo)}" alt="${esc(theme.stadium.name)}" width="600" height="360" loading="lazy"><figcaption>${esc(theme.stadium.name)}<br>${esc(theme.name)} · your home field</figcaption></figure>`:''}</aside></div><div class="clubhouse-live-foot"><span>${S.feed.last?'Updated '+new Date(S.feed.last).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'Connecting to live data'} · Estimates are not guarantees.</span><button type="button" data-tab="pick6">All Pick6 slips →</button></div>`+leagueLegend()+`<details class="clubhouse-extras"><summary>Prediction trades & history</summary>${contractsHTML()}</details><details class="clubhouse-extras"><summary>Alerts & activity</summary>${alertPrefsHTML()}${tapeHTML()}</details>`;
+}
+
+
 /* ---------------- shared pieces ---------------- */
 /* icon colours for the necklace; the strand is invisible, the icons just hang on a smile curve */
 const NAVCOLOR = { live: '#FF4D5E', me: '#2ED8BA', pick6: '#F2C14E', ftd: '#FF9A3D', scalp: '#B28CFF', pickem: '#4DA3FF', games: '#5BE08A', injuries: '#FF7AA8', research: '#7EE7FF', ledger: '#E8D5A0' };
@@ -4740,6 +4790,7 @@ function necklaceHTML() {
 }
 function renderNav() {
   $('#necklace').innerHTML = necklaceHTML();
+  const clubRail=$('#clubhouseRail');clubRail.hidden=!clubhouseTheme();clubRail.innerHTML=clubhouseTheme()?TABS.concat([['settings','Settings','gear']]).map(([id,label,icon])=>`<button class="navbtn" type="button" data-tab="${id}" ${S.tab===id?'aria-current="page"':''}>${SVG[icon]||''}<span>${esc(label)}</span>${id==='pick6'?`<span class="cnt">${activeTickets().length}</span>`:''}</button>`).join(''):'';
   window.PZMobile.renderNav(S.tab, TABS, SVG, { pick6: activeTickets().length });
 }
 function setTab(id) {
@@ -5441,6 +5492,7 @@ function gameBoard(live, upcoming, done, debrief) {
   return `<section class="gboard" aria-label="Games">${sec('live', 'Live now', live)}${debrief || ''}${sec('pre', `${SVG.clock}Coming up`, upcoming)}${sec('post', 'Final', done)}</section>`;
 }
 function viewLive() {
+  if(clubhouseTheme())return viewClubhouseLive();
   const L = liveSets(), { evs, live, next, done, hero } = L;
   const ctxEv = ctxEvent(L);
   const so = { live: 0, open: 1, partial: 2, won: 2, review: 3, dead: 4, lost: 4 };
@@ -6019,12 +6071,13 @@ function renderTicker() {
 }
 
 /* ---------------- render ---------------- */
-function render() {
+function render(force=false) {
+  if(clubhouseDeferRender(force))return;
   if (!S.G) S.G = gradeAll();
   document.body.dataset.view = S.tab;
-  renderNav(); renderRecord(); feedStatus(); renderTicker(); applyPlayoffs();
   const themeAccess = meTier();
   if (S.themeAccess !== themeAccess) { S.themeAccess = themeAccess; applyTeam(preferredTeam()); }
+  renderNav(); renderRecord(); feedStatus(); renderTicker(); applyPlayoffs();
   const accessLabel = document.getElementById('teamAccess');
   if (accessLabel) accessLabel.textContent = can('teamThemes') ? 'Included · the whole board takes its colors' : 'Pro · the whole board takes its colors';
   /* the header shows today's date; the slate title is the weekly archive name and reads as stale the day after a refresh */
@@ -6038,8 +6091,10 @@ function render() {
   if (S.tab !== 'live') { const strip = liveStrip(); if (strip) { const i = body.indexOf('</section>'); body = i > -1 ? body.slice(0, i + 10) + strip + body.slice(i + 10) : strip + body; } }
   const researchNav = window.PZMobile.researchNav(S.tab, TABS);
   if (researchNav) { const end = body.indexOf('</section>'); body = end >= 0 ? body.slice(0, end + 10) + researchNav + body.slice(end + 10) : researchNav + body; }
-  if (S.tab === 'live') { const end = body.indexOf('<!--hero-end-->'); const actions = `<nav class="mobile-home-actions" aria-label="Quick actions"><button type="button" data-tab="me">${SVG.user} My slips</button><button type="button" data-tab="research">${SVG.research} Research a line</button><button type="button" data-tab="pick6">${SVG.pick6} PoiZen's board</button><button type="button" data-tab="ledger">${SVG.ledger} Results</button></nav>`; body = end >= 0 ? body.slice(0, end + 15) + actions + body.slice(end + 15) : actions + body; }
-  $('#main').innerHTML = body + footHTML();
+  if (S.tab === 'live' && !clubhouseTheme()) { const end = body.indexOf('<!--hero-end-->'); const actions = `<nav class="mobile-home-actions" aria-label="Quick actions"><button type="button" data-tab="me">${SVG.user} My slips</button><button type="button" data-tab="research">${SVG.research} Research a line</button><button type="button" data-tab="pick6">${SVG.pick6} PoiZen's board</button><button type="button" data-tab="ledger">${SVG.ledger} Results</button></nav>`; body = end >= 0 ? body.slice(0, end + 15) + actions + body.slice(end + 15) : actions + body; }
+  const club=clubhouseTheme();
+  if(club&&!S.clubhouseSeen){S.sweatOpen=false;S.clubhouseSeen=true;}
+  $('#main').innerHTML = (club?window.PZClubhouse.render(club):'') + body + footHTML();
   Object.entries(keep).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; });
   document.querySelectorAll('main details').forEach((d) => { const s = d.querySelector('summary'); if (s && openD.includes(s.textContent)) d.open = true; });
   { const bEl = document.getElementById('pzbM'); if (bEl) { S.me.builder = S.me.builder || PZB.state(); PZB.mountInto(bEl, S.me.builder, memberBuilderCtx()); } }
@@ -6055,8 +6110,15 @@ function calcUpdate() {
   $('#calcOut').innerHTML = sel.length ? `Return ${money(ret)} on ${money(risk)} → <span class="${ret - risk >= 0 ? 'win' : 'loss'}">${money(ret - risk, true)}</span>` : 'Pick players to see the math.';
 }
 
+let clubhouseEditTimer;
+function clubhouseEditing(active){clearTimeout(clubhouseEditTimer);S.clubhouseEditingUntil=active?Date.now()+12000:0;if(active)clubhouseEditTimer=setTimeout(()=>{S.clubhouseEditingUntil=0;render(true);},12000);}
+document.addEventListener('pointerdown',e=>{if(e.target.matches?.('#clubLeague,#clubStatus'))clubhouseEditing(true);});
+document.addEventListener('keydown',e=>{if(!e.target.matches?.('#clubLeague,#clubStatus'))return;if(e.key==='Escape'){clubhouseEditing(false);render(true);}else if(['ArrowDown','ArrowUp',' ','Enter'].includes(e.key))clubhouseEditing(true);});
+document.addEventListener('focusout',e=>{if(e.target.matches?.('#clubLeague,#clubStatus'))clubhouseEditing(false);});
+document.addEventListener('change',e=>{if(e.target.id==='clubLeague'){clubhouseEditing(false);S.clubhouseLeague=e.target.value;render(true);}if(e.target.id==='clubStatus'){clubhouseEditing(false);S.clubhouseStatus=e.target.value;render(true);}});
 /* ---------------- events ---------------- */
 document.addEventListener('click', (e) => {
+  const clubView=e.target.closest('[data-club-view]');if(clubView&&['tickets','players'].includes(clubView.dataset.clubView)){clubhouseEditing(false);S.sweatOpen=false;S.clubhouseView=clubView.dataset.clubView;render(true);return;}
   const jb = e.target.closest('[data-jump]'); if (jb) { const [tb, an] = jb.dataset.jump.split('|'); jump(tb, an); return; }
   if (S.sweatOpen && !e.target.closest('#sweatTab')) { S.sweatOpen = false; updateSweatTab(); window.bannerSync(); }
   const stb = e.target.closest('[data-sweattab]'); if (stb) { S.sweatOpen = !S.sweatOpen; updateSweatTab(); tickCountdowns(); window.bannerSync(); return; }

@@ -20,7 +20,7 @@ test('basic themes remain free while team themes require Pro and playoffs requir
 test('a requested team waits for paid auth and clears on expiry or account mismatch', () => {
   const rootEl = {dataset:{vibe:'midnight'},style:{setProperty(){},removeProperty(){}}};
   const S = {me:{user:null,tier:null}};
-  const ctx = {S, M, OWNER_EMAIL:'owner@example.com', document:{documentElement:rootEl}, TEAMS:{nfl:[['LV','Las Vegas Raiders','000000','A5ACAF']]}, updateVibeBtn(){},renderTeamGrid(){},teamLogo(){return 'logo.png';}, store:{get(){return 'nfl:DAL';}}, params:new URLSearchParams('team=nfl-lv')};
+  const ctx = {S, M, OWNER_EMAIL:'owner@example.com', document:{documentElement:rootEl}, TEAMS:{nfl:[['LV','Las Vegas Raiders','000000','A5ACAF']]}, syncClubhouse(){},updateVibeBtn(){},renderTeamGrid(){},teamLogo(){return 'logo.png';}, store:{get(){return 'nfl:DAL';}}, params:new URLSearchParams('team=nfl-lv')};
   vm.createContext(ctx);
   const meTier = html.slice(html.indexOf('function meTier()'),html.indexOf('const isOwner'));
   const team = html.slice(html.indexOf('const hexRgb ='),html.indexOf('function updateVibeBtn()'));
