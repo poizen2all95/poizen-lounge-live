@@ -50,3 +50,11 @@ No actionable P0/P1/P2 findings remain after the iterations below.
 - P3: replace historical sponsor-sign photographs with newer official photographs as they become available; the physical venues are correct.
 - This theme work does not establish that every imported market has a stats feed. Existing unsupported/unlinked labels remain visible, and projections remain estimates.
 - Live hit/miss states are verified by deterministic fixtures because the browser data at inspection time was pregame. No game results were fabricated for screenshots.
+
+## Deployment receipt
+
+- Rebased on concurrent main update e299984, preserving its player-line Sweat overlay. Full suite after rebase: 87 passed, 0 failed.
+- Published implementation commit: `390dec05a7ff8ed511b3c6512e609abc23c960a9`.
+- GitHub Pages run `39845449151`: completed successfully.
+- Opened the deployed Raiders theme in the existing signed-in Edge session. Authentic crest/stadium, Tickets/Players controls and NFL filter rendered; NFL selected 12 tracked tickets and NE @ CHI in next game. Captured error log was empty.
+- Production evidence: `C:/Users/Owner/Documents/Codex/2026-10-20/ok-t/work/theme-audit/clubhouse-published.png`.

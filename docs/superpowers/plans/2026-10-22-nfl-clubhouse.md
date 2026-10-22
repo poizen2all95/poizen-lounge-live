@@ -49,4 +49,4 @@
 
 - [x] Start local preview, inspect Raiders plus contrasting NFL palettes in Edge, exercise navigation/theme changes and Sweat.
 - [x] Compare selected reference and implementation; correct P0/P1/P2 layout, type, image and contrast differences.
-- [ ] Publish authorized changes after checks pass, verify Pages deployment and leave the result open.
+- [x] Publish authorized changes after checks pass, verify Pages deployment and leave the result open.
