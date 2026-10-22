@@ -4937,7 +4937,7 @@ function slipTracker({ t, r }) {
   const H = r.payout !== null || r.state === 'dead' ? null : slipHealth(t, r);
   const cascade = H && H.clusters.length ? `<div class="cascade">${H.clusters.map((c) => `${c.idx.length} legs in danger in ${esc(c.game)} — one bad game script sinks both`).join(' · ')}</div>` : '';
   return `<details class="slip ${r.state}" id="lv-${esc(t.id)}" data-slip="${esc(t.id)}" ${open ? 'open' : ''}>
-    <summary><div class="faces">${facesHTML(r, 3, false)}</div><div class="st"><b>${esc(t.title)}</b><span>${esc(line2)}</span>${aliveMeter(r)}</div>
+    <summary><div class="faces">${facesHTML(r, 3, false)}</div><div class="st">${ticketLeagueBadges(t)}<b>${esc(t.title)}</b><span>${esc(line2)}</span>${aliveMeter(r)}</div>
       <div class="hwrap" title="${H ? 'Slip health: ' + esc(H.label) : esc(done || '')}">${H ? healthRing(H) : `<span class="hdone ${r.payout > 0 ? 'win' : 'loss'}">${r.payout > 0 ? SVG.check : SVG.x}</span>`}</div>
       <div class="cnum en"><b>${money(r.entry)}</b><span>entry</span></div>${odds}<div class="pay"><b>${pay}</b><span>${r.payout !== null ? 'paid' : 'to win'}</span></div>${CHEV}</summary>${window.PZTradeCards.html(window.PZTradeCards.publicSlip(t,r))}
     ${cascade}<div class="slip-legs">${r.legs.map(({ leg, g }) => legRow(leg, g)).join('')}</div>${honestHTML(t, r)}</details>`;
@@ -5000,7 +5000,7 @@ function contextPanel(ev) {
     return `<button class="ctx-pk ${g.state}" type="button" data-jump="games|g-${esc(ev.id)}"><b>${esc(P(leg.player).name)}</b><span class="ln">${leg.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(leg.line)}</span><span class="mk">${esc(mk.short)}${g.state !== 'scheduled' ? ` · <b>${E.fmt(g.value)}</b>` : ''}</span><em>${n} slip${n === 1 ? '' : 's'}</em></button>`; })).join('');
   return `<section class="panel ctx"><div class="ph">${SVG.research}<h3>Game context</h3><button class="ph-go" type="button" data-jump="games|g-${esc(ev.id)}">Open game</button></div>
     <div class="ctx-art" style="--c1:${teamColors(ev.sport, home.abbr)[0]}">${venueArt(ev)}<div class="ctx-shade"></div>${p && p.number ? `<div class="jn">${esc(p.number)}</div>` : ''}${src ? `<img class="hs" src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}
-      <div class="ctx-t"><b>${esc(away.abbr)} @ ${esc(home.abbr)}</b><span class="when">${when}</span>${wxHTML(ev)}</div>
+      <div class="ctx-t">${leagueBadge(ev.sport)}<b>${esc(away.abbr)} @ ${esc(home.abbr)}</b><span class="when">${when}</span>${wxHTML(ev)}</div>
       ${p ? `<div class="ctx-who"><b>${esc(p.name)}</b><span>${esc(p.team)} · ${esc(p.pos || '')}${p.number ? ' · #' + esc(p.number) : ''}</span></div>` : ''}</div>
     ${venueLine(ev)}
     ${rows ? `<div class="ctx-pks">${rows}</div>` : ''}
