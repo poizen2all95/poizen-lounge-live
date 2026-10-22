@@ -1759,7 +1759,7 @@ async function publish() {
   const t = $('#title'); if (t) A.slate.title = t.value.trim() || A.slate.title;
   const errs = validateSlate(A.slate); if (errs.length) { toast('Fix first: ' + errs[0], 'bad', 6000); return; }
   // stamp the Lab's pre-game read on legs whose game has not started, so the Coach can check the model later
-  (A.slate.pick6 || []).forEach((tk) => tk.legs.forEach((l) => { const ev = eventFor(l.player); if (ev && ev.state !== 'pre') return; const pre = legPre(l); if (pre && pre.source === 'log') l.prob = Math.round(pre.p * 1000) / 1000; }));
+  (A.slate.pick6 || []).forEach((tk) => tk.legs.forEach((l) => { if (l.venueOnly || !E.MARKETS[l.market]) return; const ev = eventFor(l.player); if (ev && ev.state !== 'pre') return; const pre = legPre(l); if (pre && pre.source === 'log') l.prob = Math.round(pre.p * 1000) / 1000; }));
   A.slate.updated = new Date().toISOString();
   try { const wk=weekKeyOf(A.slate.title),locks=(await db.ref('pickemLocks/'+wk).get()).val()||{},upd=window.PZBoardUpdates.lockUpdates(A.slate,eventFor,locks),changes={'board/slate':JSON.parse(JSON.stringify(A.slate)),'board/history':JSON.parse(JSON.stringify(A.history))};for(const [id,at] of Object.entries(upd))changes['pickemLocks/'+wk+'/'+id]=at;await db.ref().update(changes);A.publishedAt=Date.now();setDirty(false);toast(`Published — tickets, trades and results updated · ${Object.keys(upd).length} new Pick’em locks`);render(); }
   catch (e) { toast('Publish failed: ' + e.message, 'bad', 6000); }
