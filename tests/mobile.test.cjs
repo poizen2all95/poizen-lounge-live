@@ -54,6 +54,12 @@ test('ticker wraps seamlessly, pauses, and clamps long background gaps', () => {
   assert.equal(nextOffset(0, 30000, 200, false), 2);
   assert.equal(nextOffset(12, 100, 0, false), 12);
 });
+test('ticker speed multiplies movement and defaults to normal', () => {
+  const { nextOffset } = require(path.join(root, 'mobile.js'));
+  assert.equal(nextOffset(0, 100, 1000, false), 2);
+  assert.equal(nextOffset(0, 100, 1000, false, 0.5), 1);
+  assert.equal(nextOffset(0, 100, 1000, false, 2), 4);
+});
 test('ticker keeps fractional movement between browser scroll events', () => {
   const callbacks = [];
   class Element {

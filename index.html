@@ -1821,11 +1821,72 @@ main{width:100%;max-width:1560px;margin-inline:auto}
 .nk .cnt{position:absolute;top:-3px;right:-5px;min-width:16px;padding:1px 5px;border-radius:999px;background:var(--gold);color:#07090b;font:900 10px/1.3 var(--stadium);text-align:center}
 [data-vibe="daylight"] .nk{color:color-mix(in srgb,var(--ic) 72%,#000)}[data-vibe="daylight"] .nk svg{filter:none}
 @media(min-width:861px){
-  .top-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;padding-top:6px;padding-bottom:8px}
+  .top-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding-top:6px;padding-bottom:8px}
   .brand-top{display:none}
-  .necklace{grid-column:2;display:flex;align-items:flex-start;justify-content:center;gap:clamp(12px,1.9vw,34px)}
-  .top-r{grid-column:3;justify-self:end;margin-left:0}
+  .necklace{grid-column:1;grid-row:1;display:flex;align-items:flex-start;justify-content:center;gap:clamp(10px,1.3vw,24px);padding:4px 10px;margin:-4px -10px}
+  .top-in .record-shell{grid-column:2;grid-row:1;padding:0;mask-image:linear-gradient(90deg,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%)}
+  .top-in .record-shell .record{padding:0 22px}
+  .top-r{grid-column:3;grid-row:1;justify-self:end;margin-left:0}
+  .top{transition:top .32s ease}
+  .top.away{top:calc(-1 * var(--bannerh,66px) - 48px)}
+  body.nk-away .necklace{opacity:0;transition:opacity .35s ease .6s}
+  body.nk-away .necklace:hover,body.nk-away .necklace:focus-within{opacity:1;transition-delay:0s}
 }
+.top-in .record-shell{min-width:0}
+@media(min-width:861px) and (max-width:1100px){.top-in .record-shell{grid-column:1/-1;grid-row:2}}
+.st-btn b,.st-btn em{white-space:nowrap}
+@media(max-width:860px){.top-in{flex-wrap:wrap}.top-in .record-shell{order:9;flex:1 1 100%}.top-handle{display:none!important}}
+.top-handle{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:41;width:240px;height:16px;padding:0;border:0;background:transparent;cursor:pointer}
+.top-handle[hidden]{display:none}
+.top-handle::after{content:"";position:absolute;left:50%;top:3px;width:54px;height:4px;margin-left:-27px;border-radius:4px;background:var(--fg3);opacity:.4;transition:opacity .2s,width .2s,margin .2s}
+.top-handle:hover::after{opacity:.95;width:84px;margin-left:-42px}
+.sweat-tab{position:absolute;top:100%;left:50%;transform:translateX(-50%);z-index:45;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.sweat-tab[hidden]{display:none}
+.sweat-tab>*{pointer-events:auto}
+.st-btn{display:flex;align-items:center;gap:9px;max-width:min(560px,92vw);padding:4px 16px 5px;border:1px solid var(--line2);border-top:0;border-radius:0 0 14px 14px;background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--fg2);font:800 11.5px/1.3 var(--stadium);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;opacity:.8;transition:opacity .2s,color .2s}
+.st-btn:hover,.st-btn:focus-visible,.st-btn[aria-expanded="true"]{opacity:1;color:var(--fg)}
+.st-btn b{color:var(--gold)}
+.st-btn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:none;letter-spacing:0;font-weight:700}
+.st-btn em{font-style:normal;color:var(--fg3)}
+.st-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--fg3)}
+.st-dot.live{background:var(--live);box-shadow:0 0 8px var(--live)}
+.st-drop{width:min(760px,94vw);margin-top:6px;padding:10px;border:1px solid var(--line2);border-radius:16px;background:var(--bg);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.st-drop .lhcar{width:100%;margin:0}
+.foot-set{display:inline-flex;align-items:center;gap:8px;align-self:center;padding:8px 14px;border:1px solid var(--line2);border-radius:12px;background:var(--panel);color:var(--fg2);font:800 12px/1 var(--stadium);letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
+.foot-set svg{width:16px;height:16px}
+.foot-set:hover,.foot-set[aria-current="page"]{color:var(--fg);border-color:var(--gold)}
+.dash{--dash-h:calc(100vh - var(--toph,80px) - 262px);display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr) minmax(300px,.9fr);gap:14px;align-items:stretch;height:var(--dash-h);min-height:440px;margin-bottom:16px}
+.dash.tucked{--dash-h:calc(100vh - var(--toph,80px) - 96px)}
+.dash.no-ct{grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr)}
+.dash>.panel{margin:0;min-width:0;min-height:0;overflow:auto;scrollbar-width:thin}
+.dash .ph{position:sticky;top:0;z-index:3;background:var(--panel)}
+.dashc{display:flex;flex-direction:column;gap:14px;min-width:0;min-height:0;overflow:auto;scrollbar-width:thin}
+.dashc>*{flex:none}.dashc .panel{margin:0}
+.dash .contracts{grid-template-columns:minmax(0,1fr);padding:0 12px 12px}
+.dash .ctP .more{margin:0 12px 12px}
+@media(max-width:1200px){.dash,.dash.no-ct,.dash.tucked{grid-template-columns:minmax(0,1fr);height:auto;min-height:0}.dash>.panel,.dashc{overflow:visible}.dash .ph{position:static}}
+.set-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:14px;align-items:start}
+.set-card{padding:0 0 4px;margin:0}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 16px;border-top:1px solid var(--line)}
+.set-row b{display:block;font-size:14px}
+.set-row small{display:block;margin-top:3px;color:var(--fg3);font-size:12px;line-height:1.45;max-width:46ch}
+.set-sw{flex:none;position:relative;width:48px;height:28px;padding:0;border-radius:999px;border:1px solid var(--line2);background:var(--panel2,var(--panel));cursor:pointer;transition:background .18s,border-color .18s}
+.set-sw i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--fg3);transition:transform .18s,background .18s}
+.set-sw[aria-checked="true"]{background:color-mix(in srgb,var(--gold) 26%,transparent);border-color:var(--gold)}
+.set-sw[aria-checked="true"] i{transform:translateX(20px);background:var(--gold)}
+.set-sw:focus-visible,.set-seg button:focus-visible,.set-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.set-seg{flex:none;display:flex;gap:3px;padding:3px;border:1px solid var(--line2);border-radius:10px}
+.set-seg button{padding:6px 12px;border:0;border-radius:7px;background:transparent;color:var(--fg2);font:800 12px/1 var(--stadium);letter-spacing:.04em;cursor:pointer}
+.set-seg button[aria-pressed="true"]{background:var(--gold);color:#07090b}
+.set-btn{flex:none;padding:9px 14px;border:1px solid var(--line2);border-radius:10px;background:var(--panel);color:var(--fg);font:800 12px/1 var(--stadium);letter-spacing:.05em;cursor:pointer}
+.set-btn:hover{border-color:var(--gold)}
+.set-vibes .vibe-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;width:100%}
+.set-alerts .aprefs{display:grid;gap:12px;width:100%}
+.set-alerts .aprefs label{display:flex;align-items:center;justify-content:flex-start;gap:12px;font-size:13px}
+.set-alerts .aprefs select{margin-left:auto}
+.set-vibes .vopt b{color:var(--fg)}
+@media(max-width:860px){.set-row{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.top,.set-sw,.set-sw i,body.nk-away .necklace{transition:none}}
 .rec.kpi svg{width:14px;height:14px;flex:none;align-self:center;color:var(--gold)}
 .rec b.livec{color:var(--live)}.rec b.gold{color:var(--gold)}.rec b.teal{color:var(--teal)}.rec b.win{color:var(--win)}.rec b.loss{color:var(--loss)}
 .lhcar{position:relative;width:min(760px,100%);margin:0 auto 16px}
@@ -1856,6 +1917,18 @@ footer.legal{align-items:flex-start;gap:16px 28px}
 footer.legal .dhealth{margin:0;flex:1 1 360px;max-width:780px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px 20px}
 footer.legal .dhealth .dh-h{grid-column:1/-1}
 .foot-fine{display:flex;flex-direction:column;gap:6px;max-width:430px}
+@media(min-width:861px){
+  .lhcar{width:min(700px,100%);margin:0 auto 10px}
+  .lhcar .lhero2{min-height:clamp(150px,10.5vw,176px)}
+  .lhcar .lhero2 h2{font-size:clamp(30px,2.6vw,44px)}
+  .lhcar .lh-cd{font-size:clamp(24px,2vw,34px)}
+  .lhcar .lh-txt{max-width:80%;margin:0 auto 0 0;align-self:center;padding:12px 20px 14px;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;text-align:left;gap:4px 12px}
+  .lhcar .lh-txt .lh-k{flex:1 1 100%;margin:0}
+  .lhcar .lh-txt .lh-chips,.lhcar .lh-txt .lh-cd{margin:0;flex:0 1 auto}
+  .lhcar .lh-txt .btn-sweat{margin:0;padding:8px 12px}
+  .lhcar .lh-txt h2{margin:0;line-height:1}
+  .lhc-ctl{margin-top:6px}
+}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="tiers.css">
@@ -1900,9 +1973,11 @@ footer.legal .dhealth .dh-h{grid-column:1/-1}
       </div>
       <div class="feed" id="feed" role="status"><span class="dot"></span><span id="feedTxt">Connecting…</span></div>
     </div>
-  </div>
   <div class="record-shell"><div class="record" id="record" aria-label="Record ticker. Scroll to explore." tabindex="0"></div><button class="record-pause" id="recordPause" type="button" aria-label="Pause record ticker" aria-pressed="false" hidden>Ⅱ</button></div>
+  </div>
+  <div class="sweat-tab" id="sweatTab" hidden></div>
 </header>
+<button class="top-handle" id="topHandle" type="button" aria-label="Show the banner" title="Show the banner" hidden></button>
 
 <div class="shell">
   <main id="main" tabindex="-1"><section class="seo-intro"><h2>Poizen Lounge</h2><p>PoiZen's live sports prediction-trading board. It tracks DraftKings Pick6 slips and DraftKings Predictions, Robinhood and Kalshi event contracts live, leg by leg, with the honest math on every slip.</p><ul><li>Live: every open slip and contract with its chance right now</li><li>Pick6, first touchdown and in-game scalps</li><li>Games with stadium, weather and TV, and the full NFL injury report</li><li>Lab, Ledger and a personal Coach for members</li></ul><p>Plans: Free, Pro and Elite. Loading the live board…</p></section></main>
@@ -1910,6 +1985,7 @@ footer.legal .dhealth .dh-h{grid-column:1/-1}
 <nav class="bottom" id="bottom" aria-label="Mobile navigation"></nav>
 <dialog class="mobile-more" id="mobileMore" aria-labelledby="mobileMoreTitle"><div class="mobile-more-head"><h2 id="mobileMoreTitle">Explore the Lounge</h2><button type="button" data-close-more aria-label="Close navigation">✕</button></div><div class="mobile-more-grid"></div><p class="mobile-more-note">Research a line, follow the public board, or track your own slips in My Lounge.</p></dialog>
 <script src="mobile.js"></script>
+<script src="settings.js"></script>
 <script src="tiers.js"></script>
 <script src="trade-cards.js"></script>
 <script src="member-save.js"></script>
@@ -3038,6 +3114,8 @@ const store = { get(k, d) { try { const v = localStorage.getItem(k); return v ==
 S.custom = store.get('pz_custom_checks', []);
 S.p6Filter = store.get('pz_p6_filter', 'active');
 if (!['active','live','settled','all'].includes(S.p6Filter)) S.p6Filter='active';
+S.set = window.PZSettings.normalize(store.get('pz_settings', {}));
+S.sweatOpen = false;
 
 /* ---------------- vibe ---------------- */
 const VIBES = { midnight: ['Midnight', 'linear-gradient(135deg,#11161A 45%,#D9B36A)'], vegas: ['Vegas', 'linear-gradient(135deg,#F2C14E,#E0284A)'], daylight: ['Daylight', 'linear-gradient(135deg,#F3F4F6 45%,#00A386)'] };
@@ -3103,6 +3181,7 @@ const P = (key) => (S.pOverride && S.pOverride[key]) || (S.slate.players || {})[
 const sportOf = (key) => P(key).sport || 'nfl';
 const confirmed = (t) => t.status !== 'unconfirmed';
 const SVG = {
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
   lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   live: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8M8.5 8.5a4.9 4.9 0 0 0 0 7M15.5 8.5a4.9 4.9 0 0 1 0 7"/></svg>',
@@ -3796,7 +3875,7 @@ function slateTitleText() {
   return new Date().toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) + (sp.length ? ' · ' + sp.join(' + ') : '') + ' · live board';
 }
 function footHTML() {
-  return `<footer class="legal"><div class="foot-brand"><img src="crest.png" alt="Maciel's Incorporated crest" width="48" height="48" loading="lazy"><div><b>Poizen Lounge</b><small>${esc(slateTitleText())}</small></div></div>${dataHealth()}<div class="foot-fine"><span><b>21+</b> · Analysis and entertainment, not betting advice.</span><span>${helpLine(true)}</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></div></footer>`;
+  return `<footer class="legal"><div class="foot-brand"><img src="crest.png" alt="Maciel's Incorporated crest" width="48" height="48" loading="lazy"><div><b>Poizen Lounge</b><small>${esc(slateTitleText())}</small></div></div><button class="foot-set" type="button" data-tab="settings"${S.tab === 'settings' ? ' aria-current="page"' : ''}>${SVG.gear}Settings</button>${dataHealth()}<div class="foot-fine"><span><b>21+</b> · Analysis and entertainment, not betting advice.</span><span>${helpLine(true)}</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></div></footer>`;
 }
 /* responsible play: Monday-to-Sunday week in local time */
 function weekStart() { const d = new Date(); const day = (d.getDay() + 6) % 7; d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - day); return d.getTime(); }
@@ -4560,7 +4639,7 @@ function renderNav() {
   window.PZMobile.renderNav(S.tab, TABS, SVG, { pick6: activeTickets().length });
 }
 function setTab(id) {
-  if (!TABS.some((t) => t[0] === id)) id = 'live';
+  if (id !== 'settings' && !TABS.some((t) => t[0] === id)) id = 'live';
   const from = S.tab;
   S.tabScroll = S.tabScroll || {};
   if (from !== id) S.tabScroll[from] = window.scrollY;
@@ -4572,7 +4651,7 @@ function setTab(id) {
   if (id === 'research') loadResearch();
   if (['ledger', 'pick6', 'ftd', 'scalp'].includes(id)) loadArchive();
 }
-const TABICON = { me: 'user', pickem: 'target', live: 'live', pick6: 'pick6', ftd: 'ftd', scalp: 'scalp', games: 'games', injuries: 'inj', research: 'research', ledger: 'ledger' };
+const TABICON = { me: 'user', pickem: 'target', live: 'live', pick6: 'pick6', ftd: 'ftd', scalp: 'scalp', games: 'games', injuries: 'inj', research: 'research', ledger: 'ledger', settings: 'gear' };
 const vh = (title, sub, chips = '', right = '', extra = '') => `<section class="banner"><div class="wm">${SVG[TABICON[S.tab]] || ''}</div><div class="b-top"><div class="b-l"><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ''}</div>${right ? `<div class="b-r">${right}</div>` : ''}</div>${chips ? `<div class="bchips">${chips}</div>` : ''}${extra}</section>${['live','pick6','pickem','games','research'].includes(S.tab)?leagueLegend():''}`;
 
 /* player card — the leg on a stadium backdrop: his game's home venue, his own team's colors */
@@ -4847,6 +4926,48 @@ function contractsHTML() {
   return `<h3 class="sec">Contracts · sell or hold</h3><div class="contracts">${open.map(contractCard).join('')}</div>${done.length?`<details class="more"><summary>${done.length} closed trades · history</summary><div class="contracts">${done.map(contractCard).join('')}</div></details>`:''}`;
 }
 
+function contractsPanel() {
+  const h = contractsHTML(); if (!h) return '';
+  return `<section class="panel ctP"><div class="ph">${SVG.cash}<h3>Contracts · sell or hold</h3></div>${h.replace(/^<h3 class="sec">[^<]*<\/h3>/, '')}</section>`;
+}
+
+/* ---------------- Settings ---------------- */
+function putSet(patch) { S.set = window.PZSettings.normalize({ ...S.set, ...patch }); store.set('pz_settings', S.set); applySettings(); render(); }
+function applySettings() {
+  document.body.classList.toggle('nk-away', !!S.set.necklaceHide);
+  if (window.PZMobile && window.PZMobile.setSpeed) window.PZMobile.setSpeed(window.PZSettings.SPEEDS[S.set.tickerSpeed]);
+  if (window.heroSchedule) window.heroSchedule();
+  if (window.bannerSync) window.bannerSync();
+}
+function setSwitch(key, title, desc) {
+  const on = !!S.set[key];
+  return `<div class="set-row"><div><b>${title}</b><small>${desc}</small></div><button class="set-sw" type="button" role="switch" aria-checked="${on}" aria-label="${esc(title)}" data-set="${key}"><i></i></button></div>`;
+}
+function setSeg(key, title, desc, opts) {
+  return `<div class="set-row"><div><b>${title}</b><small>${desc}</small></div><div class="set-seg" role="group" aria-label="${esc(title)}">${opts.map(([v, l]) => `<button type="button" data-set="${key}" data-val="${v}" aria-pressed="${String(S.set[key]) === String(v)}">${l}</button>`).join('')}</div></div>`;
+}
+function viewSettings() {
+  const vibe = document.documentElement.dataset.vibe || 'midnight';
+  const card = (icon, title, body) => `<section class="panel set-card"><div class="ph">${icon}<h3>${title}</h3></div>${body}</section>`;
+  return vh('<span>Settings</span>', 'Make the board yours. Everything here is saved on this device and applies right away.') + `<div class="set-wrap">`
+    + card(SVG.live, 'Live Sweat',
+      setSwitch('sweatTucked', 'Tuck behind the banner', 'Live Sweat becomes a slim tab hanging under the banner on every page. Tap it to drop the carousel down. The dashboard moves up to fill the space.')
+      + setSwitch('heroAuto', 'Rotate games automatically', 'Cycle through games that have your picks. Hovering or focusing the carousel pauses it.')
+      + setSeg('heroSecs', 'Time on each game', 'How long the carousel stays on one game.', [[4, '4s'], [7, '7s'], [10, '10s'], [15, '15s']]))
+    + card(SVG.target, 'Banner and navigation',
+      setSwitch('bannerHide', 'Hide the banner while scrolling down', 'Desktop and large tablets. The banner slides away as you scroll down and returns when you scroll up, or from a faint handle at the top centre. Live Sweat tucks away with it.')
+      + setSwitch('necklaceHide', 'Hide the necklace until I hover', 'The icon necklace fades out and comes back when your pointer moves near it or you tab to it. Desktop only.'))
+    + card(SVG.trend, 'Ticker',
+      setSeg('tickerSpeed', 'Ticker speed', 'How fast the record and board totals scroll.', [['slow', 'Slow'], ['normal', 'Normal'], ['fast', 'Fast']])
+      + setSwitch('tickerTotals', 'Show board totals', 'Slips alive, legs live, expected payout and the other board numbers alongside Today, Week, Month and All-time.'))
+    + card(SVG.research, 'Appearance',
+      `<div class="set-row set-vibes"><div class="vibe-list" role="group" aria-label="Vibe">${Object.keys(VIBES).map((v) => `<button class="vopt" type="button" data-vibe="${v}" aria-pressed="${v === vibe}"><span class="pv" style="--pv:${VIBES[v][1]}"></span><span><b>${VIBES[v][0]}</b></span></button>`).join('')}</div></div>`
+      + `<div class="set-row"><div><b>Team colors</b><small>Pick your team to dress the whole board in its colors. Playoffs mode lives there too.</small></div><button class="set-btn" type="button" data-open-vibe>Choose team</button></div>`)
+    + card(SVG.chips, 'Alerts', `<div class="set-row set-alerts">${alertPrefsHTML()}</div>`)
+    + card(SVG.lock, 'Reset', `<div class="set-row"><div><b>Restore defaults</b><small>Puts the settings on this page back to how the board shipped. Your slips and account are not touched.</small></div><button class="set-btn" type="button" data-set-reset>Restore defaults</button></div>`)
+    + `</div>`;
+}
+
 /* ---------------- Scalp ---------------- */
 function viewScalp() {
   const sc = S.slate.scalp;
@@ -5068,15 +5189,43 @@ function heroSet(i) {
   slides.forEach((el, k) => { el.classList.toggle('on', k === i); if (k === i) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true'); });
   document.querySelectorAll('.lhcar .lhc-dot').forEach((d, k) => { d.classList.toggle('on', k === i); d.setAttribute('aria-current', String(k === i)); });
   S.heroId = slides[i].dataset.ev;
+  const ev = S.events[S.heroId], slot = document.getElementById('ctxSlot');
+  if (ev && slot) { slot.innerHTML = contextPanel(ev); tickCountdowns(); }
+  fitDash();
+  const lbl = document.querySelector('#sweatTab .st-btn span'); if (lbl) lbl.innerHTML = sweatLabel(ev);
+}
+/* the dashboard fills what is left of the first screen under the carousel, so most of the board is visible without scrolling */
+function fitDash() {
+  const d = document.querySelector('.dash'); if (!d) return;
+  if (window.innerWidth <= 1200) { d.style.removeProperty('--dash-h'); return; }
+  const top = d.getBoundingClientRect().top + window.scrollY;
+  d.style.setProperty('--dash-h', Math.max(440, Math.round(window.innerHeight - top - 16)) + 'px');
+}
+window.addEventListener('resize', () => fitDash());
+function sweatLabel(ev) { return ev ? `${esc(ev.name)} · ${ev.state === 'in' ? esc(ev.detail) : esc(kickLabel(ev.date))}` : 'No games on the board'; }
+/* Live Sweat tucked behind the banner: a slim tab that drops the carousel down on demand */
+function updateSweatTab() {
+  const el = document.getElementById('sweatTab'); if (!el) return;
+  if (!S.set.sweatTucked) { el.hidden = true; el.innerHTML = ''; S.sweatOpen = false; return; }
+  const L = liveSets(), list = heroEvents(L.evs), cur = list.find((e) => e.id === S.heroId) || list[0] || null;
+  if (cur) S.heroId = cur.id;
+  const open = !!S.sweatOpen;
+  el.hidden = false;
+  el.innerHTML = `<button class="st-btn" type="button" data-sweattab aria-expanded="${open}" aria-controls="sweatDrop"><i class="st-dot${L.live.length ? ' live' : ''}"></i><b>Live Sweat</b><span>${sweatLabel(cur)}</span><em aria-hidden="true">${open ? '▴' : '▾'}</em></button>`
+    + (open ? `<div class="st-drop" id="sweatDrop">${liveCarousel(L.live, L.next, L.hero, L.evs).replace('<!--hero-end-->', '')}</div>` : '');
 }
 function heroStep(d) { const slides = [...document.querySelectorAll('.lhcar .lhc-slide')]; heroSet(slides.findIndex((el) => el.classList.contains('on')) + d); }
 {
-  const calm = window.matchMedia('(prefers-reduced-motion:reduce)'); let over = false;
+  const calm = window.matchMedia('(prefers-reduced-motion:reduce)'); let over = false, timer = 0;
   const inCar = (e) => !!(e.target && e.target.closest && e.target.closest('.lhcar'));
   document.addEventListener('pointerover', (e) => { over = inCar(e); });
   document.addEventListener('focusin', (e) => { over = inCar(e); });
   document.addEventListener('focusout', () => { over = false; });
-  setInterval(() => { if (document.hidden || calm.matches || over || S.heroPaused || S.tab !== 'live' || S.sweat) return; heroStep(1); }, 7000);
+  const shown = () => (S.set.sweatTucked ? !!S.sweatOpen : S.tab === 'live');
+  window.heroSchedule = function () {
+    clearTimeout(timer);
+    timer = setTimeout(() => { if (!(document.hidden || calm.matches || over || S.heroPaused || !S.set.heroAuto || S.sweat || !shown())) heroStep(1); window.heroSchedule(); }, S.set.heroSecs * 1000);
+  };
 }
 /* the model's numbers are final only once scores, injuries and every game log are in */
 function modelReady() {
@@ -5092,7 +5241,7 @@ function kpiData() {
 }
 /* board totals as ticker cells, same height as the record cells */
 function kpiCells() {
-  if (!S.G) return '';
+  if (!S.G || !S.set.tickerTotals) return '';
   const k = kpiData(), m = k.m, ready = modelReady();
   const cell = (lbl, val, cls = '', sub = '', icon = '', tip = '') => `<div class="rec kpi"${tip ? ` title="${esc(tip)}"` : ''}>${icon}<span class="lbl">${lbl}</span><b class="${cls}">${val}</b>${sub ? `<span class="dim">${sub}</span>` : ''}</div>`;
   return cell('Slips alive', `${k.alive}/${k.total}`)
@@ -5124,24 +5273,37 @@ function liveStrip() {
   const legs = S.G.pick6.filter(({ t }) => confirmed(t)).reduce((a, { r }) => a + r.legs.filter(({ g }) => g.state === 'live').length, 0);
   return `<div class="lstrip"><span class="chip live">LIVE</span><span>${L.map((e) => esc(e.name + ' · ' + e.detail)).join('&nbsp;&nbsp;')}</span><span class="dim">${legs} leg${legs === 1 ? '' : 's'} live</span><button class="go" type="button" data-tab="live">Open the live sweat</button></div>`;
 }
-function viewLive() {
+function liveSets() {
   const evs = Object.values(S.events).filter(relevantEvent);
   const order = { in: 0, pre: 1, post: 2 };
   evs.sort((a, b) => order[a.state] - order[b.state] || a.date.localeCompare(b.date) || eventPicks(b).length - eventPicks(a).length);
   const live = evs.filter((e) => e.state === 'in'), next = evs.filter((e) => e.state === 'pre'), done = evs.filter((e) => e.state === 'post');
   const hero = live.length ? [...live].sort((a, b) => legsLiveIn(b) - legsLiveIn(a))[0] : next[0] || null;
-  const ctxEv = [...live, ...next].filter((e) => !hero || e.id !== hero.id).sort((a, b) => (b.state === 'in') - (a.state === 'in') || (eventPicks(b).length > 0) - (eventPicks(a).length > 0) || a.date.localeCompare(b.date) || eventPicks(b).length - eventPicks(a).length)[0] || null;
+  return { evs, live, next, done, hero };
+}
+/* Game context follows the game the Live Sweat carousel is showing */
+function ctxEvent(L) {
+  const list = heroEvents(L.evs);
+  const ev = list.find((e) => e.id === S.heroId) || list[0] || L.hero || null;
+  if (ev && list.length) S.heroId = ev.id;
+  return ev;
+}
+function viewLive() {
+  const L = liveSets(), { evs, live, next, done, hero } = L;
+  const ctxEv = ctxEvent(L);
   const so = { live: 0, open: 1, partial: 2, won: 2, review: 3, dead: 4, lost: 4 };
   const slips = S.G.pick6.filter(({ t,r }) => confirmed(t)&&r.payout===null&&!['won','lost','partial','dead'].includes(r.state)).sort((a, b) => byStart(a, b) || (so[a.r.state] ?? 5) - (so[b.r.state] ?? 5));
   const slipsPanel = `<section class="panel slipsP"><div class="ph">${SVG.pick6}<h3>Open slips</h3><button class="ph-go" type="button" data-tab="pick6">Pick6 tab</button></div>
     ${slips.length ? `<div class="sl-head" aria-hidden="true"><span>Slip</span><span>Health</span><span>Entry</span><span>Chance</span><span>To win</span></div><div class="slips">${tdWatch()}${waveRows(slips,slipTracker)}</div>` : `<div class="empty flat"><b>No slips on the board yet</b>They show up here the moment PoiZen publishes them.</div>`}</section>`;
   const tape = `<section class="panel tapeP"><div class="ph">${SVG.trend}<h3>Activity tape</h3>${alertPrefsHTML()}</div>${tapeHTML()}</section>`;
-  const upcoming = next.filter((e) => !ctxEv || e.id !== ctxEv.id);
-  return liveCarousel(live, next, hero, evs) + leagueLegend() +
-    `<div class="livegrid ${ctxEv ? '' : 'solo'}">${slipsPanel}${ctxEv ? contextPanel(ctxEv) : ''}</div>` + contractsHTML() + tape +
+  const upcoming = next;
+  const ct = contractsPanel();
+  const dashCls = `dash${ct ? '' : ' no-ct'}${S.set.sweatTucked ? ' tucked' : ''}`;
+  return (S.set.sweatTucked ? '<!--hero-end-->' : liveCarousel(live, next, hero, evs)) + leagueLegend() +
+    `<div class="${dashCls}">${slipsPanel}<div class="dashc"><div id="ctxSlot">${ctxEv ? contextPanel(ctxEv) : ''}</div>${tape}</div>${ct}</div>` +
     (live.length ? `<h3 class="sec">Games live now</h3><div class="grid2">${live.map((e) => gameCard(e)).join('')}</div>` : '') +
     (!live.length && (!next.length || done.length >= evs.length - next.length) && done.length ? debriefHTML() : '') +
-    (upcoming.length ? `<h3 class="sec">${SVG.clock}Coming up · not started<span class="sec-r">${upcoming.length} game${upcoming.length === 1 ? '' : 's'}${ctxEv && ctxEv.state === 'pre' ? ` · ${esc(ctxEv.name)} is in Game context` : ''}</span></h3><div class="grid2 upnext">${upcoming.map((e) => gameCard(e)).join('')}</div>` : '') +
+    (upcoming.length ? `<h3 class="sec">${SVG.clock}Coming up · not started<span class="sec-r">${upcoming.length} game${upcoming.length === 1 ? '' : 's'}</span></h3><div class="grid2 upnext">${upcoming.map((e) => gameCard(e)).join('')}</div>` : '') +
     (done.length ? `<h3 class="sec">Final</h3><div class="grid2">${done.map((e) => gameCard(e)).join('')}</div>` : '') +
     (!evs.length ? '<div class="empty"><b>Loading games</b>Connecting to the live feed.</div>' : '');
 }
@@ -5716,7 +5878,7 @@ function render() {
   /* the header shows today's date; the slate title is the weekly archive name and reads as stale the day after a refresh */
   $('#slateTitle').textContent = slateTitleText();
   const dk = S.slate.dkLink; const dkEl = $('#dkJoin'); if (dk) { dkEl.href = dk; dkEl.hidden = false; } else dkEl.hidden = true;
-  const views = { me: viewMe, pickem: viewPickem, live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger };
+  const views = { me: viewMe, pickem: viewPickem, live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger, settings: viewSettings };
   const openD = [...document.querySelectorAll('main details[open]:not([data-slip])')].map((d) => d.querySelector('summary') && d.querySelector('summary').textContent);
   const ae = document.activeElement; const focusId = ae && ae.id; let caret = null; try { caret = ae ? {start:ae.selectionStart,end:ae.selectionEnd} : null; } catch {}
   const keep = {}; ['ckName', 'ckLine', 'ckMarket', 'wiMult', 'pkName'].forEach((id) => { const el = document.getElementById(id); if (el) keep[id] = el.value; });
@@ -5731,7 +5893,7 @@ function render() {
   { const bEl = document.getElementById('pzbM'); if (bEl) { S.me.builder = S.me.builder || PZB.state(); PZB.mountInto(bEl, S.me.builder, memberBuilderCtx()); } }
   { const workspace = document.getElementById('eliteWorkspace'); if (workspace && S.me.user) window.PZElite.mount(workspace, eliteContext()); }
   if (focusId && document.getElementById(focusId)) { const el = document.getElementById(focusId); el.focus({preventScroll:true}); try { if (caret !== null) el.setSelectionRange(caret.start, caret.end); } catch {} }
-  tickCountdowns(); renderSweat();
+  updateSweatTab(); fitDash(); tickCountdowns(); renderSweat();
   if (S.tab === 'ftd') calcUpdate();
 }
 function calcUpdate() {
@@ -5744,6 +5906,11 @@ function calcUpdate() {
 /* ---------------- events ---------------- */
 document.addEventListener('click', (e) => {
   const jb = e.target.closest('[data-jump]'); if (jb) { const [tb, an] = jb.dataset.jump.split('|'); jump(tb, an); return; }
+  if (S.sweatOpen && !e.target.closest('#sweatTab')) { S.sweatOpen = false; updateSweatTab(); window.bannerSync(); }
+  const stb = e.target.closest('[data-sweattab]'); if (stb) { S.sweatOpen = !S.sweatOpen; updateSweatTab(); tickCountdowns(); window.bannerSync(); return; }
+  const sset = e.target.closest('[data-set]'); if (sset) { const k = sset.dataset.set; putSet({ [k]: sset.dataset.val !== undefined ? (k === 'heroSecs' ? Number(sset.dataset.val) : sset.dataset.val) : !S.set[k] }); return; }
+  const srs = e.target.closest('[data-set-reset]'); if (srs) { if (!S.resetArmed) { S.resetArmed = true; srs.textContent = 'Tap again to restore defaults'; setTimeout(() => { S.resetArmed = false; const b = document.querySelector('[data-set-reset]'); if (b) b.textContent = 'Restore defaults'; }, 4000); return; } S.resetArmed = false; S.set = window.PZSettings.normalize({}); store.set('pz_settings', S.set); applySettings(); render(); return; }
+  if (e.target.closest('[data-open-vibe]')) { const vb2 = $('#vibeBtn'); if (vb2) vb2.click(); return; }
   const t = e.target.closest('[data-tab]'); if (t) { setTab(t.dataset.tab); return; }
   const hb = e.target.closest('[data-hero]'); if (hb) { const v = hb.dataset.hero; if (v === 'prev') heroStep(-1); else if (v === 'next') heroStep(1); else if (v === 'toggle') { S.heroPaused = !S.heroPaused; hb.setAttribute('aria-pressed', String(S.heroPaused)); hb.setAttribute('aria-label', (S.heroPaused ? 'Resume' : 'Pause') + ' game rotation'); hb.textContent = S.heroPaused ? '▶' : 'Ⅱ'; } else heroSet(Number(v)); return; }
   const vb = e.target.closest('#vibeBtn'); if (vb) { const m = $('#vibeMenu'); m.hidden = !m.hidden; vb.setAttribute('aria-expanded', String(!m.hidden)); if (!m.hidden) window.PZMobile.themeOpened(); return; }
@@ -5798,9 +5965,29 @@ let ofT; document.addEventListener('input', (e) => { if (e.target.dataset && e.t
 let wiT; document.addEventListener('input', (e) => { if (e.target.id === 'wiMult') { clearTimeout(wiT); const v = e.target.value; wiT = setTimeout(() => { S.wiMult = v; render(); }, 450); } });
 let injT; document.addEventListener('input', (e) => { if (e.target.id === 'injQ') { clearTimeout(injT); const val = e.target.value; injT = setTimeout(() => { S.injQ = val; render(); }, 250); } });
 window.addEventListener('hashchange', () => setTab(location.hash.slice(1)));
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.sweat) { S.sweat = false; renderSweat(); return; } if (e.key === 'Escape') { const m = $('#vibeMenu'); if (m && !m.hidden) { m.hidden = true; $('#vibeBtn').setAttribute('aria-expanded', 'false'); $('#vibeBtn').focus(); } } });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.sweat) { S.sweat = false; renderSweat(); return; } if (e.key === 'Escape' && S.sweatOpen) { S.sweatOpen = false; updateSweatTab(); window.bannerSync(); return; } if (e.key === 'Escape') { const m = $('#vibeMenu'); if (m && !m.hidden) { m.hidden = true; $('#vibeBtn').setAttribute('aria-expanded', 'false'); $('#vibeBtn').focus(); } } });
 setInterval(() => { tickCountdowns(); feedStatus(); }, 1000);
-{ const topEl = document.querySelector('.top'); const setH = () => document.documentElement.style.setProperty('--toph', topEl.offsetHeight + 'px'); setH(); try { new ResizeObserver(setH).observe(topEl); } catch { window.addEventListener('resize', setH); } }
+{
+  const topEl = document.querySelector('.top'), handle = document.getElementById('topHandle');
+  const setH = () => { const r = document.documentElement.style; r.setProperty('--bannerh', topEl.offsetHeight + 'px'); r.setProperty('--toph', (topEl.classList.contains('away') ? 0 : topEl.offsetHeight) + 'px'); };
+  setH(); try { new ResizeObserver(setH).observe(topEl); } catch { window.addEventListener('resize', setH); }
+  const wide = window.matchMedia('(min-width:861px)');
+  let lastY = window.scrollY, away = false, peek = false, leaveT = 0;
+  window.bannerSync = function () {
+    const on = !!S.set.bannerHide && wide.matches; if (!on) away = false;
+    const menu = document.getElementById('vibeMenu'); const busy = (menu && !menu.hidden) || !!S.sweatOpen;
+    const hide = on && away && !peek && !busy;
+    topEl.classList.toggle('away', hide); handle.hidden = !(on && away && !peek); setH();
+  };
+  window.addEventListener('scroll', () => { const y = window.scrollY; if (S.set.bannerHide && wide.matches) away = window.PZSettings.bannerAway(away, lastY, y, topEl.offsetHeight); lastY = y; window.bannerSync(); }, { passive: true });
+  const show = () => { clearTimeout(leaveT); peek = true; window.bannerSync(); leaveT = setTimeout(() => { if (!topEl.matches(':hover') && !topEl.contains(document.activeElement)) { peek = false; window.bannerSync(); } }, 2500); };
+  const later = () => { clearTimeout(leaveT); leaveT = setTimeout(() => { if (!topEl.contains(document.activeElement)) { peek = false; window.bannerSync(); } }, 700); };
+  handle.addEventListener('pointerenter', show); handle.addEventListener('click', show);
+  topEl.addEventListener('pointerenter', () => clearTimeout(leaveT)); topEl.addEventListener('pointerleave', later);
+  topEl.addEventListener('focusin', show); topEl.addEventListener('focusout', later);
+  try { wide.addEventListener('change', window.bannerSync); } catch {}
+  applySettings();
+}
 document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - S.feed.last > 20000) poll(); });
 
 /* restore custom research players into the slate's player map */
