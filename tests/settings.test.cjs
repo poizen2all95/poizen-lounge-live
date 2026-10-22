@@ -8,6 +8,9 @@ test('defaults leave the new features off and the board as it was', () => {
   assert.equal(S.DEFAULTS.sweatTucked, false);
   assert.equal(S.DEFAULTS.bannerHide, false);
   assert.equal(S.DEFAULTS.necklaceHide, false);
+  assert.equal(S.DEFAULTS.glass, true);
+  assert.equal(S.normalize({ glass: false }).glass, false);
+  assert.equal(S.normalize({ glass: 'no' }).glass, true);
 });
 test('saved settings keep valid values and drop invalid ones', () => {
   const out = S.normalize({ necklaceHide: true, sweatTucked: true, bannerHide: 'yes', heroSecs: 10, tickerSpeed: 'warp', extra: 1 });

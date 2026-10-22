@@ -1821,21 +1821,18 @@ main{width:100%;max-width:1560px;margin-inline:auto}
 .nk .cnt{position:absolute;top:-3px;right:-5px;min-width:16px;padding:1px 5px;border-radius:999px;background:var(--gold);color:#07090b;font:900 10px/1.3 var(--stadium);text-align:center}
 [data-vibe="daylight"] .nk{color:color-mix(in srgb,var(--ic) 72%,#000)}[data-vibe="daylight"] .nk svg{filter:none}
 @media(min-width:861px){
-  .top-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;padding-top:6px;padding-bottom:8px}
+  .top-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;padding-top:6px;padding-bottom:8px}
   .brand-top{display:none}
-  .necklace{grid-column:1;grid-row:1;display:flex;align-items:flex-start;justify-content:center;gap:clamp(10px,1.3vw,24px);padding:4px 10px;margin:-4px -10px}
-  .top-in .record-shell{grid-column:2;grid-row:1;padding:0;mask-image:linear-gradient(90deg,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%)}
-  .top-in .record-shell .record{padding:0 22px}
+  .necklace{grid-column:2;grid-row:1;display:flex;align-items:flex-start;justify-content:center;gap:clamp(12px,1.9vw,34px);padding:4px 14px;margin:-4px -14px}
   .top-r{grid-column:3;grid-row:1;justify-self:end;margin-left:0}
   .top{transition:top .32s ease}
   .top.away{top:calc(-1 * var(--bannerh,66px) - 48px)}
   body.nk-away .necklace{opacity:0;transition:opacity .35s ease .6s}
   body.nk-away .necklace:hover,body.nk-away .necklace:focus-within{opacity:1;transition-delay:0s}
 }
-.top-in .record-shell{min-width:0}
-@media(min-width:861px) and (max-width:1100px){.top-in .record-shell{grid-column:1/-1;grid-row:2}}
+.top .record-shell{min-width:0}
 .st-btn b,.st-btn em{white-space:nowrap}
-@media(max-width:860px){.top-in{flex-wrap:wrap}.top-in .record-shell{order:9;flex:1 1 100%}.top-handle{display:none!important}}
+@media(max-width:860px){.top-handle{display:none!important}}
 .top-handle{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:41;width:240px;height:16px;padding:0;border:0;background:transparent;cursor:pointer}
 .top-handle[hidden]{display:none}
 .top-handle::after{content:"";position:absolute;left:50%;top:3px;width:54px;height:4px;margin-left:-27px;border-radius:4px;background:var(--fg3);opacity:.4;transition:opacity .2s,width .2s,margin .2s}
@@ -1929,7 +1926,40 @@ footer.legal .dhealth .dh-h{grid-column:1/-1}
   .lhcar .lh-txt h2{margin:0;line-height:1}
   .lhc-ctl{margin-top:6px}
 }
+/* ---------- glass cards: frosted, flat inside, glow behind ---------- */
+html[data-glass="on"]{--gl-bg:linear-gradient(150deg,color-mix(in srgb,var(--fg) 9%,transparent),color-mix(in srgb,var(--fg) 3%,transparent));--gl-line:color-mix(in srgb,var(--fg) 13%,transparent);--gl-hi:color-mix(in srgb,var(--fg) 18%,transparent);--gl-sep:color-mix(in srgb,var(--fg) 9%,transparent)}
+html[data-glass="on"] body{background-repeat:no-repeat;background-attachment:fixed;background-image:
+  radial-gradient(1000px 560px at 8% -4%,color-mix(in srgb,var(--gold) 28%,transparent),transparent 70%),
+  radial-gradient(900px 560px at 96% 10%,color-mix(in srgb,var(--teal) 24%,transparent),transparent 70%),
+  radial-gradient(1100px 680px at 50% 112%,color-mix(in srgb,var(--live) 16%,transparent),transparent 70%)}
+html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.st-drop,.set-card){background:var(--gl-bg);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--gl-line);border-radius:14px;box-shadow:inset 0 1px 0 var(--gl-hi),0 18px 48px -18px rgba(0,0,0,.45)}
+html[data-glass="on"] .gcard{overflow:hidden}
+html[data-glass="on"] :is(.ph,.dash .ph){background:color-mix(in srgb,var(--bg) 40%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--gl-sep)}
+/* flat rows instead of boxes inside boxes */
+html[data-glass="on"] .slipsP .slips{gap:0;padding:0}
+html[data-glass="on"] details.slip{background:transparent;border:0;border-bottom:1px solid var(--gl-sep);border-radius:0;box-shadow:none}
+html[data-glass="on"] details.slip:last-child{border-bottom:0}
+html[data-glass="on"] details.slip:is(.live,.won,.partial,.dead,.lost){border-width:0 0 1px 0;border-style:solid;box-shadow:inset 3px 0 0 var(--slip-edge,transparent)}
+html[data-glass="on"] details.slip.live{--slip-edge:var(--live)}
+html[data-glass="on"] details.slip:is(.won,.partial){--slip-edge:var(--win)}
+html[data-glass="on"] details.slip:is(.dead,.lost){--slip-edge:var(--loss)}
+html[data-glass="on"] details.slip:is(.live,.won,.partial,.dead,.lost){border-bottom-color:var(--gl-sep)}
+html[data-glass="on"] .ct .nums div{background:transparent;border-radius:0;padding:4px 10px;border-left:1px solid var(--gl-sep)}
+html[data-glass="on"] .ct .nums div:first-child{border-left:0;padding-left:0}
+html[data-glass="on"] .ctP .contracts{gap:0;padding:0}
+html[data-glass="on"] .ctP .ct{background:transparent;border:0;border-radius:0;box-shadow:none;border-bottom:1px solid var(--gl-sep);-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-glass="on"] .chip:where([class="chip"]){background:transparent;border-color:transparent;padding-inline:0}
+/* ticker: a clear band across the header with hairline dividers, no cells */
+html[data-glass="on"] .top .record-shell{background:color-mix(in srgb,var(--fg) 4%,transparent);border-top:1px solid var(--gl-sep)}
+html[data-glass="on"] .rec{background:transparent;border:0;border-left:1px solid var(--gl-sep);border-radius:0;box-shadow:none;padding-inline:16px}
+html[data-glass="on"] .record-group>.rec:first-child{border-left:0}
+html[data-glass="on"] .lhcar .lhero2,html[data-glass="on"] .lhero2{border-radius:14px}
+html[data-glass="on"] .st-btn{background:var(--gl-bg);border-color:var(--gl-line)}
+html[data-glass="on"] .st-drop{background:color-mix(in srgb,var(--bg) 62%,transparent);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5)}
+html[data-glass="on"] .set-row{border-top-color:var(--gl-sep)}
+@media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.st-drop,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
 </style>
+<script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
 <link rel="stylesheet" href="mobile.css">
 <link rel="stylesheet" href="tiers.css">
 </head>
@@ -1973,8 +2003,8 @@ footer.legal .dhealth .dh-h{grid-column:1/-1}
       </div>
       <div class="feed" id="feed" role="status"><span class="dot"></span><span id="feedTxt">Connecting…</span></div>
     </div>
-  <div class="record-shell"><div class="record" id="record" aria-label="Record ticker. Scroll to explore." tabindex="0"></div><button class="record-pause" id="recordPause" type="button" aria-label="Pause record ticker" aria-pressed="false" hidden>Ⅱ</button></div>
   </div>
+  <div class="record-shell"><div class="record" id="record" aria-label="Record ticker. Scroll to explore." tabindex="0"></div><button class="record-pause" id="recordPause" type="button" aria-label="Pause record ticker" aria-pressed="false" hidden>Ⅱ</button></div>
   <div class="sweat-tab" id="sweatTab" hidden></div>
 </header>
 <button class="top-handle" id="topHandle" type="button" aria-label="Show the banner" title="Show the banner" hidden></button>
@@ -4935,6 +4965,7 @@ function contractsPanel() {
 function putSet(patch) { S.set = window.PZSettings.normalize({ ...S.set, ...patch }); store.set('pz_settings', S.set); applySettings(); render(); }
 function applySettings() {
   document.body.classList.toggle('nk-away', !!S.set.necklaceHide);
+  document.documentElement.dataset.glass = S.set.glass ? 'on' : 'off';
   if (window.PZMobile && window.PZMobile.setSpeed) window.PZMobile.setSpeed(window.PZSettings.SPEEDS[S.set.tickerSpeed]);
   if (window.heroSchedule) window.heroSchedule();
   if (window.bannerSync) window.bannerSync();
@@ -4962,6 +4993,7 @@ function viewSettings() {
       + setSwitch('tickerTotals', 'Show board totals', 'Slips alive, legs live, expected payout and the other board numbers alongside Today, Week, Month and All-time.'))
     + card(SVG.research, 'Appearance',
       `<div class="set-row set-vibes"><div class="vibe-list" role="group" aria-label="Vibe">${Object.keys(VIBES).map((v) => `<button class="vopt" type="button" data-vibe="${v}" aria-pressed="${v === vibe}"><span class="pv" style="--pv:${VIBES[v][1]}"></span><span><b>${VIBES[v][0]}</b></span></button>`).join('')}</div></div>`
+      + setSwitch('glass', 'Glass cards', 'Clear, frosted cards that float over a soft glow. Flat rows instead of boxes inside boxes, so the numbers stand out. Turn off for the classic solid cards.')
       + `<div class="set-row"><div><b>Team colors</b><small>Pick your team to dress the whole board in its colors. Playoffs mode lives there too.</small></div><button class="set-btn" type="button" data-open-vibe>Choose team</button></div>`)
     + card(SVG.chips, 'Alerts', `<div class="set-row set-alerts">${alertPrefsHTML()}</div>`)
     + card(SVG.lock, 'Reset', `<div class="set-row"><div><b>Restore defaults</b><small>Puts the settings on this page back to how the board shipped. Your slips and account are not touched.</small></div><button class="set-btn" type="button" data-set-reset>Restore defaults</button></div>`)
