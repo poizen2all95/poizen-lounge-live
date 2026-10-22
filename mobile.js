@@ -44,14 +44,17 @@
     const first = record.firstElementChild;
     if (!first) return;
     const width = first.getBoundingClientRect().width;
-    const overflow = width > record.clientWidth;
-    const clone = record.children[1];
-    if (overflow && !reduced.matches && !clone) {
+    /* Always run as a loop (like a stock ticker): enough copies that the strip never runs dry, even on a wide screen. */
+    const loop = width > 0 && !reduced.matches;
+    const step = width + 8;
+    const copies = loop ? Math.max(1, Math.ceil(record.clientWidth / step)) : 0;
+    while (record.children.length - 1 < copies) {
       const copy = first.cloneNode(true);
       copy.setAttribute('aria-hidden', 'true'); copy.inert = true;
       record.appendChild(copy);
-    } else if ((!overflow || reduced.matches) && clone) clone.remove();
-    cycle = overflow && !reduced.matches ? width + 8 : 0;
+    }
+    while (record.children.length - 1 > copies) record.children[record.children.length - 1].remove();
+    cycle = loop ? step : 0;
     pause.hidden = !cycle;
     record.scrollLeft = cycle ? offset % cycle : offset;
     lastWrite = record.scrollLeft;
