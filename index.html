@@ -1970,6 +1970,51 @@ html[data-glass="on"] .foot-set:hover,html[data-glass="on"] .foot-set[aria-curre
   html[data-glass="on"] .dash>.panel::after{content:"";display:block;position:sticky;bottom:0;height:34px;margin-top:-34px;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 78%,transparent))}
   html[data-glass="on"] .dashc::after{content:"";flex:none;display:block;position:sticky;bottom:0;height:34px;margin-top:-34px;pointer-events:none;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 78%,transparent))}
 }
+/* sheets, not cards: the dashboard is one glass sheet in three columns; games are open rows on one sheet */
+html[data-glass="on"] .dash{gap:0;background:var(--gl-bg);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--gl-line);border-radius:16px;box-shadow:inset 0 1px 0 var(--gl-hi),0 24px 60px -20px rgba(0,0,0,.5);overflow:hidden}
+html[data-glass="on"] .dash>.panel,html[data-glass="on"] .dashc,html[data-glass="on"] .dashc .panel{background:transparent;border:0;border-radius:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-glass="on"] .dash>.panel+.panel,html[data-glass="on"] .dash>.dashc,html[data-glass="on"] .dash>.dashc+.panel{border-left:1px solid var(--gl-sep)}
+html[data-glass="on"] .dashc .panel+.panel,html[data-glass="on"] .dashc>div+.panel{border-top:1px solid var(--gl-sep)}
+html[data-glass="on"] .dash .ph{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:1px solid var(--gl-sep)}
+html[data-glass="on"] .dash .ph h3{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg2)}
+html[data-glass="on"] .dash>.panel::after,html[data-glass="on"] .dashc::after{background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 55%,transparent))}
+.gboard{display:flex;flex-direction:column;margin:6px 0 20px}
+.gb-sec{display:flex;align-items:baseline;gap:12px;padding:16px 4px 8px}
+.gb-sec h3{display:flex;align-items:center;gap:8px;margin:0;font:900 15px/1 var(--stadium);letter-spacing:.14em;text-transform:uppercase;color:var(--fg2)}
+.gb-sec h3 svg{width:16px;height:16px}
+.gb-sec span{font-size:11px;color:var(--fg3);font-weight:700}
+.gb-sec.live h3{color:var(--live)}
+.gb-sec.live h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live)}
+.gb-row{--bar:transparent;position:relative;display:grid;grid-template-columns:54px minmax(120px,1fr) minmax(90px,auto) minmax(120px,1fr) minmax(120px,170px) minmax(0,1.7fr) minmax(0,.9fr) 18px;align-items:center;gap:6px 16px;width:100%;padding:11px 14px 11px 18px;border:0;border-bottom:1px solid var(--gl-sep);border-radius:0;color:var(--fg);text-align:left;cursor:pointer;font:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--c1) 16%,transparent),transparent 28%,transparent 62%,color-mix(in srgb,var(--c2) 12%,transparent));box-shadow:inset 3px 0 0 var(--bar);transition:background-color .15s}
+html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border:1px solid var(--gl-line);border-radius:16px;box-shadow:inset 0 1px 0 var(--gl-hi),0 24px 60px -20px rgba(0,0,0,.45);padding:0 6px 6px;overflow:hidden}
+.gb-row:hover,.gb-row:focus-visible{background-color:color-mix(in srgb,var(--fg) 6%,transparent);outline:0}
+.gb-row:focus-visible{box-shadow:inset 0 0 0 2px var(--gold)}
+.gb-row.in{--bar:var(--live)}
+.gb-row:last-child{border-bottom:0}
+.gb-tm{display:flex;align-items:center;gap:10px;min-width:0}
+.gb-tm.home{flex-direction:row-reverse;justify-content:flex-start;text-align:right}
+.gb-tm img{width:34px;height:34px;object-fit:contain;flex:none}
+.gb-tm b{font:900 24px/1 var(--stadium);letter-spacing:.02em}
+.gb-tm em{font-style:normal;font-size:11px;color:var(--fg3);font-weight:700;white-space:nowrap}
+.gb-mid{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;text-align:center}
+.gb-mid b{font:900 28px/1 var(--stadium);color:var(--fg2)}
+.gb-mid b.lead{color:var(--fg)}
+.gb-mid i{font-style:normal;font-size:12px;color:var(--fg3)}
+.gb-mid.pre{font:800 13px/1.2 var(--stadium);letter-spacing:.04em;color:var(--fg2);white-space:nowrap}
+.gb-st{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.gb-st small{font-size:11px;color:var(--fg3);font-weight:700}
+.gb-pk{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:12px;color:var(--fg2)}
+.gb-pick{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gb-pick b{color:var(--fg)}
+.gb-pick i{font-style:normal;font-weight:900;color:var(--gold)}
+.gb-pick.hit i,.gb-pick.won i{color:var(--win)}.gb-pick.miss i,.gb-pick.lost i{color:var(--loss)}
+.gb-more,.gb-none{font-size:11px;color:var(--fg3)}
+.gb-info{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:11px;color:var(--fg3);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.gb-wx .wx{display:inline-flex;align-items:center;gap:5px;color:var(--fg2)}.gb-wx svg{width:14px;height:14px}.gb-wx b{font-weight:700}.gb-wx em{display:none}
+.gb-go{color:var(--fg3);font-size:16px}
+.gb-row:hover .gb-go{color:var(--gold)}
+@media(max-width:1280px){.gb-row{grid-template-columns:54px minmax(110px,1fr) minmax(80px,auto) minmax(110px,1fr) minmax(110px,150px) 18px;grid-template-areas:"lg away mid home st go" ". pk pk pk pk pk"}.gb-lg{grid-area:lg}.gb-tm.away{grid-area:away}.gb-mid{grid-area:mid}.gb-tm.home{grid-area:home}.gb-st{grid-area:st}.gb-pk{grid-area:pk;flex-direction:row;flex-wrap:wrap;gap:4px 14px}.gb-go{grid-area:go}.gb-info{display:none}}
+@media(max-width:700px){.gb-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"away mid home" "st pk pk";padding:12px 10px 12px 14px}.gb-lg,.gb-go,.gb-tm em{display:none}.gb-tm b{font-size:20px}.gb-tm img{width:28px;height:28px}.gb-st{align-items:flex-start}}
 @media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.st-drop,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
 </style>
 <script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
@@ -5333,6 +5378,37 @@ function ctxEvent(L) {
   if (ev && list.length) S.heroId = ev.id;
   return ev;
 }
+/* Games board: one open sheet of rows (not a pile of cards) — teams, score or kickoff, status, your picks */
+function gbPicks(ev) {
+  const legs = eventPicks(ev).flatMap((o) => o.legs);
+  if (!legs.length) return '<span class="gb-none">None of your picks in this game</span>';
+  return legs.slice(0, 3).map(({ leg, g: gr }) => { const p = P(leg.player), mk = mkOf(leg.market); return `<span class="gb-pick ${gr.state}"><b>${esc(p.name)}</b> ${leg.dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(leg.line)} ${esc(mk.short || '')}${gr.state === 'scheduled' ? '' : ` <i>${E.fmt(gr.value)}</i>`}</span>`; }).join('') + (legs.length > 3 ? `<span class="gb-more">+${legs.length - 3} more</span>` : '');
+}
+function gbRow(ev) {
+  const away = ev.comps.find((t) => t.ha === 'away') || ev.comps[0], home = ev.comps.find((t) => t.ha === 'home') || ev.comps[1];
+  const [c1] = teamColors(ev.sport, away.abbr), [c2] = teamColors(ev.sport, home.abbr);
+  const pre = ev.state === 'pre', post = ev.state === 'post';
+  const team = (t, cls) => `<span class="gb-tm ${cls}"><img src="${esc(t.logo || logo(ev.sport, t.abbr))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><b>${esc(t.abbr)}</b>${t.record ? `<em>${esc(t.record)}</em>` : ''}</span>`;
+  const sc = (t) => { const n = Number(t.score); return Number.isFinite(n) ? n : 0; };
+  const lead = (t, o) => (!pre && sc(t) > sc(o) ? ' lead' : '');
+  const mid = pre ? `<span class="gb-mid pre">${esc(kickLabel(ev.date))}</span>` : `<span class="gb-mid"><b class="${lead(away, home).trim()}">${sc(away)}</b><i>@</i><b class="${lead(home, away).trim()}">${sc(home)}</b></span>`;
+  const st = pre ? cdHTML(ev.date) : ev.state === 'in' ? `<span class="chip live">${esc(ev.detail)}</span>` : `<span class="chip fin">${esc(ev.detail)}</span>`;
+  const sit = ev.situation; let sub = '';
+  if (ev.state === 'in' && sit) sub = ev.sport === 'nfl' ? (sit.downDistanceText || sit.shortDownDistanceText || '') : ev.sport === 'mlb' ? `${sit.balls || 0}-${sit.strikes || 0}, ${sit.outs || 0} out` : '';
+  const wx = post ? '' : wxHTML(ev, false);
+  const info = [ev.venue ? esc(ev.venue) : '', ev.odds && ev.odds.details ? esc(ev.odds.details) : ''].filter(Boolean).join(' · ');
+  return `<button type="button" class="gb-row ${ev.state}" id="g-${esc(ev.id)}" data-open-game="${esc(ev.id)}" style="--c1:${c1};--c2:${c2}" aria-label="${esc(ev.name)} — open game">
+    <span class="gb-lg">${leagueBadge(ev.sport)}</span>${team(away, 'away')}${mid}${team(home, 'home')}
+    <span class="gb-st">${st}${sub ? `<small>${esc(sub)}</small>` : ''}</span>
+    <span class="gb-pk">${gbPicks(ev)}</span>
+    <span class="gb-info">${info}${wx ? `<span class="gb-wx">${wx}</span>` : ''}</span>
+    <span class="gb-go" aria-hidden="true">→</span></button>`;
+}
+function gameBoard(live, upcoming, done, debrief) {
+  const sec = (cls, label, list) => list.length ? `<div class="gb-sec ${cls}"><h3>${label}</h3><span>${list.length} game${list.length === 1 ? '' : 's'}</span></div>${list.map(gbRow).join('')}` : '';
+  if (!live.length && !upcoming.length && !done.length) return '';
+  return `<section class="gboard" aria-label="Games">${sec('live', 'Live now', live)}${debrief || ''}${sec('pre', `${SVG.clock}Coming up`, upcoming)}${sec('post', 'Final', done)}</section>`;
+}
 function viewLive() {
   const L = liveSets(), { evs, live, next, done, hero } = L;
   const ctxEv = ctxEvent(L);
@@ -5346,10 +5422,10 @@ function viewLive() {
   const dashCls = `dash${ct ? '' : ' no-ct'}${S.set.sweatTucked ? ' tucked' : ''}`;
   return (S.set.sweatTucked ? '<!--hero-end-->' : liveCarousel(live, next, hero, evs)) + leagueLegend() +
     `<div class="${dashCls}">${slipsPanel}<div class="dashc"><div id="ctxSlot">${ctxEv ? contextPanel(ctxEv) : ''}</div>${tape}</div>${ct}</div>` +
-    (live.length ? `<h3 class="sec">Games live now</h3><div class="grid2">${live.map((e) => gameCard(e)).join('')}</div>` : '') +
+    (S.set.glass ? gameBoard(live, upcoming, done, (!live.length && (!next.length || done.length >= evs.length - next.length) && done.length ? debriefHTML() : '')) : (    (live.length ? `<h3 class="sec">Games live now</h3><div class="grid2">${live.map((e) => gameCard(e)).join('')}</div>` : '') +
     (!live.length && (!next.length || done.length >= evs.length - next.length) && done.length ? debriefHTML() : '') +
     (upcoming.length ? `<h3 class="sec">${SVG.clock}Coming up · not started<span class="sec-r">${upcoming.length} game${upcoming.length === 1 ? '' : 's'}</span></h3><div class="grid2 upnext">${upcoming.map((e) => gameCard(e)).join('')}</div>` : '') +
-    (done.length ? `<h3 class="sec">Final</h3><div class="grid2">${done.map((e) => gameCard(e)).join('')}</div>` : '') +
+    (done.length ? `<h3 class="sec">Final</h3><div class="grid2">${done.map((e) => gameCard(e)).join('')}</div>` : ''))) +
     (!evs.length ? '<div class="empty"><b>Loading games</b>Connecting to the live feed.</div>' : '');
 }
 function gamePositionRows(id){return sweatRows('all').filter(({r})=>r.legs.some(x=>eventForLeg(x.leg)?.id===id));}
