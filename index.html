@@ -1340,6 +1340,28 @@ details.labslip>*:not(summary){margin:0 18px 14px}
 .checkbar .f2{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:8px}
 .checkbar .inp{width:100%}
 .checkbar .go{padding:12px;border-radius:12px;font-size:14px}
+.lf{padding:0}.lf .ph .dim{font-size:12px;font-weight:700;margin-left:auto}
+.lf-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;padding:14px 16px 16px}
+.lf-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start}
+.lf-form .f{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:800;color:var(--fg2);min-width:0}.lf-form .f.wide{grid-column:1/-1}.lf-form .inp{width:100%}
+.lf-seg{display:flex;gap:6px}.lf-seg .fbtn{flex:1}
+.lf-who{display:flex;align-items:center;gap:10px;grid-column:1/-1;font-size:13px}.lf-who img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--panel2)}.lf-who b{font-size:16px}
+.lf-note{font-size:12px;color:var(--fg2);margin:0;line-height:1.45}
+.lf-ladder{display:flex;flex-direction:column;gap:5px}
+.lf-row{display:grid;grid-template-columns:minmax(0,1.3fr) 52px 48px minmax(0,1fr) 34px;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);font-size:13px}
+.lf-row.board{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}.lf-row.safe{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.lf-row .l{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lf-row .l small{display:block;font-size:10px;font-weight:800;color:var(--fg2);text-transform:uppercase;letter-spacing:.04em}
+.lf-row .p{font:900 18px/1 var(--stadium);text-align:right}.lf-row .t{font-weight:800;color:var(--fg2);text-align:right}
+.lf-row .heat{height:5px;border-radius:999px;background:var(--panel3);overflow:hidden}.lf-row .heat i{display:block;height:100%}
+.lf-row .fbtn{padding:4px 0;min-width:0;font-size:14px}
+.lf-cards{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;grid-column:1/-1}
+.lf-card{border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:10px}.lf-card .k{font-size:11px;font-weight:800;color:var(--fg2);text-transform:uppercase;letter-spacing:.04em}.lf-card .v{font:900 22px/1.15 var(--stadium);margin:3px 0}.lf-card p{margin:0;font-size:12px;color:var(--fg2)}
+.lf-slip{grid-column:1/-1;border-top:1px solid var(--line);padding-top:12px}
+.lf-slip ul{list-style:none;margin:8px 0;padding:0;display:flex;flex-direction:column;gap:5px}
+.lf-slip li{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel2)}.lf-slip li b{margin-left:auto}
+.lf-slip .xbtn{border:0;background:none;color:var(--fg2);cursor:pointer;font:800 16px var(--body);padding:0 4px}
+.lf-sum{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}.lf-sum .v{font:900 26px/1 var(--stadium)}
+@media (max-width:760px){.lf-body{grid-template-columns:minmax(0,1fr);padding:12px}.lf-form{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.lf-form .lf-stat{grid-column:1/-1}.lf-cards{grid-template-columns:minmax(0,1fr)}.lf-row{grid-template-columns:minmax(0,1.4fr) 46px 42px minmax(0,.7fr) 32px;gap:6px;padding:6px}}
 .wi{padding:0;margin-top:0}
 .wi .lab-k,.wi .facts{margin:12px 16px!important}
 .wi-empty{margin:0;padding:16px;font-size:13px}
@@ -5050,11 +5072,12 @@ function whatIfPanel(items) {
 const wiKey = (x) => x.player + '|' + x.market + '|' + Number(x.line) + '|' + (x.dir || 'over');
 function viewResearch() {
   const items = researchItems().filter((x) => sportOf(x.player) === 'nfl');
-  if (!can('research')) return vh('The <span>Lab</span>', 'A preview of how the Lounge connects a line, its supporting data and its offered payout.') + proLock('Full player research, line checks and what-if tools') + (items.length ? '<h3 class="sec">Featured research preview</h3>' + researchCard(items[0]) : '') ;
+  const lf = `<section class="panel lf" id="lineFinder">${lfHTML()}</section>`;
+  if (!can('research')) return vh('The <span>Lab</span>', 'A preview of how the Lounge connects a line, its supporting data and its offered payout.') + lf + proLock('Full player research, line checks and what-if tools') + (items.length ? '<h3 class="sec">Featured research preview</h3>' + researchCard(items[0]) : '') ;
   const opts = Object.entries(E.MARKETS).filter(([, m]) => m.sport === 'nfl').map(([k, m]) => `<option value="${k}">${esc(m.label)}</option>`).join('');
   const bar = `<form class="checkbar" id="checkForm" autocomplete="off"><label class="f"><span>Player</span><input class="inp" id="ckName" placeholder="Any NFL player — e.g. Jahmyr Gibbs" aria-label="Player"></label><div class="f2"><label class="f"><span>Stat</span><select class="inp" id="ckMarket" aria-label="Stat">${opts}</select></label><label class="f"><span>Line</span><input class="inp" id="ckLine" type="number" step="0.5" placeholder="0.0" aria-label="Line"></label></div><button class="fbtn go" type="submit" aria-pressed="true" id="ckGo">Run check</button><div id="ckMsg" class="dim" style="font-size:12px;font-weight:700"></div></form>`;
   const slips = S.G.pick6.filter(({ t }) => confirmed(t) && t.legs.every((l) => sportOf(l.player) === 'nfl'));
-  return vh('The <span>Lab</span>', 'Every leg gets a hit chance built from his 2026 game log, the Vegas total for his team, weather, and who is hurt on both sides. Every slip gets graded against what DraftKings pays. These are estimates, not locks.') +
+  return vh('The <span>Lab</span>', 'Every leg gets a hit chance built from his 2026 game log, the Vegas total for his team, weather, and who is hurt on both sides. Every slip gets graded against what DraftKings pays. These are estimates, not locks.') + lf +
     `<div class="labwrap"><div class="labmain"><h3 class="sec">Slip grades</h3>${slips.length ? `<div class="labgrid">${slips.map((x, i) => labSlipCard(x, i)).join('')}</div>` : '<div class="empty"><b>No NFL slips to grade yet</b>Slips show up here once PoiZen publishes them.</div>'}</div>
       <aside class="labtools"><h3 class="sec">Tools</h3><section class="panel"><div class="ph">${SVG.target}<h3>Check a line</h3></div>${bar}</section>${whatIfPanel(items)}</aside></div>` +
     `<h3 class="sec">Player research</h3>` +
@@ -5081,6 +5104,151 @@ async function runCheck(e) {
     await loadResearch(); render();
   } catch (er) { msg.textContent = 'Lookup failed: ' + er.message; }
 }
+
+/* ---------------- line finder (NBA) ----------------
+   Last-season hit rates by line for any player on today's NBA slate. Pro gets every player and the slip
+   calculator; Free gets one featured player. All math is M.lf*; this block only fetches and draws. */
+const LF_SEASON = 2026, LF_OLDER = 2025;
+S.lf = { games: null, gamesErr: '', gameId: '', rosters: {}, playerId: '', stat: 'pts', dir: 'over', board: '', mult: '', logs: {}, slip: store.get('pz_lf_slip', []) };
+const lfFull = () => can('markets');
+function lfGames() {
+  const L = S.lf;
+  if (L.games || L.gamesLoading) return;
+  L.gamesLoading = true;
+  getJSON(E.ESPN.scoreboard('nba')).then((j) => {
+    L.games = (j.events || []).map((ev) => { const c = (ev.competitions || [])[0] || {}; const teams = [...(c.competitors || [])].sort((a, b) => (a.homeAway === 'away' ? 0 : 1) - (b.homeAway === 'away' ? 0 : 1)).map((t) => ({ id: String(t.team.id), abbr: t.team.abbreviation, name: t.team.displayName })); return { id: String(ev.id), date: ev.date, name: teams.map((t) => t.abbr).join(' @ '), teams }; });
+  }).catch((e) => { L.gamesErr = e.message; L.games = []; }).finally(() => { L.gamesLoading = false; lfPaint(); });
+}
+function lfRoster(team) {
+  const L = S.lf;
+  if (L.rosters[team.id]) return;
+  L.rosters[team.id] = { loading: true };
+  getJSON(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/${encodeURIComponent(team.id)}/roster`).then((j) => {
+    const out = []; for (const g of j.athletes || []) for (const a of g.items || [g]) if (a.id) out.push({ id: String(a.id), name: a.displayName || a.fullName, team: team.abbr, headshot: a.headshot && a.headshot.href });
+    L.rosters[team.id] = { players: out.sort((a, b) => a.name.localeCompare(b.name)) };
+  }).catch((e) => { L.rosters[team.id] = { err: e.message }; }).finally(lfPaint);
+}
+function lfLog(id) {
+  const L = S.lf;
+  if (L.logs[id]) return;
+  L.logs[id] = { loading: true };
+  const load = (season) => getJSON(E.ESPN.nbaGamelog(id, season)).then(E.nbaGamelogRows);
+  load(LF_SEASON).then(async (latest) => {
+    let older = [];
+    if (latest.filter((r) => r.min >= 15).length < 20) older = await load(LF_OLDER).catch(() => []);
+    const s = M.lfSample(latest, older);
+    L.logs[id] = { rows: s.rows, fallback: s.fallback, season: s.fallback ? '2024-25' : '2025-26' };
+  }).catch((e) => { L.logs[id] = { err: e.message }; }).finally(lfPaint);
+}
+/* players on today's games (loaded rosters) plus any NBA player already on the board */
+function lfPlayers() {
+  const L = S.lf; const today = new Set((L.games || []).flatMap((g) => g.teams.map((t) => t.abbr)));
+  const out = new Map();
+  Object.values(S.slate.players || {}).filter((p) => p.sport === 'nba' && p.espnId && today.has(p.team)).forEach((p) => out.set(String(p.espnId), { id: String(p.espnId), name: p.name, team: p.team, headshot: p.headshot }));
+  Object.values(L.rosters).forEach((r) => (r.players || []).forEach((p) => { if (!out.has(p.id)) out.set(p.id, p); }));
+  return [...out.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+/* Free: one featured player — the first board player playing today, else the first player of the first game */
+function lfFeatured() {
+  const L = S.lf; const all = lfPlayers();
+  const board = Object.values(S.slate.players || {}).find((p) => p.sport === 'nba' && p.espnId && all.some((x) => x.id === String(p.espnId)));
+  if (board) return all.find((x) => x.id === String(board.espnId));
+  const g = (L.games || [])[0]; if (g) { lfRoster(g.teams[0]); const r = L.rosters[g.teams[0].id]; return r && r.players && r.players[0]; }
+  return null;
+}
+const lfPct = (x) => Math.round(x * 100) + '%';
+const lfCol = (p) => (p >= 0.7 ? 'var(--win)' : p >= 0.5 ? 'var(--live)' : 'var(--loss)');
+const lfLabel = (dir, line, stat) => `${dir === 'under' ? 'LESS' : 'MORE'} ${E.fmt(line)} ${M.LF_STATS[stat].short}`;
+function lfHTML() {
+  const L = S.lf, full = lfFull();
+  lfGames();
+  const head = `<div class="ph">${SVG.target}<h3>Line Finder · NBA</h3><span class="dim">Last-season history, not a prediction</span></div>`;
+  if (!L.games) return head + '<div class="lf-body"><p class="lf-note">Loading today’s NBA games…</p></div>';
+  if (!L.games.length) return head + `<div class="lf-body"><p class="lf-note">${L.gamesErr ? 'Could not load today’s NBA games: ' + esc(L.gamesErr) : 'No NBA games on today’s slate.'}</p></div>`;
+  let player;
+  if (full) {
+    const g = L.games.find((x) => x.id === L.gameId); if (g) g.teams.forEach(lfRoster);
+    player = lfPlayers().find((p) => p.id === L.playerId);
+  } else player = lfFeatured();
+  const stats = Object.entries(M.LF_STATS).map(([k, s]) => `<option value="${k}" ${k === L.stat ? 'selected' : ''}>${esc(s.label)}</option>`).join('');
+  const pick = full ? (() => {
+    const g = L.games.find((x) => x.id === L.gameId);
+    const games = `<option value="">Pick a game</option>` + L.games.map((x) => `<option value="${esc(x.id)}" ${x.id === L.gameId ? 'selected' : ''}>${esc(x.name)} · ${esc(new Date(x.date).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }))}</option>`).join('');
+    const pool = g ? lfPlayers().filter((p) => g.teams.some((t) => t.abbr === p.team)) : lfPlayers();
+    const loading = g && g.teams.some((t) => (L.rosters[t.id] || {}).loading);
+    const players = `<option value="">${loading ? 'Loading rosters…' : pool.length ? 'Pick a player' : g ? 'No roster yet' : 'Pick a game first'}</option>` + pool.map((p) => `<option value="${esc(p.id)}" ${p.id === L.playerId ? 'selected' : ''}>${esc(p.name)} · ${esc(p.team)}</option>`).join('');
+    return `<label class="f wide"><span>Game</span><select class="inp" id="lfGame">${games}</select></label><label class="f wide"><span>Player</span><select class="inp" id="lfPlayer">${players}</select></label>`;
+  })() : '';
+  const who = player ? `<div class="lf-who">${player.headshot ? `<img src="${esc(player.headshot)}" alt="" loading="lazy" onerror="this.remove()">` : ''}<div><b>${esc(player.name)}</b><div class="dim">${esc(player.team)}${full ? '' : ' · featured player'}</div></div></div>` : '';
+  const form = `<div class="lf-form">${pick}${who}<label class="f lf-stat"><span>Stat</span><select class="inp" id="lfStat">${stats}</select></label><label class="f"><span>Board line</span><input class="inp" id="lfBoard" type="number" step="0.5" min="0" inputmode="decimal" placeholder="e.g. 24.5" value="${esc(L.board)}"></label><label class="f"><span>⚡ Boost</span><input class="inp" id="lfMult" type="number" step="0.05" min="0" inputmode="decimal" placeholder="e.g. 1.25" value="${esc(L.mult)}"></label><div class="f wide"><span>Side</span><div class="lf-seg"><button class="fbtn" type="button" data-lfdir="over" aria-pressed="${L.dir !== 'under'}">MORE</button><button class="fbtn" type="button" data-lfdir="under" aria-pressed="${L.dir === 'under'}">LESS</button></div></div>${player ? lfCards(player) : ''}</div>`;
+  const right = player ? lfLadderHTML(player) : `<p class="lf-note">${full ? 'Pick a game and a player to see how often he cleared each line last season.' : 'Loading the featured player…'}</p>`;
+  const lock = full ? lfSlipHTML() : `<div class="lf-slip">${proLock('Line Finder for every player on the slate, plus the slip calculator')}</div>`;
+  return head + `<div class="lf-body">${form}<div>${right}</div>${lock}</div>`;
+}
+function lfData(player) { const d = S.lf.logs[player.id]; if (!d) lfLog(player.id); return d || { loading: true }; }
+function lfCards(player) {
+  const L = S.lf, d = lfData(player), board = Number(L.board);
+  if (!d.rows || !d.rows.length || !L.board || !(board > 0)) return `<p class="lf-note" style="grid-column:1/-1">Enter the board line to see the safest one-tap line and boost value.</p>`;
+  const safe = M.lfSafest(L.stat, board, L.dir), sr = M.lfRate(d.rows, L.stat, safe, L.dir), br = M.lfRate(d.rows, L.stat, board, L.dir);
+  const b = M.lfBoost(br.rate, L.mult);
+  const safeCard = `<div class="lf-card"><div class="k">Safest playable line</div><div class="v" style="color:${lfCol(sr.rate)}">${lfLabel(L.dir, safe, L.stat)}</div><p>${lfPct(sr.rate)} last season (${sr.hits}/${sr.n}) · ${sr.l10}/${sr.l10n} last 10.${L.dir === 'under' ? ' LESS can’t be moved on Pick6, so it stays at the board line.' : ` One tap of − from ${E.fmt(board)}.`}</p></div>`;
+  const boostCard = `<div class="lf-card"><div class="k">Boost value at ${E.fmt(board)}</div>${Number(L.mult) > 0 ? `<div class="v" style="color:${b.worth ? 'var(--win)' : 'var(--loss)'}">${b.value.toFixed(2)}</div><p>${lfPct(br.rate)} × ${E.fmt(Number(L.mult))}x. ${b.worth ? 'Above 0.55 — worth a look.' : 'Not above 0.55 — a plain 1.0x leg is about 0.50.'}</p>` : `<div class="v">–</div><p>Enter the ⚡ multiplier. Hit rate × boost above 0.55 beats a plain 1.0x leg (~0.50).</p>`}</div>`;
+  return `<div class="lf-cards">${safeCard}${boostCard}</div>`;
+}
+function lfLadderHTML(player) {
+  const L = S.lf, d = lfData(player), full = lfFull();
+  if (d.err) return `<p class="lf-note">Could not load his game log: ${esc(d.err)}</p>`;
+  if (!d.rows) return `<p class="lf-note">Loading ${esc(player.name)}’s 2025-26 game log…</p>`;
+  if (!d.rows.length) return `<p class="lf-note">No regular-season games with 15+ minutes in 2025-26 or 2024-25.</p>`;
+  const board = Number(L.board) > 0 ? Number(L.board) : NaN;
+  const safe = isFinite(board) ? M.lfSafest(L.stat, board, L.dir) : NaN;
+  const lines = M.lfLines(L.stat, d.rows, board);
+  if (isFinite(safe) && !lines.includes(safe)) lines.push(safe);
+  if (isFinite(board) && !lines.includes(board)) lines.push(board);
+  const rows = M.lfLadder(d.rows, L.stat, lines.sort((a, b) => a - b), L.dir).map((r) => {
+    const tag = r.line === board && r.line === safe ? 'Board · safest' : r.line === board ? 'Board' : r.line === safe ? 'Safest one-tap' : '';
+    const add = full ? `<button class="fbtn" type="button" data-lfadd="${r.line}" title="Add to slip" aria-label="Add ${esc(lfLabel(L.dir, r.line, L.stat))} to slip">+</button>` : '<span></span>';
+    return `<div class="lf-row ${r.line === board ? 'board' : r.line === safe ? 'safe' : ''}"><div class="l">${lfLabel(L.dir, r.line, L.stat)}${tag ? `<small>${tag}</small>` : ''}</div><div class="p" style="color:${lfCol(r.rate)}">${lfPct(r.rate)}</div><div class="t" title="Last 10 games">${r.l10}/${r.l10n}</div><div class="heat"><i style="width:${r.rate * 100}%;background:${lfCol(r.rate)}"></i></div>${add}</div>`;
+  }).join('');
+  return `<p class="lf-note" style="margin-bottom:8px">${esc(d.season)} regular season, ${d.rows.length} games with 15+ minutes${d.fallback ? ' (2025-26 had under 20, so this is 2024-25)' : ''}. % = how often he cleared it; then his last 10.</p><div class="lf-ladder">${rows}</div>`;
+}
+function lfSlipHTML() {
+  const slip = S.lf.slip; const v = M.lfSlip(slip);
+  const legs = slip.map((l, i) => `<li><span>${esc(l.name)} · ${esc(l.team)}</span><span class="dim">${lfLabel(l.dir, l.line, l.stat)}</span><b style="color:${lfCol(l.rate)}">${lfPct(l.rate)}</b><button class="xbtn" type="button" data-lfdel="${i}" aria-label="Remove">×</button></li>`).join('');
+  return `<div class="lf-slip"><div class="lf-sum"><b class="st-font" style="font-size:18px">Slip calculator</b><span class="dim">${v.n}/8 legs</span>${v.n ? `<span class="v" style="color:${lfCol(v.p)}">${lfPct(v.p)}</span><span class="dim">all hit, if every leg repeats last season</span><button class="linkbtn" type="button" data-lfclear>Clear</button>` : ''}</div>
+    ${v.n ? `<ul>${legs}</ul>` : '<p class="lf-note">Tap + on any ladder line to add it. Up to 8 legs.</p>'}
+    ${v.sharedTeams.length ? `<p class="lf-note"><span class="chip loss">Same team: ${esc(v.sharedTeams.join(', '))}</span> Teammates share shots and minutes, so these legs aren’t independent.</p>` : ''}
+    ${v.n > 1 ? '<p class="lf-note">Multiplies last-season rates as if the legs were unrelated. Rough history, not a guarantee.</p>' : ''}</div>`;
+}
+/* redraw only the panel; keep focus and caret in whichever input the member is typing in */
+function lfPaint() {
+  const el = document.getElementById('lineFinder'); if (!el) return;
+  const ae = document.activeElement; const id = ae && el.contains(ae) ? ae.id : ''; let caret = null; try { caret = id ? [ae.selectionStart, ae.selectionEnd] : null; } catch {}
+  el.innerHTML = lfHTML();
+  const f = id && document.getElementById(id); if (f) { f.focus({ preventScroll: true }); try { if (caret) f.setSelectionRange(caret[0], caret[1]); } catch {} }
+}
+document.addEventListener('change', (e) => {
+  const L = S.lf, t = e.target;
+  if (t.id === 'lfGame') { L.gameId = t.value; L.playerId = ''; lfPaint(); }
+  else if (t.id === 'lfPlayer') { L.playerId = t.value; lfPaint(); }
+  else if (t.id === 'lfStat') { L.stat = t.value; L.board = ''; lfPaint(); }
+});
+let lfT; document.addEventListener('input', (e) => { if (e.target.id !== 'lfBoard' && e.target.id !== 'lfMult') return; S.lf[e.target.id === 'lfBoard' ? 'board' : 'mult'] = e.target.value; clearTimeout(lfT); lfT = setTimeout(lfPaint, 350); });
+document.addEventListener('click', (e) => {
+  const L = S.lf;
+  const dir = e.target.closest('[data-lfdir]'); if (dir) { L.dir = dir.dataset.lfdir; lfPaint(); return; }
+  const add = e.target.closest('[data-lfadd]');
+  if (add) {
+    if (!lfFull()) return;
+    const p = lfPlayers().find((x) => x.id === L.playerId); const d = p && L.logs[p.id]; if (!d || !d.rows) return;
+    if (L.slip.length >= 8) { toast({ title: 'A slip holds up to 8 legs', tone: '' }); return; }
+    const line = Number(add.dataset.lfadd); const r = M.lfRate(d.rows, L.stat, line, L.dir);
+    L.slip = [...L.slip.filter((x) => !(x.id === p.id && x.stat === L.stat)), { id: p.id, name: p.name, team: p.team, stat: L.stat, line, dir: L.dir, rate: r.rate }];
+    store.set('pz_lf_slip', L.slip); lfPaint(); return;
+  }
+  const del = e.target.closest('[data-lfdel]'); if (del) { L.slip.splice(Number(del.dataset.lfdel), 1); store.set('pz_lf_slip', L.slip); lfPaint(); return; }
+  if (e.target.closest('[data-lfclear]')) { L.slip = []; store.set('pz_lf_slip', L.slip); lfPaint(); }
+});
 
 /* ---------------- ledger ---------------- */
 /* results recorded live (Firebase / results.json) + imported history (history.json), de-duplicated */

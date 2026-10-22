@@ -319,6 +319,52 @@
     const fees = feeKnown ? (filled * Number(feeCents)) / 100 : null;
     return { filled, residual: left, avg: filled ? gross / filled : null, gross, fees, net: feeKnown ? gross - fees : null, feeKnown, levels, top: L.length ? L[0][0] : null, visible: L.reduce((a, [, q]) => a + q, 0) };
   }
+  /* ---------- Line Finder: last-season hit rates by line ----------
+     step = how far one − tap on DraftKings Pick6 moves a MORE line. LESS cannot be moved. */
+  const LF_STATS = {
+    pts: { label: 'Points', short: 'pts', step: 3, f: (r) => r.pts },
+    reb: { label: 'Rebounds', short: 'reb', step: 1, f: (r) => r.reb },
+    ast: { label: 'Assists', short: 'ast', step: 1, f: (r) => r.ast },
+    tpm: { label: '3-Pointers Made', short: '3PM', step: 1, f: (r) => r.tpm },
+    pra: { label: 'Pts + Rebs + Asts', short: 'PRA', step: 2, f: (r) => r.pts + r.reb + r.ast },
+  };
+  const LF_MIN_MINUTES = 15, LF_MIN_GAMES = 20, LF_BOOST_OK = 0.55;
+  /* games with 15+ minutes; the latest season unless it has under 20 such games and the older one has more */
+  function lfSample(latest, older) {
+    const keep = (rows) => (rows || []).filter((r) => r.min >= LF_MIN_MINUTES);
+    const a = keep(latest), b = keep(older);
+    return a.length >= LF_MIN_GAMES || b.length <= a.length ? { rows: a, fallback: false } : { rows: b, fallback: true };
+  }
+  const lfHit = (v, line, dir) => (dir === 'under' ? v < line : v > line);
+  /* rows oldest → newest */
+  function lfRate(rows, stat, line, dir) {
+    const vals = rows.map(LF_STATS[stat].f); const l10 = vals.slice(-10);
+    const hits = vals.filter((v) => lfHit(v, line, dir)).length;
+    return { line, hits, n: vals.length, rate: vals.length ? hits / vals.length : 0, l10: l10.filter((v) => lfHit(v, line, dir)).length, l10n: l10.length };
+  }
+  /* half-point lines around the board line (or his median when no line is entered), reaching one − tap below it */
+  function lfLines(stat, rows, center) {
+    const st = LF_STATS[stat]; const vals = rows.map(st.f).sort((x, y) => x - y);
+    const mid = isFinite(center) && center > 0 ? center : vals.length ? Math.floor(vals[Math.floor(vals.length / 2)]) + 0.5 : 0.5;
+    const below = Math.max(3, st.step + 1), above = st.step > 1 ? 4 : 3;
+    const out = [];
+    for (let l = mid - below; l <= mid + above + 1e-9; l += 1) if (l > 0) out.push(Math.round(l * 2) / 2);
+    return out;
+  }
+  function lfLadder(rows, stat, lines, dir) { return lines.map((l) => lfRate(rows, stat, l, dir)); }
+  /* the lowest line one − tap reaches: MORE drops a step (never below 0.5), LESS stays at the board line */
+  function lfSafest(stat, board, dir) {
+    if (dir === 'under') return board;
+    return Math.max(0.5, Math.round((board - LF_STATS[stat].step) * 2) / 2);
+  }
+  /* a plain 1.0x leg is a coin flip (~0.50); hit rate × boost above 0.55 is worth taking */
+  function lfBoost(rate, mult) { const m = Number(mult) || 0; const value = rate * m; return { value, worth: m > 0 && value > LF_BOOST_OK }; }
+  /* legs: [{ rate, team }] — up to 8; hit rates multiplied as if independent, with a warning for shared teams */
+  function lfSlip(legs) {
+    const L = (legs || []).slice(0, 8); const count = {};
+    L.forEach((l) => { if (l.team) count[l.team] = (count[l.team] || 0) + 1; });
+    return { p: L.length ? L.reduce((a, l) => a * l.rate, 1) : 0, n: L.length, sharedTeams: Object.keys(count).filter((t) => count[t] > 1) };
+  }
   /* ---------- plans: the one definition of every tier ----------
      status: live = works today · server = built, switches on when the Poizen server is deployed · building = next release */
   const PLAN_ORDER = ['free', 'pro', 'elite'];
@@ -329,7 +375,7 @@
     ownSlips: { tier: 'free', label: 'Build and track one active personal slip; keep your last 10 settled slips visible', status: 'live' },
     moreSlips: { tier: 'pro', label: 'Track multiple active slips with no Free-plan cap', status: 'live' },
     research: { tier: 'pro', label: 'Full Lab: player research, line checks, fair-payout comparison and what-if building', status: 'live' },
-    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns', status: 'live' },
+    markets: { tier: 'pro', label: 'Complete published Pick6, first-touchdown and scalp breakdowns, plus the NBA Line Finder for every player on the slate', status: 'live' },
     honest: { tier: 'pro', label: 'Expected payout and model reasoning for each slip, alongside the price you are offered', status: 'live' },
     limits: { tier: 'free', label: 'Weekly limit and cool-off', status: 'live' },
     exportData: { tier: 'free', label: 'Export or delete all your data', status: 'live' },
@@ -373,7 +419,7 @@
   }
   const gateVerdict = (checks) => (checks.some((c) => c.state === 'fail') ? 'fail' : checks.some((c) => c.state === 'warn') ? 'warn' : 'pass');
 
-  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, FOUNDING_CAP, multPrior, trustOf, honest, honestLive, breakEven };
+  const api = { normCdf, poissonCdf, kindOf, pOver, project, legChance, priorProjection, liveChance, hitDist, slipValue, correlation, lambdaFrom2Plus, scalpFairValue, coach, wilson, COACH_MIN, health, gate, gateVerdict, GATE_DEFAULTS, leaks, cashoutCall, mlProb, devig, winChance, tdsChance, contractCall, exitAtSize, PLAN_ORDER, PLAN_NAMES, FEATURES, canUse, planFeatures, tierRank, positionState, FOUNDING_CAP, multPrior, trustOf, honest, honestLive, breakEven, LF_STATS, lfSample, lfRate, lfLines, lfLadder, lfSafest, lfBoost, lfSlip };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZM = api;
 })(typeof window !== 'undefined' ? window : globalThis);

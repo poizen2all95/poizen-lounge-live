@@ -8,6 +8,7 @@
     scoreboard: (sport) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/scoreboard${sport === 'cfb' ? '?groups=80&limit=1000' : '?limit=100'}`,
     summary: (sport, id) => `https://site.api.espn.com/apis/site/v2/sports/${sportPath(sport)}/summary?event=${id}`,
     gamelog: (id) => `https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/${id}/gamelog`,
+    nbaGamelog: (id, season) => `https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${id}/gamelog?season=${season}`,
     injuries: () => 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries',
     search: (q) => `https://site.web.api.espn.com/apis/common/v3/search?query=${encodeURIComponent(q)}&type=player&limit=6`,
   };
@@ -381,6 +382,18 @@
     const seen = {};
     return rows.filter((r) => (seen[r.eventId] ? false : (seen[r.eventId] = true))).sort((a, b) => a.week - b.week);
   }
+  /* NBA game log → one row per regular-season game. The exact season-type match keeps out "Play In Regular Season". */
+  const NBA_REGULAR = /^[0-9]{4}-[0-9]{2} Regular Season$/;
+  function nbaGamelogRows(j) {
+    const names = (j && j.names) || []; const ev = (j && j.events) || {};
+    const st = ((j && j.seasonTypes) || []).find((s) => NBA_REGULAR.test(s.displayName || ''));
+    const at = (k) => names.indexOf(k);
+    const seen = {};
+    return ((st && st.categories) || []).filter((c) => c.type === 'event').flatMap((c) => c.events || []).filter((e) => e.eventId && !seen[e.eventId] && (seen[e.eventId] = true)).map((e) => {
+      const s = e.stats || []; const g = ev[e.eventId] || {};
+      return { eventId: e.eventId, date: g.gameDate || '', opp: g.opponent && g.opponent.abbreviation, season: st.displayName.slice(0, 7), min: num(s[at('minutes')]), pts: num(s[at('points')]), reb: num(s[at('totalRebounds')]), ast: num(s[at('assists')]), tpm: num(String(s[at('threePointFieldGoalsMade-threePointFieldGoalsAttempted')] || '').split('-')[0]) };
+    }).sort((a, b) => a.date.localeCompare(b.date));
+  }
   function rowStats(r) {
     const s = emptyStats();
     s.passYds = num(r.passingYards); s.passTD = num(r.passingTouchdowns); s.ints = num(r.interceptions);
@@ -404,7 +417,7 @@
     return { vals, n, avg, median, hits, l3avg, max: sorted[n - 1] || 0, min: sorted[0] || 0 };
   }
 
-  const api = { ESPN, norm, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, researchLine, rowStats, fmt };
+  const api = { ESPN, norm, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, nbaGamelogRows, researchLine, rowStats, fmt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZE = api;
 })(typeof window !== 'undefined' ? window : globalThis);
