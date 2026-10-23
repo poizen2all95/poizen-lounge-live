@@ -20,7 +20,8 @@
   html, body { width: 100%; height: 100%; overflow: hidden; background: #050505; color: var(--cream); }
   body.h { --W: 1920px; --H: 1080px; }
   body.v { --W: 1080px; --H: 1920px; }
-  #stage { position: absolute; inset: 0; overflow: hidden; }
+  /* drawn at the design size, then scaled to fill whatever size the source renders at (TikTok LIVE Studio link sources vary) */
+  #stage { position: absolute; left: 50%; top: 50%; width: var(--W); height: var(--H); overflow: hidden; transform: translate(-50%, -50%) scale(var(--fit, 1)); }
 
   /* painted landscape with a slow drift + breathing light */
   #art { position: absolute; inset: -3%; background: center / cover no-repeat; animation: drift 70s ease-in-out infinite alternate; filter: brightness(.95) saturate(1.05); }
@@ -123,6 +124,8 @@
   document.getElementById("art").style.backgroundImage = `url("${ROOT}/Brand/Wallpapers/${layout === "h" ? "refined-scene-RIGHT-1920x1080" : "refined-scene-LEFT-1440x2560"}.png")`;
   document.getElementById("avatar").src = `${ROOT}/Brand/avatar_pablo_full.png`;
   // where the sky / lake sit in each painting (fractions of the canvas)
+  const fit = () => document.body.style.setProperty("--fit", Math.max(innerWidth / W, innerHeight / H));
+  fit(); addEventListener("resize", fit);
   const ZONES = layout === "h" ? { skyBottom: .46, waterTop: .64, waterLeft: 0 } : { skyBottom: .26, waterTop: .36, waterLeft: .32 };
 
   const emblem = `<svg class="emblem" viewBox="-60 -60 120 120"><defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4d6"/><stop offset="1" stop-color="#b8894a"/></linearGradient></defs>
