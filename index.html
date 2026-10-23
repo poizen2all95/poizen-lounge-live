@@ -6067,7 +6067,12 @@ function renderTicker() {
   if (PK.ready) { const { rows } = pickemBoard(); if (rows[0] && rows[0].pts) parts.push(`<span><span style="color:#F472B6">Pick'em leader</span> ${esc(rows[0].name)} · ${rows[0].pts} correct · ${rows.length} playing</span>`); }
   const a = periods().all; if (a.n) parts.push(`<span>Record ${a.w}-${a.l} · ${money(a.pl, true)}</span>`);
   const one = parts.join('<span style="color:#F2C14E">◆</span>');
-  $('#ticker').innerHTML = one + '<span style="color:#F2C14E">◆</span>' + one;
+  const html = one + '<span style="color:#F2C14E">◆</span>' + one, el = $('#ticker');
+  if (renderTicker.last === html) return; // re-setting identical content restarts the scroll
+  renderTicker.last = el.innerHTML = html;
+  // steady reading speed (px/s, ?speed= to tune) instead of a fixed loop time, so a long ticker doesn't race
+  const pxs = Math.max(10, Number(params.get('speed')) || 45);
+  el.style.animationDuration = Math.max(30, el.scrollWidth / 2 / pxs) + 's';
 }
 
 /* ---------------- render ---------------- */
