@@ -181,6 +181,11 @@
     window.addEventListener("obsSourceVisibleChanged", event => {
       if (event.detail?.visible) resetClock();
     });
+    // TikTok LIVE Studio has no OBS events: restart whenever the page comes back on screen. Chromium stops drawing
+    // a hidden source, so a long gap between frames means it was off screen (scene switch or Show/hide source).
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") resetClock(); });
+    let lastFrame = performance.now();
+    (function watch(t) { if (t - lastFrame > 4000) resetClock(); lastFrame = t; requestAnimationFrame(watch); })(lastFrame);
     ticker(["Grab a drink, find a seat — we start shortly.", "Say hi in chat while we load in.", fortnite ? "Markets first, then we drop in." : "Tip-off soon — get your picks in."]);
   }
 
