@@ -27,6 +27,18 @@
       .trim();
   }
 
+  // Fill missing receipt identities only from a unique, verified same-league player.
+  function hydratePlayers(players, reference) {
+    for (const p of Object.values(players || {})) {
+      if (p.espnId) continue;
+      const candidates=Object.values(reference || {}).filter(r=>r.espnId&&(r.sport||'nfl')===(p.sport||'nfl')&&norm(r.name)===norm(p.name));
+      if(new Set(candidates.map(r=>String(r.espnId))).size!==1)continue;
+      const r=candidates[0];
+      for(const field of ['espnId','team','teamId','headshot','jersey','number','pos'])if(r[field]!==undefined)p[field]=r[field];
+    }
+    return players;
+  }
+
   // ---------- odds ----------
   function americanToDecimal(odds) {
     const n = Number(String(odds).replace('+', ''));
@@ -281,9 +293,10 @@
     }
     const legs = slip.legs.map((l, i) => {
       const recorded = slip.venueProgress && slip.venueProgress.source === 'venue' && Array.isArray(slip.venueProgress.legResults) && slip.venueProgress.legResults[i];
+      const game=gameFor(l),live=gradeLeg(l,game);
       return { leg: l, g: ['hit', 'miss', 'void'].includes(recorded)
-        ? { state: recorded, value: null, line: Number(l.line), progress: recorded === 'hit' ? 1 : 0, note: 'Confirmed venue progress; ticket not settled' }
-        : gradeLeg(l, gameFor(l)) };
+        ? { state: recorded, value: game&&l.eventId&&String(l.eventId)===String(game.id)&&findPlayer(game,l)?live.value:null, line: Number(l.line), progress: recorded === 'hit' ? 1 : 0, note: 'Confirmed venue progress; ticket not settled' }
+        : live };
     });
     const n = legs.length;
     const hits = legs.filter((x) => x.g.state === 'hit').length;
@@ -422,7 +435,7 @@
     return { vals, n, avg, median, hits, l3avg, max: sorted[n - 1] || 0, min: sorted[0] || 0 };
   }
 
-  const api = { ESPN, norm, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, nbaGamelogRows, researchLine, rowStats, fmt };
+  const api = { ESPN, norm, hydratePlayers, americanToDecimal, parseGame, parseBox, gameStatus, scoringPlays, tdScorerFromText, MARKETS, findPlayer, gradeLeg, gradePick6, gradeFirstTD, gradeScalp, diffAlerts, gamelogRows, nbaGamelogRows, researchLine, rowStats, fmt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.PZE = api;
 })(typeof window !== 'undefined' ? window : globalThis);

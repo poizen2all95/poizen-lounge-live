@@ -1,21 +1,83 @@
 {
   "entries": [
     {
-      "book": "DraftKings Predictions",
+      "book": "DraftKings Pick6",
       "date": "2026-10-17",
       "game": "Florida State @ Miami",
+      "hits": 5,
       "id": "dkp-1017-01",
+      "legs": 8,
       "market": "win",
       "note": "Paid $4.61; Florida State lost 35–43",
-      "payout": 4.61,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "under",
+          "line": 16.5,
+          "market": "pts",
+          "name": "Darius Acuff Jr.",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 32.5,
+          "market": "pts",
+          "name": "Stephen Curry",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 33.5,
+          "market": "pts",
+          "name": "Luka Doncic",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 32.5,
+          "market": "pts",
+          "name": "Darius Garland",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 19.5,
+          "market": "pts",
+          "name": "Domantas Sabonis",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 19.5,
+          "market": "pts",
+          "name": "Walker Kessler",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 21.5,
+          "market": "pts",
+          "name": "Zach LaVine",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 21.5,
+          "market": "pts",
+          "name": "Austin Reaves",
+          "result": "miss"
+        }
+      ],
       "positionId": "40280278",
       "prob": 0.09,
-      "result": "sold",
-      "src": "dk-browser-1018",
-      "stake": 2.49,
-      "title": "Florida State to win",
-      "type": "prediction",
-      "verifiedAt": "2026-10-18T17:05:44.703Z"
+      "result": "lost",
+      "slipId": "dk6-RNNmpbd",
+      "src": "dk-browser-1021-evening",
+      "stake": 2,
+      "title": "NBA 8-Pick · RNNmpbd",
+      "type": "pick6",
+      "venueId": "RNNmpbd",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
       "book": "DraftKings Predictions",
@@ -5738,1629 +5800,3416 @@
       "type": "prediction"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 1,
       "id": "dk6-ByyGMMz",
-      "venueId": "ByyGMMz",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
+          "name": "Brandon Hagel",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.4x",
+          "name": "Adam Fantilli",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
+          "name": "Jake Guentzel",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.2x",
+          "name": "Bo Horvat",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
       "slipId": "dk6-ByyGMMz",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
       "title": "NHL 4-Pick · ByyGMMz",
-      "stake": 3,
-      "payout": 0,
-      "result": "lost",
-      "hits": 1,
-      "legs": 4,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Brandon Hagel",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
-        },
-        {
-          "name": "Adam Fantilli",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.4x"
-        },
-        {
-          "name": "Jake Guentzel",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
-        },
-        {
-          "name": "Bo Horvat",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        }
-      ]
+      "type": "pick6",
+      "venueId": "ByyGMMz",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 2,
       "id": "dk6-gGGqW2d",
-      "venueId": "gGGqW2d",
-      "slipId": "dk6-gGGqW2d",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NHL 4-Pick · gGGqW2d",
-      "stake": 3,
-      "payout": 0,
-      "result": "lost",
-      "hits": 2,
       "legs": 4,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
-          "name": "Macklin Celebrini",
-          "market": "goals",
-          "line": 0.5,
           "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.2x",
+          "name": "Macklin Celebrini",
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.2x",
           "name": "Auston Matthews",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Jack Hughes",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.1x",
           "name": "Nathan MacKinnon",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
+          "result": "miss"
         }
-      ]
+      ],
+      "result": "lost",
+      "slipId": "dk6-gGGqW2d",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NHL 4-Pick · gGGqW2d",
+      "type": "pick6",
+      "venueId": "gGGqW2d",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 0,
       "id": "dk6-LWWGwKp",
-      "venueId": "LWWGwKp",
-      "slipId": "dk6-LWWGwKp",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NHL 4-Pick · LWWGwKp",
-      "stake": 3,
-      "payout": 0,
-      "result": "lost",
-      "hits": 0,
       "legs": 4,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "2.1x",
           "name": "Mikael Granlund",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "2.1x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "2x",
           "name": "Gavin McKenna",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "2x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "2x",
           "name": "Sean Monahan",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "2x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "2x",
           "name": "Alex Newhook",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "2x"
+          "result": "miss"
         }
-      ]
+      ],
+      "result": "lost",
+      "slipId": "dk6-LWWGwKp",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NHL 4-Pick · LWWGwKp",
+      "type": "pick6",
+      "venueId": "LWWGwKp",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 4,
       "id": "dk6-WNNqMM4",
-      "venueId": "WNNqMM4",
-      "slipId": "dk6-WNNqMM4",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NHL 4-Pick · WNNqMM4",
-      "stake": 3,
+      "legs": 4,
       "payout": 202.61,
-      "result": "won",
-      "hits": 4,
-      "legs": 4,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
       "picks": [
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.2x",
           "name": "Macklin Celebrini",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Nikita Kucherov",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Mark Stone",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "result": "hit"
         },
         {
-          "name": "Nick Suzuki",
-          "market": "goals",
-          "line": 0.5,
           "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
+          "name": "Nick Suzuki",
+          "result": "hit"
         }
-      ]
+      ],
+      "result": "won",
+      "slipId": "dk6-WNNqMM4",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NHL 4-Pick · WNNqMM4",
+      "type": "pick6",
+      "venueId": "WNNqMM4",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 2,
       "id": "dk6-Ymmqyw9",
-      "venueId": "Ymmqyw9",
-      "slipId": "dk6-Ymmqyw9",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NHL 4-Pick · Ymmqyw9",
-      "stake": 3,
-      "payout": 0,
-      "result": "lost",
-      "hits": 2,
       "legs": 4,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
-          "name": "Mark Stone",
-          "market": "goals",
-          "line": 0.5,
           "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
+          "name": "Mark Stone",
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Nick Suzuki",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.4x",
           "name": "Adam Fantilli",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.4x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Jack Hughes",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
+          "result": "miss"
         }
-      ]
+      ],
+      "result": "lost",
+      "slipId": "dk6-Ymmqyw9",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NHL 4-Pick · Ymmqyw9",
+      "type": "pick6",
+      "venueId": "Ymmqyw9",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 0,
       "id": "dk6-PxxnPwD",
-      "venueId": "PxxnPwD",
-      "slipId": "dk6-PxxnPwD",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NHL 6-Pick · PxxnPwD",
-      "stake": 3,
-      "payout": 0,
-      "result": "lost",
-      "hits": 0,
       "legs": 6,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.5x",
           "name": "Martin Necas",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.5x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.6x",
           "name": "Kyle Palmieri",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.6x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.8x",
           "name": "Matthew Schaefer",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.8x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.5x",
           "name": "Beckett Sennecke",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.5x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.6x",
           "name": "Will Smith",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.6x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.8x",
           "name": "Dylan Strome",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.8x"
+          "result": "miss"
         }
-      ]
-    },
-    {
-      "id": "dk6-yjjYVzV",
-      "venueId": "yjjYVzV",
-      "slipId": "dk6-yjjYVzV",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NHL 6-Pick · yjjYVzV",
+      ],
+      "result": "lost",
+      "slipId": "dk6-PxxnPwD",
+      "src": "dk-browser-1021-evening",
       "stake": 3,
-      "payout": 0,
-      "result": "lost",
+      "title": "NHL 6-Pick · PxxnPwD",
+      "type": "pick6",
+      "venueId": "PxxnPwD",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
       "hits": 4,
+      "id": "dk6-yjjYVzV",
       "legs": 6,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.2x",
           "name": "Macklin Celebrini",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.2x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Brandon Hagel",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Nikita Kucherov",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Mark Stone",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.3x"
+          "result": "hit"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.3x",
           "name": "Jake Guentzel",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 0.5,
+          "market": "goals",
+          "mult": "1.2x",
           "name": "Bo Horvat",
-          "market": "goals",
-          "line": 0.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
+          "result": "miss"
         }
-      ]
+      ],
+      "result": "lost",
+      "slipId": "dk6-yjjYVzV",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NHL 6-Pick · yjjYVzV",
+      "type": "pick6",
+      "venueId": "yjjYVzV",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
     },
     {
-      "id": "dk6-KrrGn7d",
-      "venueId": "KrrGn7d",
-      "slipId": "dk6-KrrGn7d",
-      "date": "2026-10-20",
       "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · KrrGn7d",
-      "stake": 10,
-      "payout": 0,
-      "result": "lost",
+      "date": "2026-10-20",
       "hits": 0,
+      "id": "dk6-KrrGn7d",
       "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
-          "name": "Jaylen Brown",
-          "market": "pts",
-          "line": 20.5,
           "dir": "over",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Jaylen Brown",
           "result": "miss"
         },
         {
-          "name": "Jalen Brunson",
-          "market": "pts",
-          "line": 29.5,
           "dir": "over",
-          "result": "miss",
-          "mult": "1.3x"
+          "line": 29.5,
+          "market": "pts",
+          "mult": "1.3x",
+          "name": "Jalen Brunson",
+          "result": "miss"
         },
         {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
+          "dir": "over",
           "line": 34.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.5x"
+          "market": "pts",
+          "mult": "1.5x",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "miss"
         },
         {
-          "name": "Chet Holmgren",
-          "market": "reb",
+          "dir": "over",
           "line": 8.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Tyrese Maxey",
-          "market": "threes",
-          "line": 2.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Payton Pritchard",
-          "market": "pra",
-          "line": 29.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.8x"
-        },
-        {
-          "name": "Jayson Tatum",
-          "market": "pts",
-          "line": 29.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pra",
-          "line": 2026,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-xqqLw5Z",
-      "venueId": "xqqLw5Z",
-      "slipId": "dk6-xqqLw5Z",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · xqqLw5Z",
-      "stake": 10,
-      "payout": 0,
-      "result": "lost",
-      "hits": 1,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
-          "line": 30.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Jaylen Brown",
-          "market": "pts",
-          "line": 20.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Jalen Brunson",
-          "market": "pts",
-          "line": 25.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
+          "market": "reb",
+          "mult": "1.1x",
           "name": "Chet Holmgren",
-          "market": "reb",
-          "line": 8.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
+          "result": "miss"
         },
         {
-          "name": "Tyrese Maxey",
+          "dir": "over",
+          "line": 2.5,
           "market": "threes",
-          "line": 2.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
+          "mult": "1.1x",
+          "name": "Tyrese Maxey",
+          "result": "miss"
         },
         {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pra",
+          "mult": "1.8x",
           "name": "Payton Pritchard",
-          "market": "pra",
-          "line": 24.5,
-          "dir": "over",
           "result": "miss"
         },
         {
-          "name": "Jayson Tatum",
-          "market": "pts",
-          "line": 26.5,
           "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pra",
-          "line": 41.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "nba-8",
-      "venueId": "YmmwYrq",
-      "slipId": "nba-8",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick Points",
-      "stake": 5,
-      "payout": 0,
-      "result": "lost",
-      "hits": 3,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
           "line": 29.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Ausar Thompson",
           "market": "pts",
-          "line": 9.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Karl-Anthony Towns",
-          "market": "pts",
-          "line": 17.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Mikal Bridges",
-          "market": "pts",
-          "line": 13.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Jaylen Brown",
-          "market": "pts",
-          "line": 20.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Cade Cunningham",
-          "market": "pts",
-          "line": 24.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "LeBron James",
-          "market": "pts",
-          "line": 16.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
+          "mult": "1.2x",
           "name": "Jayson Tatum",
-          "market": "pts",
-          "line": 26.5,
-          "dir": "over",
           "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-7wwG8RP",
-      "venueId": "7wwG8RP",
-      "slipId": "dk6-7wwG8RP",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · 7wwG8RP",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 4,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
+        },
         {
-          "name": "Alex Caruso",
-          "market": "reb",
-          "line": 2.5,
           "dir": "over",
-          "result": "hit",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Julian Champagnie",
-          "market": "reb",
-          "line": 4.5,
-          "dir": "under",
-          "result": "hit",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "reb",
-          "line": 4.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Dylan Harper",
-          "market": "pra",
-          "line": 29.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "1.4x"
-        },
-        {
-          "name": "Jared McCain",
-          "market": "reb",
-          "line": 2.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Ajay Mitchell",
-          "market": "reb",
-          "line": 2.5,
-          "dir": "under",
-          "result": "miss",
-          "mult": "1.1x"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pra",
           "line": 44.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.2x"
-        },
-        {
-          "name": "Jalen Williams",
           "market": "pra",
-          "line": 34.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "1.7x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-jWWZ8LD",
-      "venueId": "jWWZ8LD",
-      "slipId": "dk6-jWWZ8LD",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · jWWZ8LD",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 3,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Stephon Castle",
-          "market": "pts",
-          "line": 16.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
-          "line": 29.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Dylan Harper",
-          "market": "pts",
-          "line": 15.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Julian Champagnie",
-          "market": "pts",
-          "line": 9.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "De'Aaron Fox",
-          "market": "pts",
-          "line": 14.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Ajay Mitchell",
-          "market": "pts",
-          "line": 11.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
+          "mult": "1.2x",
           "name": "Victor Wembanyama",
-          "market": "pts",
-          "line": 25.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Jalen Williams",
-          "market": "pts",
-          "line": 18.5,
-          "dir": "over",
           "result": "miss"
         }
-      ]
-    },
-    {
-      "id": "dk6-LWWYDZz",
-      "venueId": "LWWYDZz",
-      "slipId": "dk6-LWWYDZz",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · LWWYDZz",
-      "stake": 2,
-      "payout": 0,
+      ],
       "result": "lost",
-      "hits": 5,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Stephon Castle",
-          "market": "pts",
-          "line": 16.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "De'Aaron Fox",
-          "market": "pts",
-          "line": 11.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.7x"
-        },
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
-          "line": 24.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Dylan Harper",
-          "market": "pts",
-          "line": 14.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.8x"
-        },
-        {
-          "name": "Chet Holmgren",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Ajay Mitchell",
-          "market": "pts",
-          "line": 11.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pts",
-          "line": 24.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Jalen Williams",
-          "market": "pts",
-          "line": 17.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.8x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-pYYwqYn",
-      "venueId": "pYYwqYn",
-      "slipId": "dk6-pYYwqYn",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · pYYwqYn",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 5,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Stephon Castle",
-          "market": "pra",
-          "line": 29.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "De'Aaron Fox",
-          "market": "pra",
-          "line": 23.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pra",
-          "line": 40.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Dylan Harper",
-          "market": "pra",
-          "line": 24.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Chet Holmgren",
-          "market": "pra",
-          "line": 22.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Isaiah Hartenstein",
-          "market": "pra",
-          "line": 19.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pra",
-          "line": 40.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Jalen Williams",
-          "market": "pra",
-          "line": 29.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-qYYg2Kp",
-      "venueId": "qYYg2Kp",
-      "slipId": "dk6-qYYg2Kp",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · qYYg2Kp",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 4,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "OG Anunoby",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Jalen Brunson",
-          "market": "pts",
-          "line": 28.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Andre Drummond",
-          "market": "pts",
-          "line": 13.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Joel Embiid",
-          "market": "pts",
-          "line": 20.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "Jaylen Brown",
-          "market": "pts",
-          "line": 18.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "LeBron James",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Tyrese Maxey",
-          "market": "pts",
-          "line": 27.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Karl-Anthony Towns",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "under",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-r88BdBx",
-      "venueId": "r88BdBx",
-      "slipId": "dk6-r88BdBx",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · r88BdBx",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 4,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Jaylen Brown",
-          "market": "pts",
-          "line": 18.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "LeBron James",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Tyrese Maxey",
-          "market": "pts",
-          "line": 27.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Karl-Anthony Towns",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "OG Anunoby",
-          "market": "pts",
-          "line": 12.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Jalen Brunson",
-          "market": "pts",
-          "line": 28.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Andre Drummond",
-          "market": "pts",
-          "line": 13.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Joel Embiid",
-          "market": "pts",
-          "line": 20.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-VNNbVMx",
-      "venueId": "VNNbVMx",
-      "slipId": "dk6-VNNbVMx",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · VNNbVMx",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 2,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
-          "line": 29.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Karl-Anthony Towns",
-          "market": "pts",
-          "line": 18.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "OG Anunoby",
-          "market": "pts",
-          "line": 16.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Jaylen Brown",
-          "market": "pts",
-          "line": 19.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Cade Cunningham",
-          "market": "pts",
-          "line": 24.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Joel Embiid",
-          "market": "pts",
-          "line": 21.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Jayson Tatum",
-          "market": "pts",
-          "line": 27.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pts",
-          "line": 25.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-WNNDVw8",
-      "venueId": "WNNDVw8",
-      "slipId": "dk6-WNNDVw8",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · WNNDVw8",
-      "stake": 2,
-      "payout": 0.28,
-      "result": "partial",
-      "hits": 6,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Stephon Castle",
-          "market": "pra",
-          "line": 19.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "De'Aaron Fox",
-          "market": "pra",
-          "line": 19.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.7x"
-        },
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pra",
-          "line": 34.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Dylan Harper",
-          "market": "pra",
-          "line": 19.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Chet Holmgren",
-          "market": "pra",
-          "line": 14.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Jalen Williams",
-          "market": "pra",
-          "line": 19.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Isaiah Hartenstein",
-          "market": "pra",
-          "line": 14.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.6x"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pra",
-          "line": 29.5,
-          "dir": "over",
-          "result": "miss",
-          "mult": "0.6x"
-        }
-      ]
-    },
-    {
-      "id": "dk6-zDD5bx4",
-      "venueId": "zDD5bx4",
-      "slipId": "dk6-zDD5bx4",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · zDD5bx4",
-      "stake": 2,
-      "payout": 0,
-      "result": "lost",
-      "hits": 4,
-      "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
-      "picks": [
-        {
-          "name": "Alex Caruso",
-          "market": "pra",
-          "line": 11.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Dylan Harper",
-          "market": "pra",
-          "line": 24.5,
-          "dir": "over",
-          "result": "hit",
-          "mult": "0.9x"
-        },
-        {
-          "name": "Jared McCain",
-          "market": "pra",
-          "line": 13.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pra",
-          "line": 40.5,
-          "dir": "under",
-          "result": "hit"
-        },
-        {
-          "name": "De'Aaron Fox",
-          "market": "pra",
-          "line": 23.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Shai Gilgeous-Alexander",
-          "market": "pra",
-          "line": 40.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Chet Holmgren",
-          "market": "pra",
-          "line": 22.5,
-          "dir": "under",
-          "result": "miss"
-        },
-        {
-          "name": "Devin Vassell",
-          "market": "pra",
-          "line": 18.5,
-          "dir": "over",
-          "result": "miss"
-        }
-      ]
-    },
-    {
-      "id": "dk6-RNNLp2m",
-      "venueId": "RNNLp2m",
-      "slipId": "dk6-RNNLp2m",
-      "date": "2026-10-20",
-      "book": "DraftKings Pick6",
-      "type": "pick6",
-      "title": "NBA 8-Pick · RNNLp2m",
+      "slipId": "dk6-KrrGn7d",
+      "src": "dk-browser-1021-evening",
       "stake": 10,
-      "payout": 0,
-      "result": "lost",
-      "hits": 4,
+      "title": "NBA 8-Pick · KrrGn7d",
+      "type": "pick6",
+      "venueId": "KrrGn7d",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 1,
+      "id": "dk6-xqqLw5Z",
       "legs": 8,
-      "src": "dk-browser-1021",
-      "verifiedAt": "2026-10-21T11:13:22.428Z",
+      "payout": 0,
       "picks": [
         {
-          "name": "Jalen Duren",
-          "market": "pts",
-          "line": 17.5,
           "dir": "over",
-          "result": "hit"
-        },
-        {
+          "line": 30.5,
+          "market": "pts",
           "name": "Shai Gilgeous-Alexander",
-          "market": "pts",
-          "line": 0.5,
-          "dir": "over",
           "result": "hit"
         },
         {
-          "name": "Tyrese Maxey",
-          "market": "pts",
+          "dir": "over",
           "line": 20.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Ausar Thompson",
           "market": "pts",
-          "line": 10.5,
-          "dir": "over",
-          "result": "hit"
-        },
-        {
-          "name": "Joel Embiid",
-          "market": "pts",
-          "line": 22.5,
-          "dir": "over",
+          "name": "Jaylen Brown",
           "result": "miss"
         },
         {
-          "name": "De'Aaron Fox",
-          "market": "pts",
-          "line": 14.5,
           "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "LeBron James",
-          "market": "pts",
-          "line": 15.5,
-          "dir": "over",
-          "result": "miss"
-        },
-        {
-          "name": "Victor Wembanyama",
-          "market": "pts",
           "line": 25.5,
+          "market": "pts",
+          "name": "Jalen Brunson",
+          "result": "miss"
+        },
+        {
           "dir": "over",
+          "line": 8.5,
+          "market": "reb",
+          "mult": "1.1x",
+          "name": "Chet Holmgren",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "threes",
+          "mult": "1.1x",
+          "name": "Tyrese Maxey",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pra",
+          "name": "Payton Pritchard",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 26.5,
+          "market": "pts",
+          "name": "Jayson Tatum",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 41.5,
+          "market": "pra",
+          "name": "Victor Wembanyama",
           "result": "miss"
         }
-      ]
+      ],
+      "result": "lost",
+      "slipId": "dk6-xqqLw5Z",
+      "src": "dk-browser-1021",
+      "stake": 10,
+      "title": "NBA 8-Pick · xqqLw5Z",
+      "type": "pick6",
+      "venueId": "xqqLw5Z",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
-      "id": "dkp-42096202",
-      "positionId": "42096202",
+      "book": "DraftKings Pick6",
       "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 28+ Jayson Tatum Points · 26+ Cade Cunningham Points · 16+ Derrick White Points · 12+ Duncan Robinson Points · 18+ Jalen Duren Points",
+      "hits": 3,
+      "id": "nba-8",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pts",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Ausar Thompson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 17.5,
+          "market": "pts",
+          "name": "Karl-Anthony Towns",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 13.5,
+          "market": "pts",
+          "name": "Mikal Bridges",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Jaylen Brown",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Cade Cunningham",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "LeBron James",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 26.5,
+          "market": "pts",
+          "name": "Jayson Tatum",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "nba-8",
+      "src": "dk-browser-1021",
       "stake": 5,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "NBA 8-Pick Points",
+      "type": "pick6",
+      "venueId": "YmmwYrq",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 4,
+      "id": "dk6-7wwG8RP",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "reb",
+          "mult": "1.1x",
+          "name": "Alex Caruso",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 4.5,
+          "market": "reb",
+          "mult": "1.1x",
+          "name": "Julian Champagnie",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "reb",
+          "mult": "1.1x",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pra",
+          "mult": "1.4x",
+          "name": "Dylan Harper",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "reb",
+          "mult": "1.1x",
+          "name": "Jared McCain",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 2.5,
+          "market": "reb",
+          "mult": "1.1x",
+          "name": "Ajay Mitchell",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 44.5,
+          "market": "pra",
+          "mult": "1.2x",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "1.7x",
+          "name": "Jalen Williams",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-7wwG8RP",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · 7wwG8RP",
+      "type": "pick6",
+      "venueId": "7wwG8RP",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 3,
+      "id": "dk6-jWWZ8LD",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "Stephon Castle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pts",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 15.5,
+          "market": "pts",
+          "name": "Dylan Harper",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "pts",
+          "name": "Julian Champagnie",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pts",
+          "name": "De'Aaron Fox",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 11.5,
+          "market": "pts",
+          "name": "Ajay Mitchell",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 18.5,
+          "market": "pts",
+          "name": "Jalen Williams",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-jWWZ8LD",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · jWWZ8LD",
+      "type": "pick6",
+      "venueId": "jWWZ8LD",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 5,
+      "id": "dk6-LWWYDZz",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "Stephon Castle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 11.5,
+          "market": "pts",
+          "mult": "0.7x",
+          "name": "De'Aaron Fox",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "mult": "0.6x",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Dylan Harper",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 12.5,
+          "market": "pts",
+          "name": "Chet Holmgren",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 11.5,
+          "market": "pts",
+          "name": "Ajay Mitchell",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 17.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Jalen Williams",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-LWWYDZz",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · LWWYDZz",
+      "type": "pick6",
+      "venueId": "LWWYDZz",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 5,
+      "id": "dk6-pYYwqYn",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pra",
+          "name": "Stephon Castle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 23.5,
+          "market": "pra",
+          "name": "De'Aaron Fox",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 40.5,
+          "market": "pra",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pra",
+          "mult": "0.9x",
+          "name": "Dylan Harper",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 22.5,
+          "market": "pra",
+          "name": "Chet Holmgren",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pra",
+          "name": "Isaiah Hartenstein",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 40.5,
+          "market": "pra",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pra",
+          "name": "Jalen Williams",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-pYYwqYn",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · pYYwqYn",
+      "type": "pick6",
+      "venueId": "pYYwqYn",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 4,
+      "id": "dk6-qYYg2Kp",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "under",
+          "line": 12.5,
+          "market": "pts",
+          "name": "OG Anunoby",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 28.5,
+          "market": "pts",
+          "name": "Jalen Brunson",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 13.5,
+          "market": "pts",
+          "name": "Andre Drummond",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Joel Embiid",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 18.5,
+          "market": "pts",
+          "name": "Jaylen Brown",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 12.5,
+          "market": "pts",
+          "name": "LeBron James",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 27.5,
+          "market": "pts",
+          "name": "Tyrese Maxey",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 12.5,
+          "market": "pts",
+          "name": "Karl-Anthony Towns",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-qYYg2Kp",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · qYYg2Kp",
+      "type": "pick6",
+      "venueId": "qYYg2Kp",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 4,
+      "id": "dk6-r88BdBx",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 18.5,
+          "market": "pts",
+          "name": "Jaylen Brown",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 12.5,
+          "market": "pts",
+          "name": "LeBron James",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 27.5,
+          "market": "pts",
+          "name": "Tyrese Maxey",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 12.5,
+          "market": "pts",
+          "name": "Karl-Anthony Towns",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 12.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "OG Anunoby",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 28.5,
+          "market": "pts",
+          "name": "Jalen Brunson",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 13.5,
+          "market": "pts",
+          "name": "Andre Drummond",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Joel Embiid",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-r88BdBx",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · r88BdBx",
+      "type": "pick6",
+      "venueId": "r88BdBx",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 2,
+      "id": "dk6-VNNbVMx",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pts",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 18.5,
+          "market": "pts",
+          "name": "Karl-Anthony Towns",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "OG Anunoby",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "name": "Jaylen Brown",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Cade Cunningham",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 21.5,
+          "market": "pts",
+          "name": "Joel Embiid",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 27.5,
+          "market": "pts",
+          "name": "Jayson Tatum",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-VNNbVMx",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · VNNbVMx",
+      "type": "pick6",
+      "venueId": "VNNbVMx",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 6,
+      "id": "dk6-WNNDVw8",
+      "legs": 8,
+      "payout": 0.28,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Stephon Castle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pra",
+          "mult": "0.7x",
+          "name": "De'Aaron Fox",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Dylan Harper",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Chet Holmgren",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Jalen Williams",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Isaiah Hartenstein",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 29.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        }
+      ],
+      "result": "partial",
+      "slipId": "dk6-WNNDVw8",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · WNNDVw8",
+      "type": "pick6",
+      "venueId": "WNNDVw8",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 4,
+      "id": "dk6-zDD5bx4",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 11.5,
+          "market": "pra",
+          "name": "Alex Caruso",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pra",
+          "mult": "0.9x",
+          "name": "Dylan Harper",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 13.5,
+          "market": "pra",
+          "name": "Jared McCain",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 40.5,
+          "market": "pra",
+          "name": "Victor Wembanyama",
+          "result": "hit"
+        },
+        {
+          "dir": "under",
+          "line": 23.5,
+          "market": "pra",
+          "name": "De'Aaron Fox",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 40.5,
+          "market": "pra",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "miss"
+        },
+        {
+          "dir": "under",
+          "line": 22.5,
+          "market": "pra",
+          "name": "Chet Holmgren",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 18.5,
+          "market": "pra",
+          "name": "Devin Vassell",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-zDD5bx4",
+      "src": "dk-browser-1021",
+      "stake": 2,
+      "title": "NBA 8-Pick · zDD5bx4",
+      "type": "pick6",
+      "venueId": "zDD5bx4",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-20",
+      "hits": 4,
+      "id": "dk6-RNNLp2m",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 17.5,
+          "market": "pts",
+          "name": "Jalen Duren",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "pts",
+          "name": "Shai Gilgeous-Alexander",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Tyrese Maxey",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 10.5,
+          "market": "pts",
+          "name": "Ausar Thompson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 22.5,
+          "market": "pts",
+          "name": "Joel Embiid",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pts",
+          "name": "De'Aaron Fox",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 15.5,
+          "market": "pts",
+          "name": "LeBron James",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Victor Wembanyama",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-RNNLp2m",
+      "src": "dk-browser-1021",
+      "stake": 10,
+      "title": "NBA 8-Pick · RNNLp2m",
+      "type": "pick6",
+      "venueId": "RNNLp2m",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
+      "id": "dkp-42096202",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
+      "positionId": "42096202",
+      "result": "lost",
+      "stake": 5,
+      "title": "5 Pick Combo: 28+ Jayson Tatum Points · 26+ Cade Cunningham Points · 16+ Derrick White Points · 12+ Duncan Robinson Points · 18+ Jalen Duren Points",
+      "type": "prediction",
+      "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42096301",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42096301",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
+      "result": "lost",
+      "stake": 9.97,
       "title": "5 Pick Combo: 16+ Jalen Duren Points · 10+ Duncan Robinson Points · 14+ Derrick White Points · 24+ Cade Cunningham Points · 26+ Jayson Tatum Points",
-      "stake": 9.97,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42096410",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42096410",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
+      "result": "lost",
+      "stake": 1.85,
       "title": "5 Pick Combo: 12+ Jalen Duren Points · 6+ Duncan Robinson Points · 10+ Derrick White Points · 20+ Cade Cunningham Points · 22+ Jayson Tatum Points",
-      "stake": 1.85,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42096599",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42096599",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 14+ Jalen Duren Points · 8+ Duncan Robinson Points · 12+ Derrick White Points · 22+ Cade Cunningham Points · 24+ Jayson Tatum Points",
+      "result": "lost",
       "stake": 4.81,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "5 Pick Combo: 14+ Jalen Duren Points · 8+ Duncan Robinson Points · 12+ Derrick White Points · 22+ Cade Cunningham Points · 24+ Jayson Tatum Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42132216",
-      "positionId": "42132216",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "14+ Jalen Duren Points",
-      "stake": 9.88,
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
       "payout": 13,
+      "positionId": "42132216",
       "result": "won",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "stake": 9.88,
+      "title": "14+ Jalen Duren Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42132220",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42132220",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
+      "result": "lost",
+      "stake": 9.85,
       "title": "5 Pick Combo: 14+ Jalen Duren Points · 10+ Derrick White Points · 8+ Duncan Robinson Points · 20+ Cade Cunningham Points · 22+ Jayson Tatum Points",
-      "stake": 9.85,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42132270",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42132270",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
+      "result": "lost",
+      "stake": 9.94,
       "title": "5 Pick Combo: 26+ Jayson Tatum Points · 24+ Cade Cunningham Points · 12+ Derrick White Points · 8+ Duncan Robinson Points · 16+ Jalen Duren Points",
-      "stake": 9.94,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42132503",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42132503",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 16+ LeBron James Points · 18+ Karl-Anthony Towns Points · 22+ Joel Embiid Points · 20+ Jaylen Brown Points · 26+ Jalen Brunson Points",
+      "result": "lost",
       "stake": 2.97,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "5 Pick Combo: 16+ LeBron James Points · 18+ Karl-Anthony Towns Points · 22+ Joel Embiid Points · 20+ Jaylen Brown Points · 26+ Jalen Brunson Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42132551",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42132551",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 20+ Jalen Williams Points · 16+ Dylan Harper Points · 14+ De'Aaron Fox Points · 26+ Victor Wembanyama Points · 30+ Shai Gilgeous-Alexander Points",
+      "result": "lost",
       "stake": 9.97,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "5 Pick Combo: 20+ Jalen Williams Points · 16+ Dylan Harper Points · 14+ De'Aaron Fox Points · 26+ Victor Wembanyama Points · 30+ Shai Gilgeous-Alexander Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42385879",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42385879",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "6 Pick Combo: NY Knicks To Win · 12+ OG Anunoby Points · 12+ Karl-Anthony Towns Points · 16+ Joel Embiid Points · 14+ Jaylen Brown Points · 20+ Jalen Brunson Points",
+      "result": "lost",
       "stake": 9.94,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "6 Pick Combo: NY Knicks To Win · 12+ OG Anunoby Points · 12+ Karl-Anthony Towns Points · 16+ Joel Embiid Points · 14+ Jaylen Brown Points · 20+ Jalen Brunson Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42386543",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42386543",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 26+ Shai Gilgeous-Alexander Points · 20+ Victor Wembanyama Points · 10+ De'Aaron Fox Points · 12+ Dylan Harper Points · 14+ Jalen Williams Points",
+      "result": "lost",
       "stake": 1.94,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "5 Pick Combo: 26+ Shai Gilgeous-Alexander Points · 20+ Victor Wembanyama Points · 10+ De'Aaron Fox Points · 12+ Dylan Harper Points · 14+ Jalen Williams Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42387607",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42387607",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "8 Pick Combo: 26+ Shai Gilgeous-Alexander Points · 20+ Victor Wembanyama Points · 10+ De'Aaron Fox Points · 12+ Dylan Harper Points · 14+ Jalen Williams Points · 1+ Devin Vassell Three Pointers Made · 1+ Cason Wallace Three Pointers Made · 1+ Alex Caruso Three Pointers Made",
+      "result": "lost",
       "stake": 9.85,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "8 Pick Combo: 26+ Shai Gilgeous-Alexander Points · 20+ Victor Wembanyama Points · 10+ De'Aaron Fox Points · 12+ Dylan Harper Points · 14+ Jalen Williams Points · 1+ Devin Vassell Three Pointers Made · 1+ Cason Wallace Three Pointers Made · 1+ Alex Caruso Three Pointers Made",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42389249",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42389249",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "9 Pick Combo: 24+ Jalen Brunson Points · 20+ Jaylen Brown Points · 18+ Karl-Anthony Towns Points · 20+ Tyrese Maxey Points · 11+ Karl-Anthony Towns Rebounds · 6+ Andre Drummond Rebounds · 5+ Jaylen Brown Rebounds · 7+ Joel Embiid Rebounds · 7+ Josh Hart Rebounds",
+      "result": "lost",
       "stake": 2.99,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "9 Pick Combo: 24+ Jalen Brunson Points · 20+ Jaylen Brown Points · 18+ Karl-Anthony Towns Points · 20+ Tyrese Maxey Points · 11+ Karl-Anthony Towns Rebounds · 6+ Andre Drummond Rebounds · 5+ Jaylen Brown Rebounds · 7+ Joel Embiid Rebounds · 7+ Josh Hart Rebounds",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42402482",
-      "positionId": "42402482",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 8+ Karl-Anthony Towns Rebounds · 20+ Jalen Brunson Points · 14+ Jaylen Brown Points · 10+ LeBron James Points · 12+ Tyrese Maxey Points",
-      "stake": 24.91,
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
       "payout": 53,
+      "positionId": "42402482",
       "result": "won",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "stake": 24.91,
+      "title": "5 Pick Combo: 8+ Karl-Anthony Towns Rebounds · 20+ Jalen Brunson Points · 14+ Jaylen Brown Points · 10+ LeBron James Points · 12+ Tyrese Maxey Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42404009",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42404009",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "12 Pick Combo: 18+ Jalen Brunson Points · 14+ Jaylen Brown Points · 12+ Karl-Anthony Towns Points · 10+ LeBron James Points · 1+ Jalen Brunson Three Pointers Made · 1+ OG Anunoby Three Pointers Made · 7+ Karl-Anthony Towns Rebounds · 3+ Andre Drummond Rebounds · 3+ Jaylen Brown Rebounds · 4+ Joel Embiid Rebounds · 5+ LeBron James Assists · 4+ Jalen Brunson Assists",
+      "result": "lost",
       "stake": 1.74,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "12 Pick Combo: 18+ Jalen Brunson Points · 14+ Jaylen Brown Points · 12+ Karl-Anthony Towns Points · 10+ LeBron James Points · 1+ Jalen Brunson Three Pointers Made · 1+ OG Anunoby Three Pointers Made · 7+ Karl-Anthony Towns Rebounds · 3+ Andre Drummond Rebounds · 3+ Jaylen Brown Rebounds · 4+ Joel Embiid Rebounds · 5+ LeBron James Assists · 4+ Jalen Brunson Assists",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42405359",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
       "positionId": "42405359",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "6 Pick Combo: 14+ Joel Embiid Points · 14+ Jaylen Brown Points · 18+ Jalen Brunson Points · 12+ Karl-Anthony Towns Points · 10+ OG Anunoby Points · 2+ Tyrese Maxey Three Pointers Made",
+      "result": "lost",
       "stake": 1.85,
-      "payout": 0,
-      "result": "lost",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "title": "6 Pick Combo: 14+ Joel Embiid Points · 14+ Jaylen Brown Points · 18+ Jalen Brunson Points · 12+ Karl-Anthony Towns Points · 10+ OG Anunoby Points · 2+ Tyrese Maxey Three Pointers Made",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42566234",
-      "positionId": "42566234",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "4 Pick Combo: 8+ Chet Holmgren Points · 8+ Jalen Williams Points · 6+ Cason Wallace Points · 22+ Shai Gilgeous-Alexander Points",
-      "stake": 1.54,
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
       "payout": 2,
+      "positionId": "42566234",
       "result": "won",
-      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "stake": 1.54,
+      "title": "4 Pick Combo: 8+ Chet Holmgren Points · 8+ Jalen Williams Points · 6+ Cason Wallace Points · 22+ Shai Gilgeous-Alexander Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-20",
       "id": "dkp-42567687",
-      "positionId": "42567687",
-      "date": "2026-10-20",
-      "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "5 Pick Combo: 10+ Dylan Harper Points · 12+ Stephon Castle Points · 6+ Isaiah Hartenstein Points · 8+ Cason Wallace Points · 24+ Shai Gilgeous-Alexander Points",
-      "stake": 1.97,
-      "payout": 0,
-      "result": "lost",
       "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
+      "positionId": "42567687",
+      "result": "lost",
+      "stake": 1.97,
+      "title": "5 Pick Combo: 10+ Dylan Harper Points · 12+ Stephon Castle Points · 6+ Isaiah Hartenstein Points · 8+ Cason Wallace Points · 24+ Shai Gilgeous-Alexander Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
     },
     {
-      "id": "dkp-42577144",
-      "positionId": "42577144",
-      "date": "2026-10-20",
       "book": "DraftKings Predictions",
-      "type": "prediction",
-      "title": "4 Pick Combo: 16+ Victor Wembanyama Points · 28+ Shai Gilgeous-Alexander Points · 10+ Devin Vassell Points · 10+ Julian Champagnie Points",
-      "stake": 1.8,
-      "payout": 0,
-      "result": "lost",
+      "date": "2026-10-20",
+      "id": "dkp-42577144",
       "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
+      "positionId": "42577144",
+      "result": "lost",
+      "stake": 1.8,
+      "title": "4 Pick Combo: 16+ Victor Wembanyama Points · 28+ Shai Gilgeous-Alexander Points · 10+ Devin Vassell Points · 10+ Julian Champagnie Points",
+      "type": "prediction",
       "verifiedAt": "2026-10-21T11:13:22.428Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 7,
+      "id": "dk6-NVVDV4x",
+      "legs": 8,
+      "payout": 45.39,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Giannis Antetokounmpo",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 23.5,
+          "market": "pts",
+          "name": "Kevin Durant",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 28.5,
+          "market": "pts",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 21.5,
+          "market": "pts",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 21.5,
+          "market": "pts",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 38.5,
+          "market": "pra",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "won",
+      "slipId": "dk6-NVVDV4x",
+      "src": "dk-browser-1021-evening",
+      "stake": 17,
+      "title": "NBA 8-Pick · NVVDV4x",
+      "type": "pick6",
+      "venueId": "NVVDV4x",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 1,
+      "id": "dk6-ByyYj4z",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 6.5,
+          "market": "ast",
+          "mult": "1.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 54.5,
+          "market": "pra",
+          "mult": "1.5x",
+          "name": "Luka Doncic",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "mult": "1.2x",
+          "name": "Lauri Markkanen",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "threes",
+          "mult": "2.7x",
+          "name": "Jaden McDaniels",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-ByyYj4z",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · ByyYj4z",
+      "type": "pick6",
+      "venueId": "ByyYj4z",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 1,
+      "id": "dk6-yjjyrmV",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 28.5,
+          "market": "pts",
+          "name": "Giannis Antetokounmpo",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "threes",
+          "mult": "2.7x",
+          "name": "Cooper Flagg",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "mult": "1.2x",
+          "name": "Lauri Markkanen",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "threes",
+          "mult": "2.7x",
+          "name": "Jaden McDaniels",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-yjjyrmV",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · yjjyrmV",
+      "type": "pick6",
+      "venueId": "yjjyrmV",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-bQQqmdb",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 28.5,
+          "market": "pts",
+          "name": "Giannis Antetokounmpo",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 6.5,
+          "market": "ast",
+          "mult": "1.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 54.5,
+          "market": "pra",
+          "mult": "1.5x",
+          "name": "Luka Doncic",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "threes",
+          "mult": "2.7x",
+          "name": "Cooper Flagg",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-bQQqmdb",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · bQQqmdb",
+      "type": "pick6",
+      "venueId": "bQQqmdb",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 5,
+      "id": "dk6-7wwgKmD",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Brandon Miller",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-7wwgKmD",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 8-Pick · 7wwgKmD",
+      "type": "pick6",
+      "venueId": "7wwgKmD",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 5,
+      "id": "dk6-ByyYjdN",
+      "legs": 8,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Trae Young",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Brandon Miller",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-ByyYjdN",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 8-Pick · ByyYjdN",
+      "type": "pick6",
+      "venueId": "ByyYjdN",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-GPPGWMp",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 33.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Tim Burns Jr.",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 39.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Brendan Jenkins",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 35.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Adrian Norton",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 49.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Anthony Eager",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 39.5,
+          "market": "rec_yds",
+          "name": "Grady O'Neill",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 49.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Chris Reed",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-GPPGWMp",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "CFB 6-Pick · GPPGWMp",
+      "type": "pick6",
+      "venueId": "GPPGWMp",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 0,
+      "id": "dk6-2LLK7m4",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "name": "Jared Hollins",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "1.3x",
+          "name": "Brendan Jenkins",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "1.3x",
+          "name": "JJ Kohl",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "1.4x",
+          "name": "Cam'ron Lacy",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "1.9x",
+          "name": "Jojo Stone",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "2.6x",
+          "name": "Micah Woods",
+          "result": "void"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-2LLK7m4",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "CFB 6-Pick · 2LLK7m4",
+      "type": "pick6",
+      "venueId": "2LLK7m4",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-ByyGMB5",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 39.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Brendan Jenkins",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 219.5,
+          "market": "rec_yds",
+          "name": "Landyn Locke",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 49.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Anthony Eager",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 239.5,
+          "market": "pass_rush_yds",
+          "name": "Jared Hollins",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 79.5,
+          "market": "rec_yds",
+          "name": "PJ Martin",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 69.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Judah Price",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-ByyGMB5",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "CFB 6-Pick · ByyGMB5",
+      "type": "pick6",
+      "venueId": "ByyGMB5",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-VNNGQyN",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 219.5,
+          "market": "rec_yds",
+          "name": "Landyn Locke",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "0.7x",
+          "name": "PJ Martin",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 49.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Anthony Eager",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 239.5,
+          "market": "pass_rush_yds",
+          "name": "Jared Hollins",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 49.5,
+          "market": "rec_yds",
+          "mult": "0.9x",
+          "name": "Chris Reed",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "0.8x",
+          "name": "Carlos Del Rio-Wilson",
+          "result": "void"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-VNNGQyN",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "CFB 6-Pick · VNNGQyN",
+      "type": "pick6",
+      "venueId": "VNNGQyN",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-zDDRjZG",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 219.5,
+          "market": "rec_yds",
+          "name": "Landyn Locke",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "0.9x",
+          "name": "Judah Price",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 209.5,
+          "market": "rec_yds",
+          "name": "Jared Hollins",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "1.3x",
+          "name": "Brendan Jenkins",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "0.8x",
+          "name": "Devonte Lyons",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 0.5,
+          "market": "anytime_td",
+          "mult": "1.3x",
+          "name": "Antonio Martin",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-zDDRjZG",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "CFB 6-Pick · zDDRjZG",
+      "type": "pick6",
+      "venueId": "zDDRjZG",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-qYYgzxB",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Jalen Johnson",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-qYYgzxB",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · qYYgzxB",
+      "type": "pick6",
+      "venueId": "qYYgzxB",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-LWWzDBj",
+      "legs": 3,
+      "payout": 12.96,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Giannis Antetokounmpo",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        }
+      ],
+      "result": "won",
+      "slipId": "dk6-LWWzDBj",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 3-Pick · LWWzDBj",
+      "type": "pick6",
+      "venueId": "LWWzDBj",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-MmmR2rB",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Trae Young",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pra",
+          "mult": "0.6x",
+          "name": "Brandon Miller",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-MmmR2rB",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · MmmR2rB",
+      "type": "pick6",
+      "venueId": "MmmR2rB",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 4,
+      "id": "dk6-9BBbBzQ",
+      "legs": 4,
+      "payout": 7.1,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.7x",
+          "name": "Stephen Curry",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.7x",
+          "name": "Kevin Durant",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "mult": "0.7x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.7x",
+          "name": "Austin Reaves",
+          "result": "hit"
+        }
+      ],
+      "result": "won",
+      "slipId": "dk6-9BBbBzQ",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · 9BBbBzQ",
+      "type": "pick6",
+      "venueId": "9BBbBzQ",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 6,
+      "id": "dk6-yjjyrNB",
+      "legs": 8,
+      "payout": 1.31,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Trae Young",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Brandon Miller",
+          "result": "miss"
+        }
+      ],
+      "result": "partial",
+      "slipId": "dk6-yjjyrNB",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 8-Pick · yjjyrNB",
+      "type": "pick6",
+      "venueId": "yjjyrNB",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 6,
+      "id": "dk6-DZZNLR4",
+      "legs": 8,
+      "payout": 1.26,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Trae Young",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "partial",
+      "slipId": "dk6-DZZNLR4",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 8-Pick · DZZNLR4",
+      "type": "pick6",
+      "venueId": "DZZNLR4",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 4,
+      "id": "dk6-ByyBDPr",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Trae Young",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-ByyBDPr",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 6-Pick · ByyBDPr",
+      "type": "pick6",
+      "venueId": "ByyBDPr",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-wmmM99L",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Trae Young",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Brandon Miller",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-wmmM99L",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 6-Pick · wmmM99L",
+      "type": "pick6",
+      "venueId": "wmmM99L",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 5,
+      "id": "dk6-bQQ5D7x",
+      "legs": 6,
+      "payout": 1.86,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 24.5,
+          "market": "pts",
+          "name": "Brandon Miller",
+          "result": "miss"
+        }
+      ],
+      "result": "partial",
+      "slipId": "dk6-bQQ5D7x",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 6-Pick · bQQ5D7x",
+      "type": "pick6",
+      "venueId": "bQQ5D7x",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 4,
+      "id": "dk6-WNND9x5",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 34.5,
+          "market": "pra",
+          "mult": "0.8x",
+          "name": "Anthony Edwards",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-WNND9x5",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 6-Pick · WNND9x5",
+      "type": "pick6",
+      "venueId": "WNND9x5",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-Mmmr4bm",
+      "legs": 3,
+      "payout": 18,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 27.5,
+          "market": "pts",
+          "name": "Luka Doncic",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 23.5,
+          "market": "pts",
+          "name": "Kevin Durant",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 20.5,
+          "market": "pts",
+          "name": "Pascal Siakam",
+          "result": "hit"
+        }
+      ],
+      "result": "won",
+      "slipId": "dk6-Mmmr4bm",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 3-Pick · Mmmr4bm",
+      "type": "pick6",
+      "venueId": "Mmmr4bm",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-VNNLmxn",
+      "legs": 3,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 15.5,
+          "market": "pts",
+          "name": "Tyrese Haliburton",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 22.5,
+          "market": "pts",
+          "name": "Michael Porter Jr.",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-VNNLmxn",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 3-Pick · VNNLmxn",
+      "type": "pick6",
+      "venueId": "VNNLmxn",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-2LLGDrW",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Tyler Herro",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "ast",
+          "mult": "0.9x",
+          "name": "Julius Randle",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-2LLGDrW",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · 2LLGDrW",
+      "type": "pick6",
+      "venueId": "2LLGDrW",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-WNND9D7",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Cooper Flagg",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 19.5,
+          "market": "pts",
+          "mult": "0.9x",
+          "name": "Jalen Johnson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "threes",
+          "mult": "0.8x",
+          "name": "Stephen Curry",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 25.5,
+          "market": "pts",
+          "name": "Kawhi Leonard",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-WNND9D7",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NBA 4-Pick · WNND9D7",
+      "type": "pick6",
+      "venueId": "WNND9D7",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-yjjyjnM",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "shots_on_goal",
+          "mult": "1.1x",
+          "name": "Jake Sanderson",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "shots_on_goal",
+          "mult": "1.1x",
+          "name": "Trevor Zegras",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 2.5,
+          "market": "shots_on_goal",
+          "mult": "1.1x",
+          "name": "Matvei Michkov",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 3.5,
+          "market": "shots_on_goal",
+          "mult": "1.1x",
+          "name": "Tage Thompson",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-yjjyjnM",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "NHL 4-Pick · yjjyjnM",
+      "type": "pick6",
+      "venueId": "yjjyjnM",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 1,
+      "id": "dk6-GPPGW78",
+      "legs": 4,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 17.5,
+          "market": "pts",
+          "mult": "1.4x",
+          "name": "Angel Reese",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 10.5,
+          "market": "pts",
+          "name": "Jordin Canada",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "Allisha Gray",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "pts",
+          "name": "Kiah Stokes",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-GPPGW78",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "WNBA 4-Pick · GPPGW78",
+      "type": "pick6",
+      "venueId": "GPPGW78",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 2,
+      "id": "dk6-r88QRGq",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 15.5,
+          "market": "pts",
+          "name": "Rhyne Howard",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pts",
+          "name": "Angel Reese",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 9.5,
+          "market": "pts",
+          "name": "Veronica Burton",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 10.5,
+          "market": "pts",
+          "name": "Jordin Canada",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "Allisha Gray",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 17.5,
+          "market": "pts",
+          "mult": "0.8x",
+          "name": "Gabby Williams",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-r88QRGq",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "WNBA 6-Pick · r88QRGq",
+      "type": "pick6",
+      "venueId": "r88QRGq",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Pick6",
+      "date": "2026-10-21",
+      "hits": 3,
+      "id": "dk6-VNNGQ7n",
+      "legs": 6,
+      "payout": 0,
+      "picks": [
+        {
+          "dir": "over",
+          "line": 6.5,
+          "market": "pts",
+          "name": "Naz Hillmon",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 14.5,
+          "market": "pts",
+          "name": "Angel Reese",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 7.5,
+          "market": "pts",
+          "name": "Cecilia Zandalasini",
+          "result": "hit"
+        },
+        {
+          "dir": "over",
+          "line": 10.5,
+          "market": "pts",
+          "name": "Jordin Canada",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 16.5,
+          "market": "pts",
+          "name": "Allisha Gray",
+          "result": "miss"
+        },
+        {
+          "dir": "over",
+          "line": 4.5,
+          "market": "pts",
+          "name": "Kiah Stokes",
+          "result": "miss"
+        }
+      ],
+      "result": "lost",
+      "slipId": "dk6-VNNGQ7n",
+      "src": "dk-browser-1021-evening",
+      "stake": 3,
+      "title": "WNBA 6-Pick · VNNGQ7n",
+      "type": "pick6",
+      "venueId": "VNNGQ7n",
+      "verifiedAt": "2026-10-22T09:38:49.038Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-21",
+      "id": "dkp-42634440",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
+      "positionId": "42634440",
+      "result": "lost",
+      "stake": 2.84,
+      "title": "5 Pick Combo: 18+ Gabby Williams Points · 14+ Allisha Gray Points · 12+ Angel Reese Points · 8+ Jordin Canada Points · 12+ Rhyne Howard Points",
+      "type": "prediction",
+      "verifiedAt": "2026-10-22T09:39:14.274Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-21",
+      "id": "dkp-42634537",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 0,
+      "positionId": "42634537",
+      "result": "lost",
+      "stake": 2.92,
+      "title": "5 Pick Combo: BUF Sabres Moneyline · FLA Panthers Moneyline · 2+ Jack Quinn Shots on Goal · 2+ Rasmus Dahlin Shots on Goal · 2+ Tage Thompson Shots on Goal",
+      "type": "prediction",
+      "verifiedAt": "2026-10-22T09:39:14.274Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-21",
+      "id": "dkp-42876403",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 86,
+      "positionId": "42876403",
+      "result": "won",
+      "stake": 24.8,
+      "title": "8 Pick Combo: 20+ Giannis Antetokounmpo Points · 18+ Lauri Markkanen Points · 14+ Cooper Flagg Points · 10+ Dejounte Murray Points · 12+ Ja Morant Points · 14+ Anthony Davis Points · 12+ Domantas Sabonis Points · 6+ Jalen Johnson Rebounds",
+      "type": "prediction",
+      "verifiedAt": "2026-10-22T09:39:14.274Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-21",
+      "id": "dkp-42878931",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 5,
+      "positionId": "42878931",
+      "result": "won",
+      "stake": 1.7,
+      "title": "8 Pick Combo: 6+ Bam Adebayo Rebounds · 12+ Pascal Siakam Points · 16+ Austin Reaves Points · 12+ Julius Randle Points · 12+ Franz Wagner Points · 14+ Damian Lillard Points · 12+ Keyonte George Points · 14+ Alperen Sengun Points",
+      "type": "prediction",
+      "verifiedAt": "2026-10-22T09:39:14.274Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-21",
+      "id": "dkp-42882448",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 50,
+      "positionId": "42882448",
+      "result": "won",
+      "stake": 25,
+      "title": "8 Pick Combo: 7+ Rudy Gobert Rebounds · 7+ Ivica Zubac Rebounds · 12+ Michael Porter Jr. Points · 10+ Amen Thompson Points · 12+ Tyler Herro Points · 10+ RJ Barrett Points · 10+ Jaren Jackson Jr. Points · 22+ Luka Doncic Points",
+      "type": "prediction",
+      "verifiedAt": "2026-10-22T09:39:14.274Z"
+    },
+    {
+      "book": "DraftKings Predictions",
+      "date": "2026-10-21",
+      "id": "dkp-42885875",
+      "note": "Web receipts omit profit boosts; separate fees and boosted payouts are unverified.",
+      "payout": 51,
+      "positionId": "42885875",
+      "result": "won",
+      "stake": 24.99,
+      "title": "11 Pick Combo: 10+ Jalen Green Points · 12+ Darius Garland Points · 14+ Kevin Durant Points · 14+ Devin Booker Points · 20+ Luka Doncic Points · 12+ Stephen Curry Points · 10+ Jaren Jackson Jr. Points · 6+ Bennedict Mathurin Points · 14+ Brandon Miller Points · 12+ Michael Porter Jr. Points · 8+ Julius Randle Points",
+      "type": "prediction",
+      "verifiedAt": "2026-10-22T09:39:14.274Z"
     }
   ],
   "note": "Imported history. Every row says where it came from. stake null = the amount risked was not visible in the source, so the row counts toward hit rates but not toward profit and loss.",
@@ -7373,5 +9222,5 @@
     "dk-predictions-1017": "DraftKings Predictions → My Trades (Open and Settled), owner screenshots Oct 17 2026. Stakes not shown for settled trades.",
     "robinhood": "Robinhood connector, realized P&L trade history, account ••••6668 (PoiZen Method), span all, read Oct 17 2026. Prediction-market rows have no symbol; payout = contracts × close price, stake = payout − realized gain."
   },
-  "updated": "2026-10-21T11:13:22.428Z"
+  "updated": "2026-10-22T09:39:14.274Z"
 }
