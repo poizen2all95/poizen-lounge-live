@@ -1,0 +1,284 @@
+<!doctype html>
+<!--
+  Live full-screen scenes for OBS and TikTok LIVE Studio (hosted copy of C:\Stream\Overlays\custom\scene-screen.html): Starting Soon, BRB and Ending (browser source, full canvas).
+  URL:  ?mode=starting|brb|ending   &layout=h (1920x1080) | v (1080x1920)
+        starting: &minutes=5  countdown length (resets on page load and OBS scene/source activation)   or  &at=09:30  count to a clock time
+        ending:   &next=Monday%209AM   shown as "Next stream"
+  The Ending recap reads this stream's numbers from the other overlays (eliminations, challenges, likes,
+  follows, coins, top supporter). Background art: C:\Stream\Brand\Wallpapers.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>Scene Screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root { --gold: #c9a25a; --gold-hi: #ecd194; --gold-pale: #f6e7c3; --cream: #f3e8cf; --muted: #b39a6c; --ink: rgba(12,11,10,.72); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #050505; color: var(--cream); }
+  body.h { --W: 1920px; --H: 1080px; }
+  body.v { --W: 1080px; --H: 1920px; }
+  #stage { position: absolute; inset: 0; overflow: hidden; }
+
+  /* painted landscape with a slow drift + breathing light */
+  #art { position: absolute; inset: -3%; background: center / cover no-repeat; animation: drift 70s ease-in-out infinite alternate; filter: brightness(.95) saturate(1.05); }
+  @keyframes drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.07) translate(-1.2%, .8%); } }
+  #glow { position: absolute; inset: 0; mix-blend-mode: screen; pointer-events: none;
+          background: radial-gradient(ellipse 60% 40% at var(--gx) var(--gy), rgba(236,180,100,.16), transparent 70%); animation: breathe 9s ease-in-out infinite; }
+  body.h #glow { --gx: 50%; --gy: 52%; }  body.v #glow { --gx: 60%; --gy: 30%; }
+  @keyframes breathe { 50% { opacity: .45; } }
+  canvas.fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  #vignette { position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 260px 80px rgba(0,0,0,.85);
+              background: linear-gradient(180deg, rgba(0,0,0,.55), transparent 22%, transparent 70%, rgba(0,0,0,.6)); }
+
+  /* -------- typography + layout -------- */
+  .content { position: absolute; left: 0; right: 0; text-align: center; }
+  .emblem { width: 120px; height: 120px; margin: 0 auto; display: block; filter: drop-shadow(0 0 18px rgba(236,209,148,.45)); animation: float 6s ease-in-out infinite; }
+  @keyframes float { 50% { transform: translateY(-8px); } }
+  .rule { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 22px auto; width: 64%; }
+  .rule i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .rule i:last-child { background: linear-gradient(90deg, var(--gold), transparent); }
+  .rule b { width: 10px; height: 10px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 10px var(--gold-hi); }
+  .title {
+    font: 700 var(--title)/1.02 Cinzel, Cambria, serif; letter-spacing: .1em;
+    background: linear-gradient(180deg, #fffaf0 0%, #f6e7c3 30%, #ecd194 55%, #c9a25a 80%, #9a7740 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 3px 0 rgba(40,30,12,.9)) drop-shadow(0 0 28px rgba(236,209,148,.35));
+  }
+  .title .shine { position: relative; display: inline-block; }
+  .handle { font: 600 var(--handle)/1 Cinzel, Cambria, serif; letter-spacing: .32em; color: var(--gold-hi); margin-top: 18px; }
+  .tag { font: italic 500 var(--tagsize)/1.3 "Cormorant Garamond", Cambria, serif; color: var(--cream); opacity: .9; margin-top: 14px; }
+  .card { display: inline-flex; flex-direction: column; align-items: center; gap: 12px; padding: 26px 46px 28px;
+          background: var(--ink); border: 1.5px solid rgba(201,162,90,.7); border-radius: 22px; backdrop-filter: blur(6px);
+          box-shadow: 0 0 0 6px rgba(201,162,90,.08), 0 20px 50px rgba(0,0,0,.6); }
+  .k { font: 600 calc(var(--handle) * .62)/1 Cinzel, Cambria, serif; letter-spacing: .4em; color: var(--muted); }
+  .big { font: 700 var(--clock)/1 Cinzel, Cambria, serif; letter-spacing: .04em; color: var(--gold-pale); font-variant-numeric: tabular-nums;
+         text-shadow: 0 0 30px rgba(236,209,148,.35); }
+  .bar { width: 100%; height: 6px; border-radius: 3px; background: rgba(201,162,90,.18); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold-hi)); transition: width 1s linear; }
+  .chips { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+  .chip { display: flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 999px; background: var(--ink); border: 1px solid rgba(201,162,90,.5);
+          font: 600 calc(var(--handle) * .78)/1 Cinzel, Cambria, serif; letter-spacing: .14em; color: var(--cream); }
+  .chip em { font-style: normal; color: var(--gold-hi); }
+  .ticker { height: calc(var(--tagsize) * 1.5); position: relative; margin-top: 22px; }
+  .ticker span { position: absolute; left: 0; right: 0; opacity: 0; transform: translateY(10px); transition: .6s;
+                 font: italic 500 var(--tagsize)/1.3 "Cormorant Garamond", Cambria, serif; color: var(--cream); }
+  .ticker span.on { opacity: 1; transform: none; }
+  .live-now { color: #ff6b6b !important; animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .55; } }
+
+  /* recap */
+  .recap { display: grid; gap: 14px; justify-content: center; margin-top: 26px; }
+  .stat { min-width: var(--statw); padding: 18px 20px 16px; background: var(--ink); border: 1px solid rgba(201,162,90,.55); border-radius: 18px;
+          display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: 0; transform: translateY(14px); }
+  .stat.in { animation: statIn .7s cubic-bezier(.2,1.3,.4,1) forwards; }
+  @keyframes statIn { to { opacity: 1; transform: none; } }
+  .stat .n { font: 700 calc(var(--clock) * .62)/1 Cinzel, Cambria, serif; color: var(--gold-pale); font-variant-numeric: tabular-nums; }
+  .stat .l { font: 600 calc(var(--handle) * .56)/1 Cinzel, Cambria, serif; letter-spacing: .3em; color: var(--muted); }
+  .stat.wide { grid-column: 1 / -1; }
+  .stat.wide .n { font-size: calc(var(--clock) * .5); }
+
+  /* avatar */
+  #avatar { position: absolute; height: var(--avh); left: var(--avx); bottom: var(--avb); filter: drop-shadow(0 18px 30px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(236,180,100,.18));
+            animation: idle 5s ease-in-out infinite; transform-origin: bottom center; }
+  @keyframes idle { 50% { transform: translateY(-6px) rotate(-.6deg); } }
+
+  /* entrance */
+  .enter { opacity: 0; transform: translateY(18px); animation: enter 1.1s cubic-bezier(.2,.9,.3,1) forwards; }
+  .d1 { animation-delay: .15s; } .d2 { animation-delay: .35s; } .d3 { animation-delay: .55s; } .d4 { animation-delay: .8s; } .d5 { animation-delay: 1.05s; }
+  @keyframes enter { to { opacity: 1; transform: none; } }
+
+  /* sizes per canvas */
+  body.h { --title: 104px; --handle: 30px; --tagsize: 30px; --clock: 92px; --statw: 220px; --avh: 760px; --avx: 70px; --avb: -10px; }
+  body.v { --title: 96px;  --handle: 30px; --tagsize: 32px; --clock: 104px; --statw: 290px; --avh: 620px; --avx: 600px; --avb: 360px; }
+  body.h .content { top: 90px; }
+  body.v .content { top: 210px; padding: 0 40px; }
+  body.h.brb .content, body.h.ending .content { left: 520px; right: 60px; }
+  body.h .recap { grid-template-columns: repeat(4, auto); }
+  body.v .recap { grid-template-columns: repeat(2, auto); }
+  body.v.starting #avatar, body.h.starting #avatar { display: none; }
+  body.v.brb #avatar, body.v.ending #avatar { --avh: 520px; --avx: 650px; --avb: 330px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="art"></div>
+  <canvas class="fx" id="sky"></canvas>
+  <div id="glow"></div>
+  <canvas class="fx" id="water"></canvas>
+  <canvas class="fx" id="dust"></canvas>
+  <div id="vignette"></div>
+  <img id="avatar" alt="">
+  <div class="content" id="content"></div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const mode = ["starting", "brb", "ending"].includes(q.get("mode")) ? q.get("mode") : "starting";
+  const layout = q.get("layout") === "v" ? "v" : "h";
+  document.body.className = `${layout} ${mode}`;
+  const W = layout === "h" ? 1920 : 1080, H = layout === "h" ? 1080 : 1920;
+  const ROOT = location.protocol === "file:" ? "file:///C:/Stream" : ".";   // OBS loads from disk; TikTok LIVE Studio loads this hosted copy (art sits next to it)
+  document.getElementById("art").style.backgroundImage = `url("${ROOT}/Brand/Wallpapers/${layout === "h" ? "refined-scene-RIGHT-1920x1080" : "refined-scene-LEFT-1440x2560"}.png")`;
+  document.getElementById("avatar").src = `${ROOT}/Brand/avatar_pablo_full.png`;
+  // where the sky / lake sit in each painting (fractions of the canvas)
+  const ZONES = layout === "h" ? { skyBottom: .46, waterTop: .64, waterLeft: 0 } : { skyBottom: .26, waterTop: .36, waterLeft: .32 };
+
+  const emblem = `<svg class="emblem" viewBox="-60 -60 120 120"><defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4d6"/><stop offset="1" stop-color="#b8894a"/></linearGradient></defs>
+    <circle r="54" fill="rgba(10,9,8,.55)" stroke="url(#eg)" stroke-width="3"/><circle r="46" fill="none" stroke="#c9a25a" stroke-width="1" opacity=".7"/>
+    <text y="15" text-anchor="middle" font-family="Cinzel, Cambria, serif" font-weight="700" font-size="42" fill="url(#eg)" letter-spacing="2">PZ</text></svg>`;
+  const rule = `<div class="rule"><i></i><b></b><i></i></div>`;
+  const pad = n => String(n).padStart(2, "0");
+  const fmt = s => s >= 3600 ? `${Math.floor(s / 3600)}:${pad(Math.floor(s % 3600 / 60))}:${pad(s % 60)}` : `${pad(Math.floor(s / 60))}:${pad(s % 60)}`;
+  const c = document.getElementById("content");
+
+  // ---------------- STARTING SOON ----------------
+  if (mode === "starting") {
+    c.innerHTML = `${emblem.replace('class="emblem"', 'class="emblem enter"')}
+      <div class="title enter d1">STREAM<br>STARTING SOON</div>
+      ${rule.replace('class="rule"', 'class="rule enter d2"')}
+      <div class="handle enter d2">POIZEN2ALL95</div>
+      <div style="margin-top:40px" class="enter d3"><div class="card"><span class="k" id="clockLabel">LIVE IN</span><span class="big" id="clock">05:00</span><div class="bar"><i id="clockBar"></i></div></div></div>
+      <div class="chips enter d4"><span class="chip">☀ <em>MORNING MARKETS</em></span><span class="chip">→</span><span class="chip">⚔ <em>FORTNITE</em></span></div>
+      <div class="ticker enter d5" id="ticker"></div>`;
+    let total, end, lastClockReset = 0;
+    function resetClock() {
+      const now = Date.now();
+      if (now - lastClockReset < 750) return;
+      lastClockReset = now;
+      if (q.get("at")) {
+        const [hh, mm] = q.get("at").split(":").map(Number), t = new Date(now);
+        t.setHours(hh, mm || 0, 0, 0);
+        if (t.getTime() < now) t.setDate(t.getDate() + 1);
+        end = t.getTime(); total = Math.max(60, (end - now) / 1000);
+      } else {
+        const minutes = Number(q.get("minutes") || 5);
+        total = (Number.isFinite(minutes) && minutes > 0 ? minutes : 5) * 60;
+        end = now + total * 1000;
+      }
+      tick();
+    }
+    const tick = () => {
+      const left = Math.max(0, Math.round((end - Date.now()) / 1000));
+      document.getElementById("clock").textContent = left ? fmt(left) : "GOING LIVE";
+      document.getElementById("clock").classList.toggle("live-now", !left);
+      document.getElementById("clockLabel").textContent = left ? "LIVE IN" : "HERE WE GO";
+      document.getElementById("clockBar").style.width = (100 - left / total * 100) + "%";
+    };
+    resetClock(); setInterval(tick, 250);
+    // A cached browser page can stay loaded between scenes. Reset on entry as well as load.
+    window.addEventListener("obsSceneChanged", event => {
+      if (event.detail?.name === (q.get("scene") || "Starting Soon")) resetClock();
+    });
+    window.addEventListener("obsSourceActiveChanged", event => {
+      if (event.detail?.active) resetClock();
+    });
+    window.addEventListener("obsSourceVisibleChanged", event => {
+      if (event.detail?.visible) resetClock();
+    });
+    ticker(["Grab a drink, find a seat — we start shortly.", "Say hi in chat while we load in.", "Markets first, then we drop in."]);
+  }
+
+  // ---------------- BRB ----------------
+  if (mode === "brb") {
+    c.innerHTML = `${emblem.replace('class="emblem"', 'class="emblem enter"')}
+      <div class="title enter d1">BE RIGHT<br>BACK</div>
+      ${rule.replace('class="rule"', 'class="rule enter d2"')}
+      <div class="handle enter d2">POIZEN2ALL95</div>
+      <div style="margin-top:40px" class="enter d3"><div class="card"><span class="k">AWAY FOR</span><span class="big" id="away">00:00</span></div></div>
+      <div class="ticker enter d4" id="ticker"></div>`;
+    const start = Date.now();
+    setInterval(() => document.getElementById("away").textContent = fmt(Math.floor((Date.now() - start) / 1000)), 1000);
+    const lines = ["Stepping away for a moment.", "Stretch, hydrate — back in a flash.", "Keep the chat warm for me."];
+    if (layout === "h") lines.push("Support the stream: code POIZEN2ALL95 in the Item Shop.");
+    ticker(lines);
+  }
+
+  // ---------------- ENDING ----------------
+  if (mode === "ending") {
+    const read = (k) => { try { return JSON.parse(localStorage.getItem(k)) || null; } catch { return null; } };
+    const fresh = (o, key = "updated") => o && Date.now() - (o[key] || o.t || 0) < 6 * 3600 * 1000;
+    const goals = read("streamGoals"), elims = read("hypeElims"), ch = read("streamChallenges"), gifters = read("streamGifters");
+    const stats = [];
+    stats.push([fresh(elims, "t") ? Number(elims.n) || 0 : 0, "ELIMINATIONS"]);
+    if (fresh(ch) && ch.n) stats.push([ch.n, "CHALLENGES"]);
+    if (fresh(goals)) { if (goals.likes) stats.push([goals.likes, "LIKES"]); if (goals.follows) stats.push([goals.follows, "NEW FOLLOWS"]); if (goals.coins) stats.push([goals.coins, "COINS"]); }
+    const top = fresh(gifters) ? Object.entries(gifters.users || {}).sort((a, b) => b[1] - a[1])[0] : null;
+    const next = q.get("next");
+    c.innerHTML = `${emblem.replace('class="emblem"', 'class="emblem enter"')}
+      <div class="title enter d1">THAT'S A WRAP</div>
+      ${rule.replace('class="rule"', 'class="rule enter d2"')}
+      <div class="tag enter d2">Thanks for being here — catch you at the next session.</div>
+      <div class="recap" id="recap"></div>
+      ${next ? `<div class="chips enter d5"><span class="chip">NEXT STREAM · <em>${next.toUpperCase()}</em></span></div>` : ""}`;
+    const recap = document.getElementById("recap");
+    const cells = stats.slice(0, layout === "h" ? 4 : 4).map(([n, l]) => `<div class="stat" data-stat="${l}"><span class="n" data-to="${n}">0</span><span class="l">${l}</span></div>`);
+    if (top) cells.push(`<div class="stat wide"><span class="n">${escapeHtml(top[0])}</span><span class="l">TOP SUPPORTER TONIGHT</span></div>`);
+    if (!cells.length) cells.push(`<div class="stat wide"><span class="n">GG</span><span class="l">SEE YOU NEXT TIME</span></div>`);
+    recap.innerHTML = cells.join("");
+    function updateRecapKills(value) {
+      if (!value) return;
+      const count = fresh(value, "t") ? Math.max(0, Math.floor(Number(value.n) || 0)) : 0;
+      const number = recap.querySelector('[data-stat="ELIMINATIONS"] .n');
+      if (number && Number(number.dataset.to) !== count) {
+        number.dataset.to = String(count);
+        number.textContent = count.toLocaleString();
+      }
+      try { localStorage.setItem("hypeElims", JSON.stringify(value)); } catch {}
+    }
+    window.addEventListener("poizenKillsChanged", event => updateRecapKills(event.detail));
+    window.addEventListener("storage", event => {
+      if (event.key === "hypeElims") {
+        try { updateRecapKills(JSON.parse(event.newValue)); } catch {}
+      }
+    });
+    [...recap.children].forEach((el, i) => setTimeout(() => {
+      el.classList.add("in");
+      const n = el.querySelector("[data-to]"); if (!n) return;
+      const to = Number(n.dataset.to), t0 = performance.now();
+      const run = t => { if (Number(n.dataset.to) !== to) return; const p = Math.min(1, (t - t0) / 1400); n.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString(); if (p < 1) requestAnimationFrame(run); };
+      requestAnimationFrame(run);
+    }, 1200 + i * 220));
+  }
+
+  function ticker(lines) {
+    const el = document.getElementById("ticker");
+    el.innerHTML = lines.map(l => `<span>${escapeHtml(l)}</span>`).join("");
+    let i = 0; const spans = el.children; spans[0].classList.add("on");
+    setInterval(() => { spans[i].classList.remove("on"); i = (i + 1) % spans.length; spans[i].classList.add("on"); }, 6000);
+  }
+  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch])); }
+
+  // ---------------- ambient effects ----------------
+  function setup(id) { const cv = document.getElementById(id); cv.width = W; cv.height = H; return cv.getContext("2d"); }
+  const sky = setup("sky"), water = setup("water"), dust = setup("dust");
+  const stars = Array.from({ length: layout === "h" ? 140 : 120 }, () => ({ x: Math.random() * W, y: Math.random() * H * ZONES.skyBottom, r: Math.random() * 1.4 + .3, p: Math.random() * 6.28, s: Math.random() * .03 + .008 }));
+  const glints = Array.from({ length: 90 }, () => ({ x: ZONES.waterLeft * W + Math.random() * W * (1 - ZONES.waterLeft), y: H * ZONES.waterTop + Math.pow(Math.random(), 1.6) * H * (1 - ZONES.waterTop), w: Math.random() * 60 + 15, p: Math.random() * 6.28, s: Math.random() * .04 + .015 }));
+  const motes = Array.from({ length: 60 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.8 + .5, vx: (Math.random() - .5) * .2, vy: -(Math.random() * .3 + .08), p: Math.random() * 6.28 }));
+  let shoot = null;
+  function frame() {
+    sky.clearRect(0, 0, W, H);
+    for (const s of stars) { s.p += s.s; const a = .25 + .75 * Math.pow((Math.sin(s.p) + 1) / 2, 3);
+      sky.globalAlpha = a; sky.fillStyle = "#fff3d6"; sky.beginPath(); sky.arc(s.x, s.y, s.r, 0, 6.283); sky.fill(); }
+    if (!shoot && Math.random() < .0025) shoot = { x: Math.random() * W * .7, y: Math.random() * H * ZONES.skyBottom * .6, l: 0 };
+    if (shoot) { shoot.l += 1; const len = 140, x = shoot.x + shoot.l * 14, y = shoot.y + shoot.l * 5;
+      const g = sky.createLinearGradient(x, y, x - len, y - len * .36); g.addColorStop(0, "rgba(255,240,210,.9)"); g.addColorStop(1, "rgba(255,240,210,0)");
+      sky.globalAlpha = Math.max(0, 1 - shoot.l / 40); sky.strokeStyle = g; sky.lineWidth = 2; sky.beginPath(); sky.moveTo(x, y); sky.lineTo(x - len, y - len * .36); sky.stroke();
+      if (shoot.l > 40) shoot = null; }
+    sky.globalAlpha = 1;
+    water.clearRect(0, 0, W, H);
+    for (const g of glints) { g.p += g.s; const a = Math.max(0, Math.sin(g.p)) * .55;
+      water.globalAlpha = a; water.fillStyle = "#f0c27a"; water.fillRect(g.x + Math.sin(g.p * .7) * 8, g.y, g.w, 1.6); }
+    water.globalAlpha = 1;
+    dust.clearRect(0, 0, W, H);
+    for (const m of motes) { m.x += m.vx; m.y += m.vy; m.p += .02; if (m.y < -10) { m.y = H + 10; m.x = Math.random() * W; }
+      dust.globalAlpha = .25 + .35 * Math.sin(m.p); dust.fillStyle = "#ecd194"; dust.shadowColor = "rgba(236,209,148,.9)"; dust.shadowBlur = 8;
+      dust.beginPath(); dust.arc(m.x, m.y, m.r, 0, 6.283); dust.fill(); }
+    dust.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  frame();
+</script>
+</body>
+</html>
