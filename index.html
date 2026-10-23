@@ -6076,10 +6076,19 @@ function viewLedger() {
 function renderTicker() {
   if (!OVERLAY || !S.G) return;
   const parts = [];
-  S.G.pick6.filter(({ t }) => confirmed(t)).forEach(({ t, r }) => parts.push(`<span><span style="color:#F2C14E">${esc(t.title)}</span> ${r.hits}/${r.n} ${r.state === 'live' ? '<span style="color:#FF3B5C">LIVE</span>' : r.state === 'won' ? '<span style="color:#2EE59D">CASHED</span>' : r.state === 'dead' || r.state === 'lost' ? '<span style="color:#FF3B5C">BUSTED</span>' : ''} · to win ${money(r.potential)}</span>`));
+  const LIVE = '<span style="color:#FF3B5C">LIVE</span>';
+  // only what is still in play: settled slips (and old ones the board already graded) would bury tonight's tickets in a long loop
+  S.G.pick6.filter(({ t, r }) => confirmed(t) && !t.settlement && !['won', 'dead', 'lost'].includes(r.state)).forEach(({ t, r }) => parts.push(`<span><span style="color:#F2C14E">${esc(t.title)}</span> ${r.hits}/${r.n} ${r.state === 'live' ? '<span style="color:#FF3B5C">LIVE</span>' : r.state === 'won' ? '<span style="color:#2EE59D">CASHED</span>' : r.state === 'dead' || r.state === 'lost' ? '<span style="color:#FF3B5C">BUSTED</span>' : ''} · to win ${money(r.potential)}</span>`));
+  openContracts().forEach((c) => {
+    let x = null; try { x = contractEval(c); } catch { /* no live game found for it yet */ }
+    const legs = String(c.title || '').split(' | '), name = legs.slice(0, 2).join(' · ') + (legs.length > 2 ? ` +${legs.length - 2} more` : '');
+    const cost = Number(c.cost) || (Number(c.qty) || 0) * (Number(c.avg) || 0) / 100;
+    parts.push(`<span><span style="color:#0FB89A">Trade</span> ${esc(name)} · ${money(cost)} → ${money(Number(c.qty) || 0)}${x && x.ev && x.ev.state === 'in' ? ' ' + LIVE : ''}</span>`);
+  });
   S.G.shifts.forEach(({ sh, targets }) => targets.forEach(({ t, r }) => { if (r.state === 'td1' || r.state === 'live') parts.push(`<span>${esc(sh.label)}: ${esc(P(t.player).name)} ${r.tds || 0} TD</span>`); }));
   if (PK.ready) { const { rows } = pickemBoard(); if (rows[0] && rows[0].pts) parts.push(`<span><span style="color:#F472B6">Pick'em leader</span> ${esc(rows[0].name)} · ${rows[0].pts} correct · ${rows.length} playing</span>`); }
   const a = periods().all; if (a.n) parts.push(`<span>Record ${a.w}-${a.l} · ${money(a.pl, true)}</span>`);
+  if (!parts.length) parts.push('<span>No open tickets right now</span>');
   const one = parts.join('<span style="color:#F2C14E">◆</span>');
   const html = one + '<span style="color:#F2C14E">◆</span>' + one, el = $('#ticker');
   if (renderTicker.last === html) return; // re-setting identical content restarts the scroll
