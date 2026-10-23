@@ -118,6 +118,7 @@
   const q = new URLSearchParams(location.search);
   const mode = ["starting", "brb", "ending"].includes(q.get("mode")) ? q.get("mode") : "starting";
   const layout = q.get("layout") === "v" ? "v" : "h";
+  const fortnite = q.get("show") === "fortnite";   // hosted copy defaults to NBA nights; &show=fortnite restores the gaming wording + eliminations
   document.body.className = `${layout} ${mode}`;
   const W = layout === "h" ? 1920 : 1080, H = layout === "h" ? 1080 : 1920;
   const ROOT = location.protocol === "file:" ? "file:///C:/Stream" : ".";   // OBS loads from disk; TikTok LIVE Studio loads this hosted copy (art sits next to it)
@@ -143,7 +144,7 @@
       ${rule.replace('class="rule"', 'class="rule enter d2"')}
       <div class="handle enter d2">POIZEN2ALL95</div>
       <div style="margin-top:40px" class="enter d3"><div class="card"><span class="k" id="clockLabel">LIVE IN</span><span class="big" id="clock">05:00</span><div class="bar"><i id="clockBar"></i></div></div></div>
-      <div class="chips enter d4"><span class="chip">☀ <em>MORNING MARKETS</em></span><span class="chip">→</span><span class="chip">⚔ <em>FORTNITE</em></span></div>
+      <div class="chips enter d4">${fortnite ? `<span class="chip">☀ <em>MORNING MARKETS</em></span><span class="chip">→</span><span class="chip">⚔ <em>FORTNITE</em></span>` : `<span class="chip">🏀 <em>NBA GAME NIGHT</em></span>`}</div>
       <div class="ticker enter d5" id="ticker"></div>`;
     let total, end, lastClockReset = 0;
     function resetClock() {
@@ -180,7 +181,7 @@
     window.addEventListener("obsSourceVisibleChanged", event => {
       if (event.detail?.visible) resetClock();
     });
-    ticker(["Grab a drink, find a seat — we start shortly.", "Say hi in chat while we load in.", "Markets first, then we drop in."]);
+    ticker(["Grab a drink, find a seat — we start shortly.", "Say hi in chat while we load in.", fortnite ? "Markets first, then we drop in." : "Tip-off soon — get your picks in."]);
   }
 
   // ---------------- BRB ----------------
@@ -194,7 +195,7 @@
     const start = Date.now();
     setInterval(() => document.getElementById("away").textContent = fmt(Math.floor((Date.now() - start) / 1000)), 1000);
     const lines = ["Stepping away for a moment.", "Stretch, hydrate — back in a flash.", "Keep the chat warm for me."];
-    if (layout === "h") lines.push("Support the stream: code POIZEN2ALL95 in the Item Shop.");
+    if (layout === "h") lines.push(fortnite ? "Support the stream: code POIZEN2ALL95 in the Item Shop." : "Games are still on — keep the sweat going in chat.");
     ticker(lines);
   }
 
@@ -204,7 +205,7 @@
     const fresh = (o, key = "updated") => o && Date.now() - (o[key] || o.t || 0) < 6 * 3600 * 1000;
     const goals = read("streamGoals"), elims = read("hypeElims"), ch = read("streamChallenges"), gifters = read("streamGifters");
     const stats = [];
-    stats.push([fresh(elims, "t") ? Number(elims.n) || 0 : 0, "ELIMINATIONS"]);
+    if (fortnite) stats.push([fresh(elims, "t") ? Number(elims.n) || 0 : 0, "ELIMINATIONS"]);
     if (fresh(ch) && ch.n) stats.push([ch.n, "CHALLENGES"]);
     if (fresh(goals)) { if (goals.likes) stats.push([goals.likes, "LIKES"]); if (goals.follows) stats.push([goals.follows, "NEW FOLLOWS"]); if (goals.coins) stats.push([goals.coins, "COINS"]); }
     const top = fresh(gifters) ? Object.entries(gifters.users || {}).sort((a, b) => b[1] - a[1])[0] : null;
