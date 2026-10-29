@@ -20,7 +20,12 @@
   const sold=amount(c.exit);const returned=c.status==='won'?qty:c.status==='lost'?0:c.status==='sold'&&qty!==null&&sold!==null?qty*sold/100:null;
   const fees=amount(c.actualFees);return {stage:({open:'Placed · reported',sold:'Closed · sold',won:'Settled · won',lost:'Settled · lost',review:'Needs review'})[c.status||'open']||'Status unknown',risk,returned,potential:!c.status||c.status==='open'?qty:null,fees,net:risk!==null&&returned!==null?returned-risk-(fees??0):null,netLabel:fees===null?'Gross P/L · fees unknown':'Net P/L · recorded fees',basis:'Reported trade · confirm your venue statement'};
  }
+ const LOTTO_MAX_CENTS=100;
+ const isLotto=cost=>{const n=amount(cost);return n!==null&&n>0&&Math.round(n*100)<=LOTTO_MAX_CENTS;};
+ const slipLotto=t=>!!t&&!t.units&&isLotto(t.entry);
+ const contractLotto=c=>{if(!c)return false;const q=amount(c.qty),a=amount(c.avg);return isLotto(amount(c.cost)!==null?c.cost:q!==null&&a!==null?q*a/100:null);};
  const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function lottoBadge(){return '<span class="lotto-chip" title="Lotto: costs $1 or less">LOTTO</span>';}
  function html(x){const money=n=>n===null||n===undefined?'Not available':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);const cell=(label,value)=>`<div><span>${esc(label)}</span><b>${esc(money(value))}</b></div>`;return `<div class="trade-receipt"><p><b>${esc(x.stage)}</b></p><div class="trade-receipt-grid">${cell('Entry cost',x.risk)}${cell(x.returned===null?'Potential return':'Return',x.returned===null?x.potential:x.returned)}${cell(x.netLabel,x.net)}${x.fees!==undefined?cell('Total recorded fees',x.fees):''}</div><small>${esc(x.basis)}</small></div>`;}
- const api={slip,publicSlip,contract,html};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PZTradeCards=api;
+ const api={slip,publicSlip,contract,html,isLotto,slipLotto,contractLotto,lottoBadge};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PZTradeCards=api;
 })(typeof window!=='undefined'?window:globalThis);
