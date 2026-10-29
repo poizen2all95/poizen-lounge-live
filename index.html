@@ -2097,6 +2097,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 <script src="settings.js"></script>
 <script src="tiers.js"></script>
 <script src="trade-cards.js"></script>
+<script src="trade-status.js"></script>
 <script src="member-save.js"></script>
 <script src="workspace.js"></script>
 <script src="alerts.js"></script>
@@ -3450,7 +3451,8 @@ async function getJSON(url) {
   try { return await fetchJSON(url); }
   catch (e) { const alt = url.includes('://site.api.espn.com/') ? url.replace('://site.api.espn.com/', '://site.web.api.espn.com/') : null; if (!alt) throw e; try { return await fetchJSON(alt); } catch { throw e; } }
 }
-const openContracts = () => (S.slate.contracts || []).filter((c) => c && (!c.status || c.status === 'open'));
+const tradeOver = (c) => { const t = S.tradeStatus && S.tradeStatus[c.id]; return !!t && ['dead', 'ended', 'won'].includes(t.status); };
+const openContracts = () => (S.slate.contracts || []).filter((c) => c && (!c.status || c.status === 'open') && !tradeOver(c));
 /* win-probability inputs from an ESPN summary: live chart, matchup predictor, DraftKings moneylines */
 function wpFrom(sum) {
   const o = { at: Date.now() };
@@ -3863,7 +3865,7 @@ function afterData() {
     S.alertLog = S.alertLog.slice(0, 40);
   }
   if (S.feed.last) S.alertPrimed = true;
-  S.snap = snap; S.G = G; renderBg(); try { meSettle(); } catch (e) { console.warn(e); }
+  S.snap = snap; S.G = G; tradeStatusAll(); tbKick(); renderBg(); try { meSettle(); } catch (e) { console.warn(e); }
 }
 
 /* ---------------- member accounts: My Lounge ----------------
@@ -4375,6 +4377,85 @@ function sweatPickemRows(){
   const mine=PK.players[myUid()]?.picks||{};
   return pickemLegs().filter(x=>mine[x.id]&&eventForLeg(x.leg)?.state!=='post').map(x=>{const leg={...x.leg,dir:mine[x.id]},g=E.gradeLeg(legRef(leg),gameForLeg(leg));return{t:{id:'pickem:'+x.id,title:'Your community Pick’em',sweatSource:'pickem',status:'confirmed',entry:null},r:{state:g.state==='miss'?'dead':'open',payout:null,potential:0,legs:[{leg,g}]}};});
 }
+/* ---------------- DraftKings Predictions: has the trade ended? ----------------
+   These trades carry no game date, so the games are found from when each trade was captured: ESPN's scoreboards for those days, then the
+   box score of any finished game that holds a player prop. Past results never change, so they are kept on this device. */
+const TB = { boards: new Map(), out: store.get('pz_tb_out', {}) || {}, players: store.get('pz_tb_players', {}) || {}, need: new Map(), busy: false };
+{ const saved = store.get('pz_tb_boards', {}) || {}; Object.entries(saved).forEach(([k, v]) => TB.boards.set(k, v)); }
+const TB_SPORTS = ['nba', 'nfl', 'nhl', 'mlb'];
+const tbNorm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const etDate = (ms) => { const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(ms)).map((x) => [x.type, x.value])); return p.year + p.month + p.day; };
+function tbCompact(sport, ev) { const c = (ev.competitions || [])[0] || {}, st = (ev.status && ev.status.type) || {}; return { id: String(ev.id), sport, date: ev.date, state: st.state || 'pre', completed: !!st.completed, comps: (c.competitors || []).map((t) => ({ abbr: t.team.abbreviation, name: t.team.shortDisplayName || t.team.name, winner: t.winner, score: t.score })) }; }
+function tbOpenTrades() { return (S.slate.contracts || []).filter((c) => c && c.status === 'open' && c.venue === 'DraftKings Predictions' && Number.isFinite(Date.parse(c.verifiedAt || c.at || ''))); }
+function tbWanted(now) {
+  const want = new Set();
+  tbOpenTrades().forEach((c) => { const cap = Date.parse(c.verifiedAt || c.at), last = Math.min(cap + 3 * 864e5, now); for (let t = cap; t <= last + 12 * 36e5; t += 12 * 36e5) TB_SPORTS.forEach((sp) => want.add(sp + ':' + etDate(t))); });
+  return [...want];
+}
+function tbGrade(l, ev, p) {
+  const k = ev.id + '|' + tbNorm(l.player) + '|' + l.market + '|' + l.line;
+  if (ev.state === 'post') { if (TB.out[k]) return TB.out[k]; TB.need.set(k, { ev, l, p }); return null; }
+  const g = S.games[ev.id]; if (!g) return null;
+  return E.gradeLeg(tbLeg(l, p, ev.id), g).state;
+}
+/* a prop leg the engine can grade: a player on the slate, or one found through ESPN's search (name and team are all the box score needs) */
+function tbLeg(l, p, eventId) { const base = { market: l.market, line: l.line, dir: 'over', inclusive: l.inclusive, eventId }; return p.key ? legRef({ ...base, player: p.key }) : { ...base, name: l.player, espnId: p.espnId, team: p.team }; }
+const TB_LEAGUES = ['nhl', 'nba', 'nfl', 'mlb'];
+async function tbFindPlayers() {
+  const names = new Map();
+  Object.values(S.tradeStatus || {}).forEach((t) => t.legs.forEach((l) => { if (l.kind === 'prop' && !l.p) names.set(tbNorm(l.player), l.player); }));
+  const todo = [...names].filter(([k]) => { const v = TB.players[k]; return v === undefined || (v && v.miss && Date.now() - v.at > 6 * 36e5); });
+  let changed = false;
+  for (let i = 0; i < todo.length; i += 4) await Promise.all(todo.slice(i, i + 4).map(async ([k, name]) => {
+    try {
+      const j = await getJSON('https://site.web.api.espn.com/apis/common/v3/search?query=' + encodeURIComponent(name) + '&limit=5&type=player');
+      const hit = (j.items || []).find((it) => tbNorm(it.displayName) === k && TB_LEAGUES.includes(it.league));
+      const tr = hit && hit.teamRelationships && hit.teamRelationships[0] && hit.teamRelationships[0].core;
+      TB.players[k] = hit && tr ? { sport: hit.league, team: tr.abbreviation, espnId: String(hit.id || '').replace(/D/g, '') || undefined } : { miss: true, at: Date.now() };
+      changed = true;
+    } catch { /* ask again next poll */ }
+  }));
+  if (changed) store.set('pz_tb_players', TB.players);
+  return changed;
+}
+function tradeStatusAll() {
+  const events = []; TB.boards.forEach((b) => b.events.forEach((e) => events.push(e)));
+  const byName = new Map(Object.entries(S.slate.players || {}).map(([k, p]) => [tbNorm(p.name), { key: k, sport: p.sport, team: p.team }]));
+  TB.need = new Map(); const out = {};
+  tbOpenTrades().forEach((c) => { out[c.id] = window.PZTradeStatus.resolve(c, { now: Date.now(), events, player: (n) => { const k = tbNorm(n), f = TB.players[k]; return byName.get(k) || (f && !f.miss ? f : null); }, gradeProp: tbGrade }); });
+  S.tradeStatus = out; return out;
+}
+async function tbRefresh() {
+  if (TB.busy) return false; TB.busy = true; let changed = false;
+  try {
+    if (await tbFindPlayers()) { changed = true; tradeStatusAll(); }
+    const now = Date.now(), today = etDate(now), jobs = [];
+    tbWanted(now).forEach((k) => { const [sp, date] = k.split(':'), b = TB.boards.get(k); if (!b || (b.err && now - b.at > 60000) || (!b.err && date >= today && now - b.at > 60000)) jobs.push([sp, date, k]); });
+    for (let i = 0; i < jobs.length; i += 6) await Promise.all(jobs.slice(i, i + 6).map(async ([sp, date, k]) => {
+      try { const sb = await getJSON(E.ESPN.scoreboard(sp) + '&dates=' + date); TB.boards.set(k, { at: Date.now(), events: (sb.events || []).map((e) => tbCompact(sp, e)) }); changed = true; }
+      catch { if (!TB.boards.has(k)) TB.boards.set(k, { at: Date.now(), err: true, events: [] }); }
+    }));
+    if (changed) { const keep = {}; TB.boards.forEach((b, k) => { if (!b.err && k.split(':')[1] < today) keep[k] = b; }); store.set('pz_tb_boards', keep); tradeStatusAll(); }
+    /* finished games that hold a player prop: read the box score once and keep only the outcome */
+    const games = new Map(); TB.need.forEach((n) => { if (!games.has(n.ev.id)) games.set(n.ev.id, n.ev); });
+    const ids = [...games.keys()];
+    for (let i = 0; i < ids.length; i += 4) await Promise.all(ids.slice(i, i + 4).map(async (id) => {
+      const ev = games.get(id);
+      try {
+        const game = E.parseGame(await getJSON(E.ESPN.summary(ev.sport, id)), ev.sport);
+        TB.need.forEach((n, k) => { if (n.ev.id !== id) return; const st = E.gradeLeg(tbLeg(n.l, n.p, id), game).state; if (['hit', 'miss', 'dnp', 'void'].includes(st)) { TB.out[k] = st; changed = true; } });
+      } catch { /* try again on the next poll */ }
+    }));
+    if (changed) store.set('pz_tb_out', TB.out);
+  } finally { TB.busy = false; }
+  return changed;
+}
+/* first visit downloads scoreboards and box scores (cached on the device afterwards), so let the page finish loading first and leave data-saver users alone */
+function tbKick() {
+  if (TB.wait || (navigator.connection && navigator.connection.saveData)) return;
+  TB.wait = setTimeout(() => { TB.wait = 0; tbRefresh().then((changed) => { if (changed) { tradeStatusAll(); renderBg(); } }).catch(() => {}); }, TB.started ? 0 : 4000); TB.started = true;
+}
+const TB_NOTE = { ended: 'Ended · awaiting DraftKings to settle', won: 'All legs hit · confirm the payout', live: 'Live · a game is in progress', upcoming: 'Upcoming' };
 function sweatPredictionRows() {
   const normalize=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
   const players=Object.entries(S.slate?.players||{});
@@ -4388,8 +4469,9 @@ function sweatPredictionRows() {
       const ev=eventFor(player[0]),leg={player:player[0],market,line:Number(match[1])-.5,dir:'over',inclusive:Number(match[1]),eventId:ev?.id,startsAt:ev?.date};
       const g=E.gradeLeg(legRef(leg),gameFor(leg.player));legs.push({leg,g});
     });
-    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')?'dead':legs.some(x=>x.g.state==='live')?'live':'open';
-    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs}};
+    const ts=(S.tradeStatus||{})[c.id]||null;
+    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')||(ts&&ts.status==='dead')?'dead':legs.some(x=>x.g.state==='live')||(ts&&ts.status==='live')?'live':'open';
+    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs,venueStatus:ts?ts.status:null,venueNote:ts?(ts.status==='dead'?'A leg missed · busted':ts.status==='unknown'?'':TB_NOTE[ts.status]||''):'',venueWhy:ts?ts.reason:''}};
   });
 }
 /* earliest start among a ticket's unfinished legs: a live game sorts first, then the soonest tip-off */
@@ -4422,8 +4504,9 @@ function sweatRowsFor(filter) {
     if (filter === 'dead') return dead;
     if(filter==='all')return true;
     if (dead) return false;
-    const live = r.legs.some(({leg,g}) => eventForLeg(leg)?.state==='in' || g.state === 'live');
-    const pending = !r.legs.length || r.legs.some(({g}) => !['hit','miss','dnp','void'].includes(g.state));
+    const live = r.legs.some(({leg,g}) => eventForLeg(leg)?.state==='in' || g.state === 'live') || r.venueStatus==='live';
+    const over = ['ended','won'].includes(r.venueStatus);
+    const pending = (!r.legs.length && !over) || r.legs.some(({g}) => !['hit','miss','dnp','void'].includes(g.state));
     if (filter === 'settling') return r.payout !== null || (!live && !pending);
     if (r.payout !== null) return false;
     if (filter === 'live') return live;
@@ -4474,9 +4557,9 @@ function sweatLegLive(leg,g){return !sweatDone(g)&&(eventForLeg(leg)?.state==='i
 function sweatKnown(g){return g.value!==null&&g.value!==undefined&&Number.isFinite(Number(g.value))&&g.state!=='scheduled';}
 function sweatNeed(leg,g){if(!sweatKnown(g))return null;const v=Number(g.value);return leg.dir==='under'?Math.max(0,Number(leg.line)-v):Math.max(0,Math.floor(Number(leg.line))+1-v);}
 function sweatShortNote(leg,g){if(g.state==='hit')return 'Hit';if(g.state==='miss')return 'Missed';if(g.state==='void')return 'Void';if(g.state==='dnp')return 'Did not play';const ev=eventForLeg(leg);if(ev?.state==='pre')return new Date(ev.date).toLocaleString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'});const n=sweatNeed(leg,g),clock=ev?.state==='in'?(ev.detail||'Live'):'',head=n===null?'No stats yet':leg.dir==='under'?E.fmt(n)+' room left':n===0?'Target reached':E.fmt(n)+' more';return clock?head+' · '+clock:head;}
-function sweatIsLive(r){return r.legs.some(x=>sweatLegLive(x.leg,x.g));}
+function sweatIsLive(r){return r.legs.some(x=>sweatLegLive(x.leg,x.g))||r.venueStatus==='live';}
 /* "Still live to win" counts only tickets the board can actually grade. A trade with no gradable legs (a venue-only market) is never proven alive, so its payout is reported apart instead of inflating the total. */
-function sweatWinTotals(alive){const t={win:0,ungradedWin:0,ungradedN:0};alive.forEach(({t:k,r})=>{if(sweatSource(k)==='pickem'||(r.payout!==null&&r.payout!==undefined))return;const p=Number(r.potential)||0;if(r.legs.length)t.win+=p;else{t.ungradedN++;t.ungradedWin+=p;}});return t;}
+function sweatWinTotals(alive){const t={win:0,ungradedWin:0,ungradedN:0};alive.forEach(({t:k,r})=>{if(sweatSource(k)==='pickem'||(r.payout!==null&&r.payout!==undefined)||['ended','won'].includes(r.venueStatus))return;const p=Number(r.potential)||0;if(r.legs.length)t.win+=p;else{t.ungradedN++;t.ungradedWin+=p;}});return t;}
 function sweatSummaryHTML(rows){const alive=rows.filter(x=>!sweatDead(x.r)),need=new Set(),tot=sweatWinTotals(alive),win=tot.win,live=alive.filter(x=>sweatIsLive(x.r)).length;alive.forEach(({r})=>r.legs.forEach(({leg,g})=>{if(!sweatDone(g))need.add([leg.player,leg.market,leg.dir,leg.line].join('|'));}));
  return `<div class="sw3-sum"><div><small>Still alive</small><b>${alive.length}<span> of ${rows.length}</span></b></div><div><small>Live right now</small><b>${live}<span> ${live===1?'ticket':'tickets'}</span></b></div><div><small>Still live to win</small><b class="win">${money(win)}</b>${tot.ungradedN?`<em class="sw3-ung">+${money(tot.ungradedWin)} on ${tot.ungradedN} ${tot.ungradedN===1?'trade':'trades'} the board can’t grade yet</em>`:''}</div><div><small>Legs still to land</small><b>${need.size}</b></div></div>`;}
 function sweatNeededHTML(rows){const m=new Map();rows.filter(x=>!sweatDead(x.r)).forEach(({r})=>r.legs.forEach(({leg,g})=>{if(!sweatLegLive(leg,g))return;const k=[leg.player,leg.market,leg.dir,leg.line].join('|'),o=m.get(k)||{leg,g,n:0};o.n++;m.set(k,o);}));
@@ -4485,13 +4568,13 @@ function sweatNeededHTML(rows){const m=new Map();rows.filter(x=>!sweatDead(x.r))
 function sweatChip({leg,g},full=false){const p=P(leg.player),mk=swMk(leg.market),known=sweatKnown(g),v=known?Number(g.value):null,st=sweatDone(g)?g.state:sweatLegLive(leg,g)?'live':'pending',prog=g.state==='hit'?100:known?Math.min(100,Math.max(0,v/Math.max(Number(leg.line),1)*100)):0;
  const ev=eventForLeg(leg);return `<div class="sw3-chip ${st}" title="${esc(p.name+(ev?.name?' · '+ev.name:''))}">${avatar(leg.player,'av sw3-av')}<div><span class="nm">${esc(p.name)} <span class="jersey-no">#${esc(sweatJersey(leg.player,ev))}</span></span><span class="ln">${leg.dir==='under'?'Less':'More'} ${E.fmt(leg.inclusive||leg.line)} ${esc(mk.short||leg.market)}</span></div><b${!known?' class="not-started"':''}>${known?E.fmt(v):ev?.state==='pre'?'Not started':'Pending'}</b><i class="sw3-bar"><i style="width:${prog}%;background:${sweatProgressColor(leg,g)}"></i></i><small>${esc(sweatShortNote(leg,g))}</small></div>`;}
 function sweatTicketRow({t,r}){const other=sweatOtherSelections(t,r),n=r.legs.length+other.length,hit=r.legs.filter(x=>x.g.state==='hit').length,dead=sweatDead(r),left=r.legs.filter(x=>!sweatDone(x.g)),live=left.filter(x=>sweatLegLive(x.leg,x.g)),src=sweatSource(t),stake=sweatStake(t);
- const status=dead?'busted':!left.length?(other.length?'waiting on venue legs':'settling'):left.length===1?'needs '+swLast(P(left[0].leg.player).name):live.length?`${left.length} to go · ${live.length} live`:`${left.length} to go`;
+ const status=dead?'busted':(r.venueNote&&(!r.legs.length||['ended','won','live'].includes(r.venueStatus)))?r.venueNote.toLowerCase():!left.length?(other.length?'waiting on venue legs':'settling'):left.length===1?'needs '+swLast(P(left[0].leg.player).name):live.length?`${left.length} to go · ${live.length} live`:`${left.length} to go`;
  const title=src==='prediction'?(t.title?.match(/^\d+ Pick Combo/)?.[0]||'Prediction'):src==='pickem'?'Your call':n+'-pick';
  const dots=r.legs.map(({leg,g})=>`<i class="${g.state==='hit'?'h':g.state==='miss'?'x':['void','dnp'].includes(g.state)?'v':sweatLegLive(leg,g)?'l':''}"></i>`).join('')+'<i></i>'.repeat(other.length);
  return `<article style="--ticket-league:${LEAGUES[t.sport||P(r.legs[0]?.leg.player).sport]?.color||'#526074'}" class="sw3-ticket ${dead?'dead':live.length?'live':left.length?'pending':'settling'} ${S.sweatSelected===t.id?'selected':''}"><button type="button" class="sw3-head" data-sw-ticket="${esc(t.id)}" aria-pressed="${S.sweatSelected===t.id}"><span class="sw-source ${src}">${sweatType(t)} ${ticketLeagueBadges(t)}</span><b class="sw3-title">${esc(title)}</b><span class="sw3-dots" aria-label="${hit} of ${n} hit">${dots}</span><span class="sw3-status">${hit}/${n} · ${esc(status)}</span><span class="sw3-money">${src==='pickem'?'Points only':`${stake===null?'':money(stake)+' → '}<b>${money(r.potential||0)}${t.venueReturnDisplay?.minimum?'+':''}</b>`}</span></button><div class="sw3-chips">${r.legs.map(x=>sweatChip(x)).join('')}${other.map(o=>`<div class="sw3-chip other"><div><span class="nm">${esc(o)}</span><span class="ln">Venue selection · not tracked live</span></div></div>`).join('')}</div></article>`;}
 function sweatTicketsHTML(rows){const dead=rows.filter(x=>sweatDead(x.r)),alive=rows.filter(x=>!sweatDead(x.r)),left=r=>r.legs.filter(x=>!sweatDone(x.g)).length;
  const live=alive.filter(x=>x.r.payout===null&&sweatIsLive(x.r)).sort((a,b)=>left(a.r)-left(b.r)||(Number(b.r.potential)||0)-(Number(a.r.potential)||0));
- const settling=alive.filter(x=>x.r.payout!==null||(!sweatIsLive(x.r)&&x.r.legs.length&&!left(x.r))),next=alive.filter(x=>!sweatIsLive(x.r)&&!settling.includes(x)).sort(byStart);
+ const settling=alive.filter(x=>x.r.payout!==null||['ended','won'].includes(x.r.venueStatus)||(!sweatIsLive(x.r)&&x.r.legs.length&&!left(x.r))),next=alive.filter(x=>!sweatIsLive(x.r)&&!settling.includes(x)).sort(byStart);
  const sec=(title,list,body)=>list.length?`<section class="sw3-sec"><h2>${title} <span>${list.length} ${list.length===1?'ticket':'tickets'}</span></h2>${body||list.map(sweatTicketRow).join('')}</section>`:'';
  return sec('Live now',live)+sec('Up next',next,waveRows(next,sweatTicketRow))+sec('Settling',settling)+(dead.length?(bustOpen=>`<details class="sw3-bust"${bustOpen?' open':''}><summary>Busted <span>${dead.length} ${dead.length===1?'ticket':'tickets'}</span></summary>${bustOpen?dead.map(sweatTicketRow).join(''):''}</details>`)(S.sweatBustOpen||S.sweatFilter==='dead'||!alive.length):'');}
 /* players, grouped by game so each score and clock shows once */
@@ -4502,7 +4585,7 @@ function sweatPlayerCards(rows){const src=S.sweatFilter==='all'?rows.filter(x=>!
  return `<div class="sw3-games">${list.map(({ev,lines})=>{const score=ev?.comps?.length?ev.comps.map(c=>c.abbr+' '+(c.score??'—')).join(' · '):'',ls=[...lines.values()].sort((a,b)=>Number(sweatLegLive(b.leg,b.g))-Number(sweatLegLive(a.leg,a.g))||Number(sweatDone(a.g))-Number(sweatDone(b.g))||b.tickets.length-a.tickets.length);
   return `<section class="sw3-game ${ev?.state==='in'?'live':''}"><header><b>${leagueBadge(ev?.sport)} ${esc(ev?.name||'Not linked to a game')}</b><span>${esc(sweatWhen(ev))}${score?' · '+esc(score):''}${ev?.venue?' · '+esc(ev.venue):''}</span>${ev?`<button type="button" data-open-game="${esc(ev.id)}">Game info</button>`:''}</header>${ls.map(({leg,g,tickets})=>`<div class="sw3-pline">${sweatChip({leg,g},true)}<div class="sw3-tix"><small>${tickets.length} ${tickets.length===1?'ticket':'tickets'}</small>${tickets.slice(0,4).map(t=>`<button type="button" data-sw-ticket="${esc(t.id)}">#${esc(swId(t))}</button>`).join('')}${tickets.length>4?`<span>+${tickets.length-4}</span>`:''}</div></div>`).join('')}</section>`;}).join('')}</div>`;}
 function sweatHTML(){
- const rows=sweatScopedRows(),scoped=S.sweatFilter==='all'?rows:sweatScopedRows('all'),all=sweatRows('all'),events=[...new Map(all.flatMap(x=>sweatEvents(x.r)).map(e=>[e.id,e])).values()].sort((a,b)=>a.date.localeCompare(b.date)),sports=[...new Set(all.flatMap(x=>x.t.sport?[x.t.sport]:x.r.legs.map(l=>P(l.leg.player).sport)).filter(Boolean))].sort(),inPlay=rows.filter(x=>!sweatDead(x.r)&&(x.r.payout===null||x.r.payout===undefined)),risk=inPlay.reduce((a,{t})=>a+(sweatStake(t)||0),0),potential=sweatWinTotals(inPlay).win,selected=rows.find(x=>x.t.id===S.sweatSelected),view=S.sweatView||'tickets';sweatHTML.last={G:S.G,rows};
+ const rows=sweatScopedRows(),scoped=S.sweatFilter==='all'?rows:sweatScopedRows('all'),all=sweatRows('all'),events=[...new Map(all.flatMap(x=>sweatEvents(x.r)).map(e=>[e.id,e])).values()].sort((a,b)=>a.date.localeCompare(b.date)),sports=[...new Set(all.flatMap(x=>x.t.sport?[x.t.sport]:x.r.legs.map(l=>P(l.leg.player).sport)).filter(Boolean))].sort(),inPlay=rows.filter(x=>!sweatDead(x.r)&&!['ended','won'].includes(x.r.venueStatus)&&(x.r.payout===null||x.r.payout===undefined)),risk=inPlay.reduce((a,{t})=>a+(sweatStake(t)||0),0),potential=sweatWinTotals(inPlay).win,selected=rows.find(x=>x.t.id===S.sweatSelected),view=S.sweatView||'tickets';sweatHTML.last={G:S.G,rows};
  return `<header class="sw-head sw2-head"><div><div class="sw-k">POIZEN · SUPER SWEAT</div><h1>Your watch</h1><p>${rows.length} ${rows.length===1?'ticket':'tickets'} · ${money(risk)} at risk · ${money(potential)} potential</p></div><div class="sw2-view" role="group" aria-label="Watch layout">${[['tickets','Tickets'],['players','Players']].map(([v,label])=>`<button type="button" data-sw-view="${v}" aria-pressed="${view===v}">${label}</button>`).join('')}</div><button class="sw-x" type="button" data-sweat="off" aria-label="Close sweat mode">Close</button></header>${leagueLegend()}<div class="sw2-toolbar"><nav aria-label="Ticket status">${[['all','All'],['live','Live'],['upcoming','Upcoming'],['settling','Settling'],['dead','Dead']].filter(([key])=>key!=='settling'||sweatScopedRows('settling').length).map(([key,label])=>`<button type="button" data-sw-filter="${key}" aria-pressed="${S.sweatFilter===key}">${label}<b>${sweatScopedRows(key).length}</b></button>`).join('')}</nav><div class="sw2-filters"><label>League<select id="swLeague"><option value="">All leagues</option>${sports.map(sp=>`<option value="${sp}" ${S.sweatSport===sp?'selected':''}>${sp.toUpperCase()}</option>`).join('')}</select></label><label>Type<select id="swType">${[['','All types'],['prediction','Predictions'],['pick6','Pick6'],['pickem','My Pick’em']].map(([v,l])=>`<option value="${v}" ${S.sweatSourceFilter===v?'selected':''}>${l}</option>`).join('')}</select></label><label>Game<select id="swGame"><option value="">All games</option>${events.map(ev=>`<option value="${esc(ev.name)}" ${S.sweatGame===ev.name?'selected':''}>${esc(ev.name)}</option>`).join('')}</select></label><button type="button" data-sw-high aria-pressed="${!!S.sweatHigh}">$10+ risk</button></div></div><div class="sw2-context"><span>${view==='tickets'?'Alive tickets first, closest to cashing. Tap a ticket for every selection and game.':'Every player you still need, grouped by game. Tap a ticket number for the full slip.'}${S.sweatGame?' Game filter keeps complete multi-game tickets.':''}</span><span>${S.feed.last?'Updated '+new Date(S.feed.last).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'Waiting for feed'}</span></div><div class="sw2-workspace ${selected?'has-detail':''} ${selected&&S.sweatDetailFull?'detail-full':''}" style="--sw-detail-w:${sweatDetailW()}px"><div class="sw2-list">${sweatSummaryHTML(scoped)}${sweatNeededHTML(scoped)}${rows.length?(view==='players'?sweatPlayerCards(rows):sweatTicketsHTML(rows)):`<div class="sw-empty"><h2>${S.sweatFilter==='live'?'No tickets live right now':'No tickets match these filters'}</h2><p>${S.sweatFilter==='live'?'Choose Upcoming to see the next games.':'Try All or adjust the league, type or game.'}</p><button type="button" data-sw-reset>Show all tickets</button></div>`}</div>${selected?`<div class="sw2-split" role="separator" aria-orientation="vertical" aria-label="Resize ticket details. Drag, or use the arrow keys; double-click to reset" tabindex="0" aria-valuenow="${sweatDetailW()}"></div>`+sweatTicketDetail(selected):''}</div><footer class="sw-foot">Times shown in your local time zone · Potential is not guaranteed · Missing stats stay ungraded · Community Pick’em is points only</footer>`;
 }
 document.addEventListener('change',e=>{if(e.target.id==='gamesLeague'){S.gamesSport=e.target.value;render();return;}if(e.target.id==='gamesStatus'){S.gamesStatus=e.target.value;render();return;}if(['swGame','swLeague','swType'].includes(e.target.id)){S[{swGame:'sweatGame',swLeague:'sweatSport',swType:'sweatSourceFilter'}[e.target.id]]=e.target.value;renderSweat();}});
