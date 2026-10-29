@@ -1752,6 +1752,7 @@ html[data-season="playoffs"][data-team] .rail{background:linear-gradient(180deg,
 .sw3-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 14px}
 .sw3-sum>div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
 .sw3-sum small{display:block;font-size:11px;font-weight:800;color:var(--fg2);text-transform:uppercase;letter-spacing:.05em}
+.sw3-sum .sw3-ung{display:block;margin-top:2px;font:600 11px/1.3 Inter,system-ui,sans-serif;font-style:normal;color:var(--fg3)}
 .sw3-sum b{font:900 26px/1.15 var(--stadium)}.sw3-sum b span{font-size:14px;color:var(--fg3)}.sw3-sum b.win{color:var(--win)}
 .sw3-need{margin:0 0 16px}
 .sw3-sec h2,.sw3-need h2,.sw3-bust>summary{font:900 15px/1 var(--stadium);text-transform:uppercase;letter-spacing:.05em;margin:0 0 8px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
@@ -4381,7 +4382,7 @@ function sweatPredictionRows() {
       const ev=eventFor(player[0]),leg={player:player[0],market,line:Number(match[1])-.5,dir:'over',inclusive:Number(match[1]),eventId:ev?.id,startsAt:ev?.date};
       const g=E.gradeLeg(legRef(leg),gameFor(leg.player));legs.push({leg,g});
     });
-    const state=legs.some(x=>x.g.state==='miss')?'dead':legs.some(x=>x.g.state==='live')?'live':'open';
+    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')?'dead':legs.some(x=>x.g.state==='live')?'live':'open';
     return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs}};
   });
 }
@@ -4451,8 +4452,10 @@ function sweatKnown(g){return g.value!==null&&g.value!==undefined&&Number.isFini
 function sweatNeed(leg,g){if(!sweatKnown(g))return null;const v=Number(g.value);return leg.dir==='under'?Math.max(0,Number(leg.line)-v):Math.max(0,Math.floor(Number(leg.line))+1-v);}
 function sweatShortNote(leg,g){if(g.state==='hit')return 'Hit';if(g.state==='miss')return 'Missed';if(g.state==='void')return 'Void';if(g.state==='dnp')return 'Did not play';const ev=eventForLeg(leg);if(ev?.state==='pre')return new Date(ev.date).toLocaleString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'});const n=sweatNeed(leg,g),clock=ev?.state==='in'?(ev.detail||'Live'):'',head=n===null?'No stats yet':leg.dir==='under'?E.fmt(n)+' room left':n===0?'Target reached':E.fmt(n)+' more';return clock?head+' · '+clock:head;}
 function sweatIsLive(r){return r.legs.some(x=>sweatLegLive(x.leg,x.g));}
-function sweatSummaryHTML(rows){const alive=rows.filter(x=>!sweatDead(x.r)),need=new Set(),win=alive.reduce((a,{t,r})=>a+(sweatSource(t)==='pickem'?0:Number(r.potential)||0),0),live=alive.filter(x=>sweatIsLive(x.r)).length;alive.forEach(({r})=>r.legs.forEach(({leg,g})=>{if(!sweatDone(g))need.add([leg.player,leg.market,leg.dir,leg.line].join('|'));}));
- return `<div class="sw3-sum"><div><small>Still alive</small><b>${alive.length}<span> of ${rows.length}</span></b></div><div><small>Live right now</small><b>${live}<span> ${live===1?'ticket':'tickets'}</span></b></div><div><small>Still live to win</small><b class="win">${money(win)}</b></div><div><small>Legs still to land</small><b>${need.size}</b></div></div>`;}
+/* "Still live to win" counts only tickets the board can actually grade. A trade with no gradable legs (a venue-only market) is never proven alive, so its payout is reported apart instead of inflating the total. */
+function sweatWinTotals(alive){const t={win:0,ungradedWin:0,ungradedN:0};alive.forEach(({t:k,r})=>{if(sweatSource(k)==='pickem')return;const p=Number(r.potential)||0;if(r.legs.length)t.win+=p;else{t.ungradedN++;t.ungradedWin+=p;}});return t;}
+function sweatSummaryHTML(rows){const alive=rows.filter(x=>!sweatDead(x.r)),need=new Set(),tot=sweatWinTotals(alive),win=tot.win,live=alive.filter(x=>sweatIsLive(x.r)).length;alive.forEach(({r})=>r.legs.forEach(({leg,g})=>{if(!sweatDone(g))need.add([leg.player,leg.market,leg.dir,leg.line].join('|'));}));
+ return `<div class="sw3-sum"><div><small>Still alive</small><b>${alive.length}<span> of ${rows.length}</span></b></div><div><small>Live right now</small><b>${live}<span> ${live===1?'ticket':'tickets'}</span></b></div><div><small>Still live to win</small><b class="win">${money(win)}</b>${tot.ungradedN?`<em class="sw3-ung">+${money(tot.ungradedWin)} on ${tot.ungradedN} ${tot.ungradedN===1?'trade':'trades'} the board can’t grade yet</em>`:''}</div><div><small>Legs still to land</small><b>${need.size}</b></div></div>`;}
 function sweatNeededHTML(rows){const m=new Map();rows.filter(x=>!sweatDead(x.r)).forEach(({r})=>r.legs.forEach(({leg,g})=>{if(!sweatLegLive(leg,g))return;const k=[leg.player,leg.market,leg.dir,leg.line].join('|'),o=m.get(k)||{leg,g,n:0};o.n++;m.set(k,o);}));
  const list=[...m.values()].sort((a,b)=>b.n-a.n||(sweatNeed(a.leg,a.g)??99)-(sweatNeed(b.leg,b.g)??99));if(!list.length)return '';
  return `<section class="sw3-need" aria-label="Needed right now"><h2>Needed right now <span>${list.length} live ${list.length===1?'leg':'legs'} on your alive tickets</span></h2><div class="sw3-need-row">${list.map(({leg,g,n})=>{const ev=eventForLeg(leg);return `<button type="button" class="sw3-need-chip"${ev?` data-open-game="${esc(ev.id)}"`:''}>${avatar(leg.player,'av sw3-av')}<span><b>${esc(swLast(P(leg.player).name))}</b> ${esc(swMk(leg.market).short||leg.market)} <strong>${sweatKnown(g)?E.fmt(Number(g.value)):'—'}</strong><em>${leg.dir==='under'?' under ':' / '}${E.fmt(leg.inclusive||leg.line)}</em></span><small>${esc(sweatShortNote(leg,g))}${n>1?' · on '+n+' tickets':''}</small></button>`;}).join('')}</div></section>`;}
