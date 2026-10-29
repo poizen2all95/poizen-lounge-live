@@ -1851,11 +1851,9 @@ main{width:100%;max-width:1560px;margin-inline:auto}
 .st-btn em{font-style:normal;color:var(--fg3)}
 .st-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--fg3)}
 .st-dot.live{background:var(--live);box-shadow:0 0 8px var(--live)}
-.st-drop{width:min(760px,94vw);margin-top:6px;padding:10px 10px 58px;border:0;border-top:1px solid var(--line2);border-radius:16px 16px 0 0;background:linear-gradient(to bottom,var(--bg) calc(100% - 120px),color-mix(in srgb,var(--bg) 70%,transparent) calc(100% - 56px),transparent 100%);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 70px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 70px),transparent);box-shadow:none}
+.st-drop{width:min(760px,94vw);margin-top:6px;padding:10px;border:1px solid var(--line2);border-radius:16px;background:var(--bg);box-shadow:0 18px 44px rgba(0,0,0,.5);max-height:calc(100vh - var(--toph,80px) - 72px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
 .st-drop .lhcar{width:100%;margin:0}
-.lhc-slide{display:flex;flex-direction:column}
-.lhcar .lhc-slide .lhero2{height:auto;flex:none}
-.lh-players{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:0 16px;padding:10px 4px 0;max-height:250px;overflow:auto;scrollbar-width:thin}
+.lh-players{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:0 16px;padding:10px 4px 2px;max-height:min(42vh,320px);overflow:auto;scrollbar-width:thin}
 .lp{display:grid;grid-template-columns:40px minmax(0,1fr);grid-template-areas:"av t" "l l";gap:4px 10px;align-items:center;padding:9px 2px;border-top:1px solid color-mix(in srgb,var(--fg) 10%,transparent)}
 .lp .av{grid-area:av;position:relative;width:40px;height:40px;border-radius:12px;overflow:hidden;background:var(--tg)}
 .lp .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
@@ -1908,10 +1906,10 @@ main{width:100%;max-width:1560px;margin-inline:auto}
 .rec.kpi svg{width:14px;height:14px;flex:none;align-self:center;color:var(--gold)}
 .rec b.livec{color:var(--live)}.rec b.gold{color:var(--gold)}.rec b.teal{color:var(--teal)}.rec b.win{color:var(--win)}.rec b.loss{color:var(--loss)}
 .lhcar{position:relative;width:min(760px,100%);margin:0 auto 16px}
-.lhc-stage{display:grid}
-.lhc-slide{grid-area:1/1;min-width:0;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s linear .45s}
-.lhc-slide.on{opacity:1;visibility:visible;transition:opacity .45s ease}
-.lhcar .lhero2{margin-bottom:0;height:100%;min-height:clamp(210px,15vw,250px)}
+.lhc-stage{position:relative;overflow:hidden;overflow:clip;overflow-clip-margin:14px}
+.lhc-slide{display:flex;flex-direction:column;min-width:0;position:absolute;top:0;left:0;right:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s ease,visibility 0s linear .45s}
+.lhc-slide.on{position:relative;opacity:1;visibility:visible;pointer-events:auto;transition:opacity .45s ease}
+.lhcar .lhero2{margin-bottom:0;flex:none;min-height:clamp(210px,15vw,250px)}
 .lhcar .lhero2 h2{font-size:clamp(40px,4vw,62px)}
 .lhcar .lh-cd{font-size:clamp(32px,3vw,46px)}
 .lhcar .lh-txt{max-width:62%;padding:18px 22px 20px}
