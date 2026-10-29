@@ -3496,6 +3496,12 @@ function ingestScoreboard(sport, sb) {
 function eventFor(key) { const p = P(key); return S.events[S.teamEvent[(p.sport || 'nfl') + ':' + p.team]] || null; }
 function gameFor(key) { const ev = eventFor(key); if (!ev || ev.state === 'pre') return null; return S.games[ev.id] || null; }
 function eventForLeg(leg) {
+  const memo = eventForLeg.memo;
+  if (!memo) return eventForLegRaw(leg);
+  if (!memo.has(leg)) memo.set(leg, eventForLegRaw(leg));
+  return memo.get(leg);
+}
+function eventForLegRaw(leg) {
   if(leg.eventId) return S.events[String(leg.eventId)] || null;
   const ev=eventFor(leg.player);
   if(leg.venueOnly) {
@@ -4391,9 +4397,26 @@ function slipStartMs(t,r){let best=Infinity;for(const {leg,g} of r.legs){if(['hi
 function byStart(a,b){const x=slipStartMs(a.t,a.r),y=slipStartMs(b.t,b.r);return x===y?0:x<y?-1:1;}
 function slipWave(t,r){const ms=slipStartMs(t,r);return ms===-Infinity?'Live now':Number.isFinite(ms)?'Starts '+new Date(ms).toLocaleString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'}):'Start time not posted';}
 function waveRows(rows,card){let last='';return rows.map(x=>{const w=slipWave(x.t,x.r);let h='';if(w!==last){const n=rows.filter(y=>slipWave(y.t,y.r)===w).length;h=`<div class="sl-wave"><b>${esc(w)}</b><span>${n} ${n===1?'ticket':'tickets'}</span></div>`;last=w;}return h+card(x);}).join('');}
+/* One Sweat render asks for the same rows many times (a count per filter button, the list, the summary) and grading every ticket is the expensive part.
+   While a render runs, each ticket set and each leg's game is worked out once; the memos exist only for that render, so nothing is ever stale. */
+let SWMEMO = null;
+function withSweatMemo(fn) { if (SWMEMO) return fn(); SWMEMO = new Map(); eventForLeg.memo = new WeakMap(); try { return fn(); } finally { SWMEMO = null; eventForLeg.memo = null; } }
 function sweatRows(filter = S.sweatFilter) {
+  if (!SWMEMO) return sweatRowsFor(filter);
+  const key = [filter, S.sweatSourceFilter, S.sweatHigh].join('|');
+  if (!SWMEMO.has(key)) SWMEMO.set(key, sweatRowsFor(filter));
+  return SWMEMO.get(key).slice();
+}
+function sweatBaseRows() {
+  const key = 'base|' + S.sweatSourceFilter + '|' + S.sweatHigh;
+  if (SWMEMO && SWMEMO.has(key)) return SWMEMO.get(key);
   // Receipt settlements belong in history; an unsettled busted ticket stays available here.
   const rows = S.G.pick6.filter(({t}) => confirmed(t) && !t.settlement).concat(sweatPredictionRows(),sweatPickemRows()).filter(({t})=>(!S.sweatSourceFilter||sweatSource(t)===S.sweatSourceFilter)&&(!S.sweatHigh||(sweatStake(t)!==null&&sweatStake(t)>=10)));
+  if (SWMEMO) SWMEMO.set(key, rows);
+  return rows;
+}
+function sweatRowsFor(filter) {
+  const rows = sweatBaseRows();
   return rows.filter(({r}) => {
     const dead = sweatDead(r);
     if (filter === 'dead') return dead;
@@ -4470,7 +4493,7 @@ function sweatTicketsHTML(rows){const dead=rows.filter(x=>sweatDead(x.r)),alive=
  const live=alive.filter(x=>x.r.payout===null&&sweatIsLive(x.r)).sort((a,b)=>left(a.r)-left(b.r)||(Number(b.r.potential)||0)-(Number(a.r.potential)||0));
  const settling=alive.filter(x=>x.r.payout!==null||(!sweatIsLive(x.r)&&x.r.legs.length&&!left(x.r))),next=alive.filter(x=>!sweatIsLive(x.r)&&!settling.includes(x)).sort(byStart);
  const sec=(title,list,body)=>list.length?`<section class="sw3-sec"><h2>${title} <span>${list.length} ${list.length===1?'ticket':'tickets'}</span></h2>${body||list.map(sweatTicketRow).join('')}</section>`:'';
- return sec('Live now',live)+sec('Up next',next,waveRows(next,sweatTicketRow))+sec('Settling',settling)+(dead.length?`<details class="sw3-bust"${S.sweatBustOpen||S.sweatFilter==='dead'||!alive.length?' open':''}><summary>Busted <span>${dead.length} ${dead.length===1?'ticket':'tickets'}</span></summary>${dead.map(sweatTicketRow).join('')}</details>`:'');}
+ return sec('Live now',live)+sec('Up next',next,waveRows(next,sweatTicketRow))+sec('Settling',settling)+(dead.length?(bustOpen=>`<details class="sw3-bust"${bustOpen?' open':''}><summary>Busted <span>${dead.length} ${dead.length===1?'ticket':'tickets'}</span></summary>${bustOpen?dead.map(sweatTicketRow).join(''):''}</details>`)(S.sweatBustOpen||S.sweatFilter==='dead'||!alive.length):'');}
 /* players, grouped by game so each score and clock shows once */
 function sweatPlayerCards(rows){const src=S.sweatFilter==='all'?rows.filter(x=>!sweatDead(x.r)):rows,games=new Map();
  src.forEach(({t,r})=>r.legs.forEach(({leg,g})=>{if(!leg.player)return;if(S.sweatFilter==='live'&&!sweatLegLive(leg,g))return;const ev=eventForLeg(leg);if(S.sweatSport&&P(leg.player).sport!==S.sweatSport)return;if(S.sweatGame&&ev?.name!==S.sweatGame)return;const gk=ev?ev.id:'none',G=games.get(gk)||{ev,lines:new Map()};games.set(gk,G);const k=[leg.player,leg.market,leg.dir,leg.line].join('|'),L=G.lines.get(k)||{leg,g,tickets:[]};L.tickets.push(t);G.lines.set(k,L);}));
@@ -4479,7 +4502,7 @@ function sweatPlayerCards(rows){const src=S.sweatFilter==='all'?rows.filter(x=>!
  return `<div class="sw3-games">${list.map(({ev,lines})=>{const score=ev?.comps?.length?ev.comps.map(c=>c.abbr+' '+(c.score??'—')).join(' · '):'',ls=[...lines.values()].sort((a,b)=>Number(sweatLegLive(b.leg,b.g))-Number(sweatLegLive(a.leg,a.g))||Number(sweatDone(a.g))-Number(sweatDone(b.g))||b.tickets.length-a.tickets.length);
   return `<section class="sw3-game ${ev?.state==='in'?'live':''}"><header><b>${leagueBadge(ev?.sport)} ${esc(ev?.name||'Not linked to a game')}</b><span>${esc(sweatWhen(ev))}${score?' · '+esc(score):''}${ev?.venue?' · '+esc(ev.venue):''}</span>${ev?`<button type="button" data-open-game="${esc(ev.id)}">Game info</button>`:''}</header>${ls.map(({leg,g,tickets})=>`<div class="sw3-pline">${sweatChip({leg,g},true)}<div class="sw3-tix"><small>${tickets.length} ${tickets.length===1?'ticket':'tickets'}</small>${tickets.slice(0,4).map(t=>`<button type="button" data-sw-ticket="${esc(t.id)}">#${esc(swId(t))}</button>`).join('')}${tickets.length>4?`<span>+${tickets.length-4}</span>`:''}</div></div>`).join('')}</section>`;}).join('')}</div>`;}
 function sweatHTML(){
- const rows=sweatScopedRows(),scoped=S.sweatFilter==='all'?rows:sweatScopedRows('all'),all=sweatRows('all'),events=[...new Map(all.flatMap(x=>sweatEvents(x.r)).map(e=>[e.id,e])).values()].sort((a,b)=>a.date.localeCompare(b.date)),sports=[...new Set(all.flatMap(x=>x.t.sport?[x.t.sport]:x.r.legs.map(l=>P(l.leg.player).sport)).filter(Boolean))].sort(),inPlay=rows.filter(x=>!sweatDead(x.r)&&(x.r.payout===null||x.r.payout===undefined)),risk=inPlay.reduce((a,{t})=>a+(sweatStake(t)||0),0),potential=sweatWinTotals(inPlay).win,selected=rows.find(x=>x.t.id===S.sweatSelected),view=S.sweatView||'tickets';
+ const rows=sweatScopedRows(),scoped=S.sweatFilter==='all'?rows:sweatScopedRows('all'),all=sweatRows('all'),events=[...new Map(all.flatMap(x=>sweatEvents(x.r)).map(e=>[e.id,e])).values()].sort((a,b)=>a.date.localeCompare(b.date)),sports=[...new Set(all.flatMap(x=>x.t.sport?[x.t.sport]:x.r.legs.map(l=>P(l.leg.player).sport)).filter(Boolean))].sort(),inPlay=rows.filter(x=>!sweatDead(x.r)&&(x.r.payout===null||x.r.payout===undefined)),risk=inPlay.reduce((a,{t})=>a+(sweatStake(t)||0),0),potential=sweatWinTotals(inPlay).win,selected=rows.find(x=>x.t.id===S.sweatSelected),view=S.sweatView||'tickets';sweatHTML.last={G:S.G,rows};
  return `<header class="sw-head sw2-head"><div><div class="sw-k">POIZEN · SUPER SWEAT</div><h1>Your watch</h1><p>${rows.length} ${rows.length===1?'ticket':'tickets'} · ${money(risk)} at risk · ${money(potential)} potential</p></div><div class="sw2-view" role="group" aria-label="Watch layout">${[['tickets','Tickets'],['players','Players']].map(([v,label])=>`<button type="button" data-sw-view="${v}" aria-pressed="${view===v}">${label}</button>`).join('')}</div><button class="sw-x" type="button" data-sweat="off" aria-label="Close sweat mode">Close</button></header>${leagueLegend()}<div class="sw2-toolbar"><nav aria-label="Ticket status">${[['all','All'],['live','Live'],['upcoming','Upcoming'],['settling','Settling'],['dead','Dead']].filter(([key])=>key!=='settling'||sweatScopedRows('settling').length).map(([key,label])=>`<button type="button" data-sw-filter="${key}" aria-pressed="${S.sweatFilter===key}">${label}<b>${sweatScopedRows(key).length}</b></button>`).join('')}</nav><div class="sw2-filters"><label>League<select id="swLeague"><option value="">All leagues</option>${sports.map(sp=>`<option value="${sp}" ${S.sweatSport===sp?'selected':''}>${sp.toUpperCase()}</option>`).join('')}</select></label><label>Type<select id="swType">${[['','All types'],['prediction','Predictions'],['pick6','Pick6'],['pickem','My Pick’em']].map(([v,l])=>`<option value="${v}" ${S.sweatSourceFilter===v?'selected':''}>${l}</option>`).join('')}</select></label><label>Game<select id="swGame"><option value="">All games</option>${events.map(ev=>`<option value="${esc(ev.name)}" ${S.sweatGame===ev.name?'selected':''}>${esc(ev.name)}</option>`).join('')}</select></label><button type="button" data-sw-high aria-pressed="${!!S.sweatHigh}">$10+ risk</button></div></div><div class="sw2-context"><span>${view==='tickets'?'Alive tickets first, closest to cashing. Tap a ticket for every selection and game.':'Every player you still need, grouped by game. Tap a ticket number for the full slip.'}${S.sweatGame?' Game filter keeps complete multi-game tickets.':''}</span><span>${S.feed.last?'Updated '+new Date(S.feed.last).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'Waiting for feed'}</span></div><div class="sw2-workspace ${selected?'has-detail':''} ${selected&&S.sweatDetailFull?'detail-full':''}" style="--sw-detail-w:${sweatDetailW()}px"><div class="sw2-list">${sweatSummaryHTML(scoped)}${sweatNeededHTML(scoped)}${rows.length?(view==='players'?sweatPlayerCards(rows):sweatTicketsHTML(rows)):`<div class="sw-empty"><h2>${S.sweatFilter==='live'?'No tickets live right now':'No tickets match these filters'}</h2><p>${S.sweatFilter==='live'?'Choose Upcoming to see the next games.':'Try All or adjust the league, type or game.'}</p><button type="button" data-sw-reset>Show all tickets</button></div>`}</div>${selected?`<div class="sw2-split" role="separator" aria-orientation="vertical" aria-label="Resize ticket details. Drag, or use the arrow keys; double-click to reset" tabindex="0" aria-valuenow="${sweatDetailW()}"></div>`+sweatTicketDetail(selected):''}</div><footer class="sw-foot">Times shown in your local time zone · Potential is not guaranteed · Missing stats stay ungraded · Community Pick’em is points only</footer>`;
 }
 document.addEventListener('change',e=>{if(e.target.id==='gamesLeague'){S.gamesSport=e.target.value;render();return;}if(e.target.id==='gamesStatus'){S.gamesStatus=e.target.value;render();return;}if(['swGame','swLeague','swType'].includes(e.target.id)){S[{swGame:'sweatGame',swLeague:'sweatSport',swType:'sweatSourceFilter'}[e.target.id]]=e.target.value;renderSweat();}});
@@ -4489,8 +4512,19 @@ document.addEventListener('pointerdown',e=>{const sp=e.target.closest?.('.sw2-sp
  document.addEventListener('pointermove',move);document.addEventListener('pointerup',up);document.addEventListener('pointercancel',up);});
 document.addEventListener('keydown',e=>{if(!e.target.classList?.contains('sw2-split'))return;const step=e.shiftKey?120:40;if(e.key==='ArrowLeft'){e.preventDefault();setSweatDetailW(sweatDetailW()+step);}else if(e.key==='ArrowRight'){e.preventDefault();setSweatDetailW(sweatDetailW()-step);}else if(e.key==='Home'){e.preventDefault();setSweatDetailW(null);}});
 document.addEventListener('dblclick',e=>{if(e.target.closest?.('.sw2-split'))setSweatDetailW(null);});
-document.addEventListener('toggle',e=>{if(e.target.classList?.contains('sw3-bust'))S.sweatBustOpen=e.target.open;},true);
-function renderSweat(){const el=$('#sweat');if(!el)return;el.hidden=!S.sweat;if(S.sweat&&S.G){if(document.body.classList.contains('sw-resizing'))return;if(el.contains(document.activeElement)&&document.activeElement?.tagName==='SELECT')return;const top=el.scrollTop,left=el.querySelector('.sw2-list')?.scrollTop||0,right=el.querySelector('.sw2-detail')?.scrollTop||0,focus=document.activeElement,focusKey=focus?.closest?.('[data-sw-ticket]')?.dataset.swTicket;el.innerHTML=sweatHTML();el.scrollTop=top;const list=el.querySelector('.sw2-list'),detail=el.querySelector('.sw2-detail');if(list)list.scrollTop=left;if(detail)detail.scrollTop=right;if(focusKey){const button=[...el.querySelectorAll('[data-sw-ticket]')].find(b=>b.dataset.swTicket===focusKey);button?.focus({preventScroll:true});}}document.body.classList.toggle('sweating',S.sweat);}
+document.addEventListener('toggle',e=>{if(e.target.classList?.contains('sw3-bust')){S.sweatBustOpen=e.target.open;if(e.target.open&&!e.target.querySelector('.sw3-ticket'))renderSweat();}},true);
+/* Switch the open slip without rebuilding the page. Returns false (caller does a full render) when there is no open slip to swap out of or anything is unusual. */
+function sweatSwitchTicket(id){
+  const el=$('#sweat');if(!el||!S.sweat||(S.sweatView||'tickets')!=='tickets')return false;
+  const ws=el.querySelector('.sw2-workspace.has-detail'),detail=ws&&ws.querySelector('.sw2-detail');if(!detail)return false;
+  const head=[...ws.querySelectorAll('.sw3-head')].find(b=>b.dataset.swTicket===id);if(!head)return false;
+  const last=sweatHTML.last,row=(last&&last.G===S.G?last.rows.find(x=>x.t.id===id):null)||withSweatMemo(()=>sweatScopedRows().find(x=>x.t.id===id));if(!row)return false;
+  const box=document.createElement('div');box.innerHTML=sweatTicketDetail(row);const fresh=box.firstElementChild;if(!fresh)return false;
+  ws.querySelectorAll('.sw3-ticket.selected').forEach(a=>{a.classList.remove('selected');const b=a.querySelector('.sw3-head');if(b)b.setAttribute('aria-pressed','false');});
+  const card=head.closest('.sw3-ticket');if(card)card.classList.add('selected');head.setAttribute('aria-pressed','true');
+  S.sweatSelected=id;detail.replaceWith(fresh);return true;
+}
+function renderSweat(){const el=$('#sweat');if(!el)return;el.hidden=!S.sweat;if(S.sweat&&S.G){if(document.body.classList.contains('sw-resizing'))return;if(el.contains(document.activeElement)&&document.activeElement?.tagName==='SELECT')return;const top=el.scrollTop,left=el.querySelector('.sw2-list')?.scrollTop||0,right=el.querySelector('.sw2-detail')?.scrollTop||0,focus=document.activeElement,focusKey=focus?.closest?.('[data-sw-ticket]')?.dataset.swTicket;el.innerHTML=withSweatMemo(sweatHTML);el.scrollTop=top;const list=el.querySelector('.sw2-list'),detail=el.querySelector('.sw2-detail');if(list)list.scrollTop=left;if(detail)detail.scrollTop=right;if(focusKey){const button=[...el.querySelectorAll('[data-sw-ticket]')].find(b=>b.dataset.swTicket===focusKey);button?.focus({preventScroll:true});}}document.body.classList.toggle('sweating',S.sweat);}
 
 /* where every number comes from, and how old it is */
 function dataHealth() {
@@ -6187,7 +6221,7 @@ document.addEventListener('click', (e) => {
   const gameRefresh=e.target.closest('[data-game-refresh]');if(gameRefresh){loadGameDetails(gameRefresh.dataset.gameRefresh,true);return;}
   const linkedGameTicket=e.target.closest('[data-game-ticket]');if(linkedGameTicket){S.sweatSelected=linkedGameTicket.dataset.gameTicket;S.sweatGame='';S.sweatSport='';S.sweatSourceFilter='';S.sweatFilter='all';S.sweatHigh=false;S.sweat=true;renderSweat();return;}
   const viewToggle=e.target.closest('[data-sw-view]');if(viewToggle){setSweatView(viewToggle.dataset.swView);return;}
-  const ticketToggle=e.target.closest('[data-sw-ticket]');if(ticketToggle){S.sweatSelected=ticketToggle.dataset.swTicket;renderSweat();const detail=$('#sweat .sw2-detail');detail?.focus({preventScroll:true});if(window.innerWidth<=720)$('#sweat').scrollTop=0;return;}
+  const ticketToggle=e.target.closest('[data-sw-ticket]');if(ticketToggle){if(!sweatSwitchTicket(ticketToggle.dataset.swTicket)){S.sweatSelected=ticketToggle.dataset.swTicket;renderSweat();}const detail=$('#sweat .sw2-detail');detail?.focus({preventScroll:true});if(window.innerWidth<=720)$('#sweat').scrollTop=0;return;}
   if(e.target.closest('[data-sw-full]')){S.sweatDetailFull=!S.sweatDetailFull;store.set('pz_sweat_detail_full',S.sweatDetailFull?'1':'');renderSweat();return;}
   if(e.target.closest('[data-sw-back]')){const id=S.sweatSelected;S.sweatSelected=null;renderSweat();[...document.querySelectorAll('#sweat [data-sw-ticket]')].find(b=>b.dataset.swTicket===id)?.focus({preventScroll:true});return;}
   if(e.target.closest('[data-sw-reset]')){S.sweatFilter='all';S.sweatSport='';S.sweatGame='';S.sweatSourceFilter='';S.sweatHigh=false;renderSweat();return;}
