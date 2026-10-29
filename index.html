@@ -4455,7 +4455,7 @@ function tbKick() {
   if (TB.wait || (navigator.connection && navigator.connection.saveData)) return;
   TB.wait = setTimeout(() => { TB.wait = 0; tbRefresh().then((changed) => { if (changed) { tradeStatusAll(); renderBg(); } }).catch(() => {}); }, TB.started ? 0 : 4000); TB.started = true;
 }
-const TB_NOTE = { ended: 'Ended · awaiting DraftKings to settle', won: 'All legs hit · confirm the payout', live: 'Live · a game is in progress', upcoming: 'Upcoming' };
+const TB_NOTE = { ended: 'Ended · awaiting DraftKings to settle', won: 'Won · every leg hit', live: 'Live · a game is in progress', upcoming: 'Upcoming' };
 function sweatPredictionRows() {
   const normalize=s=>String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
   const players=Object.entries(S.slate?.players||{});
@@ -4470,8 +4470,8 @@ function sweatPredictionRows() {
       const g=E.gradeLeg(legRef(leg),gameFor(leg.player));legs.push({leg,g});
     });
     const ts=(S.tradeStatus||{})[c.id]||null;
-    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')||(ts&&ts.status==='dead')?'dead':legs.some(x=>x.g.state==='live')||(ts&&ts.status==='live')?'live':'open';
-    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs,venueStatus:ts?ts.status:null,venueNote:ts?(ts.status==='dead'?'A leg missed · busted':ts.status==='unknown'?'':TB_NOTE[ts.status]||''):'',venueWhy:ts?ts.reason:''}};
+    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')||(ts&&['dead','ended'].includes(ts.status))?'dead':legs.some(x=>x.g.state==='live')||(ts&&ts.status==='live')?'live':'open';
+    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs,venueStatus:ts?ts.status:null,venueNote:ts?(ts.status==='dead'?'A leg missed · busted':ts.status==='ended'?'Game over · did not clear':ts.status==='unknown'?'':TB_NOTE[ts.status]||''):'',venueWhy:ts?ts.reason:''}};
   });
 }
 /* earliest start among a ticket's unfinished legs: a live game sorts first, then the soonest tip-off */

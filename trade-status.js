@@ -62,7 +62,9 @@
  function resolve(contract,ctx){
   const now=ctx.now,cap=Date.parse(contract.verifiedAt||contract.at||'');
   const parsed=parseLegs(contract.title);
-  if(!Number.isFinite(cap)||!parsed.legs.length)return {status:'unknown',reason:'No readable legs or capture time',legs:[],unparsed:parsed.unparsed};
+  if(!Number.isFinite(cap))return {status:'unknown',reason:'No capture time',legs:[],unparsed:parsed.unparsed};
+  /* nothing readable: the only thing known is how long ago it was placed, and a game is never more than a few days out */
+  if(!parsed.legs.length){const a=now-cap;return a>=3*DAY?{status:'ended',reason:'Captured '+Math.floor(a/DAY)+' days ago; the legs could not be read',legs:[],unparsed:parsed.unparsed}:{status:'upcoming',reason:'Too recent to be over',legs:[],unparsed:parsed.unparsed};}
   const hi=Math.min(cap+3*DAY,now+14*DAY),events=(ctx.events||[]).filter(e=>inWindow(e,cap,hi));
   const propSports=new Set();
   const out=parsed.legs.map(l=>{
@@ -92,10 +94,10 @@
   if(allOver&&unresolved===0){
    return out.every(l=>l.state==='hit')?{...base,status:'won',reason:'Every leg hit'}:{...base,status:'ended',reason:'Every game is final'};
   }
-  if(allOver&&age>=4*DAY)return {...base,status:'ended',reason:'The games found are final and it was captured '+Math.floor(age/DAY)+' days ago; the rest could not be matched'};
+  if(allOver&&age>=1*DAY)return {...base,status:'ended',reason:'The games found are final and it was captured '+Math.floor(age/DAY)+' days ago; the rest could not be matched'};
   if(known.length&&known.some(l=>l.event.state==='pre'))return {...base,status:'upcoming',reason:'A game has not started'};
-  if(!known.length&&age>=7*DAY)return {...base,status:'ended',reason:'Captured '+Math.floor(age/DAY)+' days ago and no upcoming game was found'};
-  return {...base,status:known.length?'upcoming':'unknown',reason:known.length?'Waiting on the remaining games':'No game found yet'};
+  if(!known.length&&age>=3*DAY)return {...base,status:'ended',reason:'Captured '+Math.floor(age/DAY)+' days ago and no upcoming game was found'};
+  return {...base,status:'upcoming',reason:known.length?'Waiting on the remaining games':'No game found yet, so none has started'};
  }
  const api={parseLegs,resolve,teamMatches,STATS};
  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.PZTradeStatus=api;

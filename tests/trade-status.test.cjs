@@ -36,7 +36,7 @@ test('every game final and every leg hit is won; a push or missing stats is only
 test('a title that was cut off can never be called won, but can be ended once its found games are final',()=>{
  const events=[ev('1','nba',9,'post',[comp('OKC','Thunder',true),comp('HOU','Rockets',false)])];
  const c={verifiedAt:new Date(CAP).toISOString(),title:'OKC Thunder — To Win | MIA Heat — To'};
- assert.equal(T.resolve(c,{now:CAP+12*H,events}).status,'upcoming','too soon to assume the cut-off leg is done');
+ assert.equal(T.resolve(c,{now:CAP+12*H,events}).status,'upcoming','same day: the cut-off leg may be a later game');
  assert.equal(T.resolve(c,{now:CAP+5*D,events}).status,'ended');
 });
 test('a game in progress makes the trade live; an unstarted game keeps it upcoming',()=>{
@@ -46,9 +46,9 @@ test('a game in progress makes the trade live; an unstarted game keeps it upcomi
 });
 test('no game found is only called ended once the trade is days old',()=>{
  const c={verifiedAt:new Date(CAP).toISOString(),title:'OKC Thunder — To Win'};
- assert.equal(T.resolve(c,{now:CAP+H,events:[]}).status,'unknown');
- assert.equal(T.resolve(c,{now:CAP+5*D,events:[]}).status,'unknown','a week out games are possible, so do not guess earlier');
- const r=T.resolve(c,{now:CAP+8*D,events:[]});assert.equal(r.status,'ended');assert.match(r.reason,/8 days ago/);
+ assert.equal(T.resolve(c,{now:CAP+H,events:[]}).status,'upcoming','fresh and no game found: it has not started');
+ assert.equal(T.resolve(c,{now:CAP+2*D,events:[]}).status,'upcoming');
+ const r=T.resolve(c,{now:CAP+5*D,events:[]});assert.equal(r.status,'ended','the window for its game has closed');assert.match(r.reason,/5 days ago/);
  assert.equal(T.resolve({title:'OKC Thunder — To Win'},{now:CAP,events:[]}).status,'unknown','no capture time means no guess');
 });
 test('NY Giants is read as the NFL team when the other legs are football, and not the MLB club',()=>{
@@ -79,4 +79,15 @@ test('a team name must agree with its abbreviation: the NFL Jets are not the NHL
 test('points + rebounds + assists reads as the combined market',()=>{
  const r=T.parseLegs('22+ — Giannis Antetokounmpo Points + Rebounds + Assists | 5+ — Ja Morant Assists');
  assert.equal(r.unparsed,0);assert.equal(r.legs[0].market,'pra');assert.equal(r.legs[0].player,'Giannis Antetokounmpo');assert.equal(r.legs[1].market,'ast');
+});
+
+test('there is no limbo: every readable or unreadable trade is upcoming, live, won, dead or ended',()=>{
+ const base={verifiedAt:new Date(CAP).toISOString()};
+ for(const title of ['OKC Thunder — To Win','2+ — Freddy Peralta Strikeouts Thrown','garbage','']){
+  for(const days of [0,1,2,3,5,9]){const st=T.resolve({...base,title},{now:CAP+days*D,events:[]}).status;assert.ok(['upcoming','live','won','dead','ended'].includes(st),title+' @'+days+'d gave '+st);}
+ }
+});
+test('a trade with no readable legs is over after the window and not before',()=>{
+ const c={verifiedAt:new Date(CAP).toISOString(),title:'2+ — Freddy Peralta Strikeouts Thrown'};
+ assert.equal(T.resolve(c,{now:CAP+D,events:[]}).status,'upcoming');assert.equal(T.resolve(c,{now:CAP+4*D,events:[]}).status,'ended');
 });
