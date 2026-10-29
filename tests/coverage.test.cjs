@@ -15,6 +15,8 @@ test('still-live-to-win counts only gradable tickets and reports ungraded trades
  const row=(src,potential,legs)=>({t:{sweatSource:src},r:{potential,legs:Array(legs).fill({})}});
  const t=c.sweatWinTotals([row('pick6',100,8),row('pick6',50.5,3),row('prediction',471,0),row('prediction',78,0),row('prediction',27,2),row('pickem',999,1)]);
  assert.equal(t.win,177.5);assert.equal(t.ungradedWin,549);assert.equal(t.ungradedN,2);
+ const paid={t:{sweatSource:'pick6'},r:{potential:1.28,payout:1.28,legs:[{}]}},open={t:{sweatSource:'pick6'},r:{potential:20,payout:null,legs:[{}]}};
+ const d=c.sweatWinTotals([paid,open]);assert.equal(d.win,20,'an already-paid ticket is decided, not still to win');assert.equal(d.ungradedN,0);
  assert.deepEqual({...c.sweatWinTotals([])},{win:0,ungradedWin:0,ungradedN:0});});
 test('background renders wait for a press to end instead of swapping the DOM under the click',()=>{
  const code=html.slice(html.indexOf('const PRESS ='),html.indexOf('/* end press-aware */'));
@@ -26,3 +28,10 @@ test('background renders wait for a press to end instead of swapping the DOM und
  handlers.pointerup();assert.equal(timers.length,1);timers.shift()();assert.equal(renders,2,'one catch-up render after release');
  handlers.pointerdown();now+=2500;c.renderBg();assert.equal(renders,3,'a press that never lifts cannot stall updates');
  handlers.pointerdown();handlers.pointercancel();c.renderBg();assert.equal(renders,4,'cancelled press counts as released');});
+test('avatar frames are positioning contexts so the absolute initials fallback can never cover the page',()=>{
+ const css=[...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m=>m[1]).join('\n');
+ assert.match(css,/\.av-initials\{[^}]*position:absolute/);
+ const frames=new Set([...html.matchAll(/avatar\([^)]*?,\s*'av ([a-z0-9-]+)'\)/g)].map(m=>m[1]));
+ assert.ok(frames.has('sw3-av'));
+ for(const f of frames){const re=new RegExp('(?:^|[,}\\s])\\.'+f+'\\{([^}]*)\\}','g');const rules=[...css.matchAll(re)].map(m=>m[1]).join(';');assert.match(rules,/position:(relative|absolute|fixed|sticky)/,'.'+f+' must be positioned');}
+});
