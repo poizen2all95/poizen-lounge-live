@@ -4382,14 +4382,14 @@ function sweatPickemRows(){
    box score of any finished game that holds a player prop. Past results never change, so they are kept on this device. */
 const TB = { boards: new Map(), out: store.get('pz_tb_out', {}) || {}, players: store.get('pz_tb_players', {}) || {}, need: new Map(), busy: false };
 { const saved = store.get('pz_tb_boards', {}) || {}; Object.entries(saved).forEach(([k, v]) => TB.boards.set(k, v)); }
-const TB_SPORTS = ['nba', 'nfl', 'nhl', 'mlb'];
+const TB_SPORTS = ['nba', 'nfl', 'nhl', 'mlb', 'cfb'];
 const tbNorm = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 const etDate = (ms) => { const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(ms)).map((x) => [x.type, x.value])); return p.year + p.month + p.day; };
 function tbCompact(sport, ev) { const c = (ev.competitions || [])[0] || {}, st = (ev.status && ev.status.type) || {}; return { id: String(ev.id), sport, date: ev.date, state: st.state || 'pre', completed: !!st.completed, comps: (c.competitors || []).map((t) => ({ abbr: t.team.abbreviation, name: t.team.shortDisplayName || t.team.name, winner: t.winner, score: t.score })) }; }
 function tbOpenTrades() { return (S.slate.contracts || []).filter((c) => c && c.status === 'open' && c.venue === 'DraftKings Predictions' && Number.isFinite(Date.parse(c.verifiedAt || c.at || ''))); }
 function tbWanted(now) {
   const want = new Set();
-  tbOpenTrades().forEach((c) => { const cap = Date.parse(c.verifiedAt || c.at), last = Math.min(cap + 3 * 864e5, now); for (let t = cap; t <= last + 12 * 36e5; t += 12 * 36e5) TB_SPORTS.forEach((sp) => want.add(sp + ':' + etDate(t))); });
+  tbOpenTrades().forEach((c) => { const cap = Date.parse(c.verifiedAt || c.at), last = Math.min(cap + 10 * 864e5, now); for (let t = cap; t <= last + 12 * 36e5; t += 12 * 36e5) TB_SPORTS.forEach((sp) => want.add(sp + ':' + etDate(t))); });
   return [...want];
 }
 function tbGrade(l, ev, p) {
@@ -4400,7 +4400,8 @@ function tbGrade(l, ev, p) {
 }
 /* a prop leg the engine can grade: a player on the slate, or one found through ESPN's search (name and team are all the box score needs) */
 function tbLeg(l, p, eventId) { const base = { market: l.market, line: l.line, dir: 'over', inclusive: l.inclusive, eventId }; return p.key ? legRef({ ...base, player: p.key }) : { ...base, name: l.player, espnId: p.espnId, team: p.team }; }
-const TB_LEAGUES = ['nhl', 'nba', 'nfl', 'mlb'];
+const TB_LEAGUES = ['nhl', 'nba', 'nfl', 'mlb', 'college-football'];
+const TB_SPORT_OF = (league) => (league === 'college-football' ? 'cfb' : league);
 async function tbFindPlayers() {
   const names = new Map();
   Object.values(S.tradeStatus || {}).forEach((t) => t.legs.forEach((l) => { if (l.kind === 'prop' && !l.p) names.set(tbNorm(l.player), l.player); }));
@@ -4408,10 +4409,10 @@ async function tbFindPlayers() {
   let changed = false;
   for (let i = 0; i < todo.length; i += 4) await Promise.all(todo.slice(i, i + 4).map(async ([k, name]) => {
     try {
-      const j = await getJSON('https://site.web.api.espn.com/apis/common/v3/search?query=' + encodeURIComponent(name) + '&limit=5&type=player');
-      const hit = (j.items || []).find((it) => tbNorm(it.displayName) === k && TB_LEAGUES.includes(it.league));
+      const ask = async (q) => ((await getJSON('https://site.web.api.espn.com/apis/common/v3/search?query=' + encodeURIComponent(q) + '&limit=5&type=player')).items || []).find((it) => tbNorm(it.displayName) === k && TB_LEAGUES.includes(it.league));
+      const hit = (await ask(name)) || (/^[A-Z]{2}\s/.test(name) ? await ask(name[0] + '.' + name[1] + '. ' + name.slice(3)) : null);
       const tr = hit && hit.teamRelationships && hit.teamRelationships[0] && hit.teamRelationships[0].core;
-      TB.players[k] = hit && tr ? { sport: hit.league, team: tr.abbreviation, espnId: String(hit.id || '').replace(/D/g, '') || undefined } : { miss: true, at: Date.now() };
+      TB.players[k] = hit && tr ? { sport: TB_SPORT_OF(hit.league), team: tr.abbreviation, espnId: String(hit.id || '').replace(/D/g, '') || undefined } : { miss: true, at: Date.now() };
       changed = true;
     } catch { /* ask again next poll */ }
   }));
@@ -4420,7 +4421,7 @@ async function tbFindPlayers() {
 }
 function tradeStatusAll() {
   const events = []; TB.boards.forEach((b) => b.events.forEach((e) => events.push(e)));
-  const byName = new Map(Object.entries(S.slate.players || {}).map(([k, p]) => [tbNorm(p.name), { key: k, sport: p.sport, team: p.team }]));
+  const byName = new Map(Object.entries(S.slate.players || {}).filter(([, p]) => p.team && p.sport).map(([k, p]) => [tbNorm(p.name), { key: k, sport: p.sport, team: p.team }]));
   TB.need = new Map(); const out = {};
   tbOpenTrades().forEach((c) => { out[c.id] = window.PZTradeStatus.resolve(c, { now: Date.now(), events, player: (n) => { const k = tbNorm(n), f = TB.players[k]; return byName.get(k) || (f && !f.miss ? f : null); }, gradeProp: tbGrade }); });
   S.tradeStatus = out; return out;
@@ -4470,8 +4471,8 @@ function sweatPredictionRows() {
       const g=E.gradeLeg(legRef(leg),gameFor(leg.player));legs.push({leg,g});
     });
     const ts=(S.tradeStatus||{})[c.id]||null;
-    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')||(ts&&['dead','ended'].includes(ts.status))?'dead':legs.some(x=>x.g.state==='live')||(ts&&ts.status==='live')?'live':'open';
-    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs,venueStatus:ts?ts.status:null,venueNote:ts?(ts.status==='dead'?'A leg missed · busted':ts.status==='ended'?'Game over · did not clear':ts.status==='unknown'?'':TB_NOTE[ts.status]||''):'',venueWhy:ts?ts.reason:''}};
+    const state=legs.some(x=>x.g.state==='miss')||(c.venueLegResults||[]).some(v=>String(v).toLowerCase()==='miss')||(ts&&ts.status==='dead')?'dead':legs.some(x=>x.g.state==='live')||(ts&&ts.status==='live')?'live':'open';
+    return {t:{id:'prediction:'+c.id,status:'confirmed',title:c.title,cost:c.cost,sport:c.sport,receiptUrl:c.receiptUrl,sweatSource:'prediction'},r:{state,payout:null,potential:c.potentialReturn||0,legs,venueStatus:ts?ts.status:null,venueNote:ts?(ts.status==='dead'?'A leg missed · busted':ts.status==='ended'?(ts.unparsed?'Over · title cut off, last leg unreadable':'Over · awaiting settlement'):ts.status==='unknown'?'':TB_NOTE[ts.status]||''):'',venueWhy:ts?ts.reason:''}};
   });
 }
 /* earliest start among a ticket's unfinished legs: a live game sorts first, then the soonest tip-off */

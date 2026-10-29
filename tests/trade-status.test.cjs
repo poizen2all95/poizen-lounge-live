@@ -91,3 +91,49 @@ test('a trade with no readable legs is over after the window and not before',()=
  const c={verifiedAt:new Date(CAP).toISOString(),title:'2+ — Freddy Peralta Strikeouts Thrown'};
  assert.equal(T.resolve(c,{now:CAP+D,events:[]}).status,'upcoming');assert.equal(T.resolve(c,{now:CAP+4*D,events:[]}).status,'ended');
 });
+
+test('reads spreads, passing attempts, strikeouts and college players with a team in brackets',()=>{
+ const r=T.parseLegs('CHI Bears -8.5 — Spread | 29+ — Caleb Williams Passing Attempts | 2+ — Freddy Peralta Strikeouts Thrown | 160+ — Josh Hoover (IND) Passing Yards | Sam Leavitt (LSU) — Anytime TD Scorer');
+ assert.equal(r.unparsed,0);
+ assert.deepEqual(r.legs[0],{kind:'spread',team:'CHI Bears',spread:-8.5});
+ assert.equal(r.legs[1].market,'pass_att');assert.equal(r.legs[2].market,'pitcher_ks');
+ assert.equal(r.legs[3].player,'Josh Hoover');assert.equal(r.legs[3].hint,'IND');
+ assert.equal(r.legs[4].player,'Sam Leavitt');assert.equal(r.legs[4].hint,'LSU');
+});
+test('a spread is graded from the final score and a push is not a miss',()=>{
+ const c={verifiedAt:new Date(CAP).toISOString(),title:'CHI Bears -8.5 — Spread'};
+ const game=(a,b)=>[{...ev('1','nfl',9,'post',[{abbr:'CHI',name:'Bears',winner:a>b,score:String(a)},{abbr:'NE',name:'Patriots',winner:b>a,score:String(b)}])}];
+ assert.equal(T.resolve(c,{now:CAP+2*D,events:game(30,24)}).status,'dead','won by 6 does not cover -8.5');
+ assert.equal(T.resolve(c,{now:CAP+2*D,events:game(33,24)}).status,'won','won by 9 covers -8.5');
+ const push=T.resolve({...c,title:'CHI Bears -6 — Spread'},{now:CAP+2*D,events:game(30,24)});
+ assert.equal(push.legs[0].state,'void');assert.equal(push.status,'ended');
+});
+test('a game a week after the trade was placed is still found',()=>{
+ const events=[ev('1','nfl',6*24,'post',[comp('NO','Saints',false),comp('CAR','Panthers',true)])];
+ const r=T.resolve({verifiedAt:new Date(CAP).toISOString(),title:'NO Saints — To Win'},{now:CAP+9*D,events});
+ assert.equal(r.status,'dead');assert.equal(r.resolved,1);
+});
+test('Washington is WAS to DraftKings and WSH to ESPN',()=>{
+ assert.equal(T.teamMatches('WAS Commanders',{abbr:'WSH',name:'Commanders'}),true);
+});
+
+test('a last leg cut off at the capture limit is recovered when the player and stat are unmistakable',()=>{
+ const tail='18+ — Victor Wembanyama Po',head='25+ — Jayson Tatum Points | '.repeat(6),title=head+' '.repeat(200-head.length-tail.length)+tail;assert.equal(title.length,200);
+ const events=[ev('1','nba',9,'post',[comp('BOS','Celtics',true),comp('NYK','Knicks',false)]),ev('2','nba',10,'post',[comp('SA','Spurs',true),comp('HOU','Rockets',false)])];
+ const players={'Jayson Tatum':{sport:'nba',team:'BOS'},'Victor Wembanyama':{sport:'nba',team:'SA'}};
+ const mk=state=>T.resolve({verifiedAt:new Date(CAP).toISOString(),title},{now:CAP+2*D,events,player:n=>players[n]||null,gradeProp:(l)=>l.player==='Victor Wembanyama'?state:'hit'});
+ const dead=mk('miss');assert.equal(dead.status,'dead');assert.ok(dead.legs.some(l=>l.recovered&&l.player==='Victor Wembanyama'&&l.market==='pts'));
+ assert.equal(mk('hit').status,'ended','a recovered leg alone never makes a trade "won" while other text was cut');
+});
+test('a stat fragment that could mean two things is not guessed',()=>{
+ const tail='20+ — Josh Allen Pa',title='25+ — X Points | '.repeat(5)+' '.repeat(200-'25+ — X Points | '.length*5-tail.length)+tail;
+ const r=T.resolve({verifiedAt:new Date(CAP).toISOString(),title},{now:CAP+2*D,events:[],player:n=>n==='Josh Allen'?{sport:'nfl',team:'BUF'}:null});
+ assert.equal(r.legs.some(l=>l.recovered),false);
+});
+test('a combo of NBA props and an MLB team finds the baseball game',()=>{
+ const events=[ev('n','nba',9,'post',[comp('BOS','Celtics',true),comp('NYK','Knicks',false)]),ev('m','mlb',9,'post',[comp('MIL','Brewers',true),comp('TB','Rays',false)])];
+ const players={'Jayson Tatum':{sport:'nba',team:'BOS'}};
+ const r=T.resolve({verifiedAt:new Date(CAP).toISOString(),title:'MIL Brewers — To Win | 20+ — Jayson Tatum Points'},{now:CAP+2*D,events,player:n=>players[n]||null,gradeProp:()=>'hit'});
+ assert.equal(r.status,'won');assert.equal(r.resolved,2);
+});
+test('PHO is Phoenix',()=>{assert.equal(T.teamMatches('PHO Suns',{abbr:'PHX',name:'Suns'}),true);});
