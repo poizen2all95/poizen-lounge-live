@@ -3857,7 +3857,7 @@ function afterData() {
     S.alertLog = S.alertLog.slice(0, 40);
   }
   if (S.feed.last) S.alertPrimed = true;
-  S.snap = snap; S.G = G; render(); try { meSettle(); } catch (e) { console.warn(e); }
+  S.snap = snap; S.G = G; renderBg(); try { meSettle(); } catch (e) { console.warn(e); }
 }
 
 /* ---------------- member accounts: My Lounge ----------------
@@ -5057,7 +5057,7 @@ async function loadBooks(extraPositions = []) {
   await Promise.all(ts.map(async (t) => { const b = (BOOK[t] = BOOK[t] || {}); if (b.busy || (b.at && Date.now() - b.at < 8000)) return; b.busy = true;
     try { const r = await fetchJSON(String(base).replace(/\/+$/, '') + '/kalshi/' + encodeURIComponent(t), headers); if (r.error) throw new Error(r.error); b.data = r; b.err = ''; changed = true; }
     catch (e) { b.err = e.message; changed = true; } b.at = Date.now(); b.busy = false; }));
-  if (changed && ['live', 'scalp', 'me'].includes(S.tab)) render();
+  if (changed && ['live', 'scalp', 'me'].includes(S.tab)) renderBg();
 }
 setInterval(loadBooks, 10000);
 /* the live-book block on a contract: quotes with age, exit-at-size for the held quantity, top of the book */
@@ -6104,6 +6104,16 @@ function renderTicker() {
 }
 
 /* ---------------- render ---------------- */
+/* press-aware background render: feed polls and book refreshes rebuild the page, and a press that straddles a rebuild never becomes a click.
+   While a pointer is down they wait for it to lift; a press that never reports its release stops counting after 2 s so updates cannot stall. */
+const PRESS = { down: false, at: 0, later: false };
+const pressing = () => PRESS.down && Date.now() - PRESS.at < 2000;
+function renderBg() { if (pressing()) { PRESS.later = true; return; } PRESS.later = false; render(); }
+function pressEnd() { PRESS.down = false; if (PRESS.later) { PRESS.later = false; setTimeout(() => { if (!pressing()) render(); else PRESS.later = true; }, 60); } }
+document.addEventListener('pointerdown', () => { PRESS.down = true; PRESS.at = Date.now(); }, true);
+document.addEventListener('pointerup', pressEnd, true);
+document.addEventListener('pointercancel', pressEnd, true);
+/* end press-aware */
 function render(force=false) {
   if(clubhouseDeferRender(force))return;
   if (!S.G) S.G = gradeAll();

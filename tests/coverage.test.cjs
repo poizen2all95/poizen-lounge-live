@@ -16,3 +16,13 @@ test('still-live-to-win counts only gradable tickets and reports ungraded trades
  const t=c.sweatWinTotals([row('pick6',100,8),row('pick6',50.5,3),row('prediction',471,0),row('prediction',78,0),row('prediction',27,2),row('pickem',999,1)]);
  assert.equal(t.win,177.5);assert.equal(t.ungradedWin,549);assert.equal(t.ungradedN,2);
  assert.deepEqual({...c.sweatWinTotals([])},{win:0,ungradedWin:0,ungradedN:0});});
+test('background renders wait for a press to end instead of swapping the DOM under the click',()=>{
+ const code=html.slice(html.indexOf('const PRESS ='),html.indexOf('/* end press-aware */'));
+ const handlers={};let renders=0,now=1000;const timers=[];
+ const c={document:{addEventListener:(t,f)=>{handlers[t]=f;}},Date:{now:()=>now},render:()=>{renders++;},setTimeout:(f)=>{timers.push(f);}};
+ vm.createContext(c);vm.runInContext(code+';this.renderBg=renderBg;this.pressing=pressing;',c);
+ c.renderBg();assert.equal(renders,1,'no press: renders at once');
+ handlers.pointerdown();c.renderBg();c.renderBg();assert.equal(renders,1,'press down: deferred');
+ handlers.pointerup();assert.equal(timers.length,1);timers.shift()();assert.equal(renders,2,'one catch-up render after release');
+ handlers.pointerdown();now+=2500;c.renderBg();assert.equal(renders,3,'a press that never lifts cannot stall updates');
+ handlers.pointerdown();handlers.pointercancel();c.renderBg();assert.equal(renders,4,'cancelled press counts as released');});
