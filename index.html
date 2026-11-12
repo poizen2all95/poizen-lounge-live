@@ -2035,6 +2035,16 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 @media(max-width:1280px){.gb-row{grid-template-columns:54px minmax(110px,1fr) minmax(80px,auto) minmax(110px,1fr) minmax(110px,150px) 18px;grid-template-areas:"lg away mid home st go" ". pk pk pk pk pk"}.gb-lg{grid-area:lg}.gb-tm.away{grid-area:away}.gb-mid{grid-area:mid}.gb-tm.home{grid-area:home}.gb-st{grid-area:st}.gb-pk{grid-area:pk;flex-direction:row;flex-wrap:wrap;gap:4px 14px}.gb-go{grid-area:go}.gb-info{display:none}}
 @media(max-width:700px){.gb-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"away mid home" "st pk pk";padding:12px 10px 12px 14px}.gb-lg,.gb-go,.gb-tm em{display:none}.gb-tm b{font-size:20px}.gb-tm img{width:28px;height:28px}.gb-st{align-items:flex-start}}
 @media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
+.feed-t{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+#feedTrades{font-size:10.5px;font-weight:800;color:var(--fg3)}#feedTrades.warn{color:var(--live)}#feedTrades.bad{color:var(--loss)}
+.lastres{padding:10px 14px 14px}.lr-none{margin:0 0 12px;color:var(--fg2);font-size:13px}.lr-none b{color:var(--fg)}
+.lr-rec{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.lr-rec>div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+.lr-rec small{font-size:11px;font-weight:800;color:var(--fg3)}.lr-rec b{font-size:20px;line-height:1.1}.lr-rec span{font-size:12.5px;font-weight:900}
+.lr-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}.lr-h h4{margin:0;font-size:12px;font-weight:800;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em}
+.lr-list{list-style:none;margin:0;padding:0}.lr-list li{display:grid;grid-template-columns:52px minmax(0,1fr) 44px 72px;gap:10px;align-items:center;padding:9px 2px;border-top:1px solid var(--line);font-size:13px}
+.lr-d{color:var(--fg3);font-size:12px;font-weight:700}.lr-t{min-width:0;display:flex;flex-direction:column}.lr-t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lr-t small{color:var(--fg3);font-size:11.5px}
+.lr-o{font-size:11.5px;font-weight:800;color:var(--fg2)}.lr-list li.lr-win .lr-o{color:var(--win)}.lr-list li.lr-loss .lr-o{color:var(--loss)}.lr-p{text-align:right;font-weight:900}
 .stale-note{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line2);border-left:3px solid var(--live);border-radius:10px;background:var(--panel2);color:var(--fg2);font-size:12.5px;line-height:1.45}.stale-note b{color:var(--fg)}
 </style>
 <script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
@@ -2080,7 +2090,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
           <button class="vm-clear" type="button" data-team="">No team — use the vibe colors</button>
         </div>
       </div>
-      <div class="feed" id="feed" role="status"><span class="dot"></span><span id="feedTxt">Connecting…</span></div>
+      <div class="feed" id="feed" role="status"><span class="dot"></span><span class="feed-t"><span id="feedTxt">Connecting…</span><small id="feedTrades" hidden></small></span></div>
     </div>
   </div>
   <div class="record-shell"><div class="record" id="record" aria-label="Record ticker. Scroll to explore." tabindex="0"></div><button class="record-pause" id="recordPause" type="button" aria-label="Pause record ticker" aria-pressed="false" hidden>Ⅱ</button></div>
@@ -3241,7 +3251,7 @@ S.custom = store.get('pz_custom_checks', []);
 S.p6Filter = store.get('pz_p6_filter', 'active');
 if (!['active','live','settled','all'].includes(S.p6Filter)) S.p6Filter='active';
 S.set = window.PZSettings.normalize(store.get('pz_settings', {}));
-S.sweatOpen = !!S.set.sweatTucked;
+S.sweatOpen = false; /* the drop-down covers the slips, so it opens only when tapped */
 
 /* ---------------- vibe ---------------- */
 const VIBES = { midnight: ['Midnight', 'linear-gradient(135deg,#11161A 45%,#D9B36A)'], vegas: ['Vegas', 'linear-gradient(135deg,#F2C14E,#E0284A)'], daylight: ['Daylight', 'linear-gradient(135deg,#F3F4F6 45%,#00A386)'] };
@@ -3471,13 +3481,22 @@ function parkStale(s, now = Date.now()) {
   const settled = (t) => t.settlement && Number.isFinite(t.settlement.payout);
   const stale = (t) => !settled(t) && ticketSeenAt(t) > 0 && now - ticketSeenAt(t) > STALE_MS;
   const all = s.pick6 || []; S.stale = all.filter(stale); if (S.stale.length) s.pick6 = all.filter((t) => !stale(t));
-  S.boardSeenAt = Math.max(Date.parse(s.updated || '') || 0, ...all.map(ticketSeenAt));
+  S.boardSeenAt = Math.max(Date.parse(s.updated || '') || 0, ...all.map(ticketSeenAt), ...(s.contracts || []).map(ticketSeenAt));
   return s;
 }
 function staleNotice() {
   const n = (S.stale || []).length; if (!n) return '';
   const when = S.boardSeenAt ? new Date(S.boardSeenAt).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
   return `<p class="stale-note" role="status"><b>${n} older ${n === 1 ? 'ticket is' : 'tickets are'} waiting on a result from DraftKings.</b> ${when ? `The board last heard from DraftKings on ${esc(when)}. ` : ''}They are off the live board until the next sync.</p>`;
+}
+/* how fresh the trades are, separate from the score feed: amber after a day, red after three */
+function tradeSync(now = Date.now()) {
+  const at = S.boardSeenAt; if (!at) return null;
+  const days = (now - at) / 86400e3, d = new Date(at);
+  const day = d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  const same = new Date(now).toDateString() === d.toDateString();
+  return { tone: days > 3 ? 'bad' : days > 1 ? 'warn' : 'ok', when: same ? d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : day,
+    title: `Trades last came in from DraftKings on ${day}, ${d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. Scores update on their own; trades update when DraftKings is synced.` };
 }
 parkStale(S.slate); /* the built-in starting slate too */
 function activeTickets() { return (S.slate.pick6 || []).filter(confirmed); }
@@ -3700,7 +3719,14 @@ async function poll() {
   S.feed.next = Date.now() + wait;
   pollTimer = setTimeout(poll, wait);
 }
+function feedTrades() {
+  const el = $('#feedTrades'); if (!el) return; const x = tradeSync();
+  if (!x) { el.hidden = true; return; }
+  el.hidden = false; el.className = x.tone; el.title = x.title;
+  const txt = `Trades <span class="lbl">· DraftKings</span> · ${esc(x.when)}`; if (el.innerHTML !== txt) el.innerHTML = txt;
+}
 function feedStatus() {
+  feedTrades();
   const el = $('#feed'), t = $('#feedTxt'); if (!el) return;
   el.classList.remove('ok', 'warn', 'bad');
   if (S.feed.ok === null) { t.textContent = 'Connecting…'; return; }
@@ -5650,6 +5676,18 @@ function gameBoard(live, upcoming, done, debrief) {
   if (!live.length && !upcoming.length && !done.length) return '';
   return `<section class="gboard" aria-label="Games">${sec('live', 'Live now', live)}${debrief || ''}${sec('pre', `${SVG.clock}Coming up`, upcoming)}${sec('post', 'Final', done)}</section>`;
 }
+/* nothing open: show the track record instead of an empty box */
+function lastResultsHTML() {
+  const L = entries(), p = periods(), last = L.slice(-6).reverse();
+  if (!last.length) return `<div class="empty flat"><b>No open slips right now</b>They show up here the moment PoiZen publishes them.</div>`;
+  const rec = (lbl, a) => `<div><small>${lbl}</small><b>${a.w}-${a.l}</b><span class="${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : 'dim'}">${money(a.pl, true)}</span></div>`;
+  const row = (e) => { const o = outcome(e), pl = hasStake(e) ? Number(e.payout || 0) - Number(e.stake) : null, d = new Date(e.date + 'T12:00:00');
+    return `<li class="lr-${o}"><span class="lr-d">${isNaN(d) ? esc(e.date) : d.toLocaleDateString([], { month: 'short', day: 'numeric' })}</span><span class="lr-t"><b>${esc(e.title || e.book || 'Slip')}</b>${e.legs ? `<small>${Number(e.hits) || 0}/${Number(e.legs)} picks hit</small>` : ''}</span><span class="lr-o">${o === 'win' ? 'Won' : o === 'loss' ? 'Lost' : o === 'sold' ? 'Sold' : 'Push'}</span><span class="lr-p ${pl > 0 ? 'win' : pl < 0 ? 'loss' : 'dim'}">${pl === null ? money(Number(e.payout || 0)) : money(pl, true)}</span></li>`; };
+  return `<div class="lastres"><p class="lr-none"><b>No open slips right now.</b> New ones show up here the moment PoiZen publishes them.</p>
+    <div class="lr-rec">${rec('This week', p.week)}${rec('This month', p.month)}${rec('All-time', p.all)}</div>
+    <div class="lr-h"><h4>Last results</h4><button class="ph-go" type="button" data-tab="ledger">Full record</button></div>
+    <ul class="lr-list">${last.map(row).join('')}</ul></div>`;
+}
 function viewLive() {
   if(clubhouseTheme())return viewClubhouseLive();
   const L = liveSets(), { evs, live, next, done, hero } = L;
@@ -5657,7 +5695,7 @@ function viewLive() {
   const so = { live: 0, open: 1, partial: 2, won: 2, review: 3, dead: 4, lost: 4 };
   const slips = S.G.pick6.filter(({ t,r }) => confirmed(t)&&r.payout===null&&!['won','lost','partial','dead'].includes(r.state)).sort((a, b) => byStart(a, b) || (so[a.r.state] ?? 5) - (so[b.r.state] ?? 5));
   const slipsPanel = `<section class="panel slipsP"><div class="ph">${SVG.pick6}<h3>Open slips</h3><button class="ph-go" type="button" data-tab="pick6">Pick6 tab</button></div>${staleNotice()}
-    ${slips.length ? `<div class="sl-head" aria-hidden="true"><span>Slip</span><span>Health</span><span>Entry</span><span>Chance</span><span>To win</span></div><div class="slips">${tdWatch()}${waveRows(slips,slipTracker)}</div>` : `<div class="empty flat"><b>No slips on the board yet</b>They show up here the moment PoiZen publishes them.</div>`}</section>`;
+    ${slips.length ? `<div class="sl-head" aria-hidden="true"><span>Slip</span><span>Health</span><span>Entry</span><span>Chance</span><span>To win</span></div><div class="slips">${tdWatch()}${waveRows(slips,slipTracker)}</div>` : lastResultsHTML()}</section>`;
   const tape = `<section class="panel tapeP"><div class="ph">${SVG.trend}<h3>Activity tape</h3>${alertPrefsHTML()}</div>${tapeHTML()}</section>`;
   const upcoming = next;
   const ct = contractsPanel();

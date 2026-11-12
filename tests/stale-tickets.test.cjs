@@ -21,3 +21,17 @@ test('the notice counts parked tickets and names the last DraftKings sync',()=>{
  assert.match(r.notice,/2 older tickets are waiting on a result from DraftKings/);assert.match(r.notice,/Nov 1/);
  assert.equal(run([{id:'n',verifiedAt:at(1)}]).notice,'');
 });
+
+function sync(days,contracts){const c={S:{},esc:String,Date,Math,Number};vm.createContext(c);vm.runInContext(src,c);c.parkStale({pick6:[],contracts,updated:days===null?undefined:at(days)},now);return c.tradeSync(now);}
+test('the trades pill is green within a day, amber after one, red after three',()=>{
+ assert.equal(sync(0.2).tone,'ok');assert.equal(sync(2).tone,'warn');assert.equal(sync(11).tone,'bad');
+ assert.match(sync(11).when,/Nov 1/);assert.match(sync(11).title,/DraftKings/);
+});
+test('a contract seen more recently than any ticket counts as the last sync; no data shows no pill',()=>{
+ assert.equal(sync(11,[{id:'c',verifiedAt:at(0.5)}]).tone,'ok');
+ assert.equal(sync(null),null);
+});
+test('Live Sweat starts closed and the empty board shows the record',()=>{
+ assert.match(html,/S\.sweatOpen = false;/);assert.doesNotMatch(html,/No slips on the board yet/);
+ assert.match(html,/function lastResultsHTML\(\)/);
+});
