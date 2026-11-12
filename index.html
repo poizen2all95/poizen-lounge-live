@@ -921,7 +921,7 @@ details.hrow>summary::-webkit-details-marker{display:none}
   .rail{display:none}
   .bottom{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:45;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));overflow-x:auto;gap:4px;scrollbar-width:none}
   .bottom::-webkit-scrollbar{display:none}
-  .bottom .navbtn{flex:1 0 auto;width:auto;flex-direction:column;gap:3px;padding:8px 10px;font-size:11px;text-align:center;min-width:62px}
+  .bottom .navbtn{flex:1 0 0;width:auto;justify-content:center;padding:11px 6px;min-width:44px;min-height:46px}
   .bottom .navbtn .cnt{display:none}
   .shifts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .chat-fab{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
@@ -1816,12 +1816,12 @@ body.sw-resizing,body.sw-resizing *{cursor:col-resize!important;user-select:none
 main{width:100%;max-width:1560px;margin-inline:auto}
 .necklace{display:none}
 .nk{position:relative;display:grid;place-items:center;width:36px;height:36px;margin-top:var(--dy,0);padding:0;border:0;background:transparent;color:var(--ic,var(--gold));cursor:pointer;border-radius:50%;transition:transform .15s ease}
-.nk svg{width:25px;height:25px;opacity:.88;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ic) 50%,transparent));transition:opacity .15s,filter .15s}
+.nk svg{width:27px;height:27px;opacity:.88;filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ic) 50%,transparent));transition:opacity .15s,filter .15s}
 .nk:hover{transform:translateY(-2px) scale(1.14)}.nk:hover svg{opacity:1}
 .nk:focus-visible{outline:2px solid var(--ic);outline-offset:2px}
 .nk[aria-current="page"] svg{opacity:1;filter:drop-shadow(0 0 9px var(--ic))}
 .nk[aria-current="page"]::after{content:"";position:absolute;bottom:-4px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--ic);box-shadow:0 0 8px var(--ic)}
-.nk::before{content:attr(data-label);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);padding:3px 9px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--fg);font:800 11px/1.3 var(--stadium);letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:6}
+.nk[data-label]::before{content:attr(data-label);position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);padding:3px 9px;border-radius:8px;background:var(--panel);border:1px solid var(--line2);color:var(--fg);font:800 11px/1.3 var(--stadium);letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:6}
 .nk:hover::before,.nk:focus-visible::before{opacity:1}
 .nk .cnt{position:absolute;top:-3px;right:-5px;min-width:16px;padding:1px 5px;border-radius:999px;background:var(--gold);color:#07090b;font:900 10px/1.3 var(--stadium);text-align:center}
 [data-vibe="daylight"] .nk{color:color-mix(in srgb,var(--ic) 72%,#000)}[data-vibe="daylight"] .nk svg{filter:none}
@@ -2035,6 +2035,14 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 @media(max-width:1280px){.gb-row{grid-template-columns:54px minmax(110px,1fr) minmax(80px,auto) minmax(110px,1fr) minmax(110px,150px) 18px;grid-template-areas:"lg away mid home st go" ". pk pk pk pk pk"}.gb-lg{grid-area:lg}.gb-tm.away{grid-area:away}.gb-mid{grid-area:mid}.gb-tm.home{grid-area:home}.gb-st{grid-area:st}.gb-pk{grid-area:pk;flex-direction:row;flex-wrap:wrap;gap:4px 14px}.gb-go{grid-area:go}.gb-info{display:none}}
 @media(max-width:700px){.gb-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"away mid home" "st pk pk";padding:12px 10px 12px 14px}.gb-lg,.gb-go,.gb-tm em{display:none}.gb-tm b{font-size:20px}.gb-tm img{width:28px;height:28px}.gb-st{align-items:flex-start}}
 @media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
+.ctrows{display:flex;flex-direction:column}.ctr-head,details.ctrow>summary{display:grid;color:var(--fg);grid-template-columns:minmax(0,1fr) 58px 64px;gap:10px;align-items:center}
+.ctr-head{padding:8px 14px 4px;font-size:11px;font-weight:800;color:var(--fg3)}.ctr-head span+span{text-align:right}
+.ctrow{border-top:1px solid var(--line)}.ctrow.lotto{box-shadow:inset 3px 0 0 #F2B544}details.ctrow>summary{padding:10px 14px;cursor:pointer;list-style:none}details.ctrow>summary::before{display:none!important}.ctrow>summary::-webkit-details-marker{display:none}
+.ctrow>summary:hover{background:color-mix(in srgb,var(--fg) 4%,transparent)}.ctr-t{min-width:0;display:flex;flex-direction:column;gap:2px}.ctr-t b{font-size:13px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.ctrow[open] .ctr-t b{-webkit-line-clamp:unset}
+.ctr-t small{font-size:11.5px;color:var(--fg3)}.ctr-p,.ctr-c{text-align:right;font-weight:900;font-size:13px}.ctr-c{color:var(--fg2)}.ctrow>.ct{margin:0 10px 12px}.ctrow>.ct .hd b{display:none}
+.ct-hist{margin:10px 14px 12px}.ct-hist .ph-go{margin:0}
+.lottos{margin:8px;border:1px dashed color-mix(in srgb,#F2B544 55%,var(--line));border-radius:12px}.lottos>summary{padding:11px 14px;cursor:pointer;font-weight:800;font-size:13px;color:var(--fg2)}.lottos[open]>summary{color:var(--fg)}.lottos .lotto-list{padding:0 8px 8px}.lottos .lotto-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+@media(max-width:860px){main .lhcar{margin-bottom:8px}main .lhcar .lhero2{min-height:0;margin-bottom:6px}main .lhcar .lhero2 h2,main .lhcar .lh-jn,main .lhcar .lh-who span,main .lhcar .lh-who em{display:none}main .lhcar .lh-txt{padding:10px 38% 10px 14px;gap:3px}main .lhcar .lh-k{font-size:12px}main .lhcar .lh-cd{font-size:24px;line-height:1.1}main .lhcar .btn-sweat{margin-top:4px;padding:5px 11px;font-size:12px}main .lhcar .lh-hs{height:112px;width:auto}main .lhcar .lh-who{padding-bottom:4px}}
 .feed-t{display:flex;flex-direction:column;line-height:1.25;min-width:0}
 #feedTrades{font-size:10.5px;font-weight:800;color:var(--fg3)}#feedTrades.warn{color:var(--live)}#feedTrades.bad{color:var(--loss)}
 .lastres{padding:10px 14px 14px}.lr-none{margin:0 0 12px;color:var(--fg2);font-size:13px}.lr-none b{color:var(--fg)}
@@ -2048,7 +2056,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 .stale-note{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line2);border-left:3px solid var(--live);border-radius:10px;background:var(--panel2);color:var(--fg2);font-size:12.5px;line-height:1.45}.stale-note b{color:var(--fg)}
 </style>
 <script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
-<link rel="stylesheet" href="mobile.css">
+<link rel="stylesheet" href="mobile.css?v=20261112">
 <link rel="stylesheet" href="tiers.css">
 <link rel="stylesheet" href="clubhouse.css">
 </head>
@@ -2104,7 +2112,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 </div>
 <nav class="bottom" id="bottom" aria-label="Mobile navigation"></nav>
 <dialog class="mobile-more" id="mobileMore" aria-labelledby="mobileMoreTitle"><div class="mobile-more-head"><h2 id="mobileMoreTitle">Explore the Lounge</h2><button type="button" data-close-more aria-label="Close navigation">✕</button></div><div class="mobile-more-grid"></div><p class="mobile-more-note">Research a line, follow the public board, or track your own slips in My Lounge.</p></dialog>
-<script src="mobile.js"></script>
+<script src="mobile.js?v=20261112"></script>
 <script src="settings.js"></script>
 <script src="tiers.js"></script>
 <script src="trade-cards.js"></script>
@@ -3341,8 +3349,29 @@ const SVG = {
 };
 const TABS = [
   ['live', 'Live', 'live'], ['me', 'My Lounge', 'user'], ['pick6', 'Pick6', 'pick6'], ['ftd', '1st TD', 'ftd'], ['scalp', 'Scalp', 'scalp'], ['pickem', "Pick'em", 'target'],
-  ['games', 'Games', 'games'], ['injuries', 'Injuries', 'inj'], ['research', 'Lab', 'research'], ['ledger', 'Ledger', 'ledger'],
+  ['games', 'Games', 'games'], ['injuries', 'Injuries', 'inj'], ['research', 'Lab', 'research'], ['ledger', 'Ledger', 'ledger'], ['trades', 'Trades', 'cash'],
 ];
+/* the top bar and the phone bar carry five icons plus More; everything else lives behind More */
+const NAV5 = ['live', 'pick6', 'trades', 'research', 'ledger'];
+const NAVSVG = (() => {
+  const w = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`, f = 'fill="currentColor" fill-opacity=".18"';
+  return {
+    live: w(`<circle cx="12" cy="12" r="2.7" fill="currentColor" stroke="none"/><path d="M7.9 7.9a5.8 5.8 0 0 0 0 8.2M16.1 7.9a5.8 5.8 0 0 1 0 8.2"/><path d="M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2" opacity=".5"/>`),
+    pick6: w(`<path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h15A1.5 1.5 0 0 1 21 8.5V10a2 2 0 0 0 0 4v1.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 15.5V14a2 2 0 0 0 0-4z" ${f}/><path d="M8.5 7.4v9.2" stroke-dasharray="1.4 2.6"/><path d="M12 12.3l1.7 1.7 3.1-3.6"/>`),
+    trades: w(`<circle cx="12" cy="12" r="9.3" ${f} stroke="none"/><path d="M8 18V6M8 6 4.8 9.2M8 6l3.2 3.2"/><path d="M16 6v12M16 18l-3.2-3.2M16 18l3.2-3.2"/>`),
+    research: w(`<circle cx="10.5" cy="10.5" r="6.8" ${f}/><path d="M15.6 15.6 21 21"/><path d="M8 13.2v-1.9M10.5 13.2V7.8M13 13.2V9.9"/>`),
+    ledger: w(`<path d="M8 4h8v5.5a4 4 0 0 1-8 0z" ${f}/><path d="M8 6H5.2A2.8 2.8 0 0 0 8 9.6M16 6h2.8A2.8 2.8 0 0 1 16 9.6"/><path d="M12 13.5V17M9.5 17h5M8 20h8"/>`),
+    more: w(`<rect x="4" y="4" width="6.6" height="6.6" rx="2"/><rect x="13.4" y="4" width="6.6" height="6.6" rx="2"/><rect x="4" y="13.4" width="6.6" height="6.6" rx="2"/><rect x="13.4" y="13.4" width="6.6" height="6.6" rx="2" ${f}/>`),
+    me: w(`<circle cx="12" cy="8.4" r="3.9" ${f}/><path d="M4.5 20.2a7.5 7.5 0 0 1 15 0"/>`),
+    ftd: w(`<path d="M12 21v-8M6 4.5V11a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5"/><ellipse cx="12" cy="6.4" rx="2.9" ry="1.9" transform="rotate(-35 12 6.4)" ${f}/>`),
+    scalp: w(`<path d="M13 3 5 13.5h6L10 21l9-11.5h-6z" ${f}/>`),
+    pickem: w(`<circle cx="12" cy="12" r="8.7"/><circle cx="12" cy="12" r="4.6" ${f}/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/>`),
+    games: w(`<rect x="3.5" y="5.5" width="17" height="14.5" rx="3" ${f}/><path d="M3.5 10.2h17M8 3.5v4M16 3.5v4"/><path d="M8 14.6h3M14 14.6h2"/>`),
+    injuries: w(`<rect x="4" y="4" width="16" height="16" rx="4.5" ${f}/><path d="M12 8.4v7.2M8.4 12h7.2"/>`),
+    settings: w(`<path d="M4 7.5h8M18 7.5h2M4 16.5h2M12 16.5h8"/><circle cx="15" cy="7.5" r="2.4" ${f}/><circle cx="9" cy="16.5" r="2.4" ${f}/>`),
+  };
+})();
+const NAVICONS = { ...SVG, live: NAVSVG.live, pick6: NAVSVG.pick6, cash: NAVSVG.trades, research: NAVSVG.research, ledger: NAVSVG.ledger, more: NAVSVG.more, user: NAVSVG.me, ftd: NAVSVG.ftd, scalp: NAVSVG.scalp, target: NAVSVG.pickem, games: NAVSVG.games, inj: NAVSVG.injuries, gear: NAVSVG.settings };
 
 /* ---------------- teams / colors ---------------- */
 const NFLC = { ARI: ['97233F', '000000'], ATL: ['A71930', '000000'], BAL: ['241773', '9E7C0C'], BUF: ['00338D', 'C60C30'], CAR: ['0085CA', '101820'], CHI: ['0B162A', 'C83803'], CIN: ['FB4F14', '000000'], CLE: ['311D00', 'FF3C00'], DAL: ['003594', '869397'], DEN: ['FB4F14', '002244'], DET: ['0076B6', 'B0B7BC'], GB: ['203731', 'FFB612'], HOU: ['03202F', 'A71930'], IND: ['002C5F', 'A2AAAD'], JAX: ['006778', 'D7A22A'], KC: ['E31837', 'FFB81C'], LV: ['000000', 'A5ACAF'], LAC: ['0080C6', 'FFC20E'], LAR: ['003594', 'FFA300'], MIA: ['008E97', 'FC4C02'], MIN: ['4F2683', 'FFC62F'], NE: ['002244', 'C60C30'], NO: ['D3BC8D', '101820'], NYG: ['0B2265', 'A71930'], NYJ: ['125740', 'FFFFFF'], PHI: ['004C54', 'A5ACAF'], PIT: ['101820', 'FFB612'], SF: ['AA0000', 'B3995D'], SEA: ['002244', '69BE28'], TB: ['D50A0A', 'FF7900'], TEN: ['0C2340', '4B92DB'], WSH: ['5A1414', 'FFB612'] };
@@ -3776,8 +3805,15 @@ function snapshot(G) {
 }
 
 /* ---------------- model glue: projections, live odds ---------------- */
+/* game logs load for players on open tickets and trades; the First TD, Scalp and Lab lists load when one of those pages opens */
+function logKeys() {
+  const all = slatePlayersInUse(); if (['research', 'ftd', 'scalp'].includes(S.tab)) return all;
+  const plan = new Set(); ((S.slate.firstTD || {}).bets || []).forEach((b) => plan.add(b.player)); ((S.slate.scalp || {}).shifts || []).forEach((sh) => sh.targets.forEach((t) => plan.add(t.player))); (S.slate.research || []).forEach((r) => plan.add(r.player));
+  const core = new Set(); activeTickets().filter((t) => !t.settlement).forEach((t) => t.legs.forEach((l) => core.add(l.player))); openContracts().forEach((c) => { if (c.player) core.add(c.player); }); Object.values(S.me.slips || {}).forEach((x) => { if (x && x.status === 'open') (x.legs || []).forEach((l) => core.add(l.player)); });
+  return new Set([...all].filter((k) => core.has(k) || !plan.has(k)));
+}
 async function loadLogs() {
-  const players = [...new Map([...slatePlayersInUse()].map(k=>P(k)).filter(p=>p.espnId&&['nfl','cfb','nba'].includes(p.sport||'nfl')).map(p=>[p.espnId,p])).values()].filter(p=>!S.research[p.espnId]||S.research[p.espnId].err);
+  const players = [...new Map([...logKeys()].map(k=>P(k)).filter(p=>p.espnId&&['nfl','cfb','nba'].includes(p.sport||'nfl')).map(p=>[p.espnId,p])).values()].filter(p=>!S.research[p.espnId]||S.research[p.espnId].err);
   if (!players.length) return;
   players.forEach(p=>{S.research[p.espnId]={loading:true};});
   await Promise.allSettled(players.map(async p=>{try{
@@ -4961,19 +4997,20 @@ function viewClubhouseLive(){
 
 /* ---------------- shared pieces ---------------- */
 /* icon colours for the necklace; the strand is invisible, the icons just hang on a smile curve */
-const NAVCOLOR = { live: '#FF4D5E', me: '#2ED8BA', pick6: '#F2C14E', ftd: '#FF9A3D', scalp: '#B28CFF', pickem: '#4DA3FF', games: '#5BE08A', injuries: '#FF7AA8', research: '#7EE7FF', ledger: '#E8D5A0' };
+const NAVCOLOR = { live: '#FF4D5E', me: '#2ED8BA', pick6: '#F2C14E', ftd: '#FF9A3D', scalp: '#B28CFF', pickem: '#4DA3FF', games: '#5BE08A', injuries: '#FF7AA8', research: '#7EE7FF', ledger: '#E8D5A0', trades: '#5BE08A', more: '#C9D2DA' };
 function necklaceHTML() {
-  const counts = { pick6: activeTickets().length };
-  const n = TABS.length, mid = (n - 1) / 2, amp = 15;
-  return TABS.map(([id, label, ic], i) => {
-    const t = mid ? (i - mid) / mid : 0, dy = (amp * (1 - t * t)).toFixed(1);
-    return `<button class="nk" type="button" data-tab="${id}" data-label="${esc(label)}" aria-label="${esc(label)}" ${S.tab === id ? 'aria-current="page"' : ''} style="--ic:${NAVCOLOR[id] || '#F2C14E'};--dy:${dy}px">${SVG[ic]}${counts[id] ? `<span class="cnt">${counts[id]}</span>` : ''}</button>`;
+  const counts = { pick6: activeTickets().filter((t) => !t.settlement).length };
+  const items = NAV5.map((id) => TABS.find((t) => t[0] === id)).concat([['more', 'More']]);
+  const n = items.length, mid = (n - 1) / 2, amp = 10, elsewhere = !NAV5.includes(S.tab);
+  return items.map(([id, label], i) => {
+    const t = mid ? (i - mid) / mid : 0, dy = (amp * (1 - t * t)).toFixed(1), more = id === 'more';
+    return `<button class="nk" type="button" ${more ? 'data-mobile-more aria-haspopup="dialog" aria-controls="mobileMore"' : `data-tab="${id}"`} aria-label="${esc(label)}" title="${esc(label)}" ${(more ? elsewhere : S.tab === id) ? 'aria-current="page"' : ''} style="--ic:${NAVCOLOR[id] || '#F2C14E'};--dy:${dy}px">${NAVSVG[id]}${counts[id] ? `<span class="cnt">${counts[id]}</span>` : ''}</button>`;
   }).join('');
 }
 function renderNav() {
   $('#necklace').innerHTML = necklaceHTML();
   const clubRail=$('#clubhouseRail');clubRail.hidden=!clubhouseTheme();clubRail.innerHTML=clubhouseTheme()?TABS.concat([['settings','Settings','gear']]).map(([id,label,icon])=>`<button class="navbtn" type="button" data-tab="${id}" ${S.tab===id?'aria-current="page"':''}>${SVG[icon]||''}<span>${esc(label)}</span>${id==='pick6'?`<span class="cnt">${activeTickets().length}</span>`:''}</button>`).join(''):'';
-  window.PZMobile.renderNav(S.tab, TABS, SVG, { pick6: activeTickets().length });
+  window.PZMobile.renderNav(S.tab, TABS.concat([['settings', 'Settings', 'gear']]), NAVICONS, { pick6: activeTickets().filter((t) => !t.settlement).length });
 }
 function setTab(id) {
   if (id !== 'settings' && !TABS.some((t) => t[0] === id)) id = 'live';
@@ -4986,9 +5023,10 @@ function setTab(id) {
   document.getElementById('main').focus({ preventScroll: true });
   if (id === 'injuries' || id === 'research') loadInjuries();
   if (id === 'research') loadResearch();
+  if (['research', 'ftd', 'scalp'].includes(id)) loadLogs();
   if (['ledger', 'pick6', 'ftd', 'scalp'].includes(id)) loadArchive();
 }
-const TABICON = { me: 'user', pickem: 'target', live: 'live', pick6: 'pick6', ftd: 'ftd', scalp: 'scalp', games: 'games', injuries: 'inj', research: 'research', ledger: 'ledger', settings: 'gear' };
+const TABICON = { me: 'user', pickem: 'target', live: 'live', pick6: 'pick6', ftd: 'ftd', scalp: 'scalp', games: 'games', injuries: 'inj', research: 'research', ledger: 'ledger', settings: 'gear', trades: 'cash' };
 const vh = (title, sub, chips = '', right = '', extra = '') => `<section class="banner"><div class="wm">${SVG[TABICON[S.tab]] || ''}</div><div class="b-top"><div class="b-l"><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ''}</div>${right ? `<div class="b-r">${right}</div>` : ''}</div>${chips ? `<div class="bchips">${chips}</div>` : ''}${extra}</section>${['live','pick6','pickem','games','research'].includes(S.tab)?leagueLegend():''}`;
 
 /* player card — the leg on a stadium backdrop: his game's home venue, his own team's colors */
@@ -5086,9 +5124,10 @@ function viewPick6() {
   if (past) return head + weekBar() + viewArchived('pick6', past);
   const emptyMsg = f === 'active' ? '<div class="empty"><b>You are caught up</b>Closed tickets stay under Settled. New tickets appear here after the next update.</div>' : f === 'live' ? '<div class="empty"><b>No slips live right now</b>A slip shows up here the moment one of its games kicks off.</div>' : f === 'settled' ? '<div class="empty"><b>No settled slips yet this week</b>Slips land here once every leg is graded or the slip busts.</div>' : '<div class="empty"><b>No slips this week yet</b></div>';
   const active=mine.filter(({r})=>r.payout===null&&!['won','lost','partial','dead'].includes(r.state));
+  const p6Fold = f === 'active' ? lottoFold(list, (x) => ticketCard(x, 1)) : { real: list, fold: '' };
   return head + (active.length ? p6Meter(active) : '') + weekBar() +
     `<div class="filters">${fb('active', `Active (${active.length})`)}${fb('live', 'Live now')}${fb('settled', 'Settled')}${fb('all', `All (${mine.length})`)}</div>` +
-    (list.length ? `<div class="p6list">${(can('markets') ? list : list.slice(0,1)).map((x, i) => ticketCard(x, i)).join('')}</div>${!can('markets') ? proLock('Every published slip and full analysis') : ''}` : emptyMsg) +
+    (list.length ? `<div class="p6list">${(can('markets') ? p6Fold.real : list.slice(0,1)).map((x, i) => ticketCard(x, i)).join('')}</div>${can('markets') ? p6Fold.fold : ''}${!can('markets') ? proLock('Every published slip and full analysis') : ''}` : emptyMsg) +
     (pending.length ? `<details class="more" style="margin-top:22px"><summary>${pending.length} slip${pending.length === 1 ? '' : 's'} not confirmed on DraftKings</summary><div class="p6list" style="margin-top:12px">${pending.map((x) => ticketCard(x, 1)).join('')}</div></details>` : '');
 }
 
@@ -5257,12 +5296,26 @@ function contractCard(c) {
     <div class="offer"><label>Sell price you see (¢) <input data-bid="${esc(c.id)}" id="bid-${esc(c.id)}" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="${bookBid ? bookBid.toFixed(1) : '¢'}" value="${typed > 0 ? typed : ''}"></label>${call}</div>
     ${BK.html}<div class="src">${esc(x.src)}${typed > 0 ? ' · using the price you typed' : bookBid ? ' · using the Kalshi book' : ''}${c.fee !== undefined && c.fee !== null ? '' : ' · fees not included'}</div></div>`;
 }
+/* one line per trade; tap it for the full sell-or-hold card */
+function contractRow(c, note = '') {
+  const key = 'ct:' + c.id, open = !!S.slipOpen[key], over = tradeOver(c), x = over ? null : contractEval(c);
+  const qty = Number(c.qty) || 0, cost = Number.isFinite(Number(c.cost)) ? Number(c.cost) : (qty * (Number(c.avg) || 0)) / 100;
+  return `<details class="ctrow${window.PZTradeCards.contractLotto(c) ? ' lotto' : ''}" data-slip="${esc(key)}" ${open ? 'open' : ''}><summary><span class="ctr-t"><b>${esc(c.title)}</b>${note ? `<small>${esc(note)}</small>` : ''}</span><span class="ctr-p" ${x && x.p !== null ? `style="color:${pColor(x.p)}"` : ''}>${x ? fmtP(x.p) : 'Over'}</span><span class="ctr-c">${money(cost)}</span></summary>${open ? contractCard(c) : ''}</details>`;
+}
+function closedTradesHTML() {
+  const done = (S.slate.contracts || []).filter((c) => c.status && c.status !== 'open'); if (!done.length) return '';
+  return `<h3 class="sec">Closed trades</h3><details class="more"><summary>${done.length} closed ${done.length === 1 ? 'trade' : 'trades'} · history</summary><div class="contracts">${done.map(contractCard).join('')}</div></details>`;
+}
+function viewTrades() {
+  const h = contractsHTML();
+  return vh('Prediction <span>Trades</span>', 'Open trades with the sell-or-hold call. Tap a trade for the full card. Closed trades are in the Ledger.') + (h || '<div class="empty"><b>No trades on the board</b>They show up here after the next DraftKings sync.</div>');
+}
 function contractsHTML() {
   const all = S.slate.contracts || []; if (!all.length) return '';
   /* a trade whose games are over is not sell-or-hold any more: it waits in its own drawer until DraftKings reports the result */
   const open = openContracts(), over = all.filter((c) => (!c.status || c.status === 'open') && tradeOver(c)), done = all.filter((c) => c.status && c.status !== 'open');
   const overReason = (c) => { const t = S.tradeStatus[c.id]; return t.status === 'won' ? 'Every pick landed' : t.status === 'dead' ? 'A pick missed' : 'Games are over'; };
-  return `<h3 class="sec">Contracts · sell or hold</h3>${open.length ? `<div class="contracts">${open.map(contractCard).join('')}</div>` : '<p class="stale-note">No open trades right now.</p>'}${over.length?`<details class="more"><summary>${over.length} finished ${over.length === 1 ? 'trade' : 'trades'} · waiting on the DraftKings result</summary><div class="contracts">${over.map((c) => contractCard(c).replace('<div class="hd">', `<p class="mefine">${overReason(c)} · result not yet reported by DraftKings</p><div class="hd">`)).join('')}</div></details>`:''}${done.length?`<details class="more"><summary>${done.length} closed trades · history</summary><div class="contracts">${done.map(contractCard).join('')}</div></details>`:''}`;
+  return `<h3 class="sec">Contracts · sell or hold</h3>${open.length ? `<div class="ctrows"><div class="ctr-head" aria-hidden="true"><span>Trade</span><span>Chance</span><span>Paid</span></div>${open.map((c) => contractRow(c)).join('')}</div>` : '<p class="stale-note">No open trades right now.</p>'}${over.length?`<details class="more"><summary>${over.length} finished ${over.length === 1 ? 'trade' : 'trades'} · waiting on the DraftKings result</summary><div class="ctrows">${over.map((c) => contractRow(c, overReason(c) + ' · result not yet reported by DraftKings')).join('')}</div></details>`:''}${done.length?`<p class="ct-hist"><button class="ph-go" type="button" data-tab="ledger">${done.length} closed ${done.length === 1 ? 'trade' : 'trades'} · see the Ledger</button></p>`:''}`;
 }
 
 function contractsPanel() {
@@ -5688,14 +5741,22 @@ function lastResultsHTML() {
     <div class="lr-h"><h4>Last results</h4><button class="ph-go" type="button" data-tab="ledger">Full record</button></div>
     <ul class="lr-list">${last.map(row).join('')}</ul></div>`;
 }
+/* $1-or-less tickets fold into one row so the tickets with real money on them come first */
+function lottoFold(list, card) {
+  const isL = ({ t }) => window.PZTradeCards.slipLotto(t), lot = list.filter(isL), real = list.filter((x) => !isL(x));
+  if (lot.length < 3) return { real: list, fold: '' };
+  const put = lot.reduce((a, { r }) => a + (Number(r.entry) || 0), 0), best = Math.max(0, ...lot.filter(({ r }) => !['dead', 'lost'].includes(r.state)).map(({ r }) => Number(r.potential) || 0));
+  return { real, fold: `<details class="lottos"><summary>${lot.length} lottos · ${money(put)} in${best > 0 ? ` · best still alive: ${money(best)}` : ''}</summary><div class="lotto-list">${lot.map(card).join('')}</div></details>` };
+}
 function viewLive() {
   if(clubhouseTheme())return viewClubhouseLive();
   const L = liveSets(), { evs, live, next, done, hero } = L;
   const ctxEv = ctxEvent(L);
   const so = { live: 0, open: 1, partial: 2, won: 2, review: 3, dead: 4, lost: 4 };
   const slips = S.G.pick6.filter(({ t,r }) => confirmed(t)&&r.payout===null&&!['won','lost','partial','dead'].includes(r.state)).sort((a, b) => byStart(a, b) || (so[a.r.state] ?? 5) - (so[b.r.state] ?? 5));
+  const slipFold = lottoFold(slips, slipTracker);
   const slipsPanel = `<section class="panel slipsP"><div class="ph">${SVG.pick6}<h3>Open slips</h3><button class="ph-go" type="button" data-tab="pick6">Pick6 tab</button></div>${staleNotice()}
-    ${slips.length ? `<div class="sl-head" aria-hidden="true"><span>Slip</span><span>Health</span><span>Entry</span><span>Chance</span><span>To win</span></div><div class="slips">${tdWatch()}${waveRows(slips,slipTracker)}</div>` : lastResultsHTML()}</section>`;
+    ${slips.length ? `<div class="sl-head" aria-hidden="true"><span>Slip</span><span>Health</span><span>Entry</span><span>Chance</span><span>To win</span></div><div class="slips">${tdWatch()}${waveRows(slipFold.real,slipTracker)}${slipFold.fold}</div>` : lastResultsHTML()}</section>`;
   const tape = `<section class="panel tapeP"><div class="ph">${SVG.trend}<h3>Activity tape</h3>${alertPrefsHTML()}</div>${tapeHTML()}</section>`;
   const upcoming = next;
   const ct = contractsPanel();
@@ -6253,7 +6314,7 @@ function viewLedger() {
       <div class="plrow"><section class="panel plchart"><div class="ph">${SVG.trend}<h3>Running profit</h3><span class="ph-r">entries with a known stake</span></div>${plChart(L) || '<div class="empty flat">No entries with a known stake in this view.</div>'}</section>${calHTML(L)}</div>
       ${breakdown ? `<section class="panel"><div class="ph">${SVG.pick6}<h3>Pick6 by slip size</h3></div><div class="tablewrap"><table class="ltable"><thead><tr><th>Slip</th><th style="text-align:right">Record</th><th style="text-align:right">Win %</th><th style="text-align:right">Known stake</th><th style="text-align:right">Known P/L</th></tr></thead><tbody>${breakdown}</tbody></table></div></section>` : ''}`
       : '<div class="empty"><b>Nothing here yet</b></div>') +
-    `<h3 class="sec">Player hit board</h3>${boardHTML}<h3 class="sec">Previous weeks</h3>${arch || '<div class="empty"><b>No archived weeks yet</b>Each week is archived here when you close the slate in admin.</div>'}`;
+    closedTradesHTML() + `<h3 class="sec">Player hit board</h3>${boardHTML}<h3 class="sec">Previous weeks</h3>${arch || '<div class="empty"><b>No archived weeks yet</b>Each week is archived here when you close the slate in admin.</div>'}`;
 }
 
 /* ---------------- ticker (OBS) ---------------- */
@@ -6305,7 +6366,7 @@ function render(force=false) {
   /* the header shows today's date; the slate title is the weekly archive name and reads as stale the day after a refresh */
   $('#slateTitle').textContent = slateTitleText();
   const dk = S.slate.dkLink; const dkEl = $('#dkJoin'); if (dk) { dkEl.href = dk; dkEl.hidden = false; } else dkEl.hidden = true;
-  const views = { me: viewMe, pickem: viewPickem, live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger, settings: viewSettings };
+  const views = { me: viewMe, pickem: viewPickem, live: viewLive, pick6: viewPick6, ftd: viewFTD, scalp: viewScalp, games: viewGames, injuries: viewInjuries, research: viewResearch, ledger: viewLedger, settings: viewSettings, trades: viewTrades };
   const openD = [...document.querySelectorAll('main details[open]:not([data-slip])')].map((d) => d.querySelector('summary') && d.querySelector('summary').textContent);
   const ae = document.activeElement; const focusId = ae && ae.id; let caret = null; try { caret = ae ? {start:ae.selectionStart,end:ae.selectionEnd} : null; } catch {}
   const keep = {}; ['ckName', 'ckLine', 'ckMarket', 'wiMult', 'pkName'].forEach((id) => { const el = document.getElementById(id); if (el) keep[id] = el.value; });
@@ -6389,7 +6450,7 @@ document.addEventListener('click', (e) => {
   const is = e.target.closest('[data-injs]'); if (is) { S.injStatus = is.dataset.injs; render(); return; }
   const un = e.target.closest('[data-uncheck]'); if (un) { const [pl, mk, ln] = un.dataset.uncheck.split('|'); S.custom = S.custom.filter((x) => !(x.player === pl && x.market === mk && String(x.line) === ln)); store.set('pz_custom_checks', S.custom); render(); }
 });
-document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-slip]')) S.slipOpen[d.dataset.slip] = d.open; }, true);
+document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.matches && d.matches('details[data-slip]')) { S.slipOpen[d.dataset.slip] = d.open; if (d.open && d.classList.contains('ctrow') && !d.querySelector('.ct')) render(); } }, true);
 document.addEventListener('submit', (e) => { if (e.target.id === 'checkForm') runCheck(e); });
 document.addEventListener('change', (e) => {
   if (e.target.dataset.apref) { const k = e.target.dataset.apref; S.alertPrefs[k] = e.target.type === 'checkbox' ? e.target.checked : Number(e.target.value); store.set('pz_alerts', S.alertPrefs); return; }

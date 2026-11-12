@@ -39,11 +39,11 @@ test('a requested team waits for paid auth and clears on expiry or account misma
   vm.runInContext('applyTeam(preferredTeam())',ctx);
   assert.equal(rootEl.dataset.team,undefined);
 });
-test('five mobile destinations keep every existing section reachable', () => {
+test('five mobile destinations plus More keep every existing section reachable', () => {
   assert.ok(fs.existsSync(path.join(root, 'mobile.js')), 'mobile navigation module is missing');
   const ui = require('../mobile.js');
-  assert.equal(ui.PRIMARY.length, 5);
-  const ids = ['live', 'me', 'pick6', 'ftd', 'scalp', 'pickem', 'games', 'injuries', 'research', 'ledger'];
+  assert.equal(ui.PRIMARY.length, 6);
+  const ids = ['live', 'me', 'pick6', 'ftd', 'scalp', 'pickem', 'games', 'injuries', 'research', 'ledger', 'trades', 'settings'];
   for (const id of ids) assert.ok(ui.PRIMARY.some(x => x.id === ui.groupFor(id)), `${id} has no destination`);
 });
 test('ticker wraps seamlessly, pauses, and clamps long background gaps', () => {

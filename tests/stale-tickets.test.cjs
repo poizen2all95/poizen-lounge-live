@@ -35,3 +35,17 @@ test('Live Sweat starts closed and the empty board shows the record',()=>{
  assert.match(html,/S\.sweatOpen = false;/);assert.doesNotMatch(html,/No slips on the board yet/);
  assert.match(html,/function lastResultsHTML\(\)/);
 });
+
+test('the nav bar is five icons plus More, with no visible words',()=>{
+ const m=html.match(/const NAV5 = \[([^\]]+)\]/);assert.equal(m[1].split(',').length,5);
+ const neck=html.slice(html.indexOf('function necklaceHTML'),html.indexOf('function renderNav'));assert.doesNotMatch(neck,/data-label/);assert.match(neck,/aria-label/);
+ const mob=fs.readFileSync(path.join(__dirname,'..','mobile.js'),'utf8');const bar=mob.slice(mob.indexOf('bottom.innerHTML'),mob.indexOf('const grid'));assert.doesNotMatch(bar,/<span>/);assert.match(bar,/aria-label/);
+});
+test('lottos fold only when there are three or more, and closed trades moved to the Ledger',()=>{
+ const src2=html.slice(html.indexOf('function lottoFold'),html.indexOf('function viewLive'));
+ const c={window:{PZTradeCards:{slipLotto:t=>t.entry<=1}},money:n=>'$'+n,Math,Number};vm.createContext(c);vm.runInContext(src2,c);
+ const mk=(e,p,state='open')=>({t:{entry:e},r:{entry:e,potential:p,state}});
+ assert.equal(c.lottoFold([mk(1,5),mk(1,9),mk(10,30)],()=>'x').fold,'');
+ const f=c.lottoFold([mk(1,5),mk(1,269),mk(1,900,'dead'),mk(10,30)],()=>'x');assert.equal(f.real.length,1);assert.match(f.fold,/3 lottos · \$3 in · best still alive: \$269/);
+ const ct=html.slice(html.indexOf('function contractsHTML'),html.indexOf('function contractsPanel'));assert.doesNotMatch(ct,/closed trades · history/);assert.match(html,/closedTradesHTML\(\) \+/);
+});

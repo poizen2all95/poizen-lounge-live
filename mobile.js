@@ -2,11 +2,12 @@
 (function (root) {
   'use strict';
   const PRIMARY = [
-    { id: 'live', label: 'Home', icon: 'live' },
+    { id: 'live', label: 'Live', icon: 'live' },
+    { id: 'pick6', label: 'Tickets', icon: 'pick6' },
+    { id: 'trades', label: 'Trades', icon: 'cash' },
     { id: 'research', label: 'Research', icon: 'research' },
-    { id: 'me', label: 'My Slips', icon: 'user' },
-    { id: 'pickem', label: 'Lounge', icon: 'target' },
-    { id: 'more', label: 'More', icon: 'games' },
+    { id: 'ledger', label: 'Record', icon: 'ledger' },
+    { id: 'more', label: 'More', icon: 'more' },
   ];
   const RESEARCH = ['research', 'games', 'injuries', 'ftd', 'scalp'];
   function groupFor(id) { return RESEARCH.includes(id) ? 'research' : PRIMARY.some(x => x.id === id) ? id : 'more'; }
@@ -71,9 +72,9 @@
   api.renderNav = (active, tabs, icons, counts = {}) => {
     const bottom = doc.getElementById('bottom');
     const group = groupFor(active);
-    bottom.innerHTML = PRIMARY.map(x => `<button class="navbtn" type="button" ${x.id === 'more' ? 'data-mobile-more aria-haspopup="dialog" aria-controls="mobileMore" aria-expanded="' + more.open + '"' : 'data-tab="' + x.id + '"'} ${group === x.id ? 'aria-current="page"' : ''}>${icons[x.icon] || ''}<span>${x.label}</span></button>`).join('');
+    bottom.innerHTML = PRIMARY.map(x => `<button class="navbtn" type="button" ${x.id === 'more' ? 'data-mobile-more aria-haspopup="dialog" aria-controls="mobileMore" aria-expanded="' + more.open + '"' : 'data-tab="' + x.id + '"'} ${group === x.id ? 'aria-current="page"' : ''} aria-label="${x.label}" title="${x.label}">${icons[x.icon] || ''}</button>`).join('');
     const grid = more.querySelector('.mobile-more-grid');
-    grid.innerHTML = tabs.map(([id, label, icon]) => `<button class="navbtn" type="button" data-tab="${id}" ${active === id ? 'aria-current="page"' : ''}>${icons[icon] || ''}<span>${label}</span>${counts[id] ? '<span class="cnt">' + counts[id] + '</span>' : ''}</button>`).join('');
+    grid.innerHTML = tabs.filter(t => !PRIMARY.some(x => x.id === t[0])).map(([id, label, icon]) => `<button class="navbtn" type="button" data-tab="${id}" ${active === id ? 'aria-current="page"' : ''}>${icons[icon] || ''}<span>${label}</span>${counts[id] ? '<span class="cnt">' + counts[id] + '</span>' : ''}</button>`).join('');
   };
   api.researchNav = (active, tabs) => !RESEARCH.includes(active) ? '' : `<nav class="mobile-research" aria-label="Research sections">${RESEARCH.map(id => {
     const t = tabs.find(x => x[0] === id);
