@@ -2035,6 +2035,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 @media(max-width:1280px){.gb-row{grid-template-columns:54px minmax(110px,1fr) minmax(80px,auto) minmax(110px,1fr) minmax(110px,150px) 18px;grid-template-areas:"lg away mid home st go" ". pk pk pk pk pk"}.gb-lg{grid-area:lg}.gb-tm.away{grid-area:away}.gb-mid{grid-area:mid}.gb-tm.home{grid-area:home}.gb-st{grid-area:st}.gb-pk{grid-area:pk;flex-direction:row;flex-wrap:wrap;gap:4px 14px}.gb-go{grid-area:go}.gb-info{display:none}}
 @media(max-width:700px){.gb-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"away mid home" "st pk pk";padding:12px 10px 12px 14px}.gb-lg,.gb-go,.gb-tm em{display:none}.gb-tm b{font-size:20px}.gb-tm img{width:28px;height:28px}.gb-st{align-items:flex-start}}
 @media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
+.stale-note{margin:0 0 10px;padding:10px 12px;border:1px solid var(--line2);border-left:3px solid var(--live);border-radius:10px;background:var(--panel2);color:var(--fg2);font-size:12.5px;line-height:1.45}.stale-note b{color:var(--fg)}
 </style>
 <script>try{var __s=JSON.parse(localStorage.getItem("pz_settings")||"{}");document.documentElement.dataset.glass=__s.glass===false?"off":"on"}catch(e){document.documentElement.dataset.glass="on"}</script>
 <link rel="stylesheet" href="mobile.css">
@@ -3461,6 +3462,24 @@ function wpFrom(sum) {
   const pc = sum && (sum.pickcenter || [])[0]; if (pc && pc.homeTeamOdds && pc.awayTeamOdds && pc.homeTeamOdds.moneyLine && pc.awayTeamOdds.moneyLine) { o.mlHome = pc.homeTeamOdds.moneyLine; o.mlAway = pc.awayTeamOdds.moneyLine; }
   return o;
 }
+/* Tickets DraftKings never reported a result for. A Pick6 entry is over within a week of being placed, so one that is still unsettled
+   more than 8 days after it was last seen has finished at the venue; the board just never heard the result. Keep those off the live board
+   (they would attach themselves to this week's games) and say so, rather than show them as still in play. */
+const STALE_MS = 8 * 86400e3;
+function ticketSeenAt(t) { return Math.max(...[t.verifiedAt, t.venueProgress && t.venueProgress.verifiedAt, t.receiptEvidence && t.receiptEvidence.verifiedAt].map((x) => Date.parse(x || '')).filter(Number.isFinite), 0); }
+function parkStale(s, now = Date.now()) {
+  const settled = (t) => t.settlement && Number.isFinite(t.settlement.payout);
+  const stale = (t) => !settled(t) && ticketSeenAt(t) > 0 && now - ticketSeenAt(t) > STALE_MS;
+  const all = s.pick6 || []; S.stale = all.filter(stale); if (S.stale.length) s.pick6 = all.filter((t) => !stale(t));
+  S.boardSeenAt = Math.max(Date.parse(s.updated || '') || 0, ...all.map(ticketSeenAt));
+  return s;
+}
+function staleNotice() {
+  const n = (S.stale || []).length; if (!n) return '';
+  const when = S.boardSeenAt ? new Date(S.boardSeenAt).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
+  return `<p class="stale-note" role="status"><b>${n} older ${n === 1 ? 'ticket is' : 'tickets are'} waiting on a result from DraftKings.</b> ${when ? `The board last heard from DraftKings on ${esc(when)}. ` : ''}They are off the live board until the next sync.</p>`;
+}
+parkStale(S.slate); /* the built-in starting slate too */
 function activeTickets() { return (S.slate.pick6 || []).filter(confirmed); }
 function slatePlayersInUse() {
   const keys = new Set();
@@ -5200,7 +5219,7 @@ function bookHTML(c, x) {
   return { html, bid: !stale && !paused && e.filled ? { cents: e.avg * 100, e } : null };
 }
 function contractCard(c) {
-  const x = c.status && c.status !== 'open' ? null : contractEval(c);
+  const x = (c.status && c.status !== 'open') || tradeOver(c) ? null : contractEval(c); /* a finished trade has nothing left to sell */
   const qty = Number(c.qty) || 0, avg = Number(c.avg) || 0, cost = (qty * avg) / 100;
   const receipt=window.PZTradeCards.contract(c);
   if (!x) return `<div class="ct closed${window.PZTradeCards.contractLotto(c)?' lotto':''}">${window.PZTradeCards.contractLotto(c)?window.PZTradeCards.lottoBadge():''}<div class="hd"><div><b>${esc(c.title)}</b><span>${esc(c.venue || '')} · ${qty} at ${+avg.toFixed(1)}¢</span></div></div>${window.PZTradeCards.html(receipt)}${c.closedAt?`<p class="mefine">Recorded ${esc(new Date(c.closedAt).toLocaleString())}</p>`:''}</div>`;
@@ -5214,8 +5233,10 @@ function contractCard(c) {
 }
 function contractsHTML() {
   const all = S.slate.contracts || []; if (!all.length) return '';
-  const open = all.filter((c) => !c.status || c.status === 'open'), done = all.filter((c) => c.status && c.status !== 'open');
-  return `<h3 class="sec">Contracts · sell or hold</h3><div class="contracts">${open.map(contractCard).join('')}</div>${done.length?`<details class="more"><summary>${done.length} closed trades · history</summary><div class="contracts">${done.map(contractCard).join('')}</div></details>`:''}`;
+  /* a trade whose games are over is not sell-or-hold any more: it waits in its own drawer until DraftKings reports the result */
+  const open = openContracts(), over = all.filter((c) => (!c.status || c.status === 'open') && tradeOver(c)), done = all.filter((c) => c.status && c.status !== 'open');
+  const overReason = (c) => { const t = S.tradeStatus[c.id]; return t.status === 'won' ? 'Every pick landed' : t.status === 'dead' ? 'A pick missed' : 'Games are over'; };
+  return `<h3 class="sec">Contracts · sell or hold</h3>${open.length ? `<div class="contracts">${open.map(contractCard).join('')}</div>` : '<p class="stale-note">No open trades right now.</p>'}${over.length?`<details class="more"><summary>${over.length} finished ${over.length === 1 ? 'trade' : 'trades'} · waiting on the DraftKings result</summary><div class="contracts">${over.map((c) => contractCard(c).replace('<div class="hd">', `<p class="mefine">${overReason(c)} · result not yet reported by DraftKings</p><div class="hd">`)).join('')}</div></details>`:''}${done.length?`<details class="more"><summary>${done.length} closed trades · history</summary><div class="contracts">${done.map(contractCard).join('')}</div></details>`:''}`;
 }
 
 function contractsPanel() {
@@ -5429,7 +5450,8 @@ function tdWatch() {
 /* who is in a game: every slate player with the slips they ride on, most-used first */
 function eventPicks(ev) {
   if (!ev || !S.G) return []; const m = {};
-  S.G.pick6.filter(({ t }) => confirmed(t)).forEach(({ t, r }) => r.legs.forEach(({ leg, g }) => { const e2 = eventFor(leg.player); if (!e2 || e2.id !== ev.id) return; const o = (m[leg.player] = m[leg.player] || { key: leg.player, slips: new Set(), legs: [] }); o.slips.add(t.id); if (!o.legs.some((x) => x.leg.market === leg.market && Number(x.leg.line) === Number(leg.line) && (x.leg.dir || 'over') === (leg.dir || 'over'))) o.legs.push({ leg, g, n: 0 }); const x = o.legs.find((y) => y.leg.market === leg.market && Number(y.leg.line) === Number(leg.line)); if (x) x.n++; }));
+  /* a ticket settled days ago belongs to a game that is over, not to this team's next one */
+  S.G.pick6.filter(({ t }) => confirmed(t) && !(t.settlement && Date.now() - ticketSeenAt(t) > 36 * 3600e3)).forEach(({ t, r }) => r.legs.forEach(({ leg, g }) => { const e2 = eventForLeg(leg); if (!e2 || e2.id !== ev.id) return; const o = (m[leg.player] = m[leg.player] || { key: leg.player, slips: new Set(), legs: [] }); o.slips.add(t.id); if (!o.legs.some((x) => x.leg.market === leg.market && Number(x.leg.line) === Number(leg.line) && (x.leg.dir || 'over') === (leg.dir || 'over'))) o.legs.push({ leg, g, n: 0 }); const x = o.legs.find((y) => y.leg.market === leg.market && Number(y.leg.line) === Number(leg.line)); if (x) x.n++; }));
   return Object.values(m).map((o) => ({ ...o, n: o.slips.size })).sort((a, b) => b.n - a.n);
 }
 function featuredIn(ev) { const L = eventPicks(ev); if (L.length) return L[0].key; return [...slatePlayersInUse()].find((k) => { const e = eventFor(k); return e && e.id === ev.id; }) || null; }
@@ -5634,7 +5656,7 @@ function viewLive() {
   const ctxEv = ctxEvent(L);
   const so = { live: 0, open: 1, partial: 2, won: 2, review: 3, dead: 4, lost: 4 };
   const slips = S.G.pick6.filter(({ t,r }) => confirmed(t)&&r.payout===null&&!['won','lost','partial','dead'].includes(r.state)).sort((a, b) => byStart(a, b) || (so[a.r.state] ?? 5) - (so[b.r.state] ?? 5));
-  const slipsPanel = `<section class="panel slipsP"><div class="ph">${SVG.pick6}<h3>Open slips</h3><button class="ph-go" type="button" data-tab="pick6">Pick6 tab</button></div>
+  const slipsPanel = `<section class="panel slipsP"><div class="ph">${SVG.pick6}<h3>Open slips</h3><button class="ph-go" type="button" data-tab="pick6">Pick6 tab</button></div>${staleNotice()}
     ${slips.length ? `<div class="sl-head" aria-hidden="true"><span>Slip</span><span>Health</span><span>Entry</span><span>Chance</span><span>To win</span></div><div class="slips">${tdWatch()}${waveRows(slips,slipTracker)}</div>` : `<div class="empty flat"><b>No slips on the board yet</b>They show up here the moment PoiZen publishes them.</div>`}</section>`;
   const tape = `<section class="panel tapeP"><div class="ph">${SVG.trend}<h3>Activity tape</h3>${alertPrefsHTML()}</div>${tapeHTML()}</section>`;
   const upcoming = next;
@@ -6039,7 +6061,8 @@ function autoGraded() {
   S.G.pick6.filter(({ t }) => confirmed(t)).forEach(({ t, r }) => {
     if (r.payout === null) return;
     if (rec.some((e) => e.slipId === t.id || e.title === t.title)) return;
-    const evs = t.legs.map((l) => eventFor(l.player)).filter(Boolean); const last = evs.map((e) => e.date).sort().pop();
+    /* date the result by the ticket's own games or when DraftKings last reported it, never by the team's next game */
+    const seen = ticketSeenAt(t); const last = t.legs.map((l) => l.startsAt).filter(Boolean).sort().pop() || (seen ? new Date(seen).toISOString() : t.legs.map((l) => eventFor(l.player)).filter(Boolean).map((e) => e.date).sort().pop());
     out.push({ date: last ? dayKey(new Date(last)) : dayKey(), title: t.title, slipId: t.id, type: 'pick6', stake: r.entry, payout: r.payout, legs: r.n, hits: r.hits, auto: true, picks: r.legs.map(({ leg, g }) => ({ name: P(leg.player).name, player: leg.player, market: leg.market, line: leg.line, dir: leg.dir || 'over', prob: typeof leg.prob === 'number' ? leg.prob : undefined, result: g.state, value: g.value })) });
   });
   return out;
@@ -6371,7 +6394,7 @@ S.custom.forEach((c) => { if (c.meta && !S.slate.players[c.player]) S.slate.play
 /* ---------------- slate + results (hosted files) ---------------- */
 async function refreshFiles() {
   if (!/^https?:/.test(location.protocol)) return;
-  if (!S.fbSlate) try { const s = await getJSON('slate.json?ts=' + Date.now()); if (s && s.players && !S.fbSlate) { S.custom.forEach((c) => { if (c.meta && !s.players[c.player]) s.players[c.player] = c.meta; }); if (JSON.stringify(s) !== JSON.stringify(S.slate)) { S.slate = s; S.snap = null; afterData(); } } } catch {}
+  if (!S.fbSlate) try { const s = await getJSON('slate.json?ts=' + Date.now()); if (s && s.players && !S.fbSlate) { S.custom.forEach((c) => { if (c.meta && !s.players[c.player]) s.players[c.player] = c.meta; }); parkStale(s); if (JSON.stringify(s) !== JSON.stringify(S.slate)) { S.slate = s; S.snap = null; afterData(); } } } catch {}
   if(!S.fbHistory) try { const h = await getJSON('history.json?ts=' + Date.now()); if (h && Array.isArray(h.entries) && !S.fbHistory) { S.history = h; renderRecord(); if (S.tab === 'ledger') render(); } } catch {}
   if (!S.fbResults) try { const r = await getJSON('results.json?ts=' + Date.now()); if (r && r.entries && !S.fbResults) { S.results = r; renderRecord(); } } catch {}
 }
@@ -6394,6 +6417,7 @@ function watchBoard() {
     db.ref('board/slate').on('value', (snap) => {
       const s = snap.val(); if (!s || !s.players) return;
       fixArrays(s); S.fbSlate = true; S.custom.forEach((c) => { if (c.meta && !s.players[c.player]) s.players[c.player] = c.meta; });
+      parkStale(s);
       if (JSON.stringify(s) === JSON.stringify(S.slate)) return;
       S.slate = s; S.snap = null; S.shift = null; afterData(); poll(); loadLogs();
     }, () => {});
