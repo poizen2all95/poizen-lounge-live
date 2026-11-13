@@ -50,3 +50,12 @@ test('lottos fold only when there are three or more, and closed trades moved to 
  const f=c.lottoFold([mk(1,5),mk(1,269),mk(1,900,'dead'),mk(10,30)],()=>'x');assert.equal(f.real.length,1);assert.match(f.fold,/3 lottos · \$3 in · best still alive: \$269/);
  const ct=html.slice(html.indexOf('function contractsHTML'),html.indexOf('function contractsPanel'));assert.doesNotMatch(ct,/closed trades · history/);assert.match(html,/closedTradesHTML\(\) \+/);
 });
+
+test('the stage adds up money in play, the best payout and money by venue, and speaks plainly when empty',()=>{
+ const src3=html.slice(html.indexOf('function stageMath'),html.indexOf('function stageBadge'));
+ const c={Math,Object,Date};vm.createContext(c);vm.runInContext(src3,c);
+ const list=[{venue:'Kalshi',cost:2,pays:46.85},{venue:'Kalshi',cost:0.5,pays:333.33,lotto:true},{venue:'DraftKings',cost:10,pays:30}];
+ const m=c.stageMath(list);assert.equal(m.n,3);assert.equal(m.inPlay,12.5);assert.equal(m.best,333.33);assert.equal(m.venues[0][0],'DraftKings');
+ assert.match(c.stageVoice(list,m),/2 plays with real money on them, and 1 lotto/);
+ assert.match(c.stageVoice([],c.stageMath([])),/Nothing live/);
+});
