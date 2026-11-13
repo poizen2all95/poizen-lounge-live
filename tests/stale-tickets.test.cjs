@@ -85,3 +85,17 @@ test('the owner console date-stamps a plan when it is new or its content changes
  const same=run(JSON.parse(JSON.stringify(kept)));assert.equal(same.firstTD.postedAt,'2026-10-17T00:46:59Z');
  const edited=JSON.parse(JSON.stringify(kept));edited.firstTD.bets.push({player:'b'});assert.notEqual(run(edited).firstTD.postedAt,'2026-10-17T00:46:59Z');
 });
+
+test('the headline numbers wait for the live board, but never longer than five seconds',()=>{
+ const a=html.indexOf('const BOOT_AT = Date.now();'),b=html.indexOf('function stageHTML(L)');assert.ok(a>0&&b>a);
+ const mk=(S,FIREBASE)=>{const c={S,FIREBASE,Date};vm.createContext(c);vm.runInContext(html.slice(a,b)+';this.boot=BOOT_AT;',c);return c;};
+ let c=mk({},{});assert.equal(c.stageReady(c.boot+100),false);assert.equal(c.stageReady(c.boot+5001),true);
+ c=mk({fbSlate:true},{});assert.equal(c.stageReady(c.boot+100),false);
+ c=mk({fbSlate:true,fbHistory:true},{});assert.equal(c.stageReady(c.boot+100),true);
+ c=mk({},null);assert.equal(c.stageReady(c.boot+100),true);
+});
+test('the history baked into both pages is the published history file',()=>{
+ const file=JSON.stringify(JSON.parse(fs.readFileSync(path.join(__dirname,'..','history.json'),'utf8')));
+ const admin=fs.readFileSync(path.join(__dirname,'..','admin.html'),'utf8');
+ assert.ok(html.includes('const DEFAULT_HISTORY = '+file+';'));assert.ok(admin.includes('const HISTORY = '+file+';'));
+});
