@@ -6136,7 +6136,7 @@ document.addEventListener('click', (e) => {
 
 /* ---------------- ledger ---------------- */
 /* results recorded live (Firebase / results.json) + imported history (history.json), de-duplicated */
-const BOOKS = ['DraftKings Pick6', 'DraftKings Predictions', 'Robinhood'];
+const BOOKS = ['DraftKings Pick6', 'DraftKings Predictions', 'Robinhood', 'Kalshi'];
 const hasStake = (e) => e.stake !== null && e.stake !== undefined && e.stake !== '' && isFinite(Number(e.stake));
 function recorded() {
   const e = (S.results && S.results.entries) || [];
@@ -6229,7 +6229,7 @@ function calHTML(L) {
 }
 const XMK = { first_td: 'First TD', two_td: '2+ TDs', sacks: 'Sacks', moneyline: 'To win', combo: 'Combos' };
 const mkLabel = (k) => (E.MARKETS[MK_ALIAS[k] || k] || {}).label || XMK[MK_ALIAS[k] || k] || mkOf(k).label;
-const BOOKTAG = { 'DraftKings Pick6': 'Pick6', 'DraftKings Predictions': 'DK Predictions', Robinhood: 'Robinhood' };
+const BOOKTAG = { 'DraftKings Pick6': 'Pick6', 'DraftKings Predictions': 'DK Predictions', Robinhood: 'Robinhood', Kalshi: 'Kalshi' };
 function histRow(e) {
   const o = outcome(e); const v = pnl(e); const picks = e.picks ? Object.values(e.picks) : []; const known = hasStake(e);
   const dots = picks.length ? `<div class="dots">${picks.map((p) => `<i class="${p.result === 'hit' ? 'hit' : p.result === 'miss' ? 'miss' : ''}"></i>`).join('')}</div>` : typeof e.prob === 'number' ? `<span class="chip">Bought at ${fmtP(e.prob)}</span>` : '';
@@ -6290,7 +6290,7 @@ function viewLedger() {
   const A = agg(L); const board = playerBoard();
   const metrics = `<div class="lmet ${B === 'all' ? 'four' : ''}">${B === 'all' ? '' : `<div><span>${esc(BOOKTAG[B])} record</span><b>${A.w}-${A.l}</b><em>${A.n ? Math.round((A.w / A.n) * 100) + '% wins' : 'Nothing graded'}</em></div>`}<div><span>Known stake</span><b>${money(A.staked)}</b><em>${L.length - A.unknown} entries with a stake</em></div><div><span>Known-stake P/L</span><b class="${A.pl > 0 ? 'win' : A.pl < 0 ? 'loss' : ''}">${money(A.pl, true)}</b><em>${A.staked ? `${A.roi >= 0 ? '+' : ''}${Math.round(A.roi * 100)}% ROI` : '–'}</em></div><div><span>Entries missing a stake</span><b>${A.unknown}</b><em>P/L unknown — never counted as $0</em></div><div><span>Paid on those</span><b>${money(A.unknownPaid)}</b><em>Payouts the book did show</em></div></div>`;
   const exports = `<button class="fbtn ex" type="button" data-export="csv">${SVG.cash}Export CSV</button><button class="fbtn ex" type="button" data-export="json">${SVG.ledger}Export JSON</button>`;
-  const head = vh('The <span>Ledger</span>', 'Every slip and every prediction trade — Pick6, DraftKings Predictions and Robinhood — with the running profit line, the Coach’s read on where you win, and the players who keep cashing.', `<span class="chip">${ALL.length} entries</span><span class="chip">${board.length} players tracked</span>`, exports, metrics);
+  const head = vh('The <span>Ledger</span>', 'Every slip and every prediction trade — Pick6, DraftKings Predictions, Robinhood and Kalshi — with the running profit line, the Coach’s read on where you win, and the players who keep cashing.', `<span class="chip">${ALL.length} entries</span><span class="chip">${board.length} players tracked</span>`, exports, metrics);
   const bk = (id, label) => `<button class="fbtn" type="button" data-lbook="${esc(id)}" aria-pressed="${B === id}">${label}</button>`;
   const books = BOOKS.map((b) => { const a = agg(ALL.filter((e) => (e.book || 'DraftKings Pick6') === b)); return `<tr class="${B === b ? 'sel' : ''}"><td><b>${esc(BOOKTAG[b])}</b></td><td class="n">${a.w}-${a.l}</td><td class="n">${a.n ? Math.round((a.w / a.n) * 100) + '%' : '–'}</td><td class="n">${a.staked ? money(a.staked) : '–'}</td><td class="n ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${a.staked ? money(a.pl, true) : '–'}</td><td class="n">${a.unknown ? `${a.unknown} · paid ${money(a.unknownPaid)}` : '–'}</td></tr>`; }).join('');
   const now = new Date(); const ws = new Date(now); ws.setDate(now.getDate() - ((now.getDay() + 6) % 7)); const wk = dayKey(ws); const today = dayKey(); const mo = today.slice(0, 7);
@@ -6298,7 +6298,7 @@ function viewLedger() {
   const rhL = ALL.filter((e) => e.book === 'Robinhood'); const rh = agg(rhL);
   const rhCard = rh.n ? (() => { const sold = rhL.filter((e) => e.result === 'sold'), held = rhL.filter((e) => e.result !== 'sold'); const sum = (l) => l.reduce((x, e) => x + pnl(e), 0);
     return `<section class="panel rhp"><div class="ph">${SVG.trend}<h3>Robinhood breakdown</h3><button class="ph-go" type="button" data-lbook="Robinhood">Filter</button></div><div class="rhrows"><div><span>Sold before the end</span><b class="${sum(sold) >= 0 ? 'win' : 'loss'}">${money(sum(sold), true)}</b><em>${sold.length} trades</em></div><div><span>Held to settlement</span><b class="${sum(held) >= 0 ? 'win' : 'loss'}">${money(sum(held), true)}</b><em>${held.length} trades</em></div><div><span>Total on ${money(rh.staked)}</span><b class="${rh.pl >= 0 ? 'win' : 'loss'}">${money(rh.pl, true)}</b><em>${rh.roi >= 0 ? '+' : ''}${Math.round(rh.roi * 100)}% ROI · ${rh.w}-${rh.l}</em></div></div></section>`; })() : '';
-  const byLegs = {}; L.forEach((e) => { if (!e.legs) return; const k = e.legs + '-pick'; (byLegs[k] = byLegs[k] || []).push(e); });
+  const byLegs = {}; L.forEach((e) => { if (!e.legs || (e.book || 'DraftKings Pick6') !== 'DraftKings Pick6') return; const k = e.legs + '-pick'; (byLegs[k] = byLegs[k] || []).push(e); });
   const breakdown = Object.entries(byLegs).sort((a, b) => parseInt(a[0]) - parseInt(b[0])).map(([k, l]) => { const a = agg(l); return `<tr><td><b>${esc(k)}</b></td><td class="n">${a.w}-${a.l}</td><td class="n">${a.n ? Math.round((a.w / a.n) * 100) + '%' : '–'}</td><td class="n">${a.staked ? money(a.staked) : '–'}</td><td class="n ${a.pl > 0 ? 'win' : a.pl < 0 ? 'loss' : ''}">${a.staked ? money(a.pl, true) : '–'}</td></tr>`; }).join('');
   const boardHTML = board.length ? `<div class="grid4">${board.map((b) => { const pc = b.hit / b.n; const col = pc >= 0.7 ? 'var(--win)' : pc >= 0.5 ? 'var(--live)' : 'var(--loss)'; return `<div class="mtile" style="grid-template-columns:44px minmax(0,1fr) auto">${b.key && S.slate.players[b.key] ? avatar(b.key) : `<div class="av" style="display:grid;place-items:center;font:900 14px var(--stadium);color:var(--fg2);background:var(--panel3)">${esc(initials(b.name))}</div>`}<div style="min-width:0"><b>${esc(b.name)}</b><span>${Object.keys(b.markets).map((k) => esc(mkLabel(k))).join(' · ')}</span></div><span class="v" style="color:${col}">${b.hit}/${b.n}</span></div>`; }).join('')}</div>` : '<div class="empty"><b>No graded picks yet</b></div>';
   const R = S.ledgerRange; const shown = [...L].reverse().filter((e) => R === 'week' ? e.date >= wk : R === 'month' ? e.date.startsWith(mo) : true);
