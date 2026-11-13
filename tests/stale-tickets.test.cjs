@@ -59,3 +59,29 @@ test('the stage adds up money in play, the best payout and money by venue, and s
  assert.match(c.stageVoice(list,m),/2 plays with real money on them, and 1 lotto/);
  assert.match(c.stageVoice([],c.stageMath([])),/Nothing live/);
 });
+
+test('a plan posted more than eight days ago leaves the board; an undated or recent one stays',()=>{
+ const c={S:{},esc:String,Date,Math,Number};vm.createContext(c);vm.runInContext(src,c);
+ const s={pick6:[],firstTD:{bets:[1],postedAt:at(26)},scalp:{shifts:[1],postedAt:at(3)},research:[{player:'x'}],researchPostedAt:at(26)};
+ c.parkStale(s,now);
+ assert.equal(s.firstTD,undefined);assert.ok(s.scalp);assert.equal(s.research.length,0);
+ assert.equal(c.S.oldPlans.firstTD,at(26));assert.equal(c.S.oldPlans.scalp,undefined);assert.match(c.oldPlanDate('firstTD'),/Oct 1[67]/);
+ const u={pick6:[],firstTD:{bets:[1]},research:[{player:'x'}]};c.parkStale(u,now);assert.ok(u.firstTD);assert.equal(u.research.length,1);assert.equal(c.oldPlanDate('firstTD'),'');
+});
+test('a trade is over once its market has closed, even with no game status',()=>{
+ const line=html.match(/const tradeOver = [^\n]*/)[0];
+ const c={S:{tradeStatus:{a:{status:'ended'}}},Date,Number};vm.createContext(c);vm.runInContext(line+'this.tradeOver=tradeOver;',c);
+ assert.equal(c.tradeOver({id:'a'}),true);
+ assert.equal(c.tradeOver({id:'k',closesAt:new Date(Date.now()-3600e3).toISOString()}),true);
+ assert.equal(c.tradeOver({id:'k',closesAt:new Date(Date.now()+3600e3).toISOString()}),false);
+ assert.equal(c.tradeOver({id:'n'}),false);
+});
+test('the owner console date-stamps a plan when it is new or its content changes, and keeps the date otherwise',()=>{
+ const admin=fs.readFileSync(path.join(__dirname,'..','admin.html'),'utf8');
+ const a=admin.indexOf('{ const sig = (v) =>'),b=admin.indexOf('A.slate.updated = new Date().toISOString();',a);assert.ok(a>0&&b>a);
+ const run=(slate)=>{const c={A:{slate},JSON,Date};vm.createContext(c);vm.runInContext(admin.slice(a,b),c);return c.A.slate;};
+ const fresh=run({firstTD:{bets:[{player:'a'}]},research:[]});assert.ok(fresh.firstTD.postedAt&&fresh.firstTD.postedSig);
+ const kept=run({firstTD:{bets:[{player:'a'}],postedAt:'2026-10-17T00:46:59Z'}});assert.equal(kept.firstTD.postedAt,'2026-10-17T00:46:59Z');assert.ok(kept.firstTD.postedSig);
+ const same=run(JSON.parse(JSON.stringify(kept)));assert.equal(same.firstTD.postedAt,'2026-10-17T00:46:59Z');
+ const edited=JSON.parse(JSON.stringify(kept));edited.firstTD.bets.push({player:'b'});assert.notEqual(run(edited).firstTD.postedAt,'2026-10-17T00:46:59Z');
+});

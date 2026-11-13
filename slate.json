@@ -1792,6 +1792,7 @@
         "stake": 5
       }
     ],
+    "postedAt": "2026-10-17T00:46:59Z",
     "status": "plan",
     "title": "$20 Tiered First-TD Portfolio"
   },
@@ -24955,12 +24956,14 @@
       "player": "allen"
     }
   ],
+  "researchPostedAt": "2026-10-17T00:14:35Z",
   "rules": {
     "avgMustBeatLine": true,
     "cashOutOnFirstTD": true,
     "maxLegs": 4
   },
   "scalp": {
+    "postedAt": "2026-10-18T06:43:45Z",
     "rule": "Cash out the moment the player scores TD #1. If TD #2 comes first, the ticket wins in full.",
     "seed": 100,
     "shifts": [
