@@ -2035,7 +2035,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 @media(max-width:1280px){.gb-row{grid-template-columns:54px minmax(110px,1fr) minmax(80px,auto) minmax(110px,1fr) minmax(110px,150px) 18px;grid-template-areas:"lg away mid home st go" ". pk pk pk pk pk"}.gb-lg{grid-area:lg}.gb-tm.away{grid-area:away}.gb-mid{grid-area:mid}.gb-tm.home{grid-area:home}.gb-st{grid-area:st}.gb-pk{grid-area:pk;flex-direction:row;flex-wrap:wrap;gap:4px 14px}.gb-go{grid-area:go}.gb-info{display:none}}
 @media(max-width:700px){.gb-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"away mid home" "st pk pk";padding:12px 10px 12px 14px}.gb-lg,.gb-go,.gb-tm em{display:none}.gb-tm b{font-size:20px}.gb-tm img{width:28px;height:28px}.gb-st{align-items:flex-start}}
 @media(prefers-reduced-transparency:reduce){html[data-glass="on"] :is(.panel,.card,.ct,.gcard,.lstrip,.set-card){-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}}
-.ctrows{display:flex;flex-direction:column}.ctr-head,details.ctrow>summary{display:grid;color:var(--fg);grid-template-columns:minmax(0,1fr) 58px 64px;gap:10px;align-items:center}
+.ctrows{display:flex;flex-direction:column}.ctr-head,details.ctrow>summary{display:grid;color:var(--fg);grid-template-columns:minmax(0,1fr) 92px 60px;gap:10px;align-items:center}
 .ctr-head{padding:8px 14px 4px;font-size:11px;font-weight:800;color:var(--fg3)}.ctr-head span+span{text-align:right}
 .ctrow{border-top:1px solid var(--line)}.ctrow.lotto{box-shadow:inset 3px 0 0 #F2B544}details.ctrow>summary{padding:10px 14px;cursor:pointer;list-style:none}details.ctrow>summary::before{display:none!important}.ctrow>summary::-webkit-details-marker{display:none}
 .ctrow>summary:hover{background:color-mix(in srgb,var(--fg) 4%,transparent)}.ctr-t{min-width:0;display:flex;flex-direction:column;gap:2px}.ctr-t b{font-size:13px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.ctrow[open] .ctr-t b{-webkit-line-clamp:unset}
@@ -3510,7 +3510,7 @@ function parkStale(s, now = Date.now()) {
   const settled = (t) => t.settlement && Number.isFinite(t.settlement.payout);
   const stale = (t) => !settled(t) && ticketSeenAt(t) > 0 && now - ticketSeenAt(t) > STALE_MS;
   const all = s.pick6 || []; S.stale = all.filter(stale); if (S.stale.length) s.pick6 = all.filter((t) => !stale(t));
-  S.boardSeenAt = Math.max(Date.parse(s.updated || '') || 0, ...all.map(ticketSeenAt), ...(s.contracts || []).map(ticketSeenAt));
+  S.boardSeenAt = Math.max(Date.parse(s.updated || '') || 0, ...all.map(ticketSeenAt), ...(s.contracts || []).filter((c) => c && /draftkings/i.test(c.venue || '')).map(ticketSeenAt));
   return s;
 }
 function staleNotice() {
@@ -5300,7 +5300,7 @@ function contractCard(c) {
 function contractRow(c, note = '') {
   const key = 'ct:' + c.id, open = !!S.slipOpen[key], over = tradeOver(c), x = over ? null : contractEval(c);
   const qty = Number(c.qty) || 0, cost = Number.isFinite(Number(c.cost)) ? Number(c.cost) : (qty * (Number(c.avg) || 0)) / 100;
-  return `<details class="ctrow${window.PZTradeCards.contractLotto(c) ? ' lotto' : ''}" data-slip="${esc(key)}" ${open ? 'open' : ''}><summary><span class="ctr-t"><b>${esc(c.title)}</b>${note ? `<small>${esc(note)}</small>` : ''}</span><span class="ctr-p" ${x && x.p !== null ? `style="color:${pColor(x.p)}"` : ''}>${x ? fmtP(x.p) : 'Over'}</span><span class="ctr-c">${money(cost)}</span></summary>${open ? contractCard(c) : ''}</details>`;
+  return `<details class="ctrow${window.PZTradeCards.contractLotto(c) ? ' lotto' : ''}" data-slip="${esc(key)}" ${open ? 'open' : ''}><summary><span class="ctr-t"><b>${esc(c.title)}</b>${note ? `<small>${esc(note)}</small>` : ''}</span><span class="ctr-p" ${x && x.p !== null ? `style="color:${pColor(x.p)}"` : ''}>${!x ? 'Over' : x.p === null && Number(c.payout) > 0 ? money(Number(c.payout)) : fmtP(x.p)}</span><span class="ctr-c">${money(cost)}</span></summary>${open ? contractCard(c) : ''}</details>`;
 }
 function closedTradesHTML() {
   const done = (S.slate.contracts || []).filter((c) => c.status && c.status !== 'open'); if (!done.length) return '';
@@ -5315,7 +5315,7 @@ function contractsHTML() {
   /* a trade whose games are over is not sell-or-hold any more: it waits in its own drawer until DraftKings reports the result */
   const open = openContracts(), over = all.filter((c) => (!c.status || c.status === 'open') && tradeOver(c)), done = all.filter((c) => c.status && c.status !== 'open');
   const overReason = (c) => { const t = S.tradeStatus[c.id]; return t.status === 'won' ? 'Every pick landed' : t.status === 'dead' ? 'A pick missed' : 'Games are over'; };
-  return `<h3 class="sec">Contracts · sell or hold</h3>${open.length ? `<div class="ctrows"><div class="ctr-head" aria-hidden="true"><span>Trade</span><span>Chance</span><span>Paid</span></div>${open.map((c) => contractRow(c)).join('')}</div>` : '<p class="stale-note">No open trades right now.</p>'}${over.length?`<details class="more"><summary>${over.length} finished ${over.length === 1 ? 'trade' : 'trades'} · waiting on the DraftKings result</summary><div class="ctrows">${over.map((c) => contractRow(c, overReason(c) + ' · result not yet reported by DraftKings')).join('')}</div></details>`:''}${done.length?`<p class="ct-hist"><button class="ph-go" type="button" data-tab="ledger">${done.length} closed ${done.length === 1 ? 'trade' : 'trades'} · see the Ledger</button></p>`:''}`;
+  return `<h3 class="sec">Contracts · sell or hold</h3>${open.length ? `<div class="ctrows"><div class="ctr-head" aria-hidden="true"><span>Trade</span><span>Chance or pays</span><span>Paid</span></div>${open.map((c) => contractRow(c)).join('')}</div>` : '<p class="stale-note">No open trades right now.</p>'}${over.length?`<details class="more"><summary>${over.length} finished ${over.length === 1 ? 'trade' : 'trades'} · waiting on the DraftKings result</summary><div class="ctrows">${over.map((c) => contractRow(c, overReason(c) + ' · result not yet reported by DraftKings')).join('')}</div></details>`:''}${done.length?`<p class="ct-hist"><button class="ph-go" type="button" data-tab="ledger">${done.length} closed ${done.length === 1 ? 'trade' : 'trades'} · see the Ledger</button></p>`:''}`;
 }
 
 function contractsPanel() {

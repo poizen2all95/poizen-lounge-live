@@ -28,7 +28,8 @@ test('the trades pill is green within a day, amber after one, red after three',(
  assert.match(sync(11).when,/Nov 1/);assert.match(sync(11).title,/DraftKings/);
 });
 test('a contract seen more recently than any ticket counts as the last sync; no data shows no pill',()=>{
- assert.equal(sync(11,[{id:'c',verifiedAt:at(0.5)}]).tone,'ok');
+ assert.equal(sync(11,[{id:'c',venue:'DraftKings Predictions',verifiedAt:at(0.5)}]).tone,'ok');
+ assert.equal(sync(11,[{id:'k',venue:'Kalshi',verifiedAt:at(0.5)}]).tone,'bad');
  assert.equal(sync(null),null);
 });
 test('Live Sweat starts closed and the empty board shows the record',()=>{
