@@ -2055,6 +2055,7 @@ html[data-glass="on"] .gboard{background:var(--gl-bg);-webkit-backdrop-filter:bl
 .sg-cards{display:flex;flex-direction:column;gap:10px}
 .sg-card{display:flex;align-items:center;gap:16px;width:100%;padding:13px 18px;border:0;border-radius:18px;background:var(--panel);color:var(--fg);text-align:left;cursor:pointer;transition:transform .15s ease,background .15s ease}
 .sg-card:hover{transform:translateX(4px);background:var(--panel2)}.sg-b{flex:none}.sg-av{position:relative;overflow:hidden;width:50px;height:50px;border-radius:50%}
+.sg-av.av{background:var(--tg);box-shadow:0 0 0 2px color-mix(in srgb,var(--fg) 14%,transparent)}.sg-av.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 10%}
 .sg-ini{display:grid;place-items:center;background:color-mix(in srgb,var(--teal) 22%,var(--panel2));box-shadow:inset 0 0 0 2px var(--teal);font:800 20px/1 var(--stadium);color:var(--fg)}
 .sg-ini.sg-gold{background:var(--gold);box-shadow:none;color:#0B0E12}
 .sg-n{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.sg-n b{font-size:16px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sg-n small{font-size:13px;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -5773,7 +5774,7 @@ function stagePositions() {
   const trades = openContracts().map((c) => {
     const qty = Number(c.qty) || 0, cost = Number.isFinite(Number(c.cost)) ? Number(c.cost) : (qty * (Number(c.avg) || 0)) / 100, combo = c.kind === 'combo', cut = String(c.title || '').split(/:\s| · /);
     const venue = /kalshi/i.test(c.venue || '') ? 'Kalshi' : /robinhood/i.test(c.venue || '') ? 'Robinhood' : 'DraftKings';
-    return { id: c.id, venue, name: combo ? String(c.title || '').split(':')[0] : cut[0], sub: combo ? `${(c.venueLegs || []).length || ''} legs · ${venue}`.trim() : `${String(c.title || '').slice(cut[0].length).replace(/^[:\s·]+/, '')} · ${venue}`, cost, pays: Number(c.payout) || qty, player: c.player && S.slate.players[c.player] ? c.player : null, lotto: combo && window.PZTradeCards.contractLotto(c), tab: 'trades', legs: (c.venueLegs || []).length };
+    return { id: c.id, venue, name: combo ? String(c.title || '').split(':')[0] : cut[0], sub: combo ? `${(c.venueLegs || []).length || ''} legs · ${venue}`.trim() : `${String(c.title || '').slice(cut[0].length).replace(/^[:\s·]+/, '')} · ${venue}`, cost, pays: Number(c.payout) || qty, player: c.player && S.slate.players[c.player] ? c.player : null, sport: c.sport, face: !combo && /^[A-Z][\w.'-]+(?: [A-Z][\w.'-]+){1,3}$/.test(cut[0]) ? cut[0] : '', lotto: combo && window.PZTradeCards.contractLotto(c), tab: 'trades', legs: (c.venueLegs || []).length };
   });
   return [...slips, ...trades];
 }
@@ -5788,8 +5789,32 @@ function stageVoice(list, m) {
   if (!real) return `All long shots tonight: ${lot} ${lot === 1 ? 'lotto' : 'lottos'} that need a perfect night.`;
   return `${real} ${real === 1 ? 'play' : 'plays'} with real money on ${real === 1 ? 'it' : 'them'}${lot ? `, and ${lot} ${lot === 1 ? 'lotto' : 'lottos'} that need a perfect night` : ''}.`;
 }
+/* trades from venues that send only a name (Kalshi) get their photo and team colours by an exact name-and-league match on ESPN */
+const faceKey = (x) => (x.sport || 'nfl') + ':' + E.norm(x.face || '');
+const faceBusy = new Set();
+async function resolveStageFaces() {
+  if (!S.G) return;
+  const league = { nfl: 'nfl', nba: 'nba', cfb: 'college-football', nhl: 'nhl', mlb: 'mlb', wnba: 'wnba' };
+  const cache = store.get('pz_player_identity_v1', {}); S.faces = S.faces || {};
+  const want = stagePositions().filter((x) => x.face && league[x.sport] && !S.faces[faceKey(x)] && !faceBusy.has(faceKey(x)));
+  if (!want.length) return;
+  await Promise.allSettled(want.map(async (x) => { const k = faceKey(x); faceBusy.add(k); try {
+    let found = cache[k];
+    if (!found || Date.now() - found.at > 86400000) {
+      const j = await getJSON(E.ESPN.search(x.face));
+      const hit = [...new Map((j.items || []).filter((a) => E.norm(a.displayName) === E.norm(x.face) && a.league === league[x.sport]).map((a) => [String(a.id), a])).values()];
+      if (hit.length !== 1) { S.faces[k] = { miss: true }; return; }
+      const a = hit[0], t = (a.teamRelationships || []).find((r) => r.core && r.core.abbreviation);
+      found = { at: Date.now(), espnId: String(a.id), ...(a.headshot && a.headshot.href ? { headshot: a.headshot.href } : {}), ...(t ? { team: t.core.abbreviation } : {}) }; cache[k] = found;
+    }
+    S.faces[k] = found;
+  } catch { /* leave the initials; try again on the next load */ } finally { faceBusy.delete(k); } }));
+  store.set('pz_player_identity_v1', cache); if (S.tab === 'live') render();
+}
 function stageBadge(x) {
   if (x.player) return avatar(x.player, 'av sg-av');
+  const f = x.face && S.faces && S.faces[faceKey(x)];
+  if (f && f.espnId) { const src = f.headshot || `https://a.espncdn.com/combiner/i?img=/i/headshots/${x.sport}/players/full/${f.espnId}.png&w=200&h=145`; return `<div class="av sg-av" style="--tg:${tg(x.sport, f.team || '')}" aria-hidden="true"><span class="av-initials">${esc(initials(x.face))}</span><img src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()"></div>`; }
   const ini = x.legs ? String(x.legs) : String(x.name || '?').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
   return `<div class="sg-av sg-ini" aria-hidden="true">${esc(ini)}</div>`;
 }
@@ -6597,7 +6622,7 @@ function watchBoard() {
       fixArrays(s); S.fbSlate = true; S.custom.forEach((c) => { if (c.meta && !s.players[c.player]) s.players[c.player] = c.meta; });
       parkStale(s);
       if (JSON.stringify(s) === JSON.stringify(S.slate)) return;
-      S.slate = s; S.snap = null; S.shift = null; afterData(); poll(); loadLogs();
+      S.slate = s; S.snap = null; S.shift = null; afterData(); poll(); loadLogs(); resolveStageFaces();
     }, () => {});
     db.ref('.info/connected').on('value', (snap) => { const was = S.fbConnected; S.fbConnected = !!snap.val(); if (was === true && !S.fbConnected) S.alertLog.unshift({ tone: 'warn', title: 'Board sync dropped', body: 'Reconnecting automatically', at: Date.now() }); if (was === false && S.fbConnected) S.alertLog.unshift({ tone: 'win', title: 'Board sync back', body: '', at: Date.now() }); renderNav(); }, () => {});
     db.ref('board/plans').on('value', (snap) => { S.plans = snap.val() || {}; loadBooks(); if (S.tab === 'me') render(); }, () => {});
@@ -6674,7 +6699,7 @@ const Chat = {
   watchBoard(); Chat.init(); watchPickem();
   if (FIREBASE) fbReady.then(() => { firebase.auth().onAuthStateChanged((u) => { const was = S.me.user && S.me.user.uid; const now = u && !u.isAnonymous ? u.uid : null; if (was !== now) meAttach(u); }); firebase.auth().getRedirectResult().catch((e) => { S.me.err = 'Sign-in failed: ' + e.message; }); }).catch(() => {});
   if (params.has('demo')) setTimeout(() => demoMoments().forEach((m) => Moments.push(m)), 1500);
-  loadInjuries().then(() => { S.projMemo = {}; render(); }); loadLogs(); resolveReceiptPlayers();
+  loadInjuries().then(() => { S.projMemo = {}; render(); }); loadLogs(); resolveReceiptPlayers(); resolveStageFaces();
   if (S.tab === 'injuries' || S.tab === 'research') loadInjuries();
   if (S.tab === 'research') loadResearch();
   if (['ledger', 'pick6', 'ftd', 'scalp'].includes(S.tab)) loadArchive();
